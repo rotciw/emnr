@@ -32,7 +32,7 @@ Pull request:
 
 ### Server
 - **server/** django project folder containing the project modules
-  - **app (ex. user) ** - overview over user projects
+  - **app (ex. user)** - overview over user projects
     - **admins.py** - file contaning definitions to connect models to the django admin panel
     - **urls.py** - contains mapping between urls and views
     - **models.py** - contains data models
