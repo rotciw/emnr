@@ -11,7 +11,7 @@ branches:
 - dev: development branches, update continously
 - feat/feature-name: a branch that creates/improves a new feature into dev
 - design/area-name: a branch that creates/improves GUI/UX into dev
-- fix/bug-name: a branch that fix a bug for dev
+- fix/bug-name: a branch that fixes a bug for dev
 
 Pull request:
 
@@ -27,3 +27,13 @@ Pull request:
 ### Server
 - Python with Django
 - PostgreSQL (Dockerized for local development)
+
+## Folder structure
+
+### Server
+- **server/** django project folder containing the project modules
+  - **app (ex. user) ** - overview over user projects
+    - **admins.py** - file contaning definitions to connect models to the django admin panel
+    - **urls.py** - contains mapping between urls and views
+    - **models.py** - contains data models
+    - **tests/** - contains tests for the module. [View Testing in Django](https://docs.djangoproject.com/en/2.1/topics/testing/) for more.
