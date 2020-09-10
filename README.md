@@ -17,6 +17,52 @@ Pull request:
 
 - At least two collaborators have to approve a pull request before it is merged in to dev-branch
 - Always use "Squash and merge" as merge-options
+## Setup
+### Server
+### Installation with examples for ubuntu. Windows and OSX is mostly the same
+
+Fork the project and clone it to your machine.
+
+#### Setup and activation of virtualenv (env that prevents python packages from being installed globaly on the machine)
+Navigate into the project folder.
+
+`pip install virtualenv`
+
+`virtualenv env`
+
+For mac/linux:
+
+`source env/bin/activate`
+
+For windows:
+
+`env\Scripts\activate.bat`
+
+If you get an error related to charmap on Windows, run this command:
+`set PYTHONIOENCODING=UTF-8`
+
+
+#### Install python requirements
+
+`pip install -r requirements.txt`
+
+#### Migrate database
+
+`python manage.py migrate`
+
+#### Create superuser
+
+Create a local admin user by entering the following command:
+
+`python manage.py createsuperuser`
+
+Only username and password is required
+
+#### Start the app
+
+`python manage.py runserver`
+
+
 
 ## Technologies
 ### Frontend
