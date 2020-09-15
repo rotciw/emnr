@@ -37,12 +37,17 @@ const FeideLogin: React.FC = () => {
     fetchURL();
   }, []);
 
-  console.log(feideURI);
+  const handleFeideLogin = () => {
+    window.location.assign(feideURI);
+  };
+
   return (
     <Wrapper>
       <Title>TDT4290 Kundestyrt prosjekt - Gruppe 13</Title>
       <Logo src={NTNU_LOGO} />
-      <LoginButton>Logg inn med Feide</LoginButton>
+      <LoginButton clickHandler={handleFeideLogin}>
+        Logg inn med Feide
+      </LoginButton>
     </Wrapper>
   );
 };
