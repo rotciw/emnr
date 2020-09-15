@@ -27,12 +27,10 @@ SECRET_KEY = 'pd_z(c+x8zw&&s3+^2tb6izn-gs&##5jgynwu+h*nir^mh75oy'
 # SECURITY WARNING: don't run with debug turned on in production!
 ALLOWED_HOSTS = []
 
-# Config auth token
 
-
-
-# Config env
 DEBUG = True
+
+CORS_ORIGIN_ALLOW_ALL = DEBUG
 
 #TODO set DEBUG to false in prod
 env = environ.Env(DEBUG=(bool, False))
@@ -50,6 +48,7 @@ DATAPORTEN_USER_INFO_URL = env('DATAPORTEN_USER_INFO_URL')
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_expiring_authtoken',
@@ -62,9 +61,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',

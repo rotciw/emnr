@@ -3,8 +3,9 @@ import { API_URL } from '../config';
 
 //used to retrieve feide auth url
 export const getFeideLogin = () => {
+  console.log('hi');
   return axios
-    .get(API_URL + '/get_login/')
+    .get(API_URL + '/auth/get_login/')
     .then(function (response) {
       return response.data;
     })
@@ -14,7 +15,7 @@ export const getFeideLogin = () => {
 //used to verify successful feide login
 export const verifyFeideLogin = (code: string) => {
   return axios
-    .get(API_URL + '/verify-token/', {
+    .get(API_URL + '/auth/verify-token/', {
       params: {
         code: code,
       },
