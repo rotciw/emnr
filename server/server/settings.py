@@ -42,6 +42,9 @@ DATAPORTEN_USER_INFO_URL = env('DATAPORTEN_USER_INFO_URL')
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_framework_expiring_authtoken',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
