@@ -20,6 +20,7 @@ def verify_token(request):
     dataporten_oauth_client = WebApplicationClient(settings.DATAPORTEN_ID)
 
     code = request.GET.get('code')
+
     redirect_uri = settings.DATAPORTEN_REDIRECT_URI
 
     token_request_body = dataporten_oauth_client.prepare_request_body(
@@ -38,7 +39,17 @@ def verify_token(request):
 
     response_json = token_request_response.json()
 
-    print(response_json)
     session = requests.Session()
     session.headers.update({'authorization': 'bearer {}'.format(response_json['access_token'])})
 
+    user_info = session.get(settings.DATAPORTEN_USER_INFO_URL).json()['user']
+
+    #TODO Create a user service that connects to this
+    user_mail = user_info['email']
+
+    print()
+    #ExpiringToken.objects.filter(user_id=user_mail).delete()
+    #token = ExpiringToken.objects.create(user_id=user_mail)
+
+    return Response (({'token': response_json['access_token']}))
+    #Response(({'token': token.key}))
