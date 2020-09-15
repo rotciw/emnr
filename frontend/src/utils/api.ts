@@ -3,7 +3,6 @@ import { API_URL } from '../config';
 
 //used to retrieve feide auth url
 export const getFeideLogin = () => {
-  console.log('hi');
   return axios
     .get(API_URL + '/auth/get_login/')
     .then(function (response) {

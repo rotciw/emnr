@@ -12,7 +12,7 @@ const VerifyLogin: React.FC<VerifyLoginProps> = () => {
       const queryParams = qs.parse(queryString);
       const code = queryParams['?code'] as string;
       try {
-        const response = await verifyFeideLogin(code);
+        await verifyFeideLogin(code);
         console.log('logged in');
       } catch (e) {
         console.log(e);
