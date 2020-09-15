@@ -1,15 +1,37 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import NTNU_LOGO from '../../assets/images/ntnu_logo.png';
+import NTNU_LOGO from '../assets/images/ntnu_logo.png';
 
 import { LoginButton } from './Buttons';
 
 const FeideLogin: React.FC = () => {
+  const Wrapper = styled.div`
+    border: 1px solid #ccc;
+    padding: 50px;
+    border-radius: 5px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+  `;
+
+  //TODO change to more semantic tag?
+  const Title = styled.div`
+    font-size: 25;
+    font-weight: 200;
+  `;
+
+  const Logo = styled.img`
+    width: 170px;
+    margin: 0 auto;
+  `;
+
   return (
-    <>
-      <h1>Feide Login</h1>
-      <LoginButton>Login</LoginButton>
-    </>
+    <Wrapper>
+      <Title>TDT4290 Kundestyrt prosjekt - Gruppe 13</Title>
+      <Logo src={NTNU_LOGO} />
+      <LoginButton>Logg inn med Feide</LoginButton>
+    </Wrapper>
   );
 };
 
