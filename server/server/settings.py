@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import environ
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,6 +28,17 @@ SECRET_KEY = 'pd_z(c+x8zw&&s3+^2tb6izn-gs&##5jgynwu+h*nir^mh75oy'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+env = environ.Env(DEBUG=(bool, False))
+environ.Env.read_env('.env')
+
+# Dataporten settings
+DATAPORTEN_ID = env('DATAPORTEN_CLIENT_ID')
+#DATAPORTEN_OAUTH_AUTH_URL = env('DATAPORTEN_OAUTH_AUTH_URL')
+#DATAPORTEN_OAUTH_TOKEN_URL = env('DATAPORTEN_OAUTH_TOKEN_URL')
+#DATAPORTEN_SECRET = env('DATAPORTEN_SECRET')
+#DATAPORTEN_REDIRECT_URI = env('DATAPORTEN_REDIRECT_URI')
+#DATAPORTEN_USER_INFO_URL = env('DATAPORTEN_USER_INFO_URL')
 
 
 # Application definition
@@ -118,3 +131,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
