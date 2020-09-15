@@ -27,6 +27,14 @@ SECRET_KEY = 'pd_z(c+x8zw&&s3+^2tb6izn-gs&##5jgynwu+h*nir^mh75oy'
 # SECURITY WARNING: don't run with debug turned on in production!
 ALLOWED_HOSTS = []
 
+# Config auth token
+
+
+
+# Config env
+DEBUG = True
+
+#TODO set DEBUG to false in prod
 env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env('.env')
 
