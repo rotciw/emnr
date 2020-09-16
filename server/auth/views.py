@@ -5,6 +5,7 @@ from oauthlib.oauth2 import WebApplicationClient
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework_expiring_authtoken.models import ExpiringToken
+from django.contrib.auth.models import User
 from django.conf import settings
 
 @api_view(['GET'])
@@ -47,9 +48,7 @@ def verify_token(request):
     #TODO Create a user service that connects to this
     user_mail = user_info['email']
 
-    print()
-    #ExpiringToken.objects.filter(user_id=user_mail).delete()
-    #token = ExpiringToken.objects.create(user_id=user_mail)
-
-    return Response (({'token': response_json['access_token']}))
-    #Response(({'token': token.key}))
+    user, created = User.objects.get_or_create(email=user_mail)
+    ExpiringToken.objects.filter(user=user).delete()
+    token = ExpiringToken.objects.create(user=user)
+    return Response (({'token': token.key }))

@@ -20,7 +20,9 @@ const VerifyLogin: React.FC<VerifyLoginProps> = () => {
         console.log('login failed');
       }
     };
-    verifyLogin();
+    if (!authProvider.token) {
+      verifyLogin();
+    }
   });
 
   let signedIn = false;
