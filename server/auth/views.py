@@ -1,6 +1,6 @@
 from django.http import HttpResponse
-from django.shortcuts import render
 import requests
+from django.core.exceptions import PermissionDenied
 from oauthlib.oauth2 import WebApplicationClient
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -44,11 +44,14 @@ def verify_token(request):
     session.headers.update({'authorization': 'bearer {}'.format(response_json['access_token'])})
 
     user_info = session.get(settings.DATAPORTEN_USER_INFO_URL).json()['user']
-
-    #TODO Create a user service that connects to this
     user_mail = user_info['email']
-
     user, created = User.objects.get_or_create(email=user_mail)
     ExpiringToken.objects.filter(user=user).delete()
     token = ExpiringToken.objects.create(user=user)
     return Response (({'token': token.key }))
+
+@api_view(["GET"])
+def validate_token(request):
+    if request.user.is_anonymous:
+        raise PermissionDenied
+    return HttpResponse(ExpiringToken.objects.get(user=request.user).expired())

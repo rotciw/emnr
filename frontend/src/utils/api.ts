@@ -27,3 +27,13 @@ export const verifyFeideLogin = (code: string) => {
       return response.data.token;
     });
 };
+
+//used to verify if token is valid
+export const hasToken = () => {
+  if (!localStorage.getItem('token')) {
+    return false;
+  }
+  return axios.get(API_URL + 'auth/validate-token/').then(function (response) {
+    return response.data === 'False';
+  });
+};
