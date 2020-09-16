@@ -4,13 +4,14 @@ import FeideLogin from '../components/FeideLogin';
 
 interface LoginProps {}
 
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: 'center';
+  height: '100%';
+`;
+
 const Login: React.FC<LoginProps> = () => {
-  const Wrapper = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: 'center';
-    height: '100%';
-  `;
   return (
     <Wrapper>
       <FeideLogin />

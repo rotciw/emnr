@@ -37,3 +37,10 @@ export const hasToken = () => {
     return response.data === 'False';
   });
 };
+
+//fetch local token
+export const getLocalToken = () => {
+  if (!!localStorage.getItem('token')) {
+    return localStorage.getItem('token');
+  }
+};
