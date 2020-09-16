@@ -4,9 +4,11 @@ import { verifyFeideLogin } from '../utils/api';
 import { GlobalStateContext } from '../context/GlobalStateContext';
 import { Redirect } from 'react-router-dom';
 
-interface VerifyLoginProps {}
+interface VerifyLoginProps {
+  callback: (val?: any) => void;
+}
 
-const VerifyLogin: React.FC<VerifyLoginProps> = () => {
+const VerifyLogin: React.FC<VerifyLoginProps> = (props) => {
   const { authProvider } = useContext(GlobalStateContext)!;
   useEffect(() => {
     const verifyLogin = async () => {
@@ -14,8 +16,13 @@ const VerifyLogin: React.FC<VerifyLoginProps> = () => {
       const queryParams = qs.parse(queryString);
       const code = queryParams['?code'] as string;
       try {
-        const token = await verifyFeideLogin(code);
-        authProvider.setToken(token);
+        if (!authProvider.token) {
+          const token = await verifyFeideLogin(code);
+          if (token) {
+            authProvider.setToken(token);
+            props.callback();
+          }
+        }
       } catch (e) {
         console.log('login failed');
       }
