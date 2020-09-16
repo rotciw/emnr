@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
+import axios from 'axios';
 
 interface PrivateRouteProps {
   exact?: boolean;
@@ -12,6 +13,9 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   path,
   component,
 }) => {
+  axios.defaults.headers.common['Authorization'] = localStorage.getItem(
+    'token',
+  );
   return <Route exact={exact} path={path} component={component} />;
 };
 
