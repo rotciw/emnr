@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import axios from 'axios';
+import { GlobalStateContext } from '../context/GlobalStateContext';
 
 interface PrivateRouteProps {
   exact?: boolean;
@@ -13,10 +13,12 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   path,
   component,
 }) => {
-  axios.defaults.headers.common['Authorization'] = localStorage.getItem(
-    'token',
-  );
-  return <Route exact={exact} path={path} component={component} />;
+  const { authProvider } = useContext(GlobalStateContext)!;
+
+  if (authProvider.token) {
+    return <Route exact={exact} path={path} component={component} />;
+  }
+  return <Redirect to='/login' />;
 };
 
 export default PrivateRoute;

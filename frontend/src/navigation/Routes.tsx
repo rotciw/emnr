@@ -10,7 +10,7 @@ import VerifyLogin from '../pages/VerifyLogin';
 const Routes: React.FC = () => {
   return (
     <Switch>
-      <PrivateRoute exact path='/verifylogin' component={VerifyLogin} />
+      <Route exact path='/verifylogin' component={VerifyLogin} />
       <PrivateRoute exact path='/' component={App} />
       <Route exact path='/login' component={Login} />
     </Switch>
