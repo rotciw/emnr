@@ -2,8 +2,8 @@ import React from 'react';
 
 const App: React.FC = () => (
   <div>
-    <h1>grattis du har satt opp et reactprosjekt</h1>
-    <p>dødsimponerende</p>
+    <h1>Du er nå logget inn</h1>
+    <p>Det funket visst</p>
   </div>
 );
 

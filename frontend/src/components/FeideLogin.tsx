@@ -38,7 +38,9 @@ const FeideLogin: React.FC = () => {
   }, []);
 
   const handleFeideLogin = () => {
-    window.location.assign(feideURI);
+    if (feideURI) {
+      window.location.assign(feideURI);
+    }
   };
 
   return (
