@@ -21,10 +21,11 @@ export const verifyFeideLogin = (code: string) => {
     })
     .then(function (response) {
       localStorage.setItem('token', 'Token ' + response.data.token);
+      localStorage.setItem('email', response.data.email);
       axios.defaults.headers.common[
         'Authorization'
       ] = `Token ${response.data.token}`;
-      return response.data.token;
+      return { token: response.data.token, email: response.data.email };
     });
 };
 
@@ -42,5 +43,11 @@ export const hasToken = () => {
 export const getLocalToken = () => {
   if (!!localStorage.getItem('token')) {
     return localStorage.getItem('token');
+  }
+};
+
+export const getLocalEmail = () => {
+  if (!!localStorage.getItem('email')) {
+    return localStorage.getItem('email');
   }
 };

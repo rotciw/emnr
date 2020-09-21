@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
+import PrivateRoute from '../components/PrivateRoute';
 
 //pages
 import App from '../App/App';
@@ -16,7 +17,7 @@ const Routes: React.FC = () => {
     try {
       const expired = await hasToken();
       if (!expired) {
-        throw 'Expired token or not existing token';
+        throw Error('Expired token or not existing token');
       }
     } catch (error) {
       localStorage.removeItem('token');
@@ -26,7 +27,7 @@ const Routes: React.FC = () => {
   return (
     <Switch>
       <Route exact path='/verifylogin' component={VerifyLogin} />
-      <Route exact path='/' component={App} />
+      <PrivateRoute exact path='/' component={App} />
       <Route exact path='/login' component={Login} />
     </Switch>
   );

@@ -9,7 +9,7 @@ interface VerifyLoginProps {
 }
 
 const VerifyLogin: React.FC<VerifyLoginProps> = (props) => {
-  const { authProvider } = useContext(GlobalStateContext)!;
+  const { authProvider, userProvider } = useContext(GlobalStateContext)!;
   useEffect(() => {
     const verifyLogin = async () => {
       const queryString = window.location.search;
@@ -17,9 +17,11 @@ const VerifyLogin: React.FC<VerifyLoginProps> = (props) => {
       const code = queryParams['?code'] as string;
       try {
         if (!authProvider.token) {
-          const token = await verifyFeideLogin(code);
+          const { token, email } = await verifyFeideLogin(code);
           if (token) {
             authProvider.setToken(token);
+            userProvider.setEmail(email);
+
             props.callback();
           }
         }

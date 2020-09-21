@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { GlobalStateContext } from '../context/GlobalStateContext';
+import { getLocalToken } from '../utils/api';
 
 interface PrivateRouteProps {
   exact?: boolean;
@@ -15,7 +16,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
 }) => {
   const { authProvider } = useContext(GlobalStateContext)!;
 
-  if (authProvider.token) {
+  if (authProvider.token || getLocalToken()) {
     return <Route exact={exact} path={path} component={component} />;
   }
   return <Redirect to='/login' />;
