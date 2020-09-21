@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from .models import UserAuth
 
+
 @api_view(['GET'])
 def get_login_url(request):
     dataporten_oauth_client = WebApplicationClient(settings.DATAPORTEN_ID)
@@ -16,6 +17,7 @@ def get_login_url(request):
         settings.DATAPORTEN_OAUTH_AUTH_URL, redirect_uri=settings.DATAPORTEN_REDIRECT_URI
     )
     return HttpResponse(dataporten_auth_url)
+
 
 @api_view(['GET'])
 def verify_token(request):
@@ -57,7 +59,8 @@ def verify_token(request):
     if has_token:
         UserAuth.objects.get(expiring_token=token).delete()
     UserAuth.objects.create(expiring_token=token, access_token=access_token)
-    return Response (({'token': token.key, 'email': user_mail}))
+    return Response(({'token': token.key, 'email': user_mail}))
+
 
 @api_view(["GET"])
 def validate_token(request):
@@ -65,3 +68,12 @@ def validate_token(request):
         raise PermissionDenied
     token = ExpiringToken.objects.get(user=request.user)
     return HttpResponse(token.valid())
+
+
+def get_token(expiring_token):
+    access_token = ''
+    try:
+        access_token = UserAuth.objects.get(expiring_token=expiring_token)
+    except:
+        print('No token found')
+    return access_token
