@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework_expiring_authtoken.models import ExpiringToken
 from django.contrib.auth.models import User
 from django.conf import settings
+from .models import UserAuth
 
 @api_view(['GET'])
 def get_login_url(request):
@@ -42,16 +43,25 @@ def verify_token(request):
 
     session = requests.Session()
     session.headers.update({'authorization': 'bearer {}'.format(response_json['access_token'])})
-
     user_info = session.get(settings.DATAPORTEN_USER_INFO_URL).json()['user']
     user_mail = user_info['email']
     user, created = User.objects.get_or_create(email=user_mail)
     ExpiringToken.objects.filter(user=user).delete()
     token = ExpiringToken.objects.create(user=user)
-    return Response (({'token': token.key }))
+    access_token = response_json['access_token']
+    has_token = False
+    try:
+        has_token = UserAuth.objects.get(expiring_token=token).exists()
+    except:
+        print("User has no token")
+    if has_token:
+        UserAuth.objects.get(expiring_token=token).delete()
+    UserAuth.objects.create(expiring_token=token, access_token=access_token)
+    return Response (({'token': token.key, 'email': user_mail}))
 
 @api_view(["GET"])
 def validate_token(request):
     if request.user.is_anonymous:
         raise PermissionDenied
-    return HttpResponse(ExpiringToken.objects.get(user=request.user).expired())
+    token = ExpiringToken.objects.get(user=request.user)
+    return HttpResponse(token.valid())
