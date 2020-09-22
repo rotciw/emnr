@@ -1,10 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from 'App';
+import { BrowserRouter as Router } from 'react-router-dom';
+import GlobalStateProvider from './context/GlobalStateContext';
+import Routes from './navigation/Routes';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <GlobalStateProvider>
+      <Router>
+        <Routes />
+      </Router>
+    </GlobalStateProvider>
   </React.StrictMode>,
   document.getElementById('root'),
 );
