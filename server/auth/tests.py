@@ -1,6 +1,4 @@
 from django.test import TestCase, Client
-from oauthlib.oauth2 import LegacyApplicationClient
-from django.conf import settings
 
 # Create your tests here.
 class FeideLogin(TestCase):

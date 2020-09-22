@@ -19,9 +19,8 @@ Pull request:
 - Always use "Squash and merge" as merge-options
 ## Setup
 ### Server
-### Installation with examples for ubuntu. Windows and OSX is mostly the same
-
-Fork the project and clone it to your machine.
+#### Installation with examples for ubuntu. Windows and OSX is mostly the same
+Clone the project to your machine.
 
 #### Setup and activation of virtualenv (env that prevents python packages from being installed globaly on the machine)
 Navigate into the project folder.
@@ -41,6 +40,11 @@ For windows:
 If you get an error related to charmap on Windows, run this command:
 `set PYTHONIOENCODING=UTF-8`
 
+#### Setup env environment
+In order to test the application you have to register an application [here](https://dashboard.dataporten.no/)
+The redirect_uri for development is http://localhost:3000/verifylogin as it is setup that way in the frontend. Remember to ask for additional rettigheter/scopes inside the dashboard.
+
+create an .env file with the same fields as the env.example file. The fields are found within the dataporten dashboard.
 
 #### Install python requirements
 
@@ -61,8 +65,6 @@ Only username and password is required
 #### Start the app
 
 `python manage.py runserver`
-
-
 
 ## Technologies
 ### Frontend
