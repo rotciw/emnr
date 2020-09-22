@@ -14,7 +14,7 @@ export const getFeideLogin = () => {
 //used to verify successful feide login
 export const verifyFeideLogin = (code: string) => {
   return axios
-    .get(API_URL + '/auth/verify-token/', {
+    .get(API_URL + '/auth/verify_token/', {
       params: {
         code: code,
       },
@@ -34,7 +34,7 @@ export const hasToken = () => {
   if (!localStorage.getItem('token')) {
     return false;
   }
-  return axios.get(API_URL + 'auth/validate-token/').then(function (response) {
+  return axios.get(API_URL + 'auth/validate_token/').then(function (response) {
     return response.data === 'False';
   });
 };
