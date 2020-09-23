@@ -18,15 +18,15 @@ export const Course: React.FC<CourseProps> = ({
   courseCode,
   score,
   }) => {
+
+    let btnString: String = courseCode.concat(courseName as string).concat(score.toString());
   return (
     <tr>
-        <td>{courseName}</td>
-        <td>
+        <td colSpan={3}>
             <CourseButton clickHandler={handleCourseClick}>
-                {courseCode as string}
+                {btnString as string}
             </CourseButton>
         </td>
-        <td>{score}</td>
     </tr>
 
   );

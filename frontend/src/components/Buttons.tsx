@@ -22,6 +22,7 @@ const StyledCourseBtn = styled.button`
   border: 2px solid #ccc;
   text-align: center;
   background-color: #ddd;
+  width: 100%;
   :hover {
     background-color: #ccc;
     color: white;
