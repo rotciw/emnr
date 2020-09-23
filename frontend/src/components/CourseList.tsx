@@ -27,14 +27,15 @@ export const CourseList: React.FC<CourseListProps> = ({
         <table>
           <thead>
               <tr>
-                  <th>Course code</th>
-                  <th>Course name</th>
+                  <th>Fagkode</th>
+                  <th>Fagnavn</th>
+                  <th>Vurdering</th>
               </tr>
           </thead>
           <tbody>
               {
                   courseNames.map(function(currentCourseName, i){
-                      return <Course courseName={currentCourseName} courseCode={courseCodes[i]} key={i} />;
+                      return <Course courseName={currentCourseName} courseCode={courseCodes[i]} score={4.5} key={i} />;
                   })
               }
           </tbody>

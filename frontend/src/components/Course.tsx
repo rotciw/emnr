@@ -4,6 +4,7 @@ import { CourseButton } from './Buttons';
 interface CourseProps {
   courseName: String;
   courseCode: String;
+  score: Number;
 }
 
 const handleCourseClick = () => {
@@ -15,6 +16,7 @@ const handleCourseClick = () => {
 export const Course: React.FC<CourseProps> = ({
   courseName,
   courseCode,
+  score,
   }) => {
   return (
     <tr>
@@ -24,6 +26,7 @@ export const Course: React.FC<CourseProps> = ({
                 {courseCode as string}
             </CourseButton>
         </td>
+        <td>{score}</td>
     </tr>
 
   );
