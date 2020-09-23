@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { CourseButton } from './Buttons';
+import { Course } from './Course';
 
 const Wrapper = styled.div`
   border: 1px solid #ccc;
@@ -13,19 +13,33 @@ const Wrapper = styled.div`
 `;
 
 interface CourseListProps {
-}
-
-const handleCourseClick = () => {
-    console.log("Trykk på fag 1");
+  courseNames: Array<String>;
+  courseCodes: Array<String>;
 }
 
 export const CourseList: React.FC<CourseListProps> = ({
+  courseNames,
+  courseCodes,
   }) => {
+
   return (
     <Wrapper>
-        <CourseButton clickHandler={handleCourseClick}>
-            Fag 1
-        </CourseButton>
+        <table>
+          <thead>
+              <tr>
+                  <th>Course code</th>
+                  <th>Course name</th>
+              </tr>
+          </thead>
+          <tbody>
+              {
+                  courseNames.map(function(currentCourseName, i){
+                      return <Course courseName={currentCourseName} courseCode={courseCodes[i]} key={i} />;
+                  })
+              }
+          </tbody>
+          </table>
+
     </Wrapper>
   );
 };

@@ -18,6 +18,18 @@ const StyledLoginBtn = styled.button`
   }
 `;
 
+const StyledCourseBtn = styled.button`
+  display: block;
+  border: 2px solid #ccc;
+  text-align: center;
+  background-color: #ddd;
+  :hover {
+    background-color: #ccc;
+    color: white;
+    border: 2px solid #ccc;
+  }
+`;
+
 export const LoginButton: React.FC<ButtonProps> = ({
   clickHandler,
   children,
@@ -29,5 +41,5 @@ export const CourseButton: React.FC<ButtonProps> = ({
   clickHandler,
   children,
 }) => {
-  return <StyledLoginBtn onClick={clickHandler}>{children}</StyledLoginBtn>;
+  return <StyledCourseBtn onClick={clickHandler}>{children}</StyledCourseBtn>;
 };
