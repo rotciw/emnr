@@ -24,3 +24,10 @@ export const LoginButton: React.FC<ButtonProps> = ({
 }) => {
   return <StyledLoginBtn onClick={clickHandler}>{children}</StyledLoginBtn>;
 };
+
+export const CourseButton: React.FC<ButtonProps> = ({
+  clickHandler,
+  children,
+}) => {
+  return <StyledLoginBtn onClick={clickHandler}>{children}</StyledLoginBtn>;
+};
