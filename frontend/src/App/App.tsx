@@ -9,7 +9,7 @@ const getCourseNames = () => {
 }
 
 const getCourseCodes = () => {
-  let courseCodes: Array<String> = ['TDT4110','TDT4100','TDT4186','TDT4120'];
+  let courseCodes: Array<String> = ['TDT4110','TDT4100','TDT4186','TDT4240'];
   return courseCodes;
 }
 

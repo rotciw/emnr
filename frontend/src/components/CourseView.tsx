@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 
 interface CourseViewProps {
   courseName: String;
@@ -11,7 +12,9 @@ export const CourseView: React.FC<CourseViewProps> = ({
   courseCode,
   score,
   }) => {
+    const code:string = useLocation().pathname.substr(8);
+
   return (
-    <p>Velkommen til side for TDT4XXX.</p>
+    <p>haha {code} goes brrrrr</p>
   );
 };
