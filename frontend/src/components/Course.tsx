@@ -11,20 +11,25 @@ const handleCourseClick = () => {
     console.log("Trykk på fag 1");
 }
 
-
+const courseStyle = {
+  display: 'inline-block',
+  width: '33%',
+};
 
 export const Course: React.FC<CourseProps> = ({
   courseName,
   courseCode,
   score,
   }) => {
-
-    let btnString: String = courseCode.concat(courseName as string).concat(score.toString());
   return (
     <tr>
         <td colSpan={3}>
             <CourseButton clickHandler={handleCourseClick}>
-                {btnString as string}
+                <div>
+                  <p style={courseStyle}>{courseName}</p>
+                  <p style={courseStyle}>{courseCode}</p>
+                  <p style={courseStyle}>{score}</p>
+                </div>
             </CourseButton>
         </td>
     </tr>

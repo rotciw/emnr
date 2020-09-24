@@ -27,8 +27,8 @@ export const CourseList: React.FC<CourseListProps> = ({
         <table>
           <thead>
               <tr>
-                  <th>Fagkode</th>
                   <th>Fagnavn</th>
+                  <th>Fagkode</th>
                   <th>Vurdering</th>
               </tr>
           </thead>

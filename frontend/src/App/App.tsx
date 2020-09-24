@@ -4,12 +4,12 @@ import { GlobalStateContext } from '../context/GlobalStateContext';
 import { CourseList } from '../components/CourseList';
 
 const getCourseNames = () => {
-  let courseNames: Array<String> = ['itgk','java','os'];
+  let courseNames: Array<String> = ['itgk','java','os','progark'];
   return courseNames;
 }
 
 const getCourseCodes = () => {
-  let courseCodes: Array<String> = ['TDT4110','TDT4100','TDT4186'];
+  let courseCodes: Array<String> = ['TDT4110','TDT4100','TDT4186','TDT4120'];
   return courseCodes;
 }
 
