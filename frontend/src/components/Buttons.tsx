@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 interface ButtonProps {
   clickHandler?: (value?: any) => void;
-  children: string;
+  children: any;
 }
 
 const StyledLoginBtn = styled.button`
