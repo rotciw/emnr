@@ -1,5 +1,6 @@
 import React from 'react';
 import { CourseButton } from './Buttons';
+import { Link } from 'react-router-dom';
 
 interface CourseProps {
   courseName: String;
@@ -24,6 +25,7 @@ export const Course: React.FC<CourseProps> = ({
   return (
     <tr>
         <td colSpan={3}>
+          <Link to={"/course/"+courseCode}>
             <CourseButton clickHandler={handleCourseClick}>
                 <div>
                   <p style={courseStyle}>{courseName}</p>
@@ -31,6 +33,7 @@ export const Course: React.FC<CourseProps> = ({
                   <p style={courseStyle}>{score}</p>
                 </div>
             </CourseButton>
+          </Link>
         </td>
     </tr>
 

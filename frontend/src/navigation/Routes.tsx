@@ -7,6 +7,7 @@ import App from '../App/App';
 import Login from '../pages/Login';
 import VerifyLogin from '../pages/VerifyLogin';
 import { hasToken } from 'utils/api';
+import { CourseView } from 'components/CourseView';
 
 const Routes: React.FC = () => {
   useEffect(() => {
@@ -29,6 +30,7 @@ const Routes: React.FC = () => {
       <Route exact path='/verifylogin' component={VerifyLogin} />
       <PrivateRoute exact path='/' component={App} />
       <Route exact path='/login' component={Login} />
+      <PrivateRoute path='/course/:id' component={CourseView}/>
     </Switch>
   );
 };
