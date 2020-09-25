@@ -52,13 +52,14 @@ def verify_token(request):
     token = ExpiringToken.objects.create(user=user)
     access_token = response_json['access_token']
     has_token = False
+    print('user_mail', user_mail)
     try:
-        has_token = UserAuth.objects.get(expiring_token=token).exists()
-    except:
-        print("User has no token")
+        has_token = UserAuth.objects.get(user_email=user_mail).exists()
+    except DoesNotExist
+    print("User has no token")
     if has_token:
-        UserAuth.objects.get(expiring_token=token).delete()
-    UserAuth.objects.create(expiring_token=token, access_token=access_token)
+        UserAuth.objects.get(user_email=user_mail).delete()
+    UserAuth.objects.create(user_email=user_mail, expiring_token=token, access_token=access_token)
     return Response(({'token': token.key, 'email': user_mail}))
 
 
