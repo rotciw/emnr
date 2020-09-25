@@ -4,10 +4,10 @@ import PrivateRoute from '../components/PrivateRoute';
 
 //pages
 import App from '../App/App';
-import Login from '../pages/Login';
+import LoginPage from '../pages/LoginPage';
 import VerifyLogin from '../pages/VerifyLogin';
 import { hasToken } from 'utils/api';
-import { CourseView } from 'components/CourseView';
+import { CoursePage } from 'pages/CoursePage';
 
 const Routes: React.FC = () => {
   useEffect(() => {
@@ -29,8 +29,8 @@ const Routes: React.FC = () => {
     <Switch>
       <Route exact path='/verifylogin' component={VerifyLogin} />
       <PrivateRoute exact path='/' component={App} />
-      <Route exact path='/login' component={Login} />
-      <PrivateRoute path='/course/:id' component={CourseView}/>
+      <PrivateRoute path='/course/:id' component={CoursePage} />
+      <Route exact path='/login' component={LoginPage} />
     </Switch>
   );
 };

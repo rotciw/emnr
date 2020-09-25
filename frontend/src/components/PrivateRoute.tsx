@@ -17,7 +17,11 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   const { authProvider } = useContext(GlobalStateContext)!;
 
   if (authProvider.token || getLocalToken()) {
-    return <Route exact={exact} path={path} component={component} />;
+    return (
+      <>
+        <Route exact={exact} path={path} component={component} />
+      </>
+    );
   }
   return <Redirect to='/login' />;
 };

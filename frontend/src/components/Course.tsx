@@ -1,5 +1,5 @@
 import React from 'react';
-import { CourseButton } from './Buttons';
+import { CourseButton } from '../styles/Buttons';
 import { Link } from 'react-router-dom';
 
 interface CourseProps {

@@ -21,7 +21,7 @@ const StyledLoginBtn = styled.button`
 const StyledCourseBtn = styled.button`
   border: 2px solid #ccc;
   text-align: center;
-  background-color: #ddd;
+  background-color: ${({ theme }) => theme.white};
   width: 100%;
   :hover {
     background-color: #ccc;
