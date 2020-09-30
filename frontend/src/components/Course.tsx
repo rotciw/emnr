@@ -9,8 +9,8 @@ interface CourseProps {
 }
 
 const handleCourseClick = () => {
-    console.log("Trykk på fag 1");
-}
+  console.log('Trykk på fag 1');
+};
 
 const courseStyle = {
   display: 'inline-block',
@@ -21,21 +21,25 @@ export const Course: React.FC<CourseProps> = ({
   courseName,
   courseCode,
   score,
-  }) => {
+}) => {
   return (
     <tr>
-        <td colSpan={3}>
-          <Link to={"/course/"+courseCode}>
-            <CourseButton clickHandler={handleCourseClick}>
-                <div>
-                  <p style={courseStyle}>{courseName}</p>
-                  <p style={courseStyle}>{courseCode}</p>
-                  <p style={courseStyle}>{score}</p>
-                </div>
-            </CourseButton>
-          </Link>
-        </td>
+      <td colSpan={3}>
+        <Link
+          to={{
+            pathname: '/course/' + courseCode,
+            state: { courseName, courseCode, score },
+          }}
+        >
+          <CourseButton clickHandler={handleCourseClick}>
+            <div>
+              <p style={courseStyle}>{courseName}</p>
+              <p style={courseStyle}>{courseCode}</p>
+              <p style={courseStyle}>{score}</p>
+            </div>
+          </CourseButton>
+        </Link>
+      </td>
     </tr>
-
   );
 };

@@ -43,3 +43,12 @@ export const CourseButton: React.FC<ButtonProps> = ({
 }) => {
   return <StyledCourseBtn onClick={clickHandler}>{children}</StyledCourseBtn>;
 };
+
+export const RateCourseButton = styled.div`
+  background-color: ${({ theme }) => theme.red};
+  padding: 10px 20px;
+  color: white;
+  border: 1px solid black;
+  width: fit-content;
+  font-family: gilroyxbold;
+`;
