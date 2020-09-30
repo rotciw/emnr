@@ -20,25 +20,39 @@ interface CourseProps{
   courseNames: Array<String>;
   courseCodes: Array<String>;
   gradeAvgs: Array<Number>;
+  credit: Array<Number>;
 }
 
 export const CourseList: React.FC<CourseListProps> = ({
   }) => {
 
-  const [courses, updateCourses] = useState<CourseProps>({courseNames: [''],courseCodes: [''],gradeAvgs: [0]});
+  let namesTemp:Array<String> = [];
+  let codesTemp:Array<String> = [];
+  let gradesTemp:Array<Number> = [];
+  let creditTemp:Array<Number> = [];
+  
+  const [courses, updateCourses] = useState<CourseProps>({courseNames: [''],courseCodes: [''],gradeAvgs: [0],credit: [0]});
 
   useEffect (() => {
     const getCourses = async () => {
       axios
       .get("http://localhost:8000/course/all/")
+      .then(res => {
+        for(let i = 0; i < 25; i++){
+          namesTemp.push(res.data[i].course_name);
+          codesTemp.push(res.data[i].course_code);
+          gradesTemp.push(res.data[i].average_grade);
+          creditTemp.push(res.data[i].credit);
+        }
+        return res;
+      })
       .then(res => updateCourses({
-          courseNames: [res.data[0].course_name,res.data[1].course_name],
-          courseCodes: [res.data[0].course_code,res.data[1].course_code],
-          gradeAvgs: [res.data[0].average_grade,res.data[1].average_grade]
+          courseNames: namesTemp,
+          courseCodes: codesTemp,
+          gradeAvgs: gradesTemp,
+          credit: creditTemp
         }))
-        .catch(err => console.log(err));
-        
-      console.log(courses)
+        .catch(err => console.log(err));        
     }
     getCourses();
   }, []);
@@ -51,13 +65,14 @@ export const CourseList: React.FC<CourseListProps> = ({
             <tr>
                 <th>Fagnavn</th>
                 <th>Fagkode</th>
-                <th>Vurdering</th>
+                <th>Gjennomsnittskarakter</th>
+                <th>Studiepoeng</th>
             </tr>
         </thead>
         <tbody>
           {
             courses.courseNames.map(function(currentCourseName, i){
-              return <Course courseName={currentCourseName} courseCode={courses.courseCodes[i]} score={courses.gradeAvgs[i]} key={i} />;
+              return <Course courseName={currentCourseName} courseCode={courses.courseCodes[i]} gradeAvg={courses.gradeAvgs[i]} credit={courses.credit[i]} key={i} />;
             })
           }
         </tbody>
