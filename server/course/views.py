@@ -15,4 +15,4 @@ def get_all_courses(request):
 
 def get_courses_from_db():
     data = Course.objects.all()
-    return json.dumps(list(data.values()))
+    return list(data.values())
