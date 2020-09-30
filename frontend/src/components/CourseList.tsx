@@ -25,18 +25,16 @@ interface CourseProps{
 export const CourseList: React.FC<CourseListProps> = ({
   }) => {
 
-
   const [courses, updateCourses] = useState<CourseProps>({courseNames: [''],courseCodes: [''],gradeAvgs: [0]});
 
   useEffect (() => {
     const getCourses = async () => {
-    
       axios
       .get("http://localhost:8000/course/all/")
       .then(res => updateCourses({
-          courseNames: ['2323','2323'],//res.data.course_name,
-          courseCodes: ['2323','343434'],//res.data.course_code,
-          gradeAvgs: [2,3]//res.data.average_grade 
+          courseNames: ['ITGK','Java','OS'],//res.data[0].course_name,
+          courseCodes: ['2323','343434'],//res.data[0].course_code,
+          gradeAvgs: [2,3,5]//res.data[0].average_grade 
         }))
         .catch(err => console.log(err));
         
@@ -58,8 +56,8 @@ export const CourseList: React.FC<CourseListProps> = ({
         </thead>
         <tbody>
           {
-            courses.courseNames.map(function(currentCourse, i){
-              return <Course courseName={"Objekt"} courseCode={"TDT4100"} score={4.5} key={i} />;
+            courses.courseNames.map(function(currentCourseName, i){
+              return <Course courseName={currentCourseName} courseCode={courses.courseCodes[i]} score={courses.gradeAvgs[i]} key={i} />;
             })
           }
         </tbody>
