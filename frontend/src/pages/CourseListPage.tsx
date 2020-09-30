@@ -12,7 +12,7 @@ import { Layout } from 'styles/Layout';
   score: Number;
 } */
 
-export const CourseListPage: React.FC = ({children}) => {
+export const CourseListPage: React.FC = () => {
   const code: string = useLocation().pathname.substr(8);
   const { userProvider } = useContext(GlobalStateContext)!;
 
@@ -37,7 +37,7 @@ export const CourseListPage: React.FC = ({children}) => {
             <p>Din bruker er {userProvider.email || getLocalEmail()}</p>
         </FlexItem>
         <FlexItem>
-            <CourseList courseNames={courseNames} courseCodes={courseCodes} />
+            <CourseList/>
         </FlexItem>
     </Layout>
   );

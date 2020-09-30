@@ -1,13 +1,14 @@
 import React from 'react';
+import { getLocalEmail } from 'utils/api';
 import { CourseListPage } from '../pages/CourseListPage';
+import { GlobalStateContext } from '../context/GlobalStateContext';
 
 const App: React.FC = () => {
+  const { userProvider } = React.useContext(GlobalStateContext)!;
   return (
     <div>
-      <h1>Du er nå logget inn</h1>
-      <p>Din bruker er {userProvider.email || getLocalEmail()}</p>
+      <CourseListPage/>
     </div>
-    <CourseListPage />
   );
 };
 

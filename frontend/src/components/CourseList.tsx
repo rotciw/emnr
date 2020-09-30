@@ -34,9 +34,9 @@ export const CourseList: React.FC<CourseListProps> = ({
       axios
       .get("http://localhost:8000/course/all/")
       .then(res => updateCourses({
-          courseNames: res.data.course_name,
-          courseCodes: res.data.course_code,
-          gradeAvgs: res.data.average_grade 
+          courseNames: ['2323','2323'],//res.data.course_name,
+          courseCodes: ['2323','343434'],//res.data.course_code,
+          gradeAvgs: [2,3]//res.data.average_grade 
         }))
         .catch(err => console.log(err));
         
