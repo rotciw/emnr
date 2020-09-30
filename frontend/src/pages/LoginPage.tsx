@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   height: '100%';
 `;
 
-const Login: React.FC<LoginProps> = () => {
+const LoginPage: React.FC<LoginProps> = () => {
   return (
     <Wrapper>
       <FeideLogin />
@@ -19,4 +19,4 @@ const Login: React.FC<LoginProps> = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

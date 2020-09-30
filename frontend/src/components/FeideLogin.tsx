@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { getFeideLogin } from '../utils/api';
 import NTNU_LOGO from '../assets/images/ntnu_logo.png';
 
-import { LoginButton } from './Buttons';
+import { LoginButton } from '../styles/Buttons';
 
 const Wrapper = styled.div`
   border: 1px solid #ccc;
