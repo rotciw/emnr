@@ -13,8 +13,9 @@ const Wrapper = styled.div`
 `;
 
 const Logo = styled.img`
-  max-width: 360px;
+  width: 25vmax;
   margin: 0 auto;
+  user-select: none;
 `;
 
 const FeideLogin: React.FC = () => {

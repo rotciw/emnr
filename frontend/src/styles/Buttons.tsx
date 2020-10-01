@@ -14,8 +14,10 @@ const StyledLoginBtn = styled.button`
   border-radius: 5px;
   padding: 15px 50px;
   text-align: center;
+  cursor: pointer;
+  user-select: none;
   :hover {
-    background-color: ${({theme}) => theme.blue};;
+    background-color: ${({theme}) => theme.blue};
   }
 `;
 
