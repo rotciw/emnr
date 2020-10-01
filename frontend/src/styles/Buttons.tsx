@@ -8,13 +8,14 @@ interface ButtonProps {
 
 const StyledLoginBtn = styled.button`
   display: block;
-  border: 2px solid #ccc;
-  padding: 5px 15px 5px 15px;
+  color: ${({theme}) => theme.light};
+  background-color: ${({theme}) => theme.darkBlue};
+  border: none;
+  border-radius: 5px;
+  padding: 15px 50px;
   text-align: center;
   :hover {
-    background-color: #44c802;
-    color: white;
-    border: 2px solid white;
+    background-color: ${({theme}) => theme.blue};;
   }
 `;
 
