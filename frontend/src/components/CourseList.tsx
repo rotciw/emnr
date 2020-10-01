@@ -14,52 +14,41 @@ const Wrapper = styled.div`
 `;
 
 interface CourseListProps {
+  pageNumber: number;
 }
 
 interface CourseProps{
-  courseNames: Array<String>;
-  courseCodes: Array<String>;
-  gradeAvgs: Array<Number>;
-  credit: Array<Number>;
+  course_name: string;
+  course_code: string;
+  average_grade: number;
+  credit: number;
 }
 
 export const CourseList: React.FC<CourseListProps> = ({
+  pageNumber,
   }) => {
 
-  let namesTemp:Array<String> = [];
-  let codesTemp:Array<String> = [];
-  let gradesTemp:Array<Number> = [];
-  let creditTemp:Array<Number> = [];
-  
-  const [courses, updateCourses] = useState<CourseProps>({courseNames: [''],courseCodes: [''],gradeAvgs: [0],credit: [0]});
+  const [courses, updateCourses] = useState<CourseProps[]>([]);
+
+  const resultLimit:number = 25;
+  let start:number = (pageNumber-1)*resultLimit;
 
   useEffect (() => {
+    
     const getCourses = async () => {
-      axios
-      .get("http://localhost:8000/course/all/")
+      await axios
+      .get("http://localhost:8000/course/all/?n=25&offset="+start)
       .then(res => {
-        for(let i = 0; i < 25; i++){
-          namesTemp.push(res.data[i].course_name);
-          codesTemp.push(res.data[i].course_code);
-          gradesTemp.push(res.data[i].average_grade);
-          creditTemp.push(res.data[i].credit);
-        }
-        return res;
+        updateCourses(res.data);
       })
-      .then(res => updateCourses({
-          courseNames: namesTemp,
-          courseCodes: codesTemp,
-          gradeAvgs: gradesTemp,
-          credit: creditTemp
-        }))
         .catch(err => console.log(err));        
     }
     getCourses();
-  }, []);
+    start += resultLimit;
+  }, [pageNumber]); 
 
   return (
     <Wrapper>
-      
       <table>
         <thead>
             <tr>
@@ -71,8 +60,8 @@ export const CourseList: React.FC<CourseListProps> = ({
         </thead>
         <tbody>
           {
-            courses.courseNames.map(function(currentCourseName, i){
-              return <Course courseName={currentCourseName} courseCode={courses.courseCodes[i]} gradeAvg={courses.gradeAvgs[i]} credit={courses.credit[i]} key={i} />;
+            courses.map(currentCourse => { 
+              return <Course courseName={currentCourse.course_name} courseCode={currentCourse.course_code} gradeAvg={currentCourse.average_grade} credit={currentCourse.credit}/>;
             })
           }
         </tbody>
