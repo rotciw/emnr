@@ -55,7 +55,15 @@ class GetAllCoursesTest(TestCase):
 			offset += 1
 
 	def test_get_courses_from_db_invalid_parameters(self):
-		pass
+		source_data = self._create_models_without_saving()
+		n_list = [len(source_data)+1, 'Character test', -1]
+		offset_list = [len(source_data)+1, 'Character test', -1]
+		for number in n_list:
+			with self.assertRaises(ValueError):
+				get_courses_from_db(self.rf.get("/courses/all/?n={}".format(number)))
+		for offset in offset_list:
+			with self.assertRaises(ValueError):
+				get_courses_from_db(self.rf.get("/courses/all/?offset={}".format(offset)))
 
 	def test_get_all_courses_no_parameters(self):
 		c = Client()
