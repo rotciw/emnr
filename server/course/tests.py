@@ -96,9 +96,6 @@ class GetAllCoursesTest(TestCase):
 		res = c.get("/course/all/?n={}&offset={}".format(1, len(source_data)-1))
 		self.assertEqual(res.status_code, 200)
 		self.assertEqual(res.data[0]["course_code"], source_data[-1].course_code)
-		print(res.data)
-		print(source_data[-1])
-		# self.assertEqual(res.data[0]["course_code"], source_data[0].course_code)
 
 	def test_get_all_courses_invalid_parameters(self):
 		c = Client()
