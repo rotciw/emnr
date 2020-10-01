@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import classNames from 'classnames';
-import styles from '../../styles/Pagination.module.scss';
-import { SidePaginationBtn, PaginationWrapper } from '../../styles/PaginationStyle';
+import { PaginationWrapper, PaginationBtn, Separator } from '../../styles/PaginationStyle';
 export interface Props {
   page: number;
   totalPages: number;
@@ -16,92 +14,95 @@ export const PaginationComponent: React.FC<Props> = ({
     const [isActive,setIsActive] = useState(false);
 
   return (
-    <div className={styles.pagination}>
+    <div>
       <PaginationWrapper>
         {page !== 1 && (
-          <SidePaginationBtn
+          <PaginationBtn
             onClick={() => {handlePagination(page - 1)
             setIsActive(!isActive)
             }}
-            type='button'
             isActive
           >
-            &lt;/
-          </SidePaginationBtn>
+            &lt;
+          </PaginationBtn>
         )}
-        <button
-          onClick={() => handlePagination(1)}
-          type="button"
-          className={classNames(styles.pageItem, {
-            [styles.active]: page === 1,
-          })}
-        >
-          {1}
-        </button>
-        {page > 3 && <div className={styles.separator}>...</div>}
-        {page === totalPages && totalPages > 3 && (
-          <button
-            onClick={() => handlePagination(page - 2)}
-            type="button"
-            className={styles.pageItem}
+        <PaginationBtn
+            onClick={() => {handlePagination(1)
+            setIsActive(!isActive)
+            }}
+            isActive
           >
-            {page - 2}
-          </button>
+            {1}
+          </PaginationBtn>        
+        {page > 3 && <Separator>...</Separator>}
+        {page === totalPages && totalPages > 3 && (
+            <PaginationBtn
+            onClick={() => {handlePagination(page - 2)
+            setIsActive(!isActive)
+            }}
+            isActive
+        >
+                {page - 2}
+            </PaginationBtn>  
         )}
         {page > 2 && (
-          <button
-            onClick={() => handlePagination(page - 1)}
-            type="button"
-            className={styles.pageItem}
-          >
-            {page - 1}
-          </button>
+            <PaginationBtn
+            onClick={() => {handlePagination(page - 1)
+            setIsActive(!isActive)
+            }}
+            isActive
+        >
+                {page - 1}
+            </PaginationBtn> 
         )}
         {page !== 1 && page !== totalPages && (
-          <button
-            onClick={() => handlePagination(page)}
-            type="button"
-            className={[styles.pageItem, styles.active].join(' ')}
-          >
-            {page}
-          </button>
+            <PaginationBtn
+            onClick={() => {handlePagination(page)
+            setIsActive(!isActive)
+            }}
+            isActive
+        >
+                {page}
+            </PaginationBtn> 
         )}
         {page < totalPages - 1 && (
-          <button
-            onClick={() => handlePagination(page + 1)}
-            type="button"
-            className={styles.pageItem}
-          >
-            {page + 1}
-          </button>
+            <PaginationBtn
+            onClick={() => {handlePagination(page + 1)
+            setIsActive(!isActive)
+            }}
+            isActive
+        >
+                {page + 1}
+            </PaginationBtn> 
         )}
         {page === 1 && totalPages > 3 && (
-          <button
-            onClick={() => handlePagination(page + 2)}
-            type="button"
-            className={styles.pageItem}
-          >
-            {page + 2}
-          </button>
-        )}
-        {page < totalPages - 2 && <div className={styles.separator}>...</div>}
-        <button
-          onClick={() => handlePagination(totalPages)}
-          type="button"
-          className={classNames(styles.pageItem, {
-            [styles.active]: page === totalPages,
-          })}
+            <PaginationBtn
+            onClick={() => {handlePagination(page + 2)
+            setIsActive(!isActive)
+            }}
+            isActive
         >
-          {totalPages}
-        </button>
+                {page + 2}
+            </PaginationBtn> 
+        )}
+        {page < totalPages - 2 && <Separator>...</Separator>}
+        <PaginationBtn
+            onClick={() => {handlePagination(totalPages)
+            setIsActive(!isActive)
+            }}
+            isActive
+        >
+                {totalPages}
+            </PaginationBtn> 
         {page !== totalPages && (
-          <button
-            onClick={() => handlePagination(page + 1)}
-            type="button"
-            className={[styles.pageItem, styles.sides].join(' ')}
-          >
+            <PaginationBtn
+            onClick={() => {handlePagination(page + 1)
+            setIsActive(!isActive)
+            }}
+            isActive
+            >
             &gt;
-          </button>
+            </PaginationBtn>
         )}
       </PaginationWrapper>
     </div>
