@@ -23,7 +23,8 @@ class GetAllCoursesTest(TestCase):
 			data = json.load(f)
 		courses = []
 		for course_dict in data:
-			courses.append(Course.create(code=course_dict["course_code"], name=course_dict["course_name"],
+			courses.append(Course.create(code=course_dict["course_code"],
+										 name=course_dict["course_name"],
 										 credit=course_dict["credit"],
 										 average_grade=course_dict["average_grade"]))
 		return courses
@@ -50,7 +51,8 @@ class GetAllCoursesTest(TestCase):
 			for i in range(n):
 				self.assertEqual(data[i]["course_code"], source_data[offset+i].course_code)
 
-		for i in range(len(source_data) // n ):
+		# Tests for equal data in database and text file, with use of increasing offset
+		for i in range(len(source_data) // n):
 			assert_equal_content(get_courses_with_parameters(n, offset))
 			offset += 1
 
@@ -58,9 +60,11 @@ class GetAllCoursesTest(TestCase):
 		source_data = self._create_models_without_saving()
 		n_list = [len(source_data)+1, 'Character test', -1]
 		offset_list = [len(source_data)+1, 'Character test', -1]
+		# Tests different invalid parameters for 'n'
 		for number in n_list:
 			with self.assertRaises(ValueError):
 				get_courses_from_db(self.rf.get("/courses/all/?n={}".format(number)))
+		# Tests different invalid parameters for 'offset'
 		for offset in offset_list:
 			with self.assertRaises(ValueError):
 				get_courses_from_db(self.rf.get("/courses/all/?offset={}".format(offset)))
@@ -75,7 +79,26 @@ class GetAllCoursesTest(TestCase):
 			self.assertEqual(response.data[i]["course_code"], source_data[i].course_code)
 
 	def test_get_all_courses_normal_parameters(self):
-		pass
+		c = Client()
+		source_data = self._create_models_without_saving()
+
+		# Tests that two 'safe' parameters work
+		res = c.get("/course/all/?n={}&offset={}".format(10, 0))
+		self.assertEqual(res.status_code, 200)
+		self.assertEqual(res.data[0]["course_code"], source_data[0].course_code)
+
+		# Tests that length of get-request and source_data are the same, and status OK
+		res = c.get("/course/all/?n={}&offset={}".format(1, len(source_data)))
+		self.assertEqual(res.status_code, 200)
+		self.assertEqual(res.data, [])
+
+		# Test that last last element of get-request and last element of source_data are the same
+		res = c.get("/course/all/?n={}&offset={}".format(1, len(source_data)-1))
+		self.assertEqual(res.status_code, 200)
+		self.assertEqual(res.data[0]["course_code"], source_data[-1].course_code)
+		print(res.data)
+		print(source_data[-1])
+		# self.assertEqual(res.data[0]["course_code"], source_data[0].course_code)
 
 	def test_get_all_courses_invalid_parameters(self):
 		c = Client()
