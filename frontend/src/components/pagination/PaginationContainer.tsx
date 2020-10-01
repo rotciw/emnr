@@ -3,10 +3,14 @@ import React, { useState, useContext } from 'react';
 import { Pagination } from './Pagination';
 //import GlobalStateContext from '../../context/GlobalStateContext'
 
+interface PaginationContainerProps{
+  totalPages: number
+}
 
-export const PaginationContainer: React.FC = () => {
+export const PaginationContainer: React.FC<PaginationContainerProps> = ({
+  totalPages
+}) => {
   const {pageProvider} = useContext(GlobalStateContext)!;
-  const totalPages = 15;
   const handlePages = (updatePage: number) => pageProvider.setPage(updatePage);
 return (
     <div className="container">

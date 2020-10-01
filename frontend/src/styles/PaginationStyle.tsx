@@ -21,7 +21,7 @@ export const PaginationBtn = styled.div`
     border: none;
     padding: 8px;
     height: 15px;
-    width: 15px;
+    min-width: 15px;
     cursor: pointer;
     margin: 0 0.25rem;
     border-radius: 50%;

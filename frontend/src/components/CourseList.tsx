@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
 import { Course } from './Course';
 import axios from 'axios';
+import { GlobalStateContext } from 'context/GlobalStateContext';
 
 const Wrapper = styled.div`
   border: 1px solid #ccc;
@@ -33,19 +34,25 @@ export const CourseList: React.FC<CourseListProps> = ({
   const resultLimit:number = 25;
   let start:number = (pageNumber-1)*resultLimit;
 
+  const {totalPageProvider} = useContext(GlobalStateContext)!;
+
   useEffect (() => {
     
     const getCourses = async () => {
       await axios
       .get("http://localhost:8000/course/all/?n=25&offset="+start)
       .then(res => {
-        updateCourses(res.data);
+        updateCourses(res.data.data);
+        totalPageProvider.setTotalPage(Math.ceil(res.data.count/resultLimit));
       })
         .catch(err => console.log(err));        
     }
     getCourses();
     start += resultLimit;
   }, [pageNumber]); 
+
+
+
 
   return (
     <Wrapper>
