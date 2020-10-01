@@ -11,8 +11,10 @@ def health(request):
 
 @api_view(['GET'])
 def get_all_courses(request):
-    return Response(get_courses_from_db())
+    return Response(get_courses_from_db(request))
 
-def get_courses_from_db():
-    data = Course.objects.all()
+def get_courses_from_db(request):
+    number_of_courses = int(request.GET.get("n", Course.objects.all().count()))
+    offset = int(request.GET.get("offset", 0))
+    data = Course.objects.all()[offset:offset+number_of_courses]
     return list(data.values())
