@@ -1,7 +1,7 @@
 from django.test import TestCase
 import json
 from course.models import Course
-from course.views import get_all_courses, get_courses_from_db
+from course.views import get_all_courses, get_courses_from_db, get_course, get_single_course_from_db
 from django.test.client import RequestFactory
 from django.test import Client
 
@@ -116,10 +116,13 @@ class GetSingleCourseTest(TestCase):
 		self.rf = RequestFactory()
 
 	def test_get_course_from_db_existing_code(self):
-		pass
+		mock_request = self.rf.get("/course/?code=MFEL1010")
+		data = get_single_course_from_db(mock_request)
+		self.assertEqual(data["course_code"], "MFEL1010")
 
 	def test_get_course_from_db_nonexisting_code(self):
-		pass
+		with self.assertRaises(ValueError):
+			get_single_course_from_db(self.rf.get("/courses/all/?code=fdsfds"))
 
 	def test_get_course_from_db_no_code(self):
 		pass
@@ -131,5 +134,7 @@ class GetSingleCourseTest(TestCase):
 		pass
 
 	def test_get_course_no_code(self):
-		pass
+		c = Client()
+		res = c.get("/course/")
+		self.assertEqual(res.status_code, 400)
 
