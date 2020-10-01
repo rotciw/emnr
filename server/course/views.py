@@ -11,10 +11,30 @@ def health(request):
 
 @api_view(['GET'])
 def get_all_courses(request):
-    return Response(get_courses_from_db(request))
+    try:
+        data = get_courses_from_db(request)
+    except ValueError as e:
+        return Response(str(e), status=400)
+    return Response(data)
 
 def get_courses_from_db(request):
-    number_of_courses = int(request.GET.get("n", Course.objects.all().count()))
-    offset = int(request.GET.get("offset", 0))
-    data = Course.objects.all()[offset:offset+number_of_courses]
+    # Get and validate n parameter
+    number_of_courses = Course.objects.all().count()
+    n = request.GET.get("n", number_of_courses)
+    if isinstance(n, str) and not n.isdigit():
+        raise ValueError("Invalid value for n: {}".format(n))
+    n = int(n)
+    if n > number_of_courses:
+        raise ValueError("n is too large")
+
+    # Get and validate offset parameter
+    offset = request.GET.get("offset", 0)
+    if isinstance(offset, str) and not offset.isdigit():
+        raise ValueError("Invalid value for offset: {}".format(offset))
+    offset = int(offset)
+    if offset > number_of_courses:
+        raise ValueError("offset is too large")
+
+    # Fetch data from database
+    data = Course.objects.all()[offset:offset+n]
     return list(data.values())
