@@ -20,7 +20,7 @@ export const BottomRightTriangle = styled.div`
   left: ${(props: LayoutProps) => props.left || ''};
   width: ${(props: LayoutProps) => props.size || '100px'};
   height: ${(props: LayoutProps) => props.size || '100px'};
-  background-color: ${(props: LayoutProps) => props.color || '#000'}; /* Change default value to theme color? */
+  background-color: ${(props: LayoutProps) => props.color || '#000'};
   clip-path: polygon(0% 100%, 100% 100%, 100% 0%);
 `;
 
@@ -33,7 +33,7 @@ export const Circle = styled.div`
   left: ${(props: LayoutProps) => props.left || ''};
   width: ${(props: LayoutProps) => props.size || '100px'};
   height: ${(props: LayoutProps) => props.size || '100px'};
-  background-color: ${(props: LayoutProps) => props.color || '#000'}; /* Change default value to theme color? */
+  background-color: ${(props: LayoutProps) => props.color || '#000'};
 
 `;
 
