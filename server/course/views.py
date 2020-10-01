@@ -47,4 +47,4 @@ def get_courses_from_db(request):
 
 	# Fetch data from database
 	data = Course.objects.all()[offset:offset + n]
-	return list(data.values())
+	return {"count": number_of_courses, "data": list(data.values())}
