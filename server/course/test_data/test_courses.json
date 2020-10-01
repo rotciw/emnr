@@ -1,0 +1,354 @@
+[{
+"course_code": "TMR4300",
+"course_name": "Eksperimentell og numerisk hydrodynamikk",
+"credit": 7.5,
+"average_grade": 4.35833333333333
+},
+{
+"course_code": "TMR4305",
+"course_name": "Statisk og dynamisk analyse av marine konstruksjoner",
+"credit": 7.5,
+"average_grade": 2.75147928994083
+},
+{
+"course_code": "TMR4310",
+"course_name": "Marin teknikk  - Maskinerisystemer, sikkerhet og miljø",
+"credit": 7.5,
+"average_grade": 2.87846889952153
+},
+{
+"course_code": "TMR4500",
+"course_name": "Marin konstruksjonsteknikk, fordypningsprosjekt",
+"credit": 7.5,
+"average_grade": 3.86449864498645
+},
+{
+"course_code": "TMR4505",
+"course_name": "Marin konstruksjonsteknikk, fordypningsemne",
+"credit": 7.5,
+"average_grade": 3.453125
+},
+{
+"course_code": "TMR4510",
+"course_name": "Marin kybernetikk, fordypningsprosjekt",
+"credit": 7.5,
+"average_grade": 4.00578034682081
+},
+{
+"course_code": "TMR4515",
+"course_name": "Marin kybernetikk, fordypningsemne",
+"credit": 7.5,
+"average_grade": 4.02369668246446
+},
+{
+"course_code": "TMR4520",
+"course_name": "Marin hydrodynamikk, fordypningsprosjekt",
+"credit": 7.5,
+"average_grade": 4.16666666666667
+},
+{
+"course_code": "TMR4525",
+"course_name": "Marin hydrodynamikk, fordypningsemne",
+"credit": 7.5,
+"average_grade": 4.19647355163728
+},
+{
+"course_code": "TMR4530",
+"course_name": "Marint maskineri, fordypningsprosjekt",
+"credit": 7.5,
+"average_grade": 3.71794871794872
+},
+{
+"course_code": "TMR4535",
+"course_name": "Marint maskineri, fordypningsemne",
+"credit": 7.5,
+"average_grade": 3.8125
+},
+{
+"course_code": "TMR4550",
+"course_name": "Sikkerhet og driftsledelse, fordypningsprosjekt",
+"credit": 7.5,
+"average_grade": 3.74444444444444
+},
+{
+"course_code": "TMR4555",
+"course_name": "Sikkerhet og driftsledelse, fordypningsemne",
+"credit": 7.5,
+"average_grade": 3.36734693877551
+},
+{
+"course_code": "TMR4560",
+"course_name": "Marin prosjektering, fordypningsprosjekt",
+"credit": 7.5,
+"average_grade": 3.67796610169491
+},
+{
+"course_code": "TMR4565",
+"course_name": "Marin prosjektering, fordypningsemne",
+"credit": 7.5,
+"average_grade": 3.88275862068965
+},
+{
+"course_code": "TN202406",
+"course_name": "Sjørett",
+"credit": 5.0,
+"average_grade": 3.55897435897436
+},
+{
+"course_code": "TPG4105",
+"course_name": "Petroleumsteknologi, grunnkurs",
+"credit": 7.5,
+"average_grade": 2.66558966074313
+},
+{
+"course_code": "TPG4140",
+"course_name": "Naturgass",
+"credit": 7.5,
+"average_grade": 3.35419847328244
+},
+{
+"course_code": "TPG4150",
+"course_name": "Reservoarutvinningsteknikk",
+"credit": 7.5,
+"average_grade": 4.13782991202346
+},
+{
+"course_code": "TPG4177",
+"course_name": "Karbonat reservoarkarakterisering",
+"credit": 7.5,
+"average_grade": 2.85448916408669
+},
+{
+"course_code": "TPG4185",
+"course_name": "Formasjonsmekanikk ",
+"credit": 7.5,
+"average_grade": 3.23583180987203
+},
+{
+"course_code": "TPG4190",
+"course_name": "Seismisk datainnsamling og prosessering",
+"credit": 7.5,
+"average_grade": 3.11246200607903
+},
+{
+"course_code": "TPG4195",
+"course_name": "Tolkning og modellering av gravimetri og magnetometri",
+"credit": 7.5,
+"average_grade": 3.890625
+},
+{
+"course_code": "TPG4215",
+"course_name": "Boreteknologi  2 ",
+"credit": 7.5,
+"average_grade": 3.17345132743363
+},
+{
+"course_code": "TPG4245",
+"course_name": "Produksjonsbrønner",
+"credit": 7.5,
+"average_grade": 2.80296610169492
+},
+{
+"course_code": "TPK4160",
+"course_name": "Verdikjedestyring",
+"credit": 7.5,
+"average_grade": 2.95145631067961
+},
+{
+"course_code": "TPK4165",
+"course_name": "ERP og PLM systemer",
+"credit": 7.5,
+"average_grade": 3.08958333333333
+},
+{
+"course_code": "TPK5100",
+"course_name": "Praktisk prosjektledelse",
+"credit": 7.5,
+"average_grade": 3.64850136239782
+},
+{
+"course_code": "TVM4105",
+"course_name": "Hydrologi",
+"credit": 7.5,
+"average_grade": 2.98609501738123
+},
+{
+"course_code": "TVM4106",
+"course_name": "Hydrologisk modellering",
+"credit": 7.5,
+"average_grade": 3.03440366972477
+},
+{
+"course_code": "TVM4155",
+"course_name": "Numeriske modeller og hydraulikk",
+"credit": 7.5,
+"average_grade": 3.0
+},
+{
+"course_code": "TVM4510",
+"course_name": "Vannforsynings- og avløpsteknikk, fordypningsprosjekt",
+"credit": 7.5,
+"average_grade": 3.94074074074074
+},
+{
+"course_code": "TVM4520",
+"course_name": "Vannkraft og vassdragsteknikk, fordypningsprosjekt",
+"credit": 7.5,
+"average_grade": 3.78571428571429
+},
+{
+"course_code": "TVM5115",
+"course_name": "Planning and Design of Dams",
+"credit": 7.5,
+"average_grade": 3.1
+},
+{
+"course_code": "TVM5125",
+"course_name": "Hydraulic Design",
+"credit": 7.5,
+"average_grade": 3.39490445859873
+},
+{
+"course_code": "TVM5135",
+"course_name": "Vannkraftplanlegging",
+"credit": 7.5,
+"average_grade": 2.94488188976378
+},
+{
+"course_code": "TVM5160",
+"course_name": "Sedimenthåndtering ved vannkraftkonstruksjoner",
+"credit": 7.5,
+"average_grade": 3.91814946619217
+},
+{
+"course_code": "7VHSP1",
+"course_name": "Helsestasjon og skolehelsetjenesten som arbeidsfelt",
+"credit": 15.0,
+"average_grade": 0.0
+},
+{
+"course_code": "AFR1003",
+"course_name": "Sykdom og helse i Afrika",
+"credit": 15.0,
+"average_grade": 0.0
+},
+{
+"course_code": "HLS0001",
+"course_name": "Introduksjon til helsefremming",
+"credit": 7.5,
+"average_grade": 3.3655637254902
+},
+{
+"course_code": "HLS3002",
+"course_name": "Kvantitative metoder og statistikk",
+"credit": 7.5,
+"average_grade": 3.25313807531381
+},
+{
+"course_code": "HLS3505",
+"course_name": "Selvmordsforebygging",
+"credit": 7.5,
+"average_grade": 0.0
+},
+{
+"course_code": "HLS3900",
+"course_name": "Masteroppgave i helsevitenskap/samfunnsvitenskapelig variant",
+"credit": 45.0,
+"average_grade": 3.22352941176471
+},
+{
+"course_code": "HR404106",
+"course_name": "Tverrfaglig videreutdanning i rehabilitering - del 2",
+"credit": 30.0,
+"average_grade": 3.80246913580247
+},
+{
+"course_code": "K1116",
+"course_name": "Høgskolepedagogikk",
+"credit": 15.0,
+"average_grade": 0.0
+},
+{
+"course_code": "KLMED8004",
+"course_name": "Medisinsk statistikk, del 1",
+"credit": 7.5,
+"average_grade": 0.0
+},
+{
+"course_code": "MD4011",
+"course_name": "Medisin - semester IAB",
+"credit": 45.0,
+"average_grade": 0.0
+},
+{
+"course_code": "MD4020",
+"course_name": "Medisin - semester ICD",
+"credit": 60.0,
+"average_grade": 0.0
+},
+{
+"course_code": "MD4030",
+"course_name": "Medisin - semester IIAB",
+"credit": 60.0,
+"average_grade": 0.0
+},
+{
+"course_code": "MD4051",
+"course_name": "Medisin - semester IIIA - hovedoppgave",
+"credit": 30.0,
+"average_grade": 0.0
+},
+{
+"course_code": "MD4062",
+"course_name": "Medisin - semester IIID",
+"credit": 30.0,
+"average_grade": 0.0
+},
+{
+"course_code": "MD4072",
+"course_name": "Medisin forskerlinjen semester 2",
+"credit": 30.0,
+"average_grade": 0.0
+},
+{
+"course_code": "MFEL1010",
+"course_name": "Innføring i medisin for ikke-medisinere",
+"credit": 7.5,
+"average_grade": 0.34127942063971
+},
+{
+"course_code": "MFEL1050",
+"course_name": "Innføring i idrettsfysiologi - Trening for prestasjon, helse og livskvalitet",
+"credit": 7.5,
+"average_grade": 0.0
+},
+{
+"course_code": "MFEL4852",
+"course_name": "Eksperter i team - Vitenskap og fiksjon",
+"credit": 7.5,
+"average_grade": 4.38315217391304
+},
+{
+"course_code": "MOL3001",
+"course_name": "Medisinsk genetikk",
+"credit": 7.5,
+"average_grade": 2.93704600484261
+},
+{
+"course_code": "MOL3010",
+"course_name": "Animalsk cellekultur",
+"credit": 7.5,
+"average_grade": 3.60714285714286
+},
+{
+"course_code": "MOL3901",
+"course_name": "Masteroppgave i molekylærmedisin",
+"credit": 60.0,
+"average_grade": 4.03367003367003
+},
+{
+"course_code": "MOL4010",
+"course_name": "Grunnleggende molekylærbiologi",
+"credit": 7.5,
+"average_grade": 1.91864406779661
+}]
