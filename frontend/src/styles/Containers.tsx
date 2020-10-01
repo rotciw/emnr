@@ -27,9 +27,17 @@ export const ShapeContainer = styled.div`
   overflow: hidden;
 `;
 
+export const LocalShapeContainer = styled.div`
+  position: relative;
+  z-index: -1;
+  overflow: hidden;
+  flex: 1;
+`;
+
 export const FlexItem = styled.div`
   flex: ${(props: LayoutProps) => props.flex || 1};
   margin: ${(props: LayoutProps) => props.margin || 'auto'};
+  width: '';
 `;
 
 export const HrLine = styled.div`

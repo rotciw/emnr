@@ -10,6 +10,7 @@ interface LayoutProps {
   bottom?: string;
   left?: string;
   color?: string;
+  angle?: string;
 }
 
 export const BottomRightTriangle = styled.div`
@@ -34,7 +35,18 @@ export const Circle = styled.div`
   width: ${(props: LayoutProps) => props.size || '100px'};
   height: ${(props: LayoutProps) => props.size || '100px'};
   background-color: ${(props: LayoutProps) => props.color || '#000'};
+`;
 
+export const RotatedSquare = styled.div`
+  position: absolute;
+  top: ${(props: LayoutProps) => props.top || ''};
+  right: ${(props: LayoutProps) => props.right || ''};
+  bottom: ${(props: LayoutProps) => props.bottom || ''};
+  left: ${(props: LayoutProps) => props.left || ''};
+  width: ${(props: LayoutProps) => props.size || '100px'};
+  height: ${(props: LayoutProps) => props.size || '100px'};
+  background-color: ${(props: LayoutProps) => props.color || '#000'};
+  transform: rotate(${(props: LayoutProps) => props.angle || '45deg'});
 `;
 
 

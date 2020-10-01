@@ -1,9 +1,16 @@
 import React, { useCallback } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Layout } from 'styles/Layout';
-import { FlexContainer, FlexItem, HrLine } from 'styles/Containers';
+import {
+  FlexContainer,
+  FlexItem,
+  HrLine,
+  LocalShapeContainer,
+} from 'styles/Containers';
 import { BoldTitle, Title, SubTitle, GoBackText } from 'styles/Text';
 import { RateCourseButton } from 'styles/Buttons';
+import { Circle, RotatedSquare } from 'styles/Shapes';
+import { defaultTheme } from 'styles/theme';
 
 interface CourseViewProps {
   courseName: String;
@@ -22,21 +29,24 @@ export const CoursePage: React.FC<CourseViewProps> = (
   const handleOnClick = useCallback(() => history.push('/'), [history]);
 
   return (
-    <Layout>
-      <FlexItem margin='2vh 0 4vh 0' onClick={handleOnClick}>
-        <GoBackText>Tilbake</GoBackText>
-      </FlexItem>
+    <Layout padding="0 20%">
       <FlexContainer>
-        <FlexItem flex={2}>
+        <FlexItem margin='0 0 0 10vh'>
+          <FlexItem margin='2vh 0 4vh 0' onClick={handleOnClick}>
+            <GoBackText>Tilbake</GoBackText>
+          </FlexItem>
           <Title margin='0 0 5px 0'>{courseCode}</Title>
           <BoldTitle fontSize='30px'>{courseName}</BoldTitle>
           <BoldTitle margin='10px 0 0 0'>{score} / 5</BoldTitle>
           <SubTitle margin='0 0 4vh 0'>Basert på x antall vurderinger</SubTitle>
           <RateCourseButton>Vurder {courseCode}</RateCourseButton>
         </FlexItem>
-        <FlexItem>Ball</FlexItem>
+        <LocalShapeContainer>
+          <Circle color={defaultTheme.lightBlue} size='215px' left='0' top='50px' />
+          <RotatedSquare color={defaultTheme.blue} size='150px' left='100px' top='30px' angle='20deg' />
+        </LocalShapeContainer>
       </FlexContainer>
-      <HrLine/>
+      <HrLine />
     </Layout>
   );
 };
