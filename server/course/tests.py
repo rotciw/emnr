@@ -37,7 +37,22 @@ class GetAllCoursesTest(TestCase):
 			self.assertEqual(data[i]["course_code"], source_data[i].course_code)
 
 	def test_get_courses_from_db_normal_parameters(self):
-		pass
+		n = 25
+		offset = 0
+		source_data = self._create_models_without_saving()
+
+		def get_courses_with_parameters(n, offset):
+			mock_request = self.rf.get("/courses/all/?n={}&offset={}".format(n, offset))
+			data = get_courses_from_db(mock_request)
+			return data
+
+		def assert_equal_content(data):
+			for i in range(n):
+				self.assertEqual(data[i]["course_code"], source_data[offset+i].course_code)
+
+		for i in range(len(source_data) // n ):
+			assert_equal_content(get_courses_with_parameters(n, offset))
+			offset += 1
 
 	def test_get_courses_from_db_invalid_parameters(self):
 		pass
