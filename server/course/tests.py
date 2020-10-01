@@ -45,14 +45,21 @@ class GetAllCoursesTest(TestCase):
 	def test_get_all_courses_no_parameters(self):
 		c = Client()
 		response = c.get("/course/all/")
+		self.assertEqual(response.status_code, 200)
 		source_data = self._create_models_without_saving()
 		self.assertEqual(len(response.data), len(source_data))
 		for i in range(len(response.data)):
 			self.assertEqual(response.data[i]["course_code"], source_data[i].course_code)
 
-
 	def test_get_all_courses_normal_parameters(self):
 		pass
 
 	def test_get_all_courses_invalid_parameters(self):
-		pass
+		c = Client()
+		ns = ["test", "-12", "{}".format(len(self._create_models_without_saving()) + 10), "10", "10", "10", "abc"]
+		offsets = ["0", "12", "1", "abcd", "-1253", "{}".format(len(self._create_models_without_saving()) + 10), "-1452"]
+
+		# Test all the pairwise combinations of invalid parameters:
+		for i in range(len(ns)):
+			res = c.get("/course/all/?n={}&offset={}".format(ns[i], offsets[i]))
+			self.assertEqual(res.status_code, 400)
