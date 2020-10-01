@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { PaginationWrapper, PaginationBtn, Separator } from '../../styles/PaginationStyle';
-export interface Props {
+
+export interface PaginationProps {
   page: number;
   totalPages: number;
   handlePagination: (page: number) => void;
 }
-export const PaginationComponent: React.FC<Props> = ({
+export const PaginationComponent: React.FC<PaginationProps> = ({
   page,
   totalPages,
   handlePagination,

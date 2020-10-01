@@ -9,7 +9,7 @@ import { PaginationContainer } from 'components/pagination/PaginationContainer';
 
 export const CourseListPage: React.FC = () => {
   const code: string = useLocation().pathname.substr(8);
-  const { userProvider, pageProvider } = useContext(GlobalStateContext)!;
+  const { userProvider, pageProvider, totalPageProvider } = useContext(GlobalStateContext)!;
 
   return (
     <Layout>
@@ -20,7 +20,7 @@ export const CourseListPage: React.FC = () => {
         <FlexItem>
             <CourseList pageNumber={pageProvider.page}/>
         </FlexItem>
-        <PaginationContainer/>
+        <PaginationContainer totalPages={totalPageProvider.totalPage}/>
     </Layout>
   );
 };
