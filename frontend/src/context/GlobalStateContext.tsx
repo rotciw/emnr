@@ -3,6 +3,7 @@ import React, { createContext, useState, useMemo } from 'react';
 interface GlobalStateContextProps {
   authProvider: AuthProviderValue;
   userProvider: UserProviderValue;
+  pageProvider: PageProviderValue;
 }
 
 interface AuthProviderValue {
@@ -15,6 +16,11 @@ interface UserProviderValue {
   setEmail: (val: string) => void;
 }
 
+interface PageProviderValue {
+  page: number;
+  setPage: (val: number) => void;
+}
+
 export const GlobalStateContext = createContext<GlobalStateContextProps | null>(
   null,
 );
@@ -22,15 +28,18 @@ export const GlobalStateContext = createContext<GlobalStateContextProps | null>(
 const GlobalStateProvider: React.FC = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
+  const [page, setPage] = useState<number>(1);
 
   const authProvider = useMemo(() => ({ token, setToken }), [token, setToken]);
   const userProvider = useMemo(() => ({ email, setEmail }), [email, setEmail]);
+  const pageProvider = useMemo(() => ({ page, setPage }), [page, setPage]);
 
   return (
     <GlobalStateContext.Provider
       value={{
         authProvider,
         userProvider,
+        pageProvider,
       }}
     >
       {children}
