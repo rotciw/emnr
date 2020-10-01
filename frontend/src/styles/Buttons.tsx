@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 interface ButtonProps {
   clickHandler?: (value?: any) => void;
-  children: string;
+  children: any;
 }
 
 const StyledLoginBtn = styled.button`
@@ -18,9 +18,28 @@ const StyledLoginBtn = styled.button`
   }
 `;
 
+const StyledCourseBtn = styled.button`
+  border: 2px solid #ccc;
+  text-align: center;
+  background-color: ${({ theme }) => theme.white};
+  width: 100%;
+  :hover {
+    background-color: #ccc;
+    color: white;
+    border: 2px solid #ccc;
+  }
+`;
+
 export const LoginButton: React.FC<ButtonProps> = ({
   clickHandler,
   children,
 }) => {
   return <StyledLoginBtn onClick={clickHandler}>{children}</StyledLoginBtn>;
+};
+
+export const CourseButton: React.FC<ButtonProps> = ({
+  clickHandler,
+  children,
+}) => {
+  return <StyledCourseBtn onClick={clickHandler}>{children}</StyledCourseBtn>;
 };
