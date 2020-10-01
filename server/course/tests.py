@@ -1,7 +1,7 @@
 from django.test import TestCase
 import json
 from course.models import Course
-from course.views import get_all_courses, get_courses_from_db, get_course, get_single_course_from_db
+from course.views import get_courses_from_db, get_single_course_from_db
 from django.test.client import RequestFactory
 from django.test import Client
 
@@ -49,7 +49,7 @@ class GetAllCoursesTest(TestCase):
 
 		def assert_equal_content(data):
 			for i in range(n):
-				self.assertEqual(data[i]["course_code"], source_data[offset+i].course_code)
+				self.assertEqual(data[i]["course_code"], source_data[offset + i].course_code)
 
 		# Tests for equal data in database and text file, with use of increasing offset
 		for i in range(len(source_data) // n):
@@ -58,8 +58,8 @@ class GetAllCoursesTest(TestCase):
 
 	def test_get_courses_from_db_invalid_parameters(self):
 		source_data = _create_models_without_saving()
-		n_list = [len(source_data)+1, 'Character test', -1]
-		offset_list = [len(source_data)+1, 'Character test', -1]
+		n_list = [len(source_data) + 1, 'Character test', -1]
+		offset_list = [len(source_data) + 1, 'Character test', -1]
 		# Tests different invalid parameters for 'n'
 		for number in n_list:
 			with self.assertRaises(ValueError):
@@ -93,7 +93,7 @@ class GetAllCoursesTest(TestCase):
 		self.assertEqual(res.data, [])
 
 		# Test that last last element of get-request and last element of source_data are the same
-		res = c.get("/course/all/?n={}&offset={}".format(1, len(source_data)-1))
+		res = c.get("/course/all/?n={}&offset={}".format(1, len(source_data) - 1))
 		self.assertEqual(res.status_code, 200)
 		self.assertEqual(res.data[0]["course_code"], source_data[-1].course_code)
 
@@ -106,6 +106,7 @@ class GetAllCoursesTest(TestCase):
 		for i in range(len(ns)):
 			res = c.get("/course/all/?n={}&offset={}".format(ns[i], offsets[i]))
 			self.assertEqual(res.status_code, 400)
+
 
 class GetSingleCourseTest(TestCase):
 	def setUp(self) -> None:
@@ -125,16 +126,27 @@ class GetSingleCourseTest(TestCase):
 			get_single_course_from_db(self.rf.get("/courses/all/?code=fdsfds"))
 
 	def test_get_course_from_db_no_code(self):
-		pass
+		mock_request = self.rf.get("/course/")
+		with self.assertRaises(ValueError):
+			get_single_course_from_db(mock_request)
+		mock_request = self.rf.get("/course/?p=12341asbs")
+		with self.assertRaises(ValueError):
+			get_single_course_from_db(mock_request)
 
 	def test_get_course_existing_code(self):
-		pass
+		c = Client()
+		course_code = "MFEL1010"
+		response = c.get("/course/?code={}".format(course_code))
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.data["course_code"], course_code)
 
 	def test_get_course_nonexisting_code(self):
-		pass
+		c = Client()
+		test_code = "TEST101"
+		response = c.get("/course/?code={}".format(test_code))
+		self.assertEqual(response.status_code, 400)
 
 	def test_get_course_no_code(self):
 		c = Client()
 		res = c.get("/course/")
 		self.assertEqual(res.status_code, 400)
-
