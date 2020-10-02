@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 interface CourseProps {
   courseName: String;
   courseCode: String;
-  score: Number;
+  gradeAvg: Number;
+  credit: Number;
 }
 
 const handleCourseClick = () => {
@@ -14,32 +15,29 @@ const handleCourseClick = () => {
 
 const courseStyle = {
   display: 'inline-block',
-  width: '33%',
+  width: '25%',
 };
 
 export const Course: React.FC<CourseProps> = ({
   courseName,
   courseCode,
-  score,
-}) => {
+  gradeAvg,
+  credit,
+  }) => {
   return (
     <tr>
-      <td colSpan={3}>
-        <Link
-          to={{
-            pathname: '/course/' + courseCode,
-            state: { courseName, courseCode, score },
-          }}
-        >
-          <CourseButton clickHandler={handleCourseClick}>
-            <div>
-              <p style={courseStyle}>{courseName}</p>
-              <p style={courseStyle}>{courseCode}</p>
-              <p style={courseStyle}>{score}</p>
-            </div>
-          </CourseButton>
-        </Link>
-      </td>
+        <td colSpan={3}>
+          <Link to={"/course/"+courseCode}>
+            <CourseButton clickHandler={handleCourseClick}>
+                <div>
+                  <p style={courseStyle}>{courseName}</p>
+                  <p style={courseStyle}>{courseCode}</p>
+                  <p style={courseStyle}>{gradeAvg}</p>
+                  <p style={courseStyle}>{credit}</p>
+                </div>
+            </CourseButton>
+          </Link>
+        </td>
     </tr>
   );
 };

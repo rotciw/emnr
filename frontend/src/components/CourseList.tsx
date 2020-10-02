@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
 import { Course } from './Course';
 import axios from 'axios';
+import { GlobalStateContext } from 'context/GlobalStateContext';
 
 const Wrapper = styled.div`
   border: 1px solid #ccc;
@@ -14,52 +15,60 @@ const Wrapper = styled.div`
 `;
 
 interface CourseListProps {
+  pageNumber: number;
 }
 
 interface CourseProps{
-  courseNames: Array<String>;
-  courseCodes: Array<String>;
-  gradeAvgs: Array<Number>;
+  course_name: string;
+  course_code: string;
+  average_grade: number;
+  credit: number;
 }
 
 export const CourseList: React.FC<CourseListProps> = ({
+  pageNumber,
   }) => {
 
+  const [courses, updateCourses] = useState<CourseProps[]>([]);
 
-  const [courses, updateCourses] = useState<CourseProps>({courseNames: [''],courseCodes: [''],gradeAvgs: [0]});
+  const resultLimit:number = 25;
+  let start:number = (pageNumber-1)*resultLimit;
+
+  const {totalPageProvider} = useContext(GlobalStateContext)!;
 
   useEffect (() => {
-    const getCourses = async () => {
     
-      axios
-      .get("http://localhost:8000/course/all/")
-      .then(res => updateCourses({
-          courseNames: ['2323','2323'],//res.data.course_name,
-          courseCodes: ['2323','343434'],//res.data.course_code,
-          gradeAvgs: [2,3]//res.data.average_grade 
-        }))
-        .catch(err => console.log(err));
-        
-      console.log(courses)
+    const getCourses = async () => {
+      await axios
+      .get("http://localhost:8000/course/all/?n=25&offset="+start)
+      .then(res => {
+        updateCourses(res.data.data);
+        totalPageProvider.setTotalPage(Math.ceil(res.data.count/resultLimit));
+      })
+        .catch(err => console.log(err));        
     }
     getCourses();
-  }, []);
+    start += resultLimit;
+  }, [pageNumber]); 
+
+
+
 
   return (
     <Wrapper>
-      
       <table>
         <thead>
             <tr>
                 <th>Fagnavn</th>
                 <th>Fagkode</th>
-                <th>Vurdering</th>
+                <th>Gjennomsnittskarakter</th>
+                <th>Studiepoeng</th>
             </tr>
         </thead>
         <tbody>
           {
-            courses.courseNames.map(function(currentCourse, i){
-              return <Course courseName={"Objekt"} courseCode={"TDT4100"} score={4.5} key={i} />;
+            courses.map(currentCourse => { 
+              return <Course courseName={currentCourse.course_name} courseCode={currentCourse.course_code} gradeAvg={currentCourse.average_grade} credit={currentCourse.credit}/>;
             })
           }
         </tbody>
