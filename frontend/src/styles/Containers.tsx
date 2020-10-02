@@ -2,53 +2,45 @@ import React from 'react';
 import styled from 'styled-components';
 
 interface LayoutProps {
-  clickHandler?: (value?: any) => void;
-  children: any;
+  margin?: string;
+  flex?: number;
 }
 
 export const FlexContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 `;
 
-export const FlexItem = styled.div`
+export const CenteredFlexContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+// Used to hide shape overflow
+export const ShapeContainer = styled.div`
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+`;
+
+export const LocalShapeContainer = styled.div`
+  position: relative;
+  z-index: -1;
+  overflow: hidden;
   flex: 1;
 `;
 
-// const StyledLoginBtn = styled.button`
-//   display: block;
-//   border: 2px solid #ccc;
-//   padding: 5px 15px 5px 15px;
-//   text-align: center;
-//   :hover {
-//     background-color: #44c802;
-//     color: white;
-//     border: 2px solid white;
-//   }
-// `;
+export const FlexItem = styled.div`
+  flex: ${(props: LayoutProps) => props.flex || 1};
+  margin: ${(props: LayoutProps) => props.margin || 'auto'};
+  width: '';
+`;
 
-// const StyledCourseBtn = styled.button`
-//   border: 2px solid #ccc;
-//   text-align: center;
-//   background-color: ${({ theme }) => theme.white};
-//   width: 100%;
-//   :hover {
-//     background-color: #ccc;
-//     color: white;
-//     border: 2px solid #ccc;
-//   }
-// `;
-
-// export const LoginButton: React.FC<ButtonProps> = ({
-//   clickHandler,
-//   children,
-// }) => {
-//   return <StyledLoginBtn onClick={clickHandler}>{children}</StyledLoginBtn>;
-// };
-
-// export const CourseButton: React.FC<ButtonProps> = ({
-//   clickHandler,
-//   children,
-// }) => {
-//   return <StyledCourseBtn onClick={clickHandler}>{children}</StyledCourseBtn>;
-// };
+export const HrLine = styled.div`
+  margin: 5vh 0 2vh 0;
+  border-bottom: 1px solid ${({theme}) => theme.darkBlue};
+`;

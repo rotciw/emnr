@@ -10,8 +10,8 @@ interface CourseProps {
 }
 
 const handleCourseClick = () => {
-    console.log("Trykk på fag 1");
-}
+  console.log('Trykk på fag 1');
+};
 
 const courseStyle = {
   display: 'inline-block',
@@ -39,6 +39,5 @@ export const Course: React.FC<CourseProps> = ({
           </Link>
         </td>
     </tr>
-
   );
 };

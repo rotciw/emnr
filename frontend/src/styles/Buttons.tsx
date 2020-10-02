@@ -8,13 +8,16 @@ interface ButtonProps {
 
 const StyledLoginBtn = styled.button`
   display: block;
-  border: 2px solid #ccc;
-  padding: 5px 15px 5px 15px;
+  color: ${({theme}) => theme.light};
+  background-color: ${({theme}) => theme.darkBlue};
+  border: none;
+  border-radius: 5px;
+  padding: 15px 50px;
   text-align: center;
+  cursor: pointer;
+  user-select: none;
   :hover {
-    background-color: #44c802;
-    color: white;
-    border: 2px solid white;
+    background-color: ${({theme}) => theme.blue};
   }
 `;
 
@@ -43,3 +46,12 @@ export const CourseButton: React.FC<ButtonProps> = ({
 }) => {
   return <StyledCourseBtn onClick={clickHandler}>{children}</StyledCourseBtn>;
 };
+
+export const RateCourseButton = styled.div`
+  background-color: ${({ theme }) => theme.red};
+  padding: 10px 20px;
+  color: white;
+  border: 1px solid black;
+  width: fit-content;
+  font-family: gilroyxbold;
+`;

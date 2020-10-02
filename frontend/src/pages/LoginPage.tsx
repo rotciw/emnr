@@ -1,21 +1,20 @@
 import React from 'react';
-import styled from 'styled-components';
 import FeideLogin from '../components/FeideLogin';
+import { CenteredFlexContainer, ShapeContainer } from 'styles/Containers';
+import { Circle, BottomRightTriangle } from 'styles/Shapes';
+import { defaultTheme } from 'styles/theme'
 
 interface LoginProps {}
 
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: 'center';
-  height: '100%';
-`;
-
 const LoginPage: React.FC<LoginProps> = () => {
   return (
-    <Wrapper>
+    <CenteredFlexContainer>
       <FeideLogin />
-    </Wrapper>
+      <ShapeContainer>
+        <Circle color={defaultTheme.red} bottom='-7vmin' left='-10vmin' size='50vmin'/>
+        <BottomRightTriangle color={defaultTheme.darkBlue} bottom='0' right='0' size='40vmin'/>
+      </ShapeContainer>
+    </CenteredFlexContainer>
   );
 };
 
