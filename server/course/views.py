@@ -26,7 +26,8 @@ def get_courses_from_db(request):
 	:param request: GET request containing optional parameters n (number of courses to fetch) and offset (index to
 					start the fetching at).
 	:raises: ValueError if n or offset is invalid.
-	:return: List of JSON objects, each containing course information.
+	:return: JSON containing total number of courses in database (count), and list of JSON objects (data),
+			 each containing course information.
 	"""
 	# Get and validate n parameter
 	number_of_courses = Course.objects.all().count()
@@ -47,7 +48,7 @@ def get_courses_from_db(request):
 
 	# Fetch data from database
 	data = Course.objects.all()[offset:offset + n]
-	return list(data.values())
+	return {"count": number_of_courses, "data": list(data.values())}
 
 
 @api_view(['GET'])
