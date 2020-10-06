@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.db.models import Q
 import json
 from course.models import Course
 
@@ -46,8 +47,14 @@ def get_courses_from_db(request):
 	if offset > number_of_courses:
 		raise ValueError("offset is too large")
 
+	# Get search parameter and combines the fields "course_code" and "course_name" into an OR field,
+	# by making a Q object.
+	search = request.GET.get("search", "")
+	combined_search_filter = Q(course_code__contains=search) | Q(course_name__contains=search)
+
+
 	# Fetch data from database
-	data = Course.objects.all()[offset:offset + n]
+	data = Course.objects.filter(combined_search_filter)[offset:offset + n]
 	return {"count": number_of_courses, "data": list(data.values())}
 
 
