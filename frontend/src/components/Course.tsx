@@ -32,7 +32,7 @@ export const Course: React.FC<CourseProps> = ({
                 <div>
                   <p style={courseStyle}>{courseName}</p>
                   <p style={courseStyle}>{courseCode}</p>
-                  <p style={courseStyle}>{gradeAvg}</p>
+                  <p style={courseStyle}>{gradeAvg.toFixed(2)}</p>
                   <p style={courseStyle}>{credit}</p>
                 </div>
             </CourseButton>
