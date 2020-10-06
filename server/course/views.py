@@ -4,6 +4,10 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import json
 from course.models import Course
+from auth.views import get_token
+import requests
+import json
+from unidecode import unidecode
 
 
 # Create your views here.
@@ -73,10 +77,6 @@ def get_single_course_from_db(request):
 	if not Course.objects.filter(course_code=code).exists():
 		raise ValueError("Course does not exist in database")
 	return Course.objects.filter(course_code=code).values()[0]
-from auth.views import get_token
-import requests
-import json
-
 # Create your views here.
 def health(request):
     return HttpResponse("OK")
@@ -94,13 +94,27 @@ def get_current_user_courses(request):
             'authorization': 'Bearer {}'.format(access_token),
         }
     )
-    api_request.encoding = "utf-8"
+
+    print(api_request)
+    #api_request.encoding = "utf-8"
 
     json_object = api_request.json()
-    print(json_object[0])
 
-    for subj in json_object:
-        print(subj["displayName"].encode("latin-1"))
 
-    
+
+    course_codes = []
+
+
+    for obj in json_object:
+        if 'emne' in obj['type'].split(':'):
+            id_split = obj['id'].split(':')
+            course_code = unidecode(id_split[-2])
+
+
+            course_codes.append(course_code)
+
+    print(course_codes)
+
+
     return HttpResponse(api_request)
+    #return HttpResponse(json.dumps(course_codes))
