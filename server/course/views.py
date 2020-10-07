@@ -51,8 +51,15 @@ def get_courses_from_db(request):
 	if offset > number_of_courses:
 		raise ValueError("offset is too large")
 
+	# Get order_by and ascending parameters
+	ascending = request.GET.get("ascending", True)
+	order_by = request.GET.get("order_by", "course_name")
+	if ascending == "False":
+		print("hallo")
+		order_by = "-" + order_by
+
 	# Fetch data from database
-	data = Course.objects.filter(combined_search_filter)[offset:offset + n]
+	data = Course.objects.filter(combined_search_filter).order_by(order_by)[offset:offset + n]
 	return {"count": number_of_courses, "data": list(data.values())}
 
 
