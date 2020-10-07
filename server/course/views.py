@@ -24,8 +24,9 @@ def get_all_courses(request):
 def get_courses_from_db(request):
 	"""
 	Helper method for fetching an arbitrary sequence of courses from the database.
-	:param request: GET request containing optional parameters n (number of courses to fetch) and offset (index to
-					start the fetching at).
+	:param request: GET request containing optional parameters n (number of courses to fetch), offset (index to
+					start the fetching at) and search (filters courses on whether code or name contains the search
+					input).
 	:raises: ValueError if n or offset is invalid.
 	:return: JSON containing total number of courses in database (count), and list of JSON objects (data),
 			 each containing course information.
