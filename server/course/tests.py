@@ -118,10 +118,6 @@ class GetAllCoursesTest(TestCase):
 			res = c.get("/course/all/?n={}&offset={}".format(ns[i], offsets[i]))
 			self.assertEqual(res.status_code, 400)
 
-	# * "count" er likt som antall treff
-	# * Man får minst ett treff og status kode 200 når man søker på noe som kommer fra et av fagene.
-	# * Man får ingen treff om man søker på noe fullstendig bullshit.
-	# * Ingen parametere burde fungere helt fint
 	def test_get_courses_from_db_search_good_parameter(self):
 		first_test_course = _get_first_test_course()
 		search_value = first_test_course.get("course_code")[1:4]
