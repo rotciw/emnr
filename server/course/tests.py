@@ -67,7 +67,7 @@ class GetAllCoursesTest(TestCase):
 
 	def test_get_courses_from_db_invalid_parameters(self):
 		source_data = _create_models_without_saving()
-		n_list = [len(source_data) + 1, 'Character test', -1]
+		n_list = ['Character test', -1]
 		offset_list = [len(source_data) + 1, 'Character test', -1]
 
 		# Tests different invalid parameters for 'n'
@@ -110,8 +110,8 @@ class GetAllCoursesTest(TestCase):
 
 	def test_get_all_courses_invalid_parameters(self):
 		c = Client()
-		ns = ["test", "-12", "{}".format(len(_create_models_without_saving()) + 10), "10", "10", "10", "abc"]
-		offsets = ["0", "12", "1", "abcd", "-1253", "{}".format(len(_create_models_without_saving()) + 10), "-1452"]
+		ns = ["test", "-12", "10", "10", "10", "abc"]
+		offsets = ["0", "12", "abcd", "-1253", "{}".format(len(_create_models_without_saving()) + 10), "-1452"]
 
 		# Test all the pairwise combinations of invalid parameters:
 		for i in range(len(ns)):

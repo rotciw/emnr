@@ -42,8 +42,6 @@ def get_courses_from_db(request):
 	if isinstance(n, str) and not n.isdigit():
 		raise ValueError("Invalid value for n: {}".format(n))
 	n = int(n)
-	if n > number_of_courses:
-		raise ValueError("n is too large")
 
 	# Get and validate offset parameter
 	offset = request.GET.get("offset", 0)
