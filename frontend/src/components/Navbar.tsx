@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import emnrLogo from '../assets/images/emnr_logo_long.svg';
+import emnrLogo from '../assets/images/emnr_long.svg';
 
 const NavBarContainer = styled.nav`
   width: 100vw;
@@ -13,6 +13,7 @@ const NavBarContainer = styled.nav`
 const Logo = styled.img`
   padding: 10px;
   cursor: pointer;
+  width: 100px;
 `;
 
 export const Navbar: React.FC = () => {
