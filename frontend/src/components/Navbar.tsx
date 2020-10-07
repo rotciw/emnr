@@ -2,12 +2,14 @@ import React, { useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import emnrLogo from '../assets/images/emnr_long.svg';
+import { Searchbar } from './Searchbar';
 
 const NavBarContainer = styled.nav`
   width: 100vw;
   float: left;
   flex: 1;
   background-color: ${({ theme }) => theme.darkBlue};
+  padding-bottom: 25px;
 `;
 
 const Logo = styled.img`
@@ -23,6 +25,7 @@ export const Navbar: React.FC = () => {
   return (
     <NavBarContainer>
       <Logo src={emnrLogo} onClick={handleOnClick} />
+      <Searchbar />
     </NavBarContainer>
   );
 };
