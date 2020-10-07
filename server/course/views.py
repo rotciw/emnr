@@ -31,8 +31,13 @@ def get_courses_from_db(request):
 	:return: JSON containing total number of courses in database (count), and list of JSON objects (data),
 			 each containing course information.
 	"""
+	# Get search parameter and combines the fields "course_code" and "course_name" into an OR field,
+	# by making a Q object.
+	search = request.GET.get("search", "")
+	combined_search_filter = Q(course_code__contains=search) | Q(course_name__contains=search)
+
 	# Get and validate n parameter
-	number_of_courses = Course.objects.all().count()
+	number_of_courses = Course.objects.filter(combined_search_filter).count()
 	n = request.GET.get("n", number_of_courses)
 	if isinstance(n, str) and not n.isdigit():
 		raise ValueError("Invalid value for n: {}".format(n))
@@ -47,12 +52,6 @@ def get_courses_from_db(request):
 	offset = int(offset)
 	if offset > number_of_courses:
 		raise ValueError("offset is too large")
-
-	# Get search parameter and combines the fields "course_code" and "course_name" into an OR field,
-	# by making a Q object.
-	search = request.GET.get("search", "")
-	combined_search_filter = Q(course_code__contains=search) | Q(course_name__contains=search)
-
 
 	# Fetch data from database
 	data = Course.objects.filter(combined_search_filter)[offset:offset + n]
