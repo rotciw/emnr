@@ -22,6 +22,9 @@ def _create_models_without_saving():
 
 
 def _get_first_test_course():
+	"""
+	Returns the first json-object among the courses in the test data json file.
+	"""
 	with open("course/test_data/test_courses.json", "r") as f:
 		data = json.load(f)
 	return data[0]
