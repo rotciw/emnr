@@ -2,16 +2,16 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+import json
 
 # Create your views here.
 @api_view(['POST'])
-def post_reviews(request):
-	try:
-		data = get_courses_from_db(request)
-	except ValueError as e:
-		return Response(str(e), status=400)
-	return Response(data)
+def post_review(request):
+	# Hente fullt navn, studieprogram og alle fag fra gruppe-APIet (eller tilsvarende)
+	# Validere at fagkoden er for et fag man allerede har tatt, og sjekke at reviewen ikke eksisterer fra før
+	# Lagre review-objekt til databasen.
+	# Returnere 200 hvis bra, 400 hvis ikke.
+	print(json.loads(request.body))
 
-
-def validate_and_save_review(request):
+	return Response({"test": "yes"})
 
