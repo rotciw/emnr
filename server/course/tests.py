@@ -207,7 +207,24 @@ class GetAllCoursesTest(TestCase):
 				self.assertTrue(data[i][sort_value] >= data[i+1][sort_value])
 
 	def test_get_all_courses_valid_order_by(self):
-		pass
+		c = Client()
+		order_by = "course_code"
+		ascending = "0"  # "0" translates to false, meaning descending
+		# Tests ascending(default) sorting ordering by course_code
+		res = c.get("/course/all/?order_by={}".format(order_by))
+		self.assertEqual(res.status_code, 200)
+		for i in range(len(res.data["data"]) - 1):
+			self.assertTrue(res.data["data"][i][order_by] <= res.data["data"][i+1][order_by])
+		# Tests descending sorting ordering by course_name(default)
+		res = c.get("/course/all/?ascending={}".format(ascending))
+		self.assertEqual(res.status_code, 200)
+		for i in range(len(res.data["data"]) - 1):
+			self.assertTrue(res.data["data"][i]["course_name"] >= res.data["data"][i+1]["course_name"])
+		# Tests descending sorting ordering by course_code
+		res = c.get("/course/all/?order_by={}&ascending={}".format(order_by, ascending))
+		self.assertEqual(res.status_code, 200)
+		for i in range(len(res.data["data"]) - 1):
+			self.assertTrue(res.data["data"][i][order_by] >= res.data["data"][i+1][order_by])
 
 	def test_get_courses_from_db_invalid_order_by(self):
 		pass
