@@ -54,4 +54,5 @@ export const RateCourseButton = styled.div`
   border: 1px solid black;
   width: fit-content;
   font-family: gilroyxbold;
+  cursor: pointer;
 `;

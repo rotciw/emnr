@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import Modal from 'react-modal';
 import { Layout } from 'styles/Layout';
 import {
   FlexContainer,
@@ -12,6 +13,8 @@ import { RateCourseButton } from 'styles/Buttons';
 import { Circle, RotatedSquare } from 'styles/Shapes';
 import { defaultTheme } from 'styles/theme';
 import axios from 'axios';
+import { ReviewForm } from 'components/ReviewForm';
+import { modalStyles } from 'styles/Modals';
 
 interface CourseViewProps {
   courseName: String;
@@ -28,6 +31,12 @@ export const CoursePage: React.FC<CourseViewProps> = (
 
   const history = useHistory();
   const handleBackClick = useCallback(() => history.push('/'), [history]);
+
+  const [modalIsOpen,setModalIsOpen] = useState<boolean>(false);
+
+  function toggleModalIsOpen(){
+    setModalIsOpen(!modalIsOpen);
+  }
 
   useEffect(() => {
     const getCourses = async () => {
@@ -50,7 +59,17 @@ export const CoursePage: React.FC<CourseViewProps> = (
           <BoldTitle fontSize='30px'>{courseInfo.course_name}</BoldTitle>
           <BoldTitle margin='10px 0 0 0'>{courseInfo.score} / 5</BoldTitle>
           <SubTitle margin='0 0 4vh 0'>Basert på x antall vurderinger</SubTitle>
-          <RateCourseButton>Vurder {courseCode}</RateCourseButton>
+          <RateCourseButton onClick={toggleModalIsOpen}>
+            Vurder {courseCode}
+          </RateCourseButton>
+          <Modal 
+            isOpen={modalIsOpen}
+            onRequestClose={toggleModalIsOpen}
+            style={modalStyles}
+            contentLabel="Example Modal"
+            >
+              <ReviewForm courseName={courseInfo.course_name} courseCode={courseInfo.course_code} closeModal={toggleModalIsOpen}/>
+            </Modal>
         </FlexItem>
         <LocalShapeContainer>
           <Circle
