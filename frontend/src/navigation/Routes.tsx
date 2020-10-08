@@ -6,15 +6,14 @@ import PrivateRoute from '../components/PrivateRoute';
 import App from '../App/App';
 import LoginPage from '../pages/LoginPage';
 import VerifyLogin from '../pages/VerifyLogin';
-import { hasToken } from 'utils/api';
 import { CoursePage } from 'pages/CoursePage';
 
 const Routes: React.FC = () => {
-  useEffect(() => {
+  /*useEffect(() => {
     checkValidToken();
-  }, []);
+  }, []);*/
 
-  const checkValidToken = async () => {
+  /*const checkValidToken = async () => {
     try {
       const expired = await hasToken();
       if (!expired) {
@@ -23,7 +22,7 @@ const Routes: React.FC = () => {
     } catch (error) {
       localStorage.removeItem('token');
     }
-  };
+  };*/
 
   return (
     <Switch>
