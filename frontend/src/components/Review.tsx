@@ -35,8 +35,8 @@ export const Review: React.FC<ReviewProps> = ({
   name,
   studyProgramme,
   score,
-  workLoad=0,
-  difficulty=0,
+  workLoad=-1,
+  difficulty=-1,
   text,
   date,
   }) => {

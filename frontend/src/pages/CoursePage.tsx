@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Layout } from 'styles/Layout';
 import {
@@ -13,6 +13,8 @@ import { Circle, RotatedSquare } from 'styles/Shapes';
 import { defaultTheme } from 'styles/theme';
 import axios from 'axios';
 import { ReviewList } from 'components/ReviewList';
+import { PaginationContainer } from 'components/pagination/PaginationContainer';
+import { GlobalStateContext } from 'context/GlobalStateContext';
 
 interface CourseViewProps {
   courseName: String;
@@ -24,6 +26,10 @@ interface CourseViewProps {
 export const CoursePage: React.FC<CourseViewProps> = (
   props: CourseViewProps,
 ) => {
+  const { pageReviewProvider, totalPageReviewProvider } = useContext(
+    GlobalStateContext,
+  )!;
+
   const courseCode: string = useLocation().pathname.substr(8);
   const [courseInfo, setCourseInfo] = useState<any>({});
 
@@ -70,7 +76,8 @@ export const CoursePage: React.FC<CourseViewProps> = (
         </LocalShapeContainer>
       </FlexContainer>
       <HrLine />
-      <ReviewList courseCode={courseInfo.course_code}/>
+      <ReviewList courseCode={courseInfo.course_code} pageNumber={pageReviewProvider.pageReview}/>
+      <PaginationContainer totalPages={totalPageReviewProvider.totalPageReview} />
     </Layout>
   );
 };
