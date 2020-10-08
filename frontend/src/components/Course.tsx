@@ -20,20 +20,6 @@ export const Course: React.FC<CourseProps> = ({
 }) => {
   return (
     <tr>
-<<<<<<< HEAD
-        <td colSpan={3}>
-          <Link to={"/course/"+courseCode}>
-            <CourseButton clickHandler={handleCourseClick}>
-                <div>
-                  <p style={courseStyle}>{courseName}</p>
-                  <p style={courseStyle}>{courseCode}</p>
-                  <p style={courseStyle}>{gradeAvg.toFixed(2)}</p>
-                  <p style={courseStyle}>{credit}</p>
-                </div>
-            </CourseButton>
-          </Link>
-        </td>
-=======
       <td colSpan={3}>
         <Link to={`/course/${courseCode}`}>
           <CourseButton clickHandler={handleCourseClick}>
@@ -45,7 +31,6 @@ export const Course: React.FC<CourseProps> = ({
           </CourseButton>
         </Link>
       </td>
->>>>>>> dev
     </tr>
   );
 };
