@@ -21,7 +21,7 @@ export const Course: React.FC<CourseProps> = ({
   return (
     <tr>
       <td colSpan={3}>
-        <Link to={'/course/' + courseCode}>
+        <Link to={`/course/${courseCode}`}>
           <CourseButton clickHandler={handleCourseClick}>
             <CourseItemText width='25%'>{courseCode}</CourseItemText>
             <CourseItemText width='50%' textAlign='left'>
