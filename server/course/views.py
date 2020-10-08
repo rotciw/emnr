@@ -51,11 +51,16 @@ def get_courses_from_db(request):
 	if offset > number_of_courses:
 		raise ValueError("offset is too large")
 
-	# Get order_by and ascending parameters
-	ascending = request.GET.get("ascending", True)
+	# Get and validate order_by and ascending parameters
 	order_by = request.GET.get("order_by", "course_name")
-	if ascending == "False":
-		print("hallo")
+	valid_order_parameters = ["course_code", "course_name", "credit", "average_grade"]
+	print(order_by)
+	if order_by not in valid_order_parameters:
+		raise ValueError("Invalid value for order_by: {}. Valid  values: {}".format(order_by, valid_order_parameters))
+	ascending = request.GET.get("ascending", "1")
+	if ascending not in ["0", "1"]:
+		raise ValueError("Invalid value for ascending: {}".format(ascending))
+	if not ascending:
 		order_by = "-" + order_by
 
 	# Fetch data from database
