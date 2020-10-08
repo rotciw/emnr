@@ -5,7 +5,7 @@ import emnrLogo from '../assets/images/emnr_long.svg';
 import { Searchbar } from './Searchbar';
 
 const NavBarContainer = styled.nav`
-  width: 100vw;
+  width: 100%;
   float: left;
   flex: 1;
   background-color: ${({ theme }) => theme.darkBlue};

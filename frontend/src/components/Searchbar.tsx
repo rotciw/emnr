@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { GlobalStateContext } from 'context/GlobalStateContext';
 import styled from 'styled-components';
 
 const SearchbarContainer = styled.div`
   background-color: ${({ theme }) => theme.darkBlue};
-  left: 0;
   text-align: center;
   margin: 0 25vw;
   @media (max-width: 768px) {
@@ -30,9 +30,14 @@ const SearchInput = styled.input`
 `;
 
 export const Searchbar: React.FC = () => {
+  const { searchQueryProvider } = useContext(GlobalStateContext)!;
+
   return (
     <SearchbarContainer>
-      <SearchInput placeholder='Søk etter fagkode eller navn..' />
+      <SearchInput
+        onChange={(e) => searchQueryProvider.setSearchQuery(e.target.value)}
+        placeholder='Søk etter fagkode eller navn..'
+      />
     </SearchbarContainer>
   );
 };
