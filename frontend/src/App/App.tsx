@@ -1,10 +1,11 @@
 import React from 'react';
 import { CourseListPage } from '../pages/CourseListPage';
-import { GlobalStateContext } from '../context/GlobalStateContext';
+import { getMyCourses } from '../utils/api';
 
 const App: React.FC = () => {
   return (
     <div>
+      <button onClick={getMyCourses}>test</button>
       <CourseListPage />
     </div>
   );
