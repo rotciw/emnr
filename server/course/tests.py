@@ -89,9 +89,7 @@ class GetAllCoursesTest(TestCase):
 
 		# Tests for expected data length with increasing offset
 		for i in range(len(source_data) // n + 1):
-			print(i)
 			data = get_courses_with_parameters(n, offset)
-			print(data)
 			self.assertTrue(len(data) == n or len(data) == len(source_data) % n)
 			offset += n
 
@@ -179,6 +177,43 @@ class GetAllCoursesTest(TestCase):
 		self.assertEqual(res.status_code, 200)
 		self.assertEqual(res.data["count"], 0)
 		self.assertEqual(res.data["data"], [])
+
+	def test_get_courses_from_db_valid_order_by(self):
+		order_by_values = ["course_code", "course_name", "credit", "average_grade"]
+
+		def get_data(order_by, ascending):
+			if ascending is None:
+				mock_request = self.rf.get("/course/all/?order_by={}".format(sort_value))
+			else:
+				mock_request = self.rf.get("/course/all/?order_by={}&ascending={}".format(sort_value, ascending))
+			mock_response = get_courses_from_db(mock_request)
+			data = mock_response["data"]
+			return data
+
+		# Tests sorting on all legal order_by values, on different ascending values
+		for sort_value in order_by_values:
+			print(sort_value)
+			# Tests default ascending
+			data = get_data(sort_value, None)
+			for i in range(len(data) - 1):
+				self.assertTrue(data[i][sort_value] <= data[i+1][sort_value])
+			# Tests ascending sorting
+			data = get_data(sort_value, "1")
+			for i in range(len(data) - 1):
+				self.assertTrue(data[i][sort_value] <= data[i+1][sort_value])
+			# Tests descending sorting
+			data = get_data(sort_value, "0")
+			for i in range(len(data) - 1):
+				self.assertTrue(data[i][sort_value] >= data[i+1][sort_value])
+
+	def test_get_all_courses_valid_order_by(self):
+		pass
+
+	def test_get_courses_from_db_invalid_order_by(self):
+		pass
+
+	def test_get_all_courses_invalid_order_by(self):
+		pass
 
 	def test_get_courses_from_db_all_parameters(self):
 		n = 10
