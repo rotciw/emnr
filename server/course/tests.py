@@ -193,7 +193,6 @@ class GetAllCoursesTest(TestCase):
 
 		# Tests sorting on all legal order_by values, on different ascending values
 		for sort_value in order_by_values:
-			print(sort_value)
 			# Tests default ascending
 			data = get_data(sort_value, None)
 			for i in range(len(data) - 1):
