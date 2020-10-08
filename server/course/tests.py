@@ -167,11 +167,36 @@ class GetAllCoursesTest(TestCase):
 		self.assertEqual(res.data["data"], [])
 
 	def test_get_courses_from_db_all_parameters(self):
-		pass
+		n = 10
+		offset = 2
+		search_value = _get_first_test_course().get("course_code")[1:4]
+		mock_request = self.rf.get("course/all/?n={}&offset={}&search={}".format(n, offset, search_value))
+		data = get_courses_from_db(mock_request)
+		# Tests correct amount of received courses after filtering on search-param
+		self.assertEqual(data["count"], 15)
+		# Tests n
+		self.assertEqual(len(data["data"]), 10)
+		# Tests offset
+		self.assertEqual(data["data"][0]["course_code"], "TMR4310")
+		for i in range(len(data["data"])):
+			self.assertTrue(search_value in data["data"][i]["course_code"]
+							or search_value in data["data"][i]["course_name"])
 
 	def test_get_all_courses_all_parameters(self):
-		pass
-
+		c = Client()
+		n = 10
+		offset = 2
+		search_value = _get_first_test_course().get("course_code")[1:4]
+		res = c.get("/course/all/?n={}&offset={}&search={}".format(n, offset, search_value))
+		self.assertEqual(res.status_code, 200)
+		# Tests correct amount of received courses after filtering on search-param
+		self.assertEqual(res.data["count"], 15)
+		# Tests n
+		self.assertEqual(len(res.data["data"]), 10)
+		# Tests offset
+		self.assertEqual(res.data["data"][0]["course_code"], "TMR4310")
+		for course in res.data["data"]:
+			self.assertTrue(search_value in course["course_code"] or search_value in course["course_name"])
 
 
 class GetSingleCourseTest(TestCase):
