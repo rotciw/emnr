@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FlexContainer, FlexItem } from 'styles/Containers';
+import { FlexContainer, FlexItem, HrLine } from 'styles/Containers';
+import { SubTitle } from 'styles/Text';
 
 interface ReviewProps {
     name: String;
@@ -12,28 +13,22 @@ interface ReviewProps {
     date: String;
 }
 
-const reviewStyle = {
-    display: 'inline-block',
-    width: '10%',
-    border: '20px',
-  };
-
 const ReviewContainer = styled.div`
     background-color: ${({ theme }) => theme.white};
     border: 1px solid ${({ theme }) => theme.black};
     display: flex;
     margin: 10px 0px;
     box-shadow: 0px 4px 4px rgba(0,0,0,0.25); 
+    font-weight: 1000;
 `;
 
-const Score = styled.p`
-    padding: 5px 20px;
-    background-color: red;
+const ScoreDateContainer = styled.div`
+    justify-content: space-between;
+    display: flex;
 `;
 
-const Date = styled.p`
+const Metric = styled.p`
     padding: 5px 20px;
-    background-color: blue;
 `;
 
 export const Review: React.FC<ReviewProps> = ({
@@ -49,23 +44,28 @@ export const Review: React.FC<ReviewProps> = ({
     <ReviewContainer>
         <FlexItem flex={1}>
             <div>
-                <p>
-                    {name}
-                </p>
-                <p>
-                    {studyProgramme}
-                </p>
+                <p>{name}</p>
+                <p>{studyProgramme}</p>
             </div>
         </FlexItem>
         <FlexItem flex={3}>
+            <ScoreDateContainer>
+                <Metric>
+                    <SubTitle>
+                        Totalvurdering: {score}/5
+                    </SubTitle>
+                </Metric>
+                <Metric>
+                    <SubTitle>
+                        {date}
+                    </SubTitle>
+                </Metric>
+            </ScoreDateContainer>
             <FlexContainer>
-                <Score>{score}</Score>
-                <Date>{date}</Date>
+                <Metric>Arbeidsmengde: {workLoad}/5</Metric>
+                <Metric>Vanskelighetsgrad: {difficulty}/5</Metric>
             </FlexContainer>
-            <FlexContainer>
-                <p>{workLoad}</p>
-                <p>{difficulty}</p>
-            </FlexContainer>
+            <HrLine/>
             <FlexContainer>
                 <p>{text}</p>
             </FlexContainer>
