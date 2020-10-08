@@ -5,7 +5,6 @@ import { getMyCourses } from '../utils/api';
 const App: React.FC = () => {
   return (
     <div>
-      <button onClick={getMyCourses}>test</button>
       <CourseListPage />
     </div>
   );
