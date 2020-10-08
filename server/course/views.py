@@ -8,6 +8,7 @@ from auth.views import get_token
 import requests
 import json
 from unidecode import unidecode
+import time
 
 
 # Create your views here.
@@ -117,11 +118,15 @@ def parse_course_object(obj):
     """
     if 'emne' not in obj['type'].split(':'):
         return None
+
+    # Get course code
     course_code = obj["id"].split(":")[-2]
+
+    # Get semester
+    semester = ""
     if 'notAfter' in obj['membership']:
         # Course has already been taken
         notAfter_split = (obj['membership']['notAfter']).split('-')
-        semester = ""
         if notAfter_split[1] == "08":
             semester += "V"
         elif notAfter_split[1] == "12":
@@ -130,5 +135,13 @@ def parse_course_object(obj):
             raise ValueError("Unknown semester end month: {}".format(notAfter_split[1]))
         semester += notAfter_split[0]
     else:
-        semester = None
-    return {"course_code": course_code, "semester": semester}
+        if int(time.strftime("%m")) < 8:
+            semester += "V"
+        else:
+            semester += "H"
+        semester += time.strftime("%Y")
+
+    # Get course name from Course table
+    course_name = Course.objects.filter(course_code=course_code)[0].course_name
+
+    return {"course_code": course_code, "course_name": course_name, "semester": semester}
