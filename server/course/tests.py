@@ -48,7 +48,17 @@ class GetAllCoursesTest(TestCase):
 		for i in range(len(data)):
 			self.assertEqual(data[i]["course_code"], source_data[i].course_code)
 
-	def test_get_courses_from_db_normal_parameters(self):
+	def test_get_all_courses_no_parameters(self):
+		c = Client()
+		response = c.get("/course/all/")
+		self.assertEqual(response.status_code, 200)
+		source_data = _create_models_without_saving()
+		self.assertEqual(response.data["count"], len(source_data))
+		self.assertEqual(len(response.data["data"]), len(source_data))
+		for i in range(len(response.data["data"])):
+			self.assertEqual(response.data["data"][i]["course_code"], source_data[i].course_code)
+
+	def test_get_courses_from_db_valid_n_offset(self):
 		n = 25
 		offset = 0
 		source_data = _create_models_without_saving()
@@ -68,31 +78,7 @@ class GetAllCoursesTest(TestCase):
 			assert_equal_content(get_courses_with_parameters(n, offset))
 			offset += 1
 
-	def test_get_courses_from_db_invalid_parameters(self):
-		source_data = _create_models_without_saving()
-		n_list = ['Character test', -1]
-		offset_list = [len(source_data) + 1, 'Character test', -1]
-
-		# Tests different invalid parameters for 'n'
-		for number in n_list:
-			with self.assertRaises(ValueError):
-				get_courses_from_db(self.rf.get("/courses/all/?n={}".format(number)))
-		# Tests different invalid parameters for 'offset'
-		for offset in offset_list:
-			with self.assertRaises(ValueError):
-				get_courses_from_db(self.rf.get("/courses/all/?offset={}".format(offset)))
-
-	def test_get_all_courses_no_parameters(self):
-		c = Client()
-		response = c.get("/course/all/")
-		self.assertEqual(response.status_code, 200)
-		source_data = _create_models_without_saving()
-		self.assertEqual(response.data["count"], len(source_data))
-		self.assertEqual(len(response.data["data"]), len(source_data))
-		for i in range(len(response.data["data"])):
-			self.assertEqual(response.data["data"][i]["course_code"], source_data[i].course_code)
-
-	def test_get_all_courses_normal_parameters(self):
+	def test_get_all_courses_valid_n_offset(self):
 		c = Client()
 		source_data = _create_models_without_saving()
 
@@ -111,7 +97,21 @@ class GetAllCoursesTest(TestCase):
 		self.assertEqual(res.status_code, 200)
 		self.assertEqual(res.data["data"][0]["course_code"], source_data[-1].course_code)
 
-	def test_get_all_courses_invalid_parameters(self):
+	def test_get_courses_from_db_invalid_n_offset(self):
+		source_data = _create_models_without_saving()
+		n_list = ['Character test', -1]
+		offset_list = [len(source_data) + 1, 'Character test', -1]
+
+		# Tests different invalid parameters for 'n'
+		for number in n_list:
+			with self.assertRaises(ValueError):
+				get_courses_from_db(self.rf.get("/courses/all/?n={}".format(number)))
+		# Tests different invalid parameters for 'offset'
+		for offset in offset_list:
+			with self.assertRaises(ValueError):
+				get_courses_from_db(self.rf.get("/courses/all/?offset={}".format(offset)))
+
+	def test_get_all_courses_invalid_n_offset(self):
 		c = Client()
 		ns = ["test", "-12", "10", "10", "10", "abc"]
 		offsets = ["0", "12", "abcd", "-1253", "{}".format(len(_create_models_without_saving()) + 10), "-1452"]
@@ -121,7 +121,7 @@ class GetAllCoursesTest(TestCase):
 			res = c.get("/course/all/?n={}&offset={}".format(ns[i], offsets[i]))
 			self.assertEqual(res.status_code, 400)
 
-	def test_get_courses_from_db_search_valid_parameter(self):
+	def test_get_courses_from_db_valid_search(self):
 		first_test_course = _get_first_test_course()
 		search_value = first_test_course.get("course_code")[1:4]
 		mock_request = self.rf.get("course/all/?search={}".format(search_value))
@@ -136,7 +136,18 @@ class GetAllCoursesTest(TestCase):
 			self.assertTrue(search_value in data["data"][i]["course_code"]
 							or search_value in data["data"][i]["course_name"])
 
-	def test_get_courses_from_db_search_invalid_parameter(self):
+	def test_get_all_courses_valid_search(self):
+		c = Client()
+		first_test_course = _get_first_test_course()
+		search_value = first_test_course.get("course_code")[1:4]
+		res = c.get("/course/all/?search={}".format(search_value))
+
+		# Tests status code and that the data set meets the search parameter
+		self.assertEqual(res.status_code, 200)
+		for course in res.data["data"]:
+			self.assertTrue(search_value in course["course_code"] or search_value in course["course_name"])
+
+	def test_get_courses_from_db_invalid_search(self):
 		search_value = "fdhsuifndsuo"
 		mock_request = self.rf.get("course/all/?search={}".format(search_value))
 		data = get_courses_from_db(mock_request)
@@ -145,19 +156,7 @@ class GetAllCoursesTest(TestCase):
 		self.assertEqual(data["count"], 0)
 		self.assertTrue(data["data"] == [])
 
-	def test_get_all_courses_search_valid_parameter(self):
-		c = Client()
-		first_test_course = _get_first_test_course()
-		search_value = first_test_course.get("course_code")[1:4]
-		source_data = _create_models_without_saving()
-		res = c.get("/course/all/?search={}".format(search_value))
-
-		# Tests status code and that the data set meets the search parameter
-		self.assertEqual(res.status_code, 200)
-		for course in res.data["data"]:
-			self.assertTrue(search_value in course["course_code"] or search_value in course["course_name"])
-
-	def test_get_all_courses_search_invalid_parameter(self):
+	def test_get_all_courses_invalid_search(self):
 		c = Client()
 		search_value = "fdhsuifndsuo"
 		res = c.get("/course/all/?search={}".format(search_value))
@@ -166,6 +165,13 @@ class GetAllCoursesTest(TestCase):
 		self.assertEqual(res.status_code, 200)
 		self.assertEqual(res.data["count"], 0)
 		self.assertEqual(res.data["data"], [])
+
+	def test_get_courses_from_db_all_parameters(self):
+		pass
+
+	def test_get_all_courses_all_parameters(self):
+		pass
+
 
 
 class GetSingleCourseTest(TestCase):
