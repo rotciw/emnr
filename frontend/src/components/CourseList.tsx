@@ -53,7 +53,7 @@ export const CourseList: React.FC<CourseListProps> = ({ pageNumber }) => {
   }, [pageNumber, searchQuery]);
 
   return (
-    <FlexContainer margin='15px 10% 0 10%'>
+    <FlexContainer margin='15px 0 0 0'>
       <StyledTable>
         <thead>
           <tr>

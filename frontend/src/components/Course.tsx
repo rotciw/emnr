@@ -23,11 +23,11 @@ export const Course: React.FC<CourseProps> = ({
       <td colSpan={3}>
         <Link to={'/course/' + courseCode}>
           <CourseButton clickHandler={handleCourseClick}>
-            <div>
-              <CourseItemText width='25%'>{courseCode}</CourseItemText>
-              <CourseItemText width='50%' textAlign='left'>{courseName}</CourseItemText>
-              <CourseItemText width='25%'>{credit} / 5</CourseItemText>
-            </div>
+            <CourseItemText width='25%'>{courseCode}</CourseItemText>
+            <CourseItemText width='50%' textAlign='left'>
+              {courseName}
+            </CourseItemText>
+            <CourseItemText width='25%'>{credit} / 5</CourseItemText>
           </CourseButton>
         </Link>
       </td>
