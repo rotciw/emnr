@@ -11,6 +11,7 @@ export const FlexContainer = styled.div`
   display: flex;
   flex-direction: row;
   margin: ${(props: LayoutProps) => props.margin || 'auto'};
+  width: ${(props: LayoutProps) => props.width || ''};
 `;
 
 export const CenteredFlexContainer = styled.div`
