@@ -45,8 +45,14 @@ class GetAllCoursesTest(TestCase):
 		self.assertEqual(data["count"], len(source_data))
 		data = data["data"]
 		self.assertEqual(len(data), len(source_data))
-		for i in range(len(data)):
-			self.assertEqual(data[i]["course_code"], source_data[i].course_code)
+		source_data_codes = []
+		for course in source_data:
+			source_data_codes.append(course.course_code)
+		for i in range(len(data) - 1):
+			# Tests that the result is sorted by the default sorting parameter
+			self.assertTrue(data[i]["course_name"] <= data[i+1]["course_name"])
+			# Tests that the result courses are in the test data set
+			self.assertTrue(data[i]["course_code"] in source_data_codes)
 
 	def test_get_all_courses_no_parameters(self):
 		c = Client()
@@ -55,8 +61,14 @@ class GetAllCoursesTest(TestCase):
 		source_data = _create_models_without_saving()
 		self.assertEqual(response.data["count"], len(source_data))
 		self.assertEqual(len(response.data["data"]), len(source_data))
-		for i in range(len(response.data["data"])):
-			self.assertEqual(response.data["data"][i]["course_code"], source_data[i].course_code)
+		source_data_codes = []
+		for course in source_data:
+			source_data_codes.append(course.course_code)
+		for i in range(len(response.data["data"]) - 1):
+			# Tests that the result is sorted by the default sorting parameter
+			self.assertTrue(response.data["data"][i]["course_name"] <= response.data["data"][i+1]["course_name"])
+			# Tests that the result courses are in the test data set
+			self.assertTrue(response.data["data"][i]["course_code"] in source_data_codes)
 
 	def test_get_courses_from_db_valid_n_offset(self):
 		n = 25
