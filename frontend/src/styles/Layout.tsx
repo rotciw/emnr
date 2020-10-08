@@ -10,7 +10,10 @@ const Body = styled.main`
   margin: 0;
   display: flex;
   flex-direction: column;
-  padding: ${(props: LayoutProps) => props.padding || '0 10%'}; /* Flex wraps incorrectly if padding is 0 */
+  padding: ${(props: LayoutProps) => props.padding || '0 20%'}; /* Flex wraps incorrectly if padding is 0 */
+  @media (max-width: 768px) {
+    padding: 0 3%;
+  }
 `;
 
 export const Layout: React.FC<LayoutProps> = ({ children, padding }) => {
