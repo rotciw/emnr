@@ -30,6 +30,14 @@ def _get_first_test_course():
 	return data[0]
 
 
+def _get_source_data_codes():
+	source_data = _create_models_without_saving()
+	source_data_codes = []
+	for course in source_data:
+		source_data_codes.append(course.course_code)
+	return source_data_codes
+
+
 class GetAllCoursesTest(TestCase):
 	def setUp(self) -> None:
 		# Crowd database with courses
@@ -40,17 +48,16 @@ class GetAllCoursesTest(TestCase):
 
 	def test_get_courses_from_db_no_parameters(self):
 		mock_request = self.rf.get("/course/all/")
-		data = get_courses_from_db(mock_request)
+		mock_response = get_courses_from_db(mock_request)
 		source_data = _create_models_without_saving()
-		self.assertEqual(data["count"], len(source_data))
-		data = data["data"]
+		self.assertEqual(mock_response["count"], len(source_data))
+		data = mock_response["data"]
 		self.assertEqual(len(data), len(source_data))
-		source_data_codes = []
-		for course in source_data:
-			source_data_codes.append(course.course_code)
+		source_data_codes = _get_source_data_codes()
 		for i in range(len(data) - 1):
 			# Tests that the result is sorted by the default sorting parameter
 			self.assertTrue(data[i]["course_name"] <= data[i+1]["course_name"])
+		for i in range(len(data)):
 			# Tests that the result courses are in the test data set
 			self.assertTrue(data[i]["course_code"] in source_data_codes)
 
@@ -61,9 +68,7 @@ class GetAllCoursesTest(TestCase):
 		source_data = _create_models_without_saving()
 		self.assertEqual(response.data["count"], len(source_data))
 		self.assertEqual(len(response.data["data"]), len(source_data))
-		source_data_codes = []
-		for course in source_data:
-			source_data_codes.append(course.course_code)
+		source_data_codes = _get_source_data_codes()
 		for i in range(len(response.data["data"]) - 1):
 			# Tests that the result is sorted by the default sorting parameter
 			self.assertTrue(response.data["data"][i]["course_name"] <= response.data["data"][i+1]["course_name"])
@@ -77,18 +82,18 @@ class GetAllCoursesTest(TestCase):
 
 		def get_courses_with_parameters(n, offset):
 			mock_request = self.rf.get("/courses/all/?n={}&offset={}".format(n, offset))
-			data = get_courses_from_db(mock_request)
-			self.assertEqual(data["count"], len(source_data))
-			return data["data"]
+			mock_response = get_courses_from_db(mock_request)
+			self.assertEqual(mock_response["count"], len(source_data))
+			data = mock_response["data"]
+			return data
 
-		def assert_equal_content(data):
-			for i in range(n):
-				self.assertEqual(data[i]["course_code"], source_data[offset + i].course_code)
-
-		# Tests for equal data in database and text file, with use of increasing offset
-		for i in range(len(source_data) // n):
-			assert_equal_content(get_courses_with_parameters(n, offset))
-			offset += 1
+		# Tests for expected data length with increasing offset
+		for i in range(len(source_data) // n + 1):
+			print(i)
+			data = get_courses_with_parameters(n, offset)
+			print(data)
+			self.assertTrue(len(data) == n or len(data) == len(source_data) % n)
+			offset += n
 
 	def test_get_all_courses_valid_n_offset(self):
 		c = Client()
