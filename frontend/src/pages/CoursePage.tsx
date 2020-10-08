@@ -32,9 +32,9 @@ export const CoursePage: React.FC<CourseViewProps> = (
   const history = useHistory();
   const handleBackClick = useCallback(() => history.push('/'), [history]);
 
-  const [modalIsOpen,setModalIsOpen] = useState<boolean>(false);
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
-  function toggleModalIsOpen(){
+  function toggleModalIsOpen() {
     setModalIsOpen(!modalIsOpen);
   }
 
@@ -42,7 +42,7 @@ export const CoursePage: React.FC<CourseViewProps> = (
     const getCourses = async () => {
       await axios
         .get('http://localhost:8000/course/?code=' + courseCode)
-        .then(res => setCourseInfo(res.data))
+        .then((res) => setCourseInfo(res.data))
         .catch((err) => console.log(err));
     };
     getCourses();
@@ -62,14 +62,18 @@ export const CoursePage: React.FC<CourseViewProps> = (
           <RateCourseButton onClick={toggleModalIsOpen}>
             Vurder {courseCode}
           </RateCourseButton>
-          <Modal 
+          <Modal
             isOpen={modalIsOpen}
             onRequestClose={toggleModalIsOpen}
             style={modalStyles}
-            contentLabel="Example Modal"
-            >
-              <ReviewForm courseName={courseInfo.course_name} courseCode={courseInfo.course_code} closeModal={toggleModalIsOpen}/>
-            </Modal>
+            contentLabel='Example Modal'
+          >
+            <ReviewForm
+              courseName={courseInfo.course_name}
+              courseCode={courseInfo.course_code}
+              closeModal={toggleModalIsOpen}
+            />
+          </Modal>
         </FlexItem>
         <LocalShapeContainer>
           <Circle

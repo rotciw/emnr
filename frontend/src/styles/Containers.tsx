@@ -44,7 +44,7 @@ export const FlexItem = styled.div`
 `;
 
 export const HrLine = styled.div`
-  margin: 5vh 0 2vh 0;
+  margin: ${(props: LayoutProps) => props.margin || '5vh 0 2vh 0'};
   border-bottom: 1px solid ${({theme}) => theme.darkBlue};
 `;
 
