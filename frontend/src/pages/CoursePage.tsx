@@ -12,6 +12,7 @@ import { RateCourseButton } from 'styles/Buttons';
 import { Circle, RotatedSquare } from 'styles/Shapes';
 import { defaultTheme } from 'styles/theme';
 import axios from 'axios';
+import { ReviewList } from 'components/ReviewList';
 
 interface CourseViewProps {
   courseName: String;
@@ -69,6 +70,7 @@ export const CoursePage: React.FC<CourseViewProps> = (
         </LocalShapeContainer>
       </FlexContainer>
       <HrLine />
+      <ReviewList courseCode={courseInfo.course_code}/>
     </Layout>
   );
 };
