@@ -21,6 +21,15 @@ def _create_models_without_saving():
 	return courses
 
 
+def _get_first_test_course():
+	"""
+	Returns the first json-object among the courses in the test data json file.
+	"""
+	with open("course/test_data/test_courses.json", "r") as f:
+		data = json.load(f)
+	return data[0]
+
+
 class GetAllCoursesTest(TestCase):
 	def setUp(self) -> None:
 		# Crowd database with courses
@@ -61,7 +70,7 @@ class GetAllCoursesTest(TestCase):
 
 	def test_get_courses_from_db_invalid_parameters(self):
 		source_data = _create_models_without_saving()
-		n_list = [len(source_data) + 1, 'Character test', -1]
+		n_list = ['Character test', -1]
 		offset_list = [len(source_data) + 1, 'Character test', -1]
 
 		# Tests different invalid parameters for 'n'
@@ -104,13 +113,59 @@ class GetAllCoursesTest(TestCase):
 
 	def test_get_all_courses_invalid_parameters(self):
 		c = Client()
-		ns = ["test", "-12", "{}".format(len(_create_models_without_saving()) + 10), "10", "10", "10", "abc"]
-		offsets = ["0", "12", "1", "abcd", "-1253", "{}".format(len(_create_models_without_saving()) + 10), "-1452"]
+		ns = ["test", "-12", "10", "10", "10", "abc"]
+		offsets = ["0", "12", "abcd", "-1253", "{}".format(len(_create_models_without_saving()) + 10), "-1452"]
 
 		# Test all the pairwise combinations of invalid parameters:
 		for i in range(len(ns)):
 			res = c.get("/course/all/?n={}&offset={}".format(ns[i], offsets[i]))
 			self.assertEqual(res.status_code, 400)
+
+	def test_get_courses_from_db_search_good_parameter(self):
+		first_test_course = _get_first_test_course()
+		search_value = first_test_course.get("course_code")[1:4]
+		mock_request = self.rf.get("course/all/?search={}".format(search_value))
+		source_data = _create_models_without_saving()
+		data = get_courses_from_db(mock_request)
+
+		# Tests that the search has filtered out some courses.
+		self.assertNotEqual(data["count"], len(source_data))
+
+		# Tests that the data set meets the search parameter
+		for i in range(len(data["data"])):
+			self.assertTrue(search_value in data["data"][i]["course_code"]
+							or search_value in data["data"][i]["course_name"])
+
+	def test_get_courses_from_db_search_bullshit_parameter(self):
+		search_value = "fdhsuifndsuo"
+		mock_request = self.rf.get("course/all/?search={}".format(search_value))
+		data = get_courses_from_db(mock_request)
+
+		# Tests that the count is 0, and that the data array is empty.
+		self.assertEqual(data["count"], 0)
+		self.assertTrue(data["data"] == [])
+
+	def test_get_all_courses_search_valid_parameter(self):
+		c = Client()
+		first_test_course = _get_first_test_course()
+		search_value = first_test_course.get("course_code")[1:4]
+		source_data = _create_models_without_saving()
+		res = c.get("/course/all/?search={}".format(search_value))
+
+		# Tests status code and that the data set meets the search parameter
+		self.assertEqual(res.status_code, 200)
+		for course in res.data["data"]:
+			self.assertTrue(search_value in course["course_code"] or search_value in course["course_name"])
+
+	def test_get_all_courses_search_invalid_parameter(self):
+		c = Client()
+		search_value = "fdhsuifndsuo"
+		res = c.get("/course/all/?search={}".format(search_value))
+
+		# Tests status_code: OK, count: 0 and data: []
+		self.assertEqual(res.status_code, 200)
+		self.assertEqual(res.data["count"], 0)
+		self.assertEqual(res.data["data"], [])
 
 
 class GetSingleCourseTest(TestCase):
