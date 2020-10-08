@@ -96,25 +96,27 @@ def get_current_user_courses(request):
     )
 
     print(api_request)
-    #api_request.encoding = "utf-8"
+
 
     json_object = api_request.json()
 
 
 
-    course_codes = []
-
+    course_info = []
 
     for obj in json_object:
-        if 'emne' in obj['type'].split(':'):
-            id_split = obj['id'].split(':')
-            course_code = unidecode(id_split[-2])
+		if 'emne' in obj['type'].split(':'):
+			id_split = obj['id'].split(':')
+			course_code = unidecode(id_split[-2])
+
+		if 'notAfter' in obj['membership']:
+			notAfter_split = (obj['membership']['notAfter']).split('-')
+			print(notAfter_split)
+					#year = notAfter_split[0]
 
 
-            course_codes.append(course_code)
 
-    print(course_codes)
+			#course_info.append(course_code)
 
-
-    return HttpResponse(api_request)
+	return HttpResponse(api_request)
     #return HttpResponse(json.dumps(course_codes))
