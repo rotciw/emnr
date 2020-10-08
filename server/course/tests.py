@@ -174,6 +174,7 @@ class GetAllCoursesTest(TestCase):
 		res = c.get("/course/all/?search={}".format(search_value))
 
 		# Tests status_code: OK, count: 0 and data: []
+		# The 'invalid search value' is only invalid in that it has no hits, which results in the status being OK
 		self.assertEqual(res.status_code, 200)
 		self.assertEqual(res.data["count"], 0)
 		self.assertEqual(res.data["data"], [])
@@ -227,10 +228,27 @@ class GetAllCoursesTest(TestCase):
 			self.assertTrue(res.data["data"][i][order_by] >= res.data["data"][i+1][order_by])
 
 	def test_get_courses_from_db_invalid_order_by(self):
-		pass
+		invalid_ascending_values = ["-1", "False", "True", "2"]
+		invalid_order_by_values = ["", "height"]
+		for asc_value in invalid_ascending_values:
+			with self.assertRaises(ValueError):
+				get_courses_from_db(self.rf.get("/courses/all/?ascending={}".format(asc_value)))
+		for order_value in invalid_order_by_values:
+			with self.assertRaises(ValueError):
+				get_courses_from_db(self.rf.get("/courses/all/?order_by={}".format(order_value)))
 
 	def test_get_all_courses_invalid_order_by(self):
-		pass
+		c = Client()
+		invalid_ascending_values = ["-1", "False", "True", "2"]
+		invalid_order_by_values = ["", "height"]
+		# Tests status code for invalid ascending values
+		for asc_value in invalid_ascending_values:
+			res = c.get("/course/all/?ascending={}".format(asc_value))
+			self.assertEqual(res.status_code, 400)
+		#Tests status code for invalid order_by values
+		for order_value in invalid_order_by_values:
+			res = c.get("/course/all/?order_by={}".format(order_value))
+			self.assertEqual(res.status_code, 400)
 
 	def test_get_courses_from_db_all_parameters(self):
 		n = 10
