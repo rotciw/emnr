@@ -1,28 +1,17 @@
 import { CourseList } from 'components/CourseList';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import React, { useContext } from 'react';
-import { useLocation } from 'react-router-dom';
-import { FlexItem } from 'styles/Containers';
-import { getLocalEmail } from '../utils/api';
 import { Layout } from 'styles/Layout';
 import { PaginationContainer } from 'components/pagination/PaginationContainer';
-import { Searchbar } from 'components/Searchbar';
 
 export const CourseListPage: React.FC = () => {
-  const code: string = useLocation().pathname.substr(8);
-  const { userProvider, pageProvider, totalPageProvider } = useContext(
+  const { pageProvider, totalPageProvider } = useContext(
     GlobalStateContext,
   )!;
 
   return (
     <Layout>
-      <FlexItem>
-        <h1>Du er nå logget inn</h1>
-        <p>Din bruker er {userProvider.email || getLocalEmail()}</p>
-      </FlexItem>
-      <FlexItem>
-        <CourseList pageNumber={pageProvider.page} />
-      </FlexItem>
+      <CourseList pageNumber={pageProvider.page} />
       <PaginationContainer totalPages={totalPageProvider.totalPage} />
     </Layout>
   );

@@ -8,8 +8,8 @@ interface ButtonProps {
 
 const StyledLoginBtn = styled.button`
   display: block;
-  color: ${({theme}) => theme.light};
-  background-color: ${({theme}) => theme.darkBlue};
+  color: ${({ theme }) => theme.light};
+  background-color: ${({ theme }) => theme.darkBlue};
   border: none;
   border-radius: 5px;
   padding: 15px 50px;
@@ -17,19 +17,21 @@ const StyledLoginBtn = styled.button`
   cursor: pointer;
   user-select: none;
   :hover {
-    background-color: ${({theme}) => theme.blue};
+    background-color: ${({ theme }) => theme.blue};
   }
 `;
 
 const StyledCourseBtn = styled.button`
-  border: 2px solid #ccc;
-  text-align: center;
+  border: 2px solid ${({ theme }) => theme.black};
   background-color: ${({ theme }) => theme.white};
+  box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.19);
+  margin: 5px 0;
   width: 100%;
+  cursor: pointer;
   :hover {
-    background-color: #ccc;
-    color: white;
-    border: 2px solid #ccc;
+    background-color: ${({ theme }) => theme.lightBlue};
+    color: black;
+    border: 2px solid black;
   }
 `;
 

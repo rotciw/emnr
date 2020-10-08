@@ -10,6 +10,8 @@ const NavBarContainer = styled.nav`
   flex: 1;
   background-color: ${({ theme }) => theme.darkBlue};
   padding-bottom: 25px;
+  position: sticky;
+  top: 0;
 `;
 
 const Logo = styled.img`

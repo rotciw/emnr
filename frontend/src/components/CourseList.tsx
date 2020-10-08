@@ -1,18 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
-import styled from 'styled-components';
 import { Course } from './Course';
 import axios from 'axios';
 import { GlobalStateContext } from 'context/GlobalStateContext';
-
-const Wrapper = styled.div`
-  border: 1px solid #ccc;
-  padding: 50px;
-  border-radius: 5px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-`;
+import { FlexContainer, StyledTable, StyledTH } from 'styles/Containers';
 
 interface CourseListProps {
   pageNumber: number;
@@ -27,16 +17,22 @@ interface CourseProps {
 
 export const CourseList: React.FC<CourseListProps> = ({ pageNumber }) => {
   const [courses, updateCourses] = useState<CourseProps[]>([]);
-
-  const resultLimit: number = 25;
-  let start: number = (pageNumber - 1) * resultLimit;
-
   const { totalPageProvider, searchQueryProvider } = useContext(
     GlobalStateContext,
   )!;
-  let searchQuery = searchQueryProvider.searchQuery
-    ? searchQueryProvider.searchQuery
-    : '';
+
+  let searchQuery: string;
+
+  // Reset page number when searching
+  if (searchQueryProvider.searchQuery) {
+    searchQuery = searchQueryProvider.searchQuery;
+    pageNumber = 1;
+  } else {
+    searchQuery = ' ';
+  }
+
+  const resultLimit: number = 25;
+  let start: number = (pageNumber - 1) * resultLimit;
 
   useEffect(() => {
     const getCourses = async () => {
@@ -57,29 +53,29 @@ export const CourseList: React.FC<CourseListProps> = ({ pageNumber }) => {
   }, [pageNumber, searchQuery]);
 
   return (
-    <Wrapper>
-      <table>
+    <FlexContainer margin='15px 10% 0 10%'>
+      <StyledTable>
         <thead>
           <tr>
-            <th>Fagnavn</th>
-            <th>Fagkode</th>
-            <th>Gjennomsnittskarakter</th>
-            <th>Studiepoeng</th>
+            <StyledTH width='25%'>Fagkode</StyledTH>
+            <StyledTH width='50%' textAlign='left'>
+              Fagnavn
+            </StyledTH>
+            <StyledTH width='25%'>Vurdering</StyledTH>
           </tr>
         </thead>
         <tbody>
           {courses.map((currentCourse) => {
             return (
               <Course
-                courseName={currentCourse.course_name}
                 courseCode={currentCourse.course_code}
-                gradeAvg={currentCourse.average_grade}
+                courseName={currentCourse.course_name}
                 credit={currentCourse.credit}
               />
             );
           })}
         </tbody>
-      </table>
-    </Wrapper>
+      </StyledTable>
+    </FlexContainer>
   );
 };
