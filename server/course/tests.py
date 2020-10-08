@@ -145,7 +145,7 @@ class GetAllCoursesTest(TestCase):
 		self.assertEqual(data["count"], 0)
 		self.assertTrue(data["data"] == [])
 
-	def test_get_all_courses_search_good_parameter(self):
+	def test_get_all_courses_search_valid_parameter(self):
 		c = Client()
 		first_test_course = _get_first_test_course()
 		search_value = first_test_course.get("course_code")[1:4]
@@ -157,7 +157,7 @@ class GetAllCoursesTest(TestCase):
 		for course in res.data["data"]:
 			self.assertTrue(search_value in course["course_code"] or search_value in course["course_name"])
 
-	def test_get_all_courses_search_bullshit_parameter(self):
+	def test_get_all_courses_search_invalid_parameter(self):
 		c = Client()
 		search_value = "fdhsuifndsuo"
 		res = c.get("/course/all/?search={}".format(search_value))
