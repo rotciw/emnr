@@ -1,78 +1,81 @@
 import React, { useEffect, useState, useContext } from 'react';
-import styled from 'styled-components';
 import { Course } from './Course';
 import axios from 'axios';
 import { GlobalStateContext } from 'context/GlobalStateContext';
-
-const Wrapper = styled.div`
-  border: 1px solid #ccc;
-  padding: 50px;
-  border-radius: 5px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-`;
+import { FlexContainer, StyledTable, StyledTH } from 'styles/Containers';
 
 interface CourseListProps {
   pageNumber: number;
 }
 
-interface CourseProps{
+interface CourseProps {
   course_name: string;
   course_code: string;
   average_grade: number;
   credit: number;
 }
 
-export const CourseList: React.FC<CourseListProps> = ({
-  pageNumber,
-  }) => {
-
+export const CourseList: React.FC<CourseListProps> = ({ pageNumber }) => {
   const [courses, updateCourses] = useState<CourseProps[]>([]);
+  const { totalPageProvider, searchQueryProvider } = useContext(
+    GlobalStateContext,
+  )!;
 
-  const resultLimit:number = 25;
-  let start:number = (pageNumber-1)*resultLimit;
+  let searchQuery: string;
 
-  const {totalPageProvider} = useContext(GlobalStateContext)!;
+  // Reset page number when searching
+  if (searchQueryProvider.searchQuery) {
+    searchQuery = searchQueryProvider.searchQuery;
+    pageNumber = 1;
+  } else {
+    searchQuery = ' ';
+  }
 
-  useEffect (() => {
-    
+  const resultLimit: number = 25;
+  let start: number = (pageNumber - 1) * resultLimit;
+
+  useEffect(() => {
     const getCourses = async () => {
       await axios
-      .get("http://localhost:8000/course/all/?n=25&offset="+start)
-      .then(res => {
-        updateCourses(res.data.data);
-        totalPageProvider.setTotalPage(Math.ceil(res.data.count/resultLimit));
-      })
-        .catch(err => console.log(err));        
-    }
+        .get(
+          `http://localhost:8000/course/all/?n=25&offset=${start}&search=${searchQuery}`,
+        )
+        .then((res) => {
+          updateCourses(res.data.data);
+          totalPageProvider.setTotalPage(
+            Math.ceil(res.data.count / resultLimit),
+          );
+        })
+        .catch((err) => console.log(err));
+    };
     getCourses();
     start += resultLimit;
-  }, [pageNumber]); 
-
-
-
+  }, [pageNumber, searchQuery]);
 
   return (
-    <Wrapper>
-      <table>
+    <FlexContainer margin='15px 0 0 0'>
+      <StyledTable>
         <thead>
-            <tr>
-                <th>Fagnavn</th>
-                <th>Fagkode</th>
-                <th>Gjennomsnittskarakter</th>
-                <th>Studiepoeng</th>
-            </tr>
+          <tr>
+            <StyledTH width='25%'>Fagkode</StyledTH>
+            <StyledTH width='50%' textAlign='left'>
+              Fagnavn
+            </StyledTH>
+            <StyledTH width='25%'>Vurdering</StyledTH>
+          </tr>
         </thead>
         <tbody>
-          {
-            courses.map(currentCourse => { 
-              return <Course courseName={currentCourse.course_name} courseCode={currentCourse.course_code} gradeAvg={currentCourse.average_grade} credit={currentCourse.credit}/>;
-            })
-          }
+          {courses.map((currentCourse) => {
+            return (
+              <Course
+                courseCode={currentCourse.course_code}
+                courseName={currentCourse.course_name}
+                credit={currentCourse.credit}
+              />
+            );
+          })}
         </tbody>
-      </table>
-    </Wrapper>
+      </StyledTable>
+    </FlexContainer>
   );
 };

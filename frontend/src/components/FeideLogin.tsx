@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { getFeideLogin } from '../utils/api';
-import emnrLoginLogo from '../assets/images/emnr_logo_login.svg';
+import emnrLoginLogo from '../assets/images/emnr_short.svg';
 import { LoginButton } from '../styles/Buttons';
 
 const Wrapper = styled.div`
