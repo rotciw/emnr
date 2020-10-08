@@ -1,11 +1,11 @@
 import React from 'react';
 import { CourseButton } from '../styles/Buttons';
 import { Link } from 'react-router-dom';
+import { CourseItemText } from 'styles/Text';
 
 interface CourseProps {
   courseName: String;
   courseCode: String;
-  gradeAvg: Number;
   credit: Number;
 }
 
@@ -13,19 +13,14 @@ const handleCourseClick = () => {
   console.log('Trykk på fag 1');
 };
 
-const courseStyle = {
-  display: 'inline-block',
-  width: '25%',
-};
-
 export const Course: React.FC<CourseProps> = ({
   courseName,
   courseCode,
-  gradeAvg,
   credit,
-  }) => {
+}) => {
   return (
     <tr>
+<<<<<<< HEAD
         <td colSpan={3}>
           <Link to={"/course/"+courseCode}>
             <CourseButton clickHandler={handleCourseClick}>
@@ -38,6 +33,19 @@ export const Course: React.FC<CourseProps> = ({
             </CourseButton>
           </Link>
         </td>
+=======
+      <td colSpan={3}>
+        <Link to={`/course/${courseCode}`}>
+          <CourseButton clickHandler={handleCourseClick}>
+            <CourseItemText width='25%'>{courseCode}</CourseItemText>
+            <CourseItemText width='50%' textAlign='left'>
+              {courseName}
+            </CourseItemText>
+            <CourseItemText width='25%'>{credit} / 5</CourseItemText>
+          </CourseButton>
+        </Link>
+      </td>
+>>>>>>> dev
     </tr>
   );
 };

@@ -1,18 +1,23 @@
 import React, { useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import emnrLogo from '../assets/images/emnr_logo_long.svg';
+import emnrLogo from '../assets/images/emnr_long.svg';
+import { Searchbar } from './Searchbar';
 
 const NavBarContainer = styled.nav`
-  width: 100vw;
+  width: 100%;
   float: left;
   flex: 1;
   background-color: ${({ theme }) => theme.darkBlue};
+  padding-bottom: 25px;
+  position: sticky;
+  top: 0;
 `;
 
 const Logo = styled.img`
   padding: 10px;
   cursor: pointer;
+  width: 100px;
 `;
 
 export const Navbar: React.FC = () => {
@@ -22,6 +27,7 @@ export const Navbar: React.FC = () => {
   return (
     <NavBarContainer>
       <Logo src={emnrLogo} onClick={handleOnClick} />
+      <Searchbar />
     </NavBarContainer>
   );
 };
