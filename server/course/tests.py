@@ -102,17 +102,14 @@ class GetAllCoursesTest(TestCase):
 		# Tests that two 'safe' parameters work
 		res = c.get("/course/all/?n={}&offset={}".format(10, 0))
 		self.assertEqual(res.status_code, 200)
-		self.assertEqual(res.data["data"][0]["course_code"], source_data[0].course_code)
+		self.assertEqual(res.data["count"], 59)
+		source_data_codes = _get_source_data_codes()
+		self.assertTrue(res.data["data"][0]["course_code"] in source_data_codes)
 
 		# Tests that length of get-request and source_data are the same, and status OK
 		res = c.get("/course/all/?n={}&offset={}".format(1, len(source_data)))
 		self.assertEqual(res.status_code, 200)
 		self.assertEqual(res.data["data"], [])
-
-		# Test that last last element of get-request and last element of source_data are the same
-		res = c.get("/course/all/?n={}&offset={}".format(1, len(source_data) - 1))
-		self.assertEqual(res.status_code, 200)
-		self.assertEqual(res.data["data"][0]["course_code"], source_data[-1].course_code)
 
 	def test_get_courses_from_db_invalid_n_offset(self):
 		source_data = _create_models_without_saving()
