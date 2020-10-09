@@ -13,14 +13,11 @@ import { RateCourseButton } from 'styles/Buttons';
 import { Circle, RotatedSquare } from 'styles/Shapes';
 import { defaultTheme } from 'styles/theme';
 import axios from 'axios';
-<<<<<<< HEAD
 import { ReviewList } from 'components/ReviewList';
+import { ReviewForm } from 'components/ReviewForm';
 import { PaginationContainer } from 'components/pagination/PaginationContainer';
 import { GlobalStateContext } from 'context/GlobalStateContext';
-=======
-import { ReviewForm } from 'components/ReviewForm';
 import { modalStyles } from 'styles/Modals';
->>>>>>> feat/US4-frontend-form-review
 
 interface CourseViewProps {
   courseName: String;
@@ -102,8 +99,13 @@ export const CoursePage: React.FC<CourseViewProps> = (
         </LocalShapeContainer>
       </FlexContainer>
       <HrLine />
-      <ReviewList courseCode={courseInfo.course_code} pageNumber={pageReviewProvider.pageReview}/>
-      <PaginationContainer totalPages={totalPageReviewProvider.totalPageReview} />
+      <ReviewList
+        courseCode={courseInfo.course_code}
+        pageNumber={pageReviewProvider.pageReview}
+      />
+      <PaginationContainer
+        totalPages={totalPageReviewProvider.totalPageReview}
+      />
     </Layout>
   );
 };
