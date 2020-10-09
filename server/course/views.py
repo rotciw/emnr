@@ -93,20 +93,8 @@ def retrieve_courses_from_token(token):
     """
     Helper method for getting the list of courses that the current user has taken (based on the frontend token).
     """
-    access_token = get_token(token)
-    session = requests.Session()
-    session.headers.update({'authorization': 'bearer {}'.format(access_token)})
-
-    api_request = requests.get(
-        'https://groups-api.dataporten.no/groups/me/groups', headers={
-            'content-type': 'application/json; charset=utf-8',
-            'authorization': 'Bearer {}'.format(access_token),
-        }
-    )
-
-    json_object = api_request.json()
+    json_object = perform_feide_api_call(token, 'https://groups-api.dataporten.no/groups/me/groups')
     course_info = []
-
     for obj in json_object:
         parsed_obj = parse_course_object(obj)
         if parsed_obj is not None:
@@ -126,9 +114,9 @@ def parse_course_object(obj):
     course_code = obj["id"].split(":")[-2]
 
     # Get semester
-    semester = ""
     if 'notAfter' in obj['membership']:
         # Course has already been taken
+        semester = ""
         notAfter_split = (obj['membership']['notAfter']).split('-')
         if notAfter_split[1] == "08":
             semester += "V"
@@ -138,13 +126,33 @@ def parse_course_object(obj):
             raise ValueError("Unknown semester end month: {}".format(notAfter_split[1]))
         semester += notAfter_split[0]
     else:
-        if int(time.strftime("%m")) < 8:
-            semester += "V"
-        else:
-            semester += "H"
-        semester += time.strftime("%Y")
+        semester = get_current_semester()
 
     # Get course name from Course table
     course_name = Course.objects.filter(course_code=course_code)[0].course_name
 
     return {"course_code": course_code, "course_name": course_name, "semester": semester}
+
+
+def perform_feide_api_call(expiring_token, api_url):
+    access_token = get_token(expiring_token)
+    session = requests.Session()
+    session.headers.update({'authorization': 'bearer {}'.format(access_token)})
+
+    api_request = requests.get(
+        api_url, headers={
+            'content-type': 'application/json; charset=utf-8',
+            'authorization': 'Bearer {}'.format(access_token),
+        }
+    )
+    return api_request.json()
+
+
+def get_current_semester():
+    semester = ""
+    if int(time.strftime("%m")) < 8:
+        semester += "V"
+    else:
+        semester += "H"
+    semester += time.strftime("%Y")
+    return semester
