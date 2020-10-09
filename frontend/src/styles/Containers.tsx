@@ -11,6 +11,7 @@ export const FlexContainer = styled.div`
   display: flex;
   flex-direction: row;
   margin: ${(props: LayoutProps) => props.margin || 'auto'};
+  width: ${(props: LayoutProps) => props.width || ''};
 `;
 
 export const CenteredFlexContainer = styled.div`
@@ -43,7 +44,7 @@ export const FlexItem = styled.div`
 `;
 
 export const HrLine = styled.div`
-  margin: 5vh 0 2vh 0;
+  margin: ${(props: LayoutProps) => props.margin || '5vh 0 2vh 0'};
   border-bottom: 1px solid ${({theme}) => theme.darkBlue};
 `;
 

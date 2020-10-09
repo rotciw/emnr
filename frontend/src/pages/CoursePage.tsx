@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import Modal from 'react-modal';
 import { Layout } from 'styles/Layout';
 import {
   FlexContainer,
@@ -12,9 +13,14 @@ import { RateCourseButton } from 'styles/Buttons';
 import { Circle, RotatedSquare } from 'styles/Shapes';
 import { defaultTheme } from 'styles/theme';
 import axios from 'axios';
+<<<<<<< HEAD
 import { ReviewList } from 'components/ReviewList';
 import { PaginationContainer } from 'components/pagination/PaginationContainer';
 import { GlobalStateContext } from 'context/GlobalStateContext';
+=======
+import { ReviewForm } from 'components/ReviewForm';
+import { modalStyles } from 'styles/Modals';
+>>>>>>> feat/US4-frontend-form-review
 
 interface CourseViewProps {
   courseName: String;
@@ -36,11 +42,17 @@ export const CoursePage: React.FC<CourseViewProps> = (
   const history = useHistory();
   const handleBackClick = useCallback(() => history.push('/'), [history]);
 
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+
+  function toggleModalIsOpen() {
+    setModalIsOpen(!modalIsOpen);
+  }
+
   useEffect(() => {
     const getCourses = async () => {
       await axios
         .get('http://localhost:8000/course/?code=' + courseCode)
-        .then(res => setCourseInfo(res.data))
+        .then((res) => setCourseInfo(res.data))
         .catch((err) => console.log(err));
     };
     getCourses();
@@ -48,7 +60,7 @@ export const CoursePage: React.FC<CourseViewProps> = (
 
   return (
     <Layout padding='0 20%'>
-      <FlexContainer>
+      <FlexContainer width='100%'>
         <FlexItem margin='0 0 0 10vh'>
           <FlexItem margin='2vh 0 4vh 0' onClick={handleBackClick}>
             <GoBackText>Tilbake</GoBackText>
@@ -57,7 +69,21 @@ export const CoursePage: React.FC<CourseViewProps> = (
           <BoldTitle fontSize='30px'>{courseInfo.course_name}</BoldTitle>
           <BoldTitle margin='10px 0 0 0'>{courseInfo.score} / 5</BoldTitle>
           <SubTitle margin='0 0 4vh 0'>Basert på x antall vurderinger</SubTitle>
-          <RateCourseButton>Vurder {courseCode}</RateCourseButton>
+          <RateCourseButton onClick={toggleModalIsOpen}>
+            Vurder {courseCode}
+          </RateCourseButton>
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={toggleModalIsOpen}
+            style={modalStyles}
+            contentLabel='Example Modal'
+          >
+            <ReviewForm
+              courseName={courseInfo.course_name}
+              courseCode={courseInfo.course_code}
+              closeModal={toggleModalIsOpen}
+            />
+          </Modal>
         </FlexItem>
         <LocalShapeContainer>
           <Circle
