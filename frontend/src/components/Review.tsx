@@ -54,10 +54,11 @@ export const Review: React.FC<ReviewProps> = ({
 }) => {
   return (
     <ReviewContainer>
-      <FlexItem flex={"none"} style={{marginRight: '5vw'}}>
+      <FlexItem flex={'none'} style={{ marginRight: '5vw' }}>
         <div>
           <ExtraBold>{name}</ExtraBold>
-          <p>{studyProgramme}</p>
+          <div>{studyProgramme}</div>
+          {/* Using div instead of p to avoid having to reduce line spacing */}
         </div>
       </FlexItem>
       <FlexItem>
@@ -75,7 +76,7 @@ export const Review: React.FC<ReviewProps> = ({
             Vanskelighetsgrad: <ExtraBold>{difficulty}/5</ExtraBold>
           </SecondaryMetric>
         </FlexContainer>
-        <HrLine margin={'20px 0 0 0'}/>
+        <HrLine margin={'20px 0 0 0'} />
         <FlexContainer>
           <p>{text}</p>
         </FlexContainer>
