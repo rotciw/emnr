@@ -135,6 +135,11 @@ def parse_course_object(obj):
 
 
 def perform_feide_api_call(expiring_token, api_url):
+    """
+    Performs a get request to a given API that requires the current user's Feide Access token
+    (like the Groups API or the UserInfo API).
+    Returns a dictionary representation of the JSON data returned from the API call.
+    """
     access_token = get_token(expiring_token)
     session = requests.Session()
     session.headers.update({'authorization': 'bearer {}'.format(access_token)})
@@ -149,6 +154,11 @@ def perform_feide_api_call(expiring_token, api_url):
 
 
 def get_current_semester():
+    """
+    Helper method for creating a string representing the current semester.
+
+    E.g. if we are in september 2018, it will return H2018 (H for Høst/Autumn).
+    """
     semester = ""
     if int(time.strftime("%m")) < 8:
         semester += "V"
