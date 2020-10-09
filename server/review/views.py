@@ -15,11 +15,13 @@ def post_review(request):
     Handles posting of reviews to the database.
 
     The incoming POST request data should be of the following format:
-    {   courseCode: ...,
+    {
+        courseCode: ...,
         score: (number between 1 and 5),
         workload: (number between 1 and 5),
         difficulty: (number between 1 and 5),
         reviewText: Free text field. Can be empty, but should be provided nonetheless.
+    }
     """
     request_data = json.loads(request.body)
     # Get full name, email, study programme and all taken courses from Feide APIs.
