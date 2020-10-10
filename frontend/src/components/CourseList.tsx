@@ -85,7 +85,7 @@ export const CourseList: React.FC<CourseListProps> = ({ pageNumber }) => {
           </tbody>
         </StyledTable>
       ) : (
-        <EmptyResult>Sorry! We could not find any results. </EmptyResult>
+        <EmptyResult>Beklager! Vi fant ingen data. </EmptyResult>
       )}
     </FlexContainer>
   );
