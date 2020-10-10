@@ -5,7 +5,7 @@ interface GlobalStateContextProps {
   userProvider: UserProviderValue;
   pageProvider: PageProviderValue;
   totalPageProvider: TotalPageProviderValue;
-  searchQueryProvider: SearchQueryProviderValue;
+  queryProvider: QueryProviderValue;
 }
 
 interface AuthProviderValue {
@@ -28,9 +28,11 @@ interface TotalPageProviderValue {
   setTotalPage: (val: number) => void;
 }
 
-interface SearchQueryProviderValue {
+interface QueryProviderValue {
   searchQuery: string | null;
   setSearchQuery: (val: string) => void;
+  orderByQuery: string | null;
+  setOrderByQuery: (val: string) => void;
 }
 
 export const GlobalStateContext = createContext<GlobalStateContextProps | null>(
@@ -43,6 +45,7 @@ const GlobalStateProvider: React.FC = ({ children }) => {
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
+  const [orderByQuery, setOrderByQuery] = useState<string | null>(null);
 
   const authProvider = useMemo(() => ({ token, setToken }), [token, setToken]);
   const userProvider = useMemo(() => ({ email, setEmail }), [email, setEmail]);
@@ -51,10 +54,10 @@ const GlobalStateProvider: React.FC = ({ children }) => {
     totalPage,
     setTotalPage,
   ]);
-  const searchQueryProvider = useMemo(() => ({ searchQuery, setSearchQuery }), [
-    searchQuery,
-    setSearchQuery,
-  ]);
+  const queryProvider = useMemo(
+    () => ({ searchQuery, setSearchQuery, orderByQuery, setOrderByQuery }),
+    [searchQuery, setSearchQuery, orderByQuery, setOrderByQuery],
+  );
 
   return (
     <GlobalStateContext.Provider
@@ -63,7 +66,7 @@ const GlobalStateProvider: React.FC = ({ children }) => {
         userProvider,
         pageProvider,
         totalPageProvider,
-        searchQueryProvider,
+        queryProvider,
       }}
     >
       {children}

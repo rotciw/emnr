@@ -17,28 +17,27 @@ interface CourseProps {
 
 export const CourseList: React.FC<CourseListProps> = ({ pageNumber }) => {
   const [courses, updateCourses] = useState<CourseProps[]>([]);
-  const { totalPageProvider, searchQueryProvider } = useContext(
+  const { totalPageProvider, queryProvider } = useContext(
     GlobalStateContext,
   )!;
 
-  let searchQuery: string;
+  let searchQuery: string = ' ';
+  let orderByQuery: string;
+  queryProvider.orderByQuery ? orderByQuery = queryProvider.orderByQuery : orderByQuery = 'course_name';
 
   // Reset page number when searching
-  if (searchQueryProvider.searchQuery) {
-    searchQuery = searchQueryProvider.searchQuery;
+  if (queryProvider.searchQuery) {
+    searchQuery = queryProvider.searchQuery;
     pageNumber = 1;
-  } else {
-    searchQuery = ' ';
   }
 
   const resultLimit: number = 25;
   let start: number = (pageNumber - 1) * resultLimit;
-
   useEffect(() => {
     const getCourses = async () => {
       await axios
         .get(
-          `http://localhost:8000/course/all/?n=25&offset=${start}&search=${searchQuery}`,
+          `http://localhost:8000/course/all/?n=25&offset=${start}&search=${searchQuery}&order_by=${orderByQuery}`,
         )
         .then((res) => {
           updateCourses(res.data.data);
@@ -50,7 +49,7 @@ export const CourseList: React.FC<CourseListProps> = ({ pageNumber }) => {
     };
     getCourses();
     start += resultLimit;
-  }, [pageNumber, searchQuery]);
+  }, [pageNumber, searchQuery, orderByQuery]);
 
   return (
     <FlexContainer margin='15px 0 0 0'>
