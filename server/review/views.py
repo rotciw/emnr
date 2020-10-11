@@ -26,9 +26,12 @@ def post_review(request):
     request_data = json.loads(request.body)
     # Get full name, email, study programme and all taken courses from Feide APIs.
     exp_token = request.META['HTTP_AUTHORIZATION']
-    reviewable_courses = get_reviewable_courses(exp_token)
-    full_name, email = get_user_full_name_and_email(exp_token)
-    study_prg = get_user_study_programme(exp_token)
+    try:
+        reviewable_courses = get_reviewable_courses(exp_token)
+        full_name, email = get_user_full_name_and_email(exp_token)
+        study_prg = get_user_study_programme(exp_token)
+    except ValueError as e:
+        return Response(str(e), status=400)
 
     # Validate request
     try:
@@ -64,11 +67,12 @@ def validate_review_post_request(request_data, reviewable_courses, email):
         raise ValueError("User is unable to review this course, as it has already reviewed it.")
 
     # Validate score, difficulty and workload
-    if request_data["score"] < 1 or request_data["score"] > 5:
+    if not isinstance(request_data["score"], int) or request_data["score"] < 1 or request_data["score"] > 5:
         raise ValueError("Invalid score: {} (Must be between 1 and 5)".format(request_data["score"]))
-    if request_data["difficulty"] < 1 or request_data["difficulty"] > 5:
+    if not isinstance(request_data["difficulty"], int) or request_data["difficulty"] < 1 or request_data[
+        "difficulty"] > 5:
         raise ValueError("Invalid difficulty: {} (Must be between 1 and 5)".format(request_data["difficulty"]))
-    if request_data["workload"] < 1 or request_data["workload"] > 5:
+    if not isinstance(request_data["workload"], int) or request_data["workload"] < 1 or request_data["workload"] > 5:
         raise ValueError("Invalid workload: {} (Must be between 1 and 5)".format(request_data["workload"]))
 
 
@@ -80,11 +84,13 @@ def get_reviewable_courses(exp_token):
     The filtering removes courses that are being taken right now,
     and the mapping maps from course object to course code.
     """
-    reviewable_courses = list(
-        map(lambda filtered_ci: filtered_ci["course_code"],
-            filter(lambda course_info: course_info["semester"] != get_current_semester(),
-                   retrieve_courses_from_token(exp_token))))
-    return reviewable_courses
+    try:
+        return list(
+            map(lambda filtered_ci: filtered_ci["course_code"],
+                filter(lambda course_info: course_info["semester"] != get_current_semester(),
+                       retrieve_courses_from_token(exp_token))))
+    except TypeError as e:
+        raise ValueError("Invalid response from Groups API. May be wrong token.")
 
 
 def get_user_full_name_and_email(expiring_token):
@@ -92,6 +98,8 @@ def get_user_full_name_and_email(expiring_token):
     Fetches the full name and email of the logged in user, via the Feide UserInfo API.
     """
     json_object = perform_feide_api_call(expiring_token, "https://auth.dataporten.no/openid/userinfo")
+    if "error" in json_object.keys():
+        raise ValueError("Invalid token")
     return json_object["name"], json_object["email"]
 
 
@@ -101,7 +109,12 @@ def get_user_study_programme(expiring_token):
     """
     json_object = perform_feide_api_call(expiring_token, 'https://groups-api.dataporten.no/groups/me/groups')
     study_programmes = []
+
+    if isinstance(json_object, dict) and "Unauthorized" in json_object["message"]:
+        raise ValueError("Invalid expiring token")
     for obj in json_object:
         if "prg" in obj["type"]:
             study_programmes.append(obj["id"].split(":")[-1])
+    if not study_programmes:
+        raise ValueError("No study programme found for the given student.")
     return study_programmes[0]
