@@ -11,15 +11,20 @@ const MarginLabel = styled.label`
 `;
 
 export const RadioButtonsBar: React.FC<ReviewFormProps> = ({ radioID }) => {
-//   const gerRadioValue = (): number => {
-//     //Gets value of checked radio button
-//     const value = document.querySelector('input[name="' + { radioID } + '"]:checked').value;
-//     if (value === null) {
-//       return -1;
-//     } else {
-//       return value;
-//     }
-//   };
+  
+  let value:number = -1;
+  
+  const gerRadioValue = (): number => {
+    //Gets value of checked radio button
+    //value = document.querySelector('input[name="' + { radioID } + '"]:checked').value;
+    //value = document.querySelector("input[name=rate]:checked").value;
+
+    if (value === null) {
+      return -1;
+    } else {
+      return value;
+    }
+  };
 
   return (
     <FlexContainer>
