@@ -29,10 +29,19 @@ class GetMyCoursesTest(TestCase):
 
     def test_parse_course_object_get_current_semester(self):
         test_data = {"id": "fc:fs:fs:emne:ntnu.no:TDT4290:1", "type": "fc:fs:emne", "parent": "fc:org:ntnu.no", "membership": {"basic": "member", "fsroles": ["STUDENT"], "active": True, "displayName": "Student"}, "displayName": "Kundestyrt prosjekt"}
-        course = Course(course_code="TDT4290", course_name="Kundestyrt prosjekt", credit=15, average_grade=0)
+        course = Course(course_code = "TDT4290", course_name = "Kundestyrt prosjekt", credit = 15, average_grade = 0)
         course.save()
         course_info = parse_course_object(test_data)
         self.assertEqual(course_info["course_code"],"TDT4290")
         self.assertEqual(course_info["course_name"], "Kundestyrt prosjekt")
         self.assertEqual(course_info["semester"], get_current_semester())
 
+
+    def test_parse_course_object(self):
+        test_data = {"id": "fc:fs:fs:emne:ntnu.no:EXPH0004:1", "type": "fc:fs:emne", "parent": "fc:org:ntnu.no", "membership": {"basic": "member", "fsroles": ["STUDENT"], "active": True, "notAfter": "2017-12-14T23:00:00Z", "subjectRelations": "undervisning", "displayName": "Student"}, "displayName": "Examen philosophicum for naturvitenskap og teknologi"}
+        course = Course(course_code = "EXPH0004", course_name = "Examen philosophicum for naturvitenskap og teknologi", credit = 7.5, average_grade = 0)
+        course.save()
+        course_info = parse_course_object(test_data)
+        self.assertEqual(course_info["course_code"], "EXPH0004")
+        self.assertEqual(course_info["course_name"], "Examen philosophicum for naturvitenskap og teknologi")
+        self.assertEqual(course_info["semester"], "H2017")
