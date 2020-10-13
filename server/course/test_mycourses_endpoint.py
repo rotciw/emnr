@@ -5,8 +5,6 @@ from course.views import get_single_course_from_db, parse_course_object, get_cur
 from django.test.client import RequestFactory
 from django.test import Client
 from .tests import _create_models_without_saving, _get_first_test_course
-from
-
 
 
 class GetMyCoursesTest(TestCase):
@@ -19,8 +17,10 @@ class GetMyCoursesTest(TestCase):
 
 
     def test_get_current_user_courses_valid_token(self):
+        pass
 
     def test_get_current_user_courses_invalid_token(self):
+        pass
 
 
     def test_parse_course_object_not_course(self):
