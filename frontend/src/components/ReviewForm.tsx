@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { RateCourseButton } from 'styles/Buttons';
 import { FlexContainer, HrLine } from 'styles/Containers';
@@ -42,46 +42,52 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
   courseName,
   courseCode,
 }) => {
+  const [scoreValue, setScoreValue] = useState<number>(-1);
+  const [difficultyValue, setDifficultyValue] = useState<number>(-1);
+  const [workloadValue, setWorkloadValue] = useState<number>(-1);
+  const [reviewText, setReviewText] = useState<String>('');
 
-  const API_URL:String = "http://localhost:8000"
+  const API_URL: String = 'http://localhost:8000';
 
   const postReview = () => {
-
     closeModal();
     const token = getLocalToken();
     axios.defaults.headers.common['Authorization'] = `${token}`;
     return axios
       .post(API_URL + '/review/', {
         courseCode: courseCode,
-        score: 4,
-        workload: 3,
-        difficulty: 7,
-        reviewText: "Kult fag."
+        score: scoreValue,
+        workload: difficultyValue,
+        difficulty: difficultyValue,
+        reviewText: reviewText,
       })
       .then(function (response) {
         return response.data;
       })
       .catch(function (error) {});
-  }
+  };
 
   return (
     <div>
-      <FlexContainer style={{justifyContent: "space-between"}}>
+      <FlexContainer style={{ justifyContent: 'space-between' }}>
         <Title margin='0 0 5px 0'>{courseCode}</Title>
         <ModalXButton onClick={closeModal}>&#10006;</ModalXButton>
       </FlexContainer>
       <BoldTitle fontSize='30px'>{courseName}</BoldTitle>
       <HrLine margin='15px 0 0 0' />
       <BoldInputDescription>Totalvurdering:</BoldInputDescription>
-      <RadioButtonsBar radioID='reviewScore' />
+      <RadioButtonsBar radioID='reviewScore' valueSetter={setScoreValue} />
       <InputDescription>Vanskelighetsgrad:</InputDescription>
-      <RadioButtonsBar radioID='difficultyScore' />
+      <RadioButtonsBar radioID='difficultyScore' valueSetter={setDifficultyValue} />
       <InputDescription>Arbeidsmengde:</InputDescription>
-      <RadioButtonsBar radioID='workloadScore' />
+      <RadioButtonsBar radioID='workloadScore' valueSetter={setWorkloadValue} />
       <InputDescription style={{ margin: '50px 0 0 0' }}>
         Kommentar (maks 750 tegn):
       </InputDescription>
-      <TextInput maxLength={750} />
+      <TextInput
+        maxLength={750}
+        onChange={(e) => setReviewText(e.target.value)}
+      />
       <RateCourseButton onClick={postReview}>Send inn</RateCourseButton>
     </div>
   );
