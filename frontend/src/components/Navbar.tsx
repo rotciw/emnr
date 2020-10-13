@@ -43,9 +43,12 @@ export const Navbar: React.FC = () => {
   const handleOnClick = useCallback(() => history.push('/'), [history]);
   const { queryProvider } = useContext(GlobalStateContext)!;
 
+
   const onSelect = (e: string) => {
     queryProvider.setOrderByQuery(e);
+    queryProvider.setOrderToggle(!queryProvider.orderToggle);
   };
+
   return (
     <NavBarContainer>
       <Logo src={emnrLogo} onClick={handleOnClick} />
