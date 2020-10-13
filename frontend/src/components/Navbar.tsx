@@ -23,11 +23,13 @@ const Logo = styled.img`
 export const Navbar: React.FC = () => {
   const history = useHistory();
   const handleOnClick = useCallback(() => history.push('/'), [history]);
+  const handleClickMe = useCallback(() => history.push('/me'), [history]);
 
   return (
     <NavBarContainer>
       <Logo src={emnrLogo} onClick={handleOnClick} />
       <Searchbar />
+      <button onClick={handleClickMe}>Me page</button>
     </NavBarContainer>
   );
 };

@@ -33,7 +33,7 @@ export const CoursePage: React.FC<CourseViewProps> = (
     const getCourses = async () => {
       await axios
         .get('http://localhost:8000/course/?code=' + courseCode)
-        .then(res => setCourseInfo(res.data))
+        .then((res) => setCourseInfo(res.data))
         .catch((err) => console.log(err));
     };
     getCourses();
