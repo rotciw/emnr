@@ -3,6 +3,7 @@ import { Course } from './Course';
 import axios from 'axios';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { FlexContainer, StyledTable, StyledTH } from 'styles/Containers';
+import styled from 'styled-components';
 
 interface CourseListProps {
   pageNumber: number;
@@ -14,6 +15,12 @@ interface CourseProps {
   average_grade: number;
   credit: number;
 }
+
+export const EmptyResult = styled.h3`
+  text-align: center;
+  align-self: center;
+  flex: 1;
+`;
 
 export const CourseList: React.FC<CourseListProps> = ({ pageNumber }) => {
   const [courses, updateCourses] = useState<CourseProps[]>([]);
@@ -53,28 +60,32 @@ export const CourseList: React.FC<CourseListProps> = ({ pageNumber }) => {
 
   return (
     <FlexContainer margin='15px 0 0 0'>
-      <StyledTable>
-        <thead>
-          <tr>
-            <StyledTH width='25%'>Fagkode</StyledTH>
-            <StyledTH width='50%' textAlign='left'>
-              Fagnavn
-            </StyledTH>
-            <StyledTH width='25%'>Vurdering</StyledTH>
-          </tr>
-        </thead>
-        <tbody>
-          {courses.map((currentCourse) => {
-            return (
-              <Course
-                courseCode={currentCourse.course_code}
-                courseName={currentCourse.course_name}
-                credit={currentCourse.credit}
-              />
-            );
-          })}
-        </tbody>
-      </StyledTable>
+      {courses.length ? (
+        <StyledTable>
+          <thead>
+            <tr>
+              <StyledTH width='25%'>Fagkode</StyledTH>
+              <StyledTH width='50%' textAlign='left'>
+                Fagnavn
+              </StyledTH>
+              <StyledTH width='25%'>Vurdering</StyledTH>
+            </tr>
+          </thead>
+          <tbody>
+            {courses.map((currentCourse) => {
+              return (
+                <Course
+                  courseCode={currentCourse.course_code}
+                  courseName={currentCourse.course_name}
+                  credit={currentCourse.credit}
+                />
+              );
+            })}
+          </tbody>
+        </StyledTable>
+      ) : (
+        <EmptyResult>Beklager! Vi fant ingen data. </EmptyResult>
+      )}
     </FlexContainer>
   );
 };
