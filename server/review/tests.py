@@ -197,7 +197,7 @@ class PostReviewTest(TestCase):
         # Valid request
         self.assertIsNone(validate_review_post_request(test_data, ["TDT4290", "TMA4125"], "test@testesen.com"))
 
-    def test_post_review_invalid_JSON_formatting_and_values(self):
+    def test_post_review_invalid_JSON_formatting_and_values_and_nonexistent_course(self):
         invalid_test_data = {"course_code": "TDT4290",
                              "score": -2,
                              "workload": "abx",
@@ -205,19 +205,45 @@ class PostReviewTest(TestCase):
         # Test invalid JSON formatting and values
         c = APIClient()
         c.credentials(HTTP_AUTHORIZATION='valid_token')
-        response = c.post("/review/", data=invalid_test_data, format="json", )
+        response = c.post("/review/", data=invalid_test_data, format="json")
         self.assertEqual(response.status_code, 400)
 
-    def test_post_review_valid_request(self):
-        # Test valid request (returns 200 and review stored to db)
+    def test_post_review_invalid_JSON_formatting_and_values_course_exists(self):
+        invalid_test_data = {"course_code": "TDT4290",
+                             "score": -2,
+                             "workload": "abx",
+                             "difficulty": 0}
+        course = Course(course_code="TDT4290", course_name="Customer Driven Project", credit=15, average_grade=1)
+        course.save()
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
+        response = c.post("/review/", data=invalid_test_data, format="json")
+        self.assertEqual(response.status_code, 400)
+
+    def test_post_review_valid_request_nonexistent_course(self):
+        # Test valid request but nonexistent course
         valid_test_data = {"courseCode": "TDT4290",
                            "score": 1,
                            "workload": 1,
                            "difficulty": 1,
                            "reviewText": "Lorem ipsum"}
         c = APIClient()
-        c.credentials(HTTP_AUTHORIZATION='Token valid_token')
-        response = c.post("/reviews/", json.dumps(valid_test_data))
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
+        response = c.post("/review/", data=valid_test_data, format="json")
+        self.assertEqual(response.status_code, 400)
 
-
-
+    def test_post_review_valid_request_course_exists(self):
+        # Test valid request with existing course
+        valid_test_data = {"courseCode": "TDT4120",
+                           "score": 1,
+                           "workload": 1,
+                           "difficulty": 1,
+                           "reviewText": "Lorem ipsum"}
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
+        with patch("course.views.Course") as mock_course_db:
+            mock_course_db.return_value.objects.return_value.filter.return_value = [
+                Course.create("AAA9999", "Test course", 0, 0)]
+            response = c.post("/review/", data=valid_test_data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(Review.objects.filter(course_code="TDT4120", user_email="test@testesen.com").exists())

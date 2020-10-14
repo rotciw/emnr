@@ -32,6 +32,8 @@ def post_review(request):
         study_prg = get_user_study_programme(exp_token)
     except ValueError as e:
         return Response(str(e), status=400)
+    except IndexError as e:
+        return Response("Course does not exist in the database", status=400)
 
     # Validate request
     try:
