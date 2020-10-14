@@ -59,17 +59,17 @@ export const ReviewList: React.FC<ReviewListProps> = ({
   }, [pageNumber]); 
   */
     const tempReviews: ReviewProps[] = [{name:'haakon',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'}];
+    {name:'haakon2',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
+    {name:'haakon3',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
+    {name:'haakon4',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
+    {name:'haakon5',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
+    {name:'haakon6',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
+    {name:'haakon7',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
+    {name:'haakon8',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
+    {name:'haakon9',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
+    {name:'haakon10',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
+    {name:'haakon11',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
+    {name:'haakon12',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'}];
 
     //Change
     totalPageReviewProvider.setTotalPageReview(
