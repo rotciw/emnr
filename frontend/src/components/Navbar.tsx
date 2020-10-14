@@ -6,7 +6,6 @@ import { Searchbar } from './Searchbar';
 
 const NavBarContainer = styled.nav`
   width: 100%;
-  float: left;
   flex: 1;
   background-color: ${({ theme }) => theme.darkBlue};
   padding-bottom: 25px;
@@ -20,6 +19,19 @@ const Logo = styled.img`
   width: 100px;
 `;
 
+const MeButton = styled.button`
+  background-color: ${({ theme }) => theme.darkBlue};
+  cursor: pointer;
+  color: white;
+`;
+
+const TopRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  vertical-align: center;
+  justify-content: space-between;
+`;
+
 export const Navbar: React.FC = () => {
   const history = useHistory();
   const handleOnClick = useCallback(() => history.push('/'), [history]);
@@ -27,9 +39,11 @@ export const Navbar: React.FC = () => {
 
   return (
     <NavBarContainer>
-      <Logo src={emnrLogo} onClick={handleOnClick} />
+      <TopRow id='top-row'>
+        <Logo src={emnrLogo} onClick={handleOnClick} />
+        <MeButton onClick={handleClickMe}> Me page </MeButton>
+      </TopRow>
       <Searchbar />
-      <button onClick={handleClickMe}>Me page</button>
     </NavBarContainer>
   );
 };
