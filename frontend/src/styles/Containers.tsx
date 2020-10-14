@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 interface LayoutProps {
   margin?: string;
-  flex?: number;
+  flex?: string;
   width?: string;
   textAlign?: string;
 }
@@ -38,7 +38,7 @@ export const LocalShapeContainer = styled.div`
 `;
 
 export const FlexItem = styled.div`
-  flex: ${(props: LayoutProps) => props.flex || 1};
+  flex: ${(props: LayoutProps) => props.flex || "1"};
   margin: ${(props: LayoutProps) => props.margin || 'auto'};
   width: '';
 `;

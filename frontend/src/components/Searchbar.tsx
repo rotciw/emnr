@@ -5,9 +5,9 @@ import styled from 'styled-components';
 const SearchbarContainer = styled.div`
   background-color: ${({ theme }) => theme.darkBlue};
   text-align: center;
-  margin: 0 25vw;
+  margin: 0 25%;
   @media (max-width: 768px) {
-    margin: 0 20vw;
+    margin: 0 20%;
   }
 `;
 
@@ -18,7 +18,7 @@ const SearchInput = styled.input`
   transition: all 0.2s ease;
   border: none;
   outline: none;
-  border-radius: 5px;
+  border-radius: 3px;
 
   &::placeholder {
     color: #b3b3b3;
@@ -30,12 +30,12 @@ const SearchInput = styled.input`
 `;
 
 export const Searchbar: React.FC = () => {
-  const { searchQueryProvider } = useContext(GlobalStateContext)!;
+  const { queryProvider } = useContext(GlobalStateContext)!;
 
   return (
     <SearchbarContainer>
       <SearchInput
-        onChange={(e) => searchQueryProvider.setSearchQuery(e.target.value)}
+        onChange={(e) => queryProvider.setSearchQuery(e.target.value)}
         placeholder='Søk etter fagkode eller navn..'
       />
     </SearchbarContainer>

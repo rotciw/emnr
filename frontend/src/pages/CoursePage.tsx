@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import Modal from 'react-modal';
 import { Layout } from 'styles/Layout';
@@ -13,7 +13,10 @@ import { RateCourseButton } from 'styles/Buttons';
 import { Circle, RotatedSquare } from 'styles/Shapes';
 import { defaultTheme } from 'styles/theme';
 import axios from 'axios';
+import { ReviewList } from 'components/ReviewList';
 import { ReviewForm } from 'components/ReviewForm';
+import { ReviewPaginationContainer } from 'components/pagination/ReviewPaginationContainer';
+import { GlobalStateContext } from 'context/GlobalStateContext';
 import { modalStyles } from 'styles/Modals';
 
 interface CourseViewProps {
@@ -26,6 +29,10 @@ interface CourseViewProps {
 export const CoursePage: React.FC<CourseViewProps> = (
   props: CourseViewProps,
 ) => {
+  const { pageReviewProvider, totalPageReviewProvider } = useContext(
+    GlobalStateContext,
+  )!;
+
   const courseCode: string = useLocation().pathname.substr(8);
   const [courseInfo, setCourseInfo] = useState<any>({});
 
@@ -92,6 +99,13 @@ export const CoursePage: React.FC<CourseViewProps> = (
         </LocalShapeContainer>
       </FlexContainer>
       <HrLine />
+      <ReviewList
+        courseCode={courseInfo.course_code}
+        pageNumber={pageReviewProvider.pageReview}
+      />
+      <ReviewPaginationContainer
+        totalPages={totalPageReviewProvider.totalPageReview}
+      />
     </Layout>
   );
 };
