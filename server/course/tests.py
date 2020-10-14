@@ -30,6 +30,14 @@ def _get_first_test_course():
 	return data[0]
 
 
+def _get_source_data_codes():
+	source_data = _create_models_without_saving()
+	source_data_codes = []
+	for course in source_data:
+		source_data_codes.append(course.course_code)
+	return source_data_codes
+
+
 class GetAllCoursesTest(TestCase):
 	def setUp(self) -> None:
 		# Crowd database with courses
@@ -40,13 +48,18 @@ class GetAllCoursesTest(TestCase):
 
 	def test_get_courses_from_db_no_parameters(self):
 		mock_request = self.rf.get("/course/all/")
-		data = get_courses_from_db(mock_request)
+		mock_response = get_courses_from_db(mock_request)
 		source_data = _create_models_without_saving()
-		self.assertEqual(data["count"], len(source_data))
-		data = data["data"]
+		self.assertEqual(mock_response["count"], len(source_data))
+		data = mock_response["data"]
 		self.assertEqual(len(data), len(source_data))
+		source_data_codes = _get_source_data_codes()
+		for i in range(len(data) - 1):
+			# Tests that the result is sorted by the default sorting parameter
+			self.assertTrue(data[i]["course_name"] <= data[i+1]["course_name"])
 		for i in range(len(data)):
-			self.assertEqual(data[i]["course_code"], source_data[i].course_code)
+			# Tests that the result courses are in the test data set
+			self.assertTrue(data[i]["course_code"] in source_data_codes)
 
 	def test_get_all_courses_no_parameters(self):
 		c = Client()
@@ -55,8 +68,12 @@ class GetAllCoursesTest(TestCase):
 		source_data = _create_models_without_saving()
 		self.assertEqual(response.data["count"], len(source_data))
 		self.assertEqual(len(response.data["data"]), len(source_data))
-		for i in range(len(response.data["data"])):
-			self.assertEqual(response.data["data"][i]["course_code"], source_data[i].course_code)
+		source_data_codes = _get_source_data_codes()
+		for i in range(len(response.data["data"]) - 1):
+			# Tests that the result is sorted by the default sorting parameter
+			self.assertTrue(response.data["data"][i]["course_name"] <= response.data["data"][i+1]["course_name"])
+			# Tests that the result courses are in the test data set
+			self.assertTrue(response.data["data"][i]["course_code"] in source_data_codes)
 
 	def test_get_courses_from_db_valid_n_offset(self):
 		n = 25
@@ -65,18 +82,16 @@ class GetAllCoursesTest(TestCase):
 
 		def get_courses_with_parameters(n, offset):
 			mock_request = self.rf.get("/courses/all/?n={}&offset={}".format(n, offset))
-			data = get_courses_from_db(mock_request)
-			self.assertEqual(data["count"], len(source_data))
-			return data["data"]
+			mock_response = get_courses_from_db(mock_request)
+			self.assertEqual(mock_response["count"], len(source_data))
+			data = mock_response["data"]
+			return data
 
-		def assert_equal_content(data):
-			for i in range(n):
-				self.assertEqual(data[i]["course_code"], source_data[offset + i].course_code)
-
-		# Tests for equal data in database and text file, with use of increasing offset
-		for i in range(len(source_data) // n):
-			assert_equal_content(get_courses_with_parameters(n, offset))
-			offset += 1
+		# Tests for expected data length with increasing offset
+		for i in range(len(source_data) // n + 1):
+			data = get_courses_with_parameters(n, offset)
+			self.assertTrue(len(data) == n or len(data) == len(source_data) % n)
+			offset += n
 
 	def test_get_all_courses_valid_n_offset(self):
 		c = Client()
@@ -85,17 +100,14 @@ class GetAllCoursesTest(TestCase):
 		# Tests that two 'safe' parameters work
 		res = c.get("/course/all/?n={}&offset={}".format(10, 0))
 		self.assertEqual(res.status_code, 200)
-		self.assertEqual(res.data["data"][0]["course_code"], source_data[0].course_code)
+		self.assertEqual(res.data["count"], 59)
+		source_data_codes = _get_source_data_codes()
+		self.assertTrue(res.data["data"][0]["course_code"] in source_data_codes)
 
 		# Tests that length of get-request and source_data are the same, and status OK
 		res = c.get("/course/all/?n={}&offset={}".format(1, len(source_data)))
 		self.assertEqual(res.status_code, 200)
 		self.assertEqual(res.data["data"], [])
-
-		# Test that last last element of get-request and last element of source_data are the same
-		res = c.get("/course/all/?n={}&offset={}".format(1, len(source_data) - 1))
-		self.assertEqual(res.status_code, 200)
-		self.assertEqual(res.data["data"][0]["course_code"], source_data[-1].course_code)
 
 	def test_get_courses_from_db_invalid_n_offset(self):
 		source_data = _create_models_without_saving()
@@ -162,41 +174,121 @@ class GetAllCoursesTest(TestCase):
 		res = c.get("/course/all/?search={}".format(search_value))
 
 		# Tests status_code: OK, count: 0 and data: []
+		# The 'invalid search value' is only invalid in that it has no hits, which results in the status being OK
 		self.assertEqual(res.status_code, 200)
 		self.assertEqual(res.data["count"], 0)
 		self.assertEqual(res.data["data"], [])
+
+	def test_get_courses_from_db_valid_order_by(self):
+		order_by_values = ["course_code", "course_name", "credit", "average_grade"]
+
+		def get_data(order_by, ascending):
+			if ascending is None:
+				mock_request = self.rf.get("/course/all/?order_by={}".format(sort_value))
+			else:
+				mock_request = self.rf.get("/course/all/?order_by={}&ascending={}".format(sort_value, ascending))
+			mock_response = get_courses_from_db(mock_request)
+			data = mock_response["data"]
+			return data
+
+		# Tests sorting on all legal order_by values, on different ascending values
+		for sort_value in order_by_values:
+			# Tests default ascending
+			data = get_data(sort_value, None)
+			for i in range(len(data) - 1):
+				self.assertTrue(data[i][sort_value] <= data[i+1][sort_value])
+			# Tests ascending sorting
+			data = get_data(sort_value, "1")
+			for i in range(len(data) - 1):
+				self.assertTrue(data[i][sort_value] <= data[i+1][sort_value])
+			# Tests descending sorting
+			data = get_data(sort_value, "0")
+			for i in range(len(data) - 1):
+				self.assertTrue(data[i][sort_value] >= data[i+1][sort_value])
+
+	def test_get_all_courses_valid_order_by(self):
+		c = Client()
+		order_by = "course_code"
+		ascending = "0"  # "0" translates to false, meaning descending
+		# Tests ascending(default) sorting ordering by course_code
+		res = c.get("/course/all/?order_by={}".format(order_by))
+		self.assertEqual(res.status_code, 200)
+		for i in range(len(res.data["data"]) - 1):
+			self.assertTrue(res.data["data"][i][order_by] <= res.data["data"][i+1][order_by])
+		# Tests descending sorting ordering by course_name(default)
+		res = c.get("/course/all/?ascending={}".format(ascending))
+		self.assertEqual(res.status_code, 200)
+		for i in range(len(res.data["data"]) - 1):
+			self.assertTrue(res.data["data"][i]["course_name"] >= res.data["data"][i+1]["course_name"])
+		# Tests descending sorting ordering by course_code
+		res = c.get("/course/all/?order_by={}&ascending={}".format(order_by, ascending))
+		self.assertEqual(res.status_code, 200)
+		for i in range(len(res.data["data"]) - 1):
+			self.assertTrue(res.data["data"][i][order_by] >= res.data["data"][i+1][order_by])
+
+	def test_get_courses_from_db_invalid_order_by(self):
+		invalid_ascending_values = ["-1", "False", "True", "2"]
+		invalid_order_by_values = ["", "height"]
+		for asc_value in invalid_ascending_values:
+			with self.assertRaises(ValueError):
+				get_courses_from_db(self.rf.get("/courses/all/?ascending={}".format(asc_value)))
+		for order_value in invalid_order_by_values:
+			with self.assertRaises(ValueError):
+				get_courses_from_db(self.rf.get("/courses/all/?order_by={}".format(order_value)))
+
+	def test_get_all_courses_invalid_order_by(self):
+		c = Client()
+		invalid_ascending_values = ["-1", "False", "True", "2"]
+		invalid_order_by_values = ["", "height"]
+		# Tests status code for invalid ascending values
+		for asc_value in invalid_ascending_values:
+			res = c.get("/course/all/?ascending={}".format(asc_value))
+			self.assertEqual(res.status_code, 400)
+		#Tests status code for invalid order_by values
+		for order_value in invalid_order_by_values:
+			res = c.get("/course/all/?order_by={}".format(order_value))
+			self.assertEqual(res.status_code, 400)
 
 	def test_get_courses_from_db_all_parameters(self):
 		n = 10
 		offset = 2
 		search_value = _get_first_test_course().get("course_code")[1:4]
-		mock_request = self.rf.get("course/all/?n={}&offset={}&search={}".format(n, offset, search_value))
+		order_by = "course_code"
+		ascending = "0"  # "0" translates to false, meaning descending
+		mock_request = self.rf.get("course/all/?n={}&offset={}&search={}&order_by={}&ascending={}"
+								   .format(n, offset, search_value, order_by, ascending))
 		data = get_courses_from_db(mock_request)
 		# Tests correct amount of received courses after filtering on search-param
 		self.assertEqual(data["count"], 15)
 		# Tests n
 		self.assertEqual(len(data["data"]), 10)
 		# Tests offset
-		self.assertEqual(data["data"][0]["course_code"], "TMR4310")
+		self.assertEqual(data["data"][0]["course_code"], "TMR4555")
 		for i in range(len(data["data"])):
 			self.assertTrue(search_value in data["data"][i]["course_code"]
 							or search_value in data["data"][i]["course_name"])
+		for i in range(len(data["data"]) - 1):
+			self.assertTrue(data["data"][i]["course_code"] >= data["data"][i+1]["course_code"])
 
 	def test_get_all_courses_all_parameters(self):
 		c = Client()
 		n = 10
 		offset = 2
 		search_value = _get_first_test_course().get("course_code")[1:4]
-		res = c.get("/course/all/?n={}&offset={}&search={}".format(n, offset, search_value))
+		order_by = "course_code"
+		ascending = "0"  # "0" translates to false, meaning descending
+		res = c.get("/course/all/?n={}&offset={}&search={}&order_by={}&ascending={}".format(n, offset, search_value, order_by, ascending))
 		self.assertEqual(res.status_code, 200)
 		# Tests correct amount of received courses after filtering on search-param
 		self.assertEqual(res.data["count"], 15)
 		# Tests n
 		self.assertEqual(len(res.data["data"]), 10)
 		# Tests offset
-		self.assertEqual(res.data["data"][0]["course_code"], "TMR4310")
+		self.assertEqual(res.data["data"][0]["course_code"], "TMR4555")
 		for course in res.data["data"]:
 			self.assertTrue(search_value in course["course_code"] or search_value in course["course_name"])
+		for i in range(len(res.data["data"]) - 1):
+			self.assertTrue(res.data["data"][i]["course_code"] >= res.data["data"][i+1]["course_code"])
 
 
 class GetSingleCourseTest(TestCase):

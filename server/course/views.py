@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.db.models import Q
+import json
 from course.models import Course
 from auth.views import get_token
 import requests
@@ -54,9 +55,20 @@ def get_courses_from_db(request):
     if offset > number_of_courses:
         raise ValueError("offset is too large")
 
-    # Fetch data from database
-    data = Course.objects.filter(combined_search_filter)[offset:offset + n]
-    return {"count": number_of_courses, "data": list(data.values())}
+	# Get and validate order_by and ascending parameters
+	order_by = request.GET.get("order_by", "course_name")
+	valid_order_parameters = ["course_code", "course_name", "credit", "average_grade"]
+	if order_by not in valid_order_parameters:
+		raise ValueError("Invalid value for order_by: {}. Valid  values: {}".format(order_by, valid_order_parameters))
+	ascending = request.GET.get("ascending", "1")
+	if ascending not in ["0", "1"]:
+		raise ValueError("Invalid value for ascending: {}".format(ascending))
+	if ascending == "0":
+		order_by = "-" + order_by
+
+	# Fetch data from database
+	data = Course.objects.filter(combined_search_filter).order_by(order_by)[offset:offset + n]
+	return {"count": number_of_courses, "data": list(data.values())}
 
 
 @api_view(['GET'])
