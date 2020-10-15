@@ -5,7 +5,7 @@ from rest_framework.response import Response
 import json
 import requests
 from course.views import retrieve_courses_from_token, get_current_semester, perform_feide_api_call
-from auth.views import get_token
+from auth.models import UserAuth
 from .models import Review
 from course.models import Course
 
@@ -60,6 +60,35 @@ def get_reviews(request):
     except ValueError as e:
         return Response(str(e), status=400)
     return Response(data, status=200)
+
+
+@api_view(["GET"])
+def can_review(request):
+    # Hent brukers email -> returner 3 hvis ikke
+    # Sjekk om har hatt fag -> returner 1 hvis
+    # Sjekk om review eksisterer -> returner 2 hvis
+    # Check if token exists, and get user email
+    exp_token = request.META["HTTP_AUTHORIZATION"]
+    if not UserAuth.objects.filter(expiring_token=exp_token).exists():
+        return Response(3)
+    user_email = UserAuth.objects.filter(expiring_token=exp_token)[0].user_email
+
+    # Check if user has had the course
+    course_code = request.GET.get("courseCode", None)
+    if course_code is None:
+        return Response("No course code provided", status=400)
+    elif not Course.objects.filter(course_code=course_code).exists():
+        return Response("Course code {} does not exist in the course database.".format(course_code), status=400)
+    
+
+
+
+    # Returkoder:
+    # 0: kan reviewe
+    # 1: har ikke hatt faget
+    # 2: har allerede postet review
+    # 3: token-feil
+    pass
 
 
 def get_reviews_from_db(request):
