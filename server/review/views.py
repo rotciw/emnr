@@ -155,15 +155,23 @@ def validate_review_post_request(request_data, reviewable_courses, email):
         raise ValueError("User is unable to review this course, as it has already reviewed it.")
 
     # Validate score, difficulty and workload
-    if not isinstance(request_data["score"], int) or request_data["score"] < 1 or request_data["score"] > 5:
+    if score_is_invalid(request_data["score"]):
         raise ValueError("Invalid score: {} (Must be between 1 and 5)".format(request_data["score"]))
-    if (not isinstance(request_data["difficulty"], int) or request_data["difficulty"] < -1 or request_data[
-        "difficulty"] > 5) and request_data["difficulty"] > 5:
+    if otherparams_is_invalid(request_data["difficulty"]):
         raise ValueError("Invalid difficulty: {} (Must be between 1 and 5)".format(request_data["difficulty"]))
-    if (not isinstance(request_data["workload"], int) or request_data["workload"] < -1 or request_data["workload"] > 5)\
-            and request_data["workload"] == -1:
+    if otherparams_is_invalid(request_data["workload"]):
         raise ValueError("Invalid workload: {} (Must be between 1 and 5)".format(request_data["workload"]))
 
+def score_is_invalid(score):
+    return not isinstance(score, int) or score < 1 or score > 5
+
+def otherparams_is_invalid(param):
+    if (not isinstance(param, int)):
+        return True
+    if param < 1 or param > 5:
+        if param != -1:
+            return True
+    return False
 
 def get_reviewable_courses(exp_token):
     """
