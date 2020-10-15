@@ -79,7 +79,7 @@ def get_reviews_from_db(request):
         raise ValueError("Course code {} does not exist in the course database.".format(course_code))
 
     # Get and validate n parameter
-    number_of_reviews = Review.objects.all().count()
+    number_of_reviews = Review.objects.filter(course_code=course_code).count()
     n = request.GET.get("n", number_of_reviews)
     if isinstance(n, str) and not n.isdigit():
         raise ValueError("Invalid value for n: {}".format(n))
