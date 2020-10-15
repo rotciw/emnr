@@ -43,7 +43,7 @@ export const Navbar: React.FC = () => {
   const handleOnClick = useCallback(() => history.push('/'), [history]);
   const { queryProvider } = useContext(GlobalStateContext)!;
 
-  let isOnLandingPage:boolean = useLocation().pathname === ("/");
+  const isOnLandingPage:boolean = useLocation().pathname === ("/");
 
   const onSelect = (e: string) => {
     queryProvider.setOrderByQuery(e);
@@ -53,8 +53,8 @@ export const Navbar: React.FC = () => {
   return (
     <NavBarContainer>
       <Logo src={emnrLogo} onClick={handleOnClick} />
-      {isOnLandingPage ? (
-        <div>
+      {isOnLandingPage && (
+        <React.Fragment>
           <Searchbar />
           <DropdownContainer>
             <Dropdown
@@ -63,9 +63,7 @@ export const Navbar: React.FC = () => {
               placeholder='Sorter etter..'
             />
           </DropdownContainer>
-        </div>
-      ) : (
-        <div></div>
+        </React.Fragment>
       )}
     </NavBarContainer>
   );
