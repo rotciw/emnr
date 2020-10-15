@@ -42,7 +42,7 @@ class GetMyCoursesTest(TestCase):
 
     def test_get_current_user_courses_valid_token(self):
         with patch("course.views.Course.objects.filter") as mock_course_db:
-            mock_course_db.return_value.objects.return_value.filter.return_value = [
+            mock_course_db.return_value = [
                 Course.create("AAA9999", "Test course", 0, 0)]
 
             c = APIClient()
