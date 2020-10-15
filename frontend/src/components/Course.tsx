@@ -10,7 +10,6 @@ interface CourseProps {
 }
 
 const handleCourseClick = () => {
-  console.log('Trykk på fag 1');
 };
 
 export const Course: React.FC<CourseProps> = ({

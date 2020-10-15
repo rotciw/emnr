@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { Review } from './Review';
 import { GlobalStateContext } from 'context/GlobalStateContext';
+import { EmptyResult } from './CourseList';
 
 const Wrapper = styled.div`
   border: 1px solid #ccc;
@@ -42,14 +43,18 @@ export const ReviewList: React.FC<ReviewListProps> = ({
 
     const resultLimit: number = 5;
     let start: number = (pageNumber - 1) * resultLimit;
-/*
+
   useEffect (() => {
     
     const getReviews = async () => {
+      console.log("Reviews: "+reviews); 
       await axios
-      .get("http://localhost:8000/reviews/"+courseCode)
+      .get(`http://localhost:8000/reviews/get/?courseCode=${courseCode}&n=25&offset=${start}`)
       .then(res => {
         updateReviews(res.data.data);
+        totalPageReviewProvider.setTotalPageReview(
+          Math.ceil(reviews.length / resultLimit),
+          );
       })
         .catch(err => console.log(err));        
     }
@@ -57,7 +62,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({
     start += resultLimit;
 
   }, [pageNumber]); 
-  */
+  
     const tempReviews: ReviewProps[] = [{name:'haakon',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
     {name:'haakon2',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
     {name:'haakon3',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
@@ -71,28 +76,28 @@ export const ReviewList: React.FC<ReviewListProps> = ({
     {name:'haakon11',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
     {name:'haakon12',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'}];
 
-    //Change
-    totalPageReviewProvider.setTotalPageReview(
-      Math.ceil(tempReviews.length / resultLimit),
-    );
-
   return (
     <Wrapper>
-      <table>
-        <tbody>
-          {
-            tempReviews.map(currentReview => { 
-              return <Review name={currentReview.name} 
-              studyProgramme={currentReview.studyProgramme} 
-              score={currentReview.score} 
-              workLoad={currentReview.workLoad} 
-              difficulty={currentReview.difficulty} 
-              text={currentReview.text}
-              date={currentReview.date}/>;
-            })
-          }
-        </tbody>
+      {reviews.length ? (
+        <table>
+          <tbody>
+            {
+              reviews.map(currentReview => {
+                return <Review name={currentReview.name} 
+                studyProgramme={currentReview.studyProgramme} 
+                score={currentReview.score} 
+                workLoad={currentReview.workLoad} 
+                difficulty={currentReview.difficulty} 
+                text={currentReview.text}
+                date={currentReview.date}/>;
+              })
+            }
+          </tbody>
       </table>
+      ) : (
+        <EmptyResult>Ingen vurderinger av {courseCode}. </EmptyResult>
+      )}
+
     </Wrapper>
   );
 };
