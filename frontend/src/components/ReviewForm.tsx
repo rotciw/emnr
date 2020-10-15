@@ -52,7 +52,6 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
   const postReview = () => {
     closeModal();
     const token = getLocalToken();
-    console.log("Token: " + token)
     axios.defaults.headers.common['Authorization'] = `${token}`;
     return axios
       .post(API_URL + '/review/', {

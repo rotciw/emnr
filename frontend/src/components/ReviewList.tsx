@@ -18,6 +18,8 @@ const Wrapper = styled.div`
 interface ReviewListProps {
     courseCode: String;
     pageNumber: number;
+    scoreAvgSetter: (value:number) => void;
+    numberOfReviewSetter: (value:number) => void;
 }
 
 interface ReviewProps{
@@ -33,6 +35,8 @@ interface ReviewProps{
 export const ReviewList: React.FC<ReviewListProps> = ({
     courseCode,
     pageNumber,
+    scoreAvgSetter,
+    numberOfReviewSetter,
   }) => {
 
     const [reviews,updateReviews] = useState<ReviewProps[]>([]);
@@ -54,6 +58,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({
         totalPageReviewProvider.setTotalPageReview(
           Math.ceil(reviews.length / resultLimit),
           );
+        scoreAvgSetter(calculateAvgScore(res.data.data))
       })
         .catch(err => console.log(err));        
     }
@@ -61,6 +66,20 @@ export const ReviewList: React.FC<ReviewListProps> = ({
     start += resultLimit;
 
   }, [pageNumber]); 
+
+  function calculateAvgScore(reviews:ReviewProps[]) {
+    numberOfReviewSetter(reviews.length);
+    let scoreAvg:number = 0;
+    if(reviews.length > 0){
+      reviews.map(currentReview =>{
+        scoreAvg += currentReview.score; 
+      })
+      return scoreAvg / reviews.length;
+    }
+    else{
+      return 0;
+    }
+  }
 
   return (
     <Wrapper>

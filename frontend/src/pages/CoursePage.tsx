@@ -36,6 +36,9 @@ export const CoursePage: React.FC<CourseViewProps> = (
   const courseCode: string = useLocation().pathname.substr(8);
   const [courseInfo, setCourseInfo] = useState<any>({});
 
+  const [scoreAvg, setScoreAvg] = useState<number>(0);
+  const [numberOfReviews, setNumberOfReviews] = useState<number>(0);
+
   const history = useHistory();
   const handleBackClick = useCallback(() => history.push('/'), [history]);
 
@@ -55,6 +58,7 @@ export const CoursePage: React.FC<CourseViewProps> = (
     getCourses();
   }, []);
 
+  console.log("Antall vurderinger: " + numberOfReviews);
   return (
     <Layout padding='0 20%'>
       <FlexContainer width='100%'>
@@ -64,8 +68,8 @@ export const CoursePage: React.FC<CourseViewProps> = (
           </FlexItem>
           <Title margin='0 0 5px 0'>{courseInfo.course_code}</Title>
           <BoldTitle fontSize='30px'>{courseInfo.course_name}</BoldTitle>
-          <BoldTitle margin='10px 0 0 0'>{courseInfo.score} / 5</BoldTitle>
-          <SubTitle margin='0 0 4vh 0'>Basert på x antall vurderinger</SubTitle>
+          <BoldTitle margin='10px 0 0 0'>{scoreAvg} / 5</BoldTitle>
+          <SubTitle margin='0 0 4vh 0'>Basert på {numberOfReviews} antall vurderinger</SubTitle>
           <RateCourseButton onClick={toggleModalIsOpen}>
             Vurder {courseCode}
           </RateCourseButton>
@@ -102,6 +106,8 @@ export const CoursePage: React.FC<CourseViewProps> = (
       <ReviewList
         courseCode={courseCode}
         pageNumber={pageReviewProvider.pageReview}
+        scoreAvgSetter={setScoreAvg}
+        numberOfReviewSetter={setNumberOfReviews}
       />
       <ReviewPaginationContainer
         totalPages={totalPageReviewProvider.totalPageReview}
