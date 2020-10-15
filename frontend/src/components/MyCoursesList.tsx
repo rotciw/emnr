@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Course } from './Course';
+import { Semester } from './Semester';
 import axios from 'axios';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { FlexContainer, StyledTable, StyledTH } from 'styles/Containers';
@@ -14,9 +14,15 @@ interface MyCourseProps {
   course_code: string;
   semester: string;
 }
+interface Semesters {
+  [semester: string]: MyCourseProps[];
+}
+
+
 
 export const MyCoursesList: React.FC<MyCoursesListProps> = () => {
   const [ myCourses, updateMyCourses ] = useState<MyCourseProps[]>([]);
+  const [ mySemesters, updateMySemesters ] = useState<Semesters>({});   //<MySemesterProps | undefined>(undefined);
 
   useEffect(() => {
     const token = getLocalToken();
@@ -25,42 +31,32 @@ export const MyCoursesList: React.FC<MyCoursesListProps> = () => {
       await axios
       .get(API_URL + '/course/me/')
       .then(response => {
-        console.log("Hallo")
+
+        const allMyCourses = response.data;
+        const sortedCourses = allMyCourses.reduce(
+          (semesters: any, course: any) => {
+          if (!semesters[course.semester]) semesters[course.semester] = [];
+          semesters[course.semester].push(course);
+          return semesters;
+        }, {});
+        updateMySemesters(sortedCourses)
         updateMyCourses(response.data)
       })
       .catch( err => console.log(err));
     };
     getMyCourses();
   }, [])
-
+  console.log(mySemesters)
   return (
     <FlexContainer margin='15px 0 0 0'>
-      {myCourses.length ? (
-        <StyledTable>
-          <thead>
-            <tr>
-              <StyledTH width='25%'>Fagkode</StyledTH>
-              <StyledTH width='50%' textAlign='left'>
-                Fagnavn
-              </StyledTH>
-              <StyledTH width='25%'>Credit</StyledTH>
-            </tr>
-          </thead>
-          <tbody>
-            {myCourses.map((currentCourse) => {
+      <StyledTable>
+        {Object.entries(mySemesters).map (([semester, courses]) => {
               return (
-                <Course
-                  courseCode={currentCourse.course_code}
-                  courseName={currentCourse.course_name}
-                  credit={7}
-                />
-              );
+                <Semester semester={semester} courses={courses} />
+              )
+              
             })}
-          </tbody>
-        </StyledTable>
-      ) : (
-        <EmptyResult>Beklager! Vi fant ingen data. </EmptyResult>
-      )}
+      </StyledTable>
     </FlexContainer>
   );
 };
