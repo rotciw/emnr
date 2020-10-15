@@ -78,7 +78,10 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
       <BoldInputDescription>Totalvurdering:</BoldInputDescription>
       <RadioButtonsBar radioID='reviewScore' valueSetter={setScoreValue} />
       <InputDescription>Vanskelighetsgrad:</InputDescription>
-      <RadioButtonsBar radioID='difficultyScore' valueSetter={setDifficultyValue} />
+      <RadioButtonsBar
+        radioID='difficultyScore'
+        valueSetter={setDifficultyValue}
+      />
       <InputDescription>Arbeidsmengde:</InputDescription>
       <RadioButtonsBar radioID='workloadScore' valueSetter={setWorkloadValue} />
       <InputDescription style={{ margin: '50px 0 0 0' }}>

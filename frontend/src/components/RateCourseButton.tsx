@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { getLocalToken } from 'utils/api';
 
 interface ReviewFormProps {
   onClickFunction: () => void;
@@ -48,33 +49,68 @@ export const TooltipText = styled.div`
   }
 `;
 
-export const RateCourseButton: React.FC<ReviewFormProps> = ({ onClickFunction, courseCode }) => {
-  let reviewEligibility:number = 0;
-  const getReviewEligibility = async () => {
-    await axios
-      .get('http://localhost:8000/review/check/' + courseCode)
-      .then((res) => reviewEligibility = res.data)
-      .catch((err) => console.log(err));
-  };
-  getReviewEligibility();
-  return (
-    <div>
-      {
-        reviewEligibility === 0 ? <RateButton onClick={ () => onClickFunction()}>Send inn</RateButton> :
-        reviewEligibility === 1 ? 
+export const RateCourseButton: React.FC<ReviewFormProps> = ({
+  onClickFunction,
+  courseCode,
+}) => {
+  const [reviewEligibility, setReviewEligibility] = useState<number>(1);
+  axios.defaults.headers.common['Authorization'] = `${getLocalToken()}`;
+
+  useEffect(() => {
+    const getReviewEligibility = async () => {
+      await axios
+        .get('http://localhost:8000/review/check/?courseCode=' + courseCode)
+        .then((res) => {
+          setReviewEligibility(res.data);
+          console.log(res.data);
+        })
+        .catch((err) => console.log(err));
+    };
+    getReviewEligibility();
+  }, []);
+
+  let content;
+
+  switch (reviewEligibility) {
+    case 0:
+      content = (
+        <RateButton onClick={() => onClickFunction()}>Send inn</RateButton>
+      );
+      break;
+    case 1:
+      content = (
         <TooltipButtonContainer>
           <DisabledRateButton>Send inn</DisabledRateButton>
-          <TooltipText>You have not completed this course</TooltipText> 
+          <TooltipText>You have not completed this course</TooltipText>
         </TooltipButtonContainer>
-        :
-        reviewEligibility === 2 ? 
+      );
+      break;
+    case 2:
+      content = (
         <TooltipButtonContainer>
           <DisabledRateButton>Send inn</DisabledRateButton>
-          <TooltipText>You have already posted a review for this course</TooltipText> 
+          <TooltipText>
+            You have already posted a review for this course
+          </TooltipText>
         </TooltipButtonContainer>
-        :
-        <div>Something went wrong when checking if you are eligible to review the course.</div> // This might need to be changed to something descriptive; unsure if it ever occurs.
-      }
-    </div>
-  );
+      );
+      break;
+    case 3:
+      content = (
+        <TooltipButtonContainer>
+          <DisabledRateButton>Send inn</DisabledRateButton>
+          <TooltipText>There was an error with user authentication</TooltipText>
+        </TooltipButtonContainer>
+      );
+      break;
+    default:
+      content = (
+        <div>
+          Something went wrong when checking if you are eligible to review the
+          course.
+        </div>
+      );
+  }
+
+  return <div>{content}</div>;
 };
