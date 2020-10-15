@@ -88,7 +88,7 @@ def get_current_user_courses(request):
     try:
         course_info = retrieve_courses_from_token(request.META['HTTP_AUTHORIZATION'])
         return HttpResponse(json.dumps(course_info))
-    except IndexError as e:
+    except TypeError as e:
         return Response("Invalid expiring token", status=401)
 
 
