@@ -1,10 +1,7 @@
-import json
 from django.test import TestCase
-from unittest.mock import patch
 from review.views import get_reviews, get_reviews_from_db
 from course.models import Course
 from review.models import Review
-from auth.models import UserAuth
 from django.test import RequestFactory, Client
 
 
