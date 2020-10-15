@@ -61,7 +61,6 @@ class GetMyCoursesTest(TestCase):
 
 
 
-
     def test_retrieve_courses_from_token_valid_token(self):
         with patch("course.views.Course") as mock_course_db:
             mock_course_db.return_value.objects.return_value.filter.return_value = [
@@ -73,7 +72,7 @@ class GetMyCoursesTest(TestCase):
         with patch("course.views.Course") as mock_course_db:
             mock_course_db.return_value.objects.return_value.filter.return_value = [
                 Course.create("AAA9999", "Test course", 0, 0)]
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             retrieve_courses_from_token("invalid_token")
 
     def test_parse_course_object_not_course(self):
