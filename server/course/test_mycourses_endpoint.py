@@ -7,7 +7,8 @@ from django.test.client import RequestFactory
 from django.test import Client
 from .tests import _create_models_without_saving, _get_first_test_course
 from .views import retrieve_courses_from_token
-from ..auth.models import UserAuth
+from auth.models import UserAuth
+from rest_framework.test import APIClient
 
 
 class MockAPIRequest:
@@ -18,7 +19,7 @@ class MockAPIRequest:
         return self.contents
 
 
-def mock_feide_apis(headers):
+def mock_feide_apis(url, headers):
         if headers["authorization"] == 'Bearer valid_token':
             with open("review/test_data/mock_groups_api_call.json", "r") as f:
                 return MockAPIRequest(json.load(f))
@@ -40,13 +41,27 @@ class GetMyCoursesTest(TestCase):
 
 
     def test_get_current_user_courses_valid_token(self):
-        pass
+        with patch("course.views.Course") as mock_course_db:
+            mock_course_db.return_value.objects.return_value.filter.return_value = [
+                Course.create("AAA9999", "Test course", 0, 0)]
 
+            c = APIClient()
+            c.credentials(HTTP_AUTHORIZATION='valid_token')
+            response = c.get("/course/me/")
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(len(json.loads(response.data)),28)
 
 
 
     def test_get_current_user_courses_invalid_token(self):
-        pass
+        with patch("course.views.Course") as mock_course_db:
+            mock_course_db.return_value.objects.return_value.filter.return_value = [
+                Course.create("AAA9999", "Test course", 0, 0)]
+
+            c = APIClient()
+            c.credentials(HTTP_AUTHORIZATION='invalid_token')
+            response = c.get("/course/me/")
+            self.assertEqual(response.status_code, 401)
 
 
 
