@@ -9,7 +9,6 @@ import { GlobalStateContext } from 'context/GlobalStateContext';
 
 const NavBarContainer = styled.nav`
   width: 100%;
-  float: left;
   flex: 1;
   background-color: ${({ theme }) => theme.darkBlue};
   padding-bottom: 25px;
@@ -31,6 +30,24 @@ const Logo = styled.img`
   width: 100px;
 `;
 
+const MeButton = styled.button`
+  background-color: ${({ theme }) => theme.darkBlue};
+  cursor: pointer;
+  color: ${({ theme }) => theme.white};
+  font-family: gilroymedium;
+  outline: none;
+  border: none;
+  :hover {
+    background-color: ${({ theme }) => theme.blue};
+  }
+`;
+
+const TopRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  vertical-align: center;
+  justify-content: space-between;
+`;
 const options = [
   { value: 'course_code', label: 'Fagkode' },
   { value: 'course_name', label: 'Fagnavn' },
@@ -42,9 +59,9 @@ export const Navbar: React.FC = () => {
   const history = useHistory();
   const handleOnClick = useCallback(() => history.push('/'), [history]);
   const handleClickMe = useCallback(() => history.push('/me'), [history]);
-  const { queryProvider } = useContext(GlobalStateContext)!;
 
-  const isOnLandingPage:boolean = useLocation().pathname === ("/");
+  const { queryProvider } = useContext(GlobalStateContext)!;
+  const isOnLandingPage: boolean = useLocation().pathname === '/';
 
   const onSelect = (e: string) => {
     queryProvider.setOrderByQuery(e);
@@ -53,7 +70,10 @@ export const Navbar: React.FC = () => {
 
   return (
     <NavBarContainer>
-      <Logo src={emnrLogo} onClick={handleOnClick} />
+      <TopRow>
+        <Logo src={emnrLogo} onClick={handleOnClick} />
+        <MeButton onClick={handleClickMe}> Min side </MeButton>
+      </TopRow>
       {isOnLandingPage && (
         <>
           <Searchbar />

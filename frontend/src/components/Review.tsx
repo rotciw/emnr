@@ -66,7 +66,7 @@ export const Review: React.FC<ReviewProps> = ({
           <MainMetric>
             <ExtraBold>{score}/5</ExtraBold>
           </MainMetric>
-          <DateText>{date}</DateText>
+          <DateText>{date.substring(0,10)}</DateText>
         </ScoreDateContainer>
         <FlexContainer>
           <SecondaryMetric>
