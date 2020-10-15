@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-from course.models import Course
 
 
 class Review(models.Model):
@@ -12,3 +11,4 @@ class Review(models.Model):
     review_text = models.TextField()
     full_name = models.CharField(max_length=100, blank=False)
     study_programme = models.CharField(max_length=20, blank=False)
+    date = models.DateTimeField(auto_now_add=True)
