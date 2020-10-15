@@ -28,10 +28,9 @@ export const CourseList: React.FC<CourseListProps> = ({ pageNumber }) => {
 
   // Search input
   // Reset page number when searching
-  let searchQuery: string = ' ';
+  let searchQuery: string = " ";
   if (queryProvider.searchQuery) {
     searchQuery = queryProvider.searchQuery;
-    pageNumber = 1;
   }
 
   // Sorting dropdown

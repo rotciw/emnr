@@ -2,7 +2,7 @@ import { CourseList } from 'components/CourseList';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import React, { useContext } from 'react';
 import { Layout } from 'styles/Layout';
-import { PaginationContainer } from 'components/pagination/PaginationContainer';
+import { Pagination } from 'components/pagination/Pagination';
 
 export const CourseListPage: React.FC = () => {
   const { pageProvider, totalPageProvider } = useContext(
@@ -12,7 +12,7 @@ export const CourseListPage: React.FC = () => {
   return (
     <Layout>
       <CourseList pageNumber={pageProvider.page} />
-      <PaginationContainer totalPages={totalPageProvider.totalPage} />
+      <Pagination />
     </Layout>
   );
 };
