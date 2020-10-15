@@ -33,7 +33,7 @@ const Logo = styled.img`
 const MeButton = styled.button`
   background-color: ${({ theme }) => theme.darkBlue};
   cursor: pointer;
-  color: white;
+  color: ${({ theme }) => theme.white};
   font-family: gilroymedium;
   outline: none;
   border: none;
