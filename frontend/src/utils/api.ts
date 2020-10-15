@@ -51,14 +51,3 @@ export const getLocalEmail = () => {
     return localStorage.getItem('email');
   }
 };
-
-export const getMyCourses = () => {
-  const token = getLocalToken();
-  axios.defaults.headers.common['Authorization'] = `${token}`;
-  return axios
-    .get(API_URL + '/course/me/')
-    .then(function (response) {
-      return response.data;
-    })
-    .catch(function (error) {});
-};

@@ -36,6 +36,9 @@ export const CoursePage: React.FC<CourseViewProps> = (
   const courseCode: string = useLocation().pathname.substr(8);
   const [courseInfo, setCourseInfo] = useState<any>({});
 
+  const [scoreAvg, setScoreAvg] = useState<number>(0);
+  const [numberOfReviews, setNumberOfReviews] = useState<number>(0);
+
   const history = useHistory();
   const handleBackClick = useCallback(() => history.push('/'), [history]);
 
@@ -100,8 +103,10 @@ export const CoursePage: React.FC<CourseViewProps> = (
       </FlexContainer>
       <HrLine />
       <ReviewList
-        courseCode={courseInfo.course_code}
+        courseCode={courseCode}
         pageNumber={pageReviewProvider.pageReview}
+        scoreAvgSetter={setScoreAvg}
+        numberOfReviewSetter={setNumberOfReviews}
       />
       <ReviewPaginationContainer
         totalPages={totalPageReviewProvider.totalPageReview}
