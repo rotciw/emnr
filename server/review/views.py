@@ -5,7 +5,7 @@ from rest_framework.response import Response
 import json
 import requests
 from course.views import retrieve_courses_from_token, get_current_semester, perform_feide_api_call
-from auth.views import get_token
+from auth.models import UserAuth
 from .models import Review
 from course.models import Course
 
@@ -62,6 +62,46 @@ def get_reviews(request):
     return Response(data, status=200)
 
 
+@api_view(["GET"])
+def can_review(request):
+    """
+    Checks whether a user can review a given course or not. Returns a 200 response with the following numbers
+    if the request is valid:
+
+    0: User can review
+    1: User cannot review because it has not taken the course
+    2: User cannot review because it has already reviewed the course
+    3: User cannot review because its expiring token does not exist.
+    """
+    # Check if expiring token is stored in db
+    exp_token = request.META["HTTP_AUTHORIZATION"]
+    if not UserAuth.objects.filter(expiring_token=exp_token).exists():
+        return Response(3)
+    user_email = UserAuth.objects.filter(expiring_token=exp_token)[0].user_email
+
+    # Check if user has had the course
+    course_code = request.GET.get("courseCode", None)
+    if course_code is None:
+        return Response("No course code provided", status=400)
+    elif not Course.objects.filter(course_code=course_code).exists():
+        return Response("Course code {} does not exist in the course database.".format(course_code), status=400)
+
+    try:
+        reviewable_courses = get_reviewable_courses(exp_token)
+    except ValueError:
+        return Response("Invalid FEIDE token", status=401)
+
+    if course_code not in reviewable_courses:
+        return Response(1)
+
+    # Check if review exists
+    if Review.objects.filter(course_code=course_code, user_email=user_email).exists():
+        return Response(2)
+
+    # User can review, so 0 is returned
+    return Response(0)
+
+
 def get_reviews_from_db(request):
     """
     Helper method for fetching all reviews for a given course code.
@@ -79,7 +119,7 @@ def get_reviews_from_db(request):
         raise ValueError("Course code {} does not exist in the course database.".format(course_code))
 
     # Get and validate n parameter
-    number_of_reviews = Review.objects.all().count()
+    number_of_reviews = Review.objects.filter(course_code=course_code).count()
     n = request.GET.get("n", number_of_reviews)
     if isinstance(n, str) and not n.isdigit():
         raise ValueError("Invalid value for n: {}".format(n))
