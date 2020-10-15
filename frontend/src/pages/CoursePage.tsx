@@ -58,7 +58,6 @@ export const CoursePage: React.FC<CourseViewProps> = (
     getCourses();
   }, []);
 
-  console.log("Antall vurderinger: " + numberOfReviews);
   return (
     <Layout padding='0 20%'>
       <FlexContainer width='100%'>
