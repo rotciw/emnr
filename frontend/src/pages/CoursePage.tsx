@@ -100,7 +100,7 @@ export const CoursePage: React.FC<CourseViewProps> = (
       </FlexContainer>
       <HrLine />
       <ReviewList
-        courseCode={courseInfo.course_code}
+        courseCode={courseCode}
         pageNumber={pageReviewProvider.pageReview}
       />
       <ReviewPaginationContainer

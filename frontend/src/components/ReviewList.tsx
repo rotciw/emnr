@@ -47,9 +47,8 @@ export const ReviewList: React.FC<ReviewListProps> = ({
   useEffect (() => {
     
     const getReviews = async () => {
-      console.log("Reviews: "+reviews); 
       await axios
-      .get(`http://localhost:8000/reviews/get/?courseCode=${courseCode}&n=25&offset=${start}`)
+      .get(`http://localhost:8000/review/get/?courseCode=${courseCode}&n=25&offset=${start}`)
       .then(res => {
         updateReviews(res.data.data);
         totalPageReviewProvider.setTotalPageReview(
