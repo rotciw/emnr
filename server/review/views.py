@@ -64,10 +64,16 @@ def get_reviews(request):
 
 @api_view(["GET"])
 def can_review(request):
-    # Hent brukers email -> returner 3 hvis ikke
-    # Sjekk om har hatt fag -> returner 1 hvis
-    # Sjekk om review eksisterer -> returner 2 hvis
-    # Check if token exists, and get user email
+    """
+    Checks whether a user can review a given course or not. Returns a 200 response with the following numbers
+    if the request is valid:
+
+    0: User can review
+    1: User cannot review because it has not taken the course
+    2: User cannot review because it has already reviewed the course
+    3: User cannot review because its expiring token does not exist.
+    """
+    # Check if expiring token is stored in db
     exp_token = request.META["HTTP_AUTHORIZATION"]
     if not UserAuth.objects.filter(expiring_token=exp_token).exists():
         return Response(3)
@@ -79,16 +85,21 @@ def can_review(request):
         return Response("No course code provided", status=400)
     elif not Course.objects.filter(course_code=course_code).exists():
         return Response("Course code {} does not exist in the course database.".format(course_code), status=400)
-    
 
+    try:
+        reviewable_courses = get_reviewable_courses(exp_token)
+    except ValueError:
+        return Response("Invalid FEIDE token", status=401)
 
+    if course_code not in reviewable_courses:
+        return Response(1)
 
-    # Returkoder:
-    # 0: kan reviewe
-    # 1: har ikke hatt faget
-    # 2: har allerede postet review
-    # 3: token-feil
-    pass
+    # Check if review exists
+    if Review.objects.filter(course_code=course_code, user_email=user_email).exists():
+        return Response(2)
+
+    # User can review, so 0 is returned
+    return Response(0)
 
 
 def get_reviews_from_db(request):
