@@ -48,7 +48,6 @@ export const PaginationButton: React.FC<PaginationInterface> = ({
 
   useEffect(() => {
     const checkStatus = () => {
-      console.log(pageProvider.page, pageNumber);
       pageProvider.page === pageNumber ? setIsActive(true) : setIsActive(false);
     };
     checkStatus();
