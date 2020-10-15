@@ -38,15 +38,6 @@ class MockAPIRequest:
 class PostReviewTest(TestCase):
     def setUp(self):
         UserAuth(expiring_token="valid_token", access_token="valid_token", user_email="test@testesen.com").save()
-        #
-        # with open("review/test_data/mock_groups_api_call.json", "r") as f:
-        #     self.mock_groups_api_json = json.load(f)
-        # with open("review/test_data/invalid_groups_api_response.json", "r") as f:
-        #     self.mock_groups_api_invalid_token_json = json.load(f)
-        # with open("review/test_data/mock_userinfo_response.json", "r") as f:
-        #     self.mock_userinfo_api_json = json.load(f)
-        # with open("review/test_data/invalid_token_userinfo_response.json", "r") as f:
-        #     self.mock_userinfo_api_invalid_token_json = json.load(f)
 
     def test_get_user_study_programme_valid_token(self):
         # Mocking the Groups API, emulating how it responds to a valid token.
