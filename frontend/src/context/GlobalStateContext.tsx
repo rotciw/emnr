@@ -4,6 +4,8 @@ interface GlobalStateContextProps {
   authProvider: AuthProviderValue;
   userProvider: UserProviderValue;
   pageProvider: PageProviderValue;
+  totalPageReviewProvider: TotalPageReviewProviderValue;
+  pageReviewProvider: PageReviewProviderValue;
   totalPageProvider: TotalPageProviderValue;
   queryProvider: QueryProviderValue;
 }
@@ -37,6 +39,16 @@ interface QueryProviderValue {
   setOrderToggle: (val: boolean) => void;
 }
 
+interface PageReviewProviderValue {
+  pageReview: number;
+  setPageReview: (val: number) => void;
+}
+
+interface TotalPageReviewProviderValue {
+  totalPageReview: number;
+  setTotalPageReview: (val: number) => void;
+}
+
 export const GlobalStateContext = createContext<GlobalStateContextProps | null>(
   null,
 );
@@ -47,6 +59,8 @@ const GlobalStateProvider: React.FC = ({ children }) => {
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
+  const [pageReview, setPageReview] = useState<number>(1);
+  const [totalPageReview, setTotalPageReview] = useState<number>(1);
   const [orderByQuery, setOrderByQuery] = useState<string | null>(null);
   const [orderToggle, setOrderToggle] = useState(false);
 
@@ -56,6 +70,11 @@ const GlobalStateProvider: React.FC = ({ children }) => {
   const totalPageProvider = useMemo(() => ({ totalPage, setTotalPage }), [
     totalPage,
     setTotalPage,
+  ]);
+  const pageReviewProvider = useMemo(() => ({ pageReview, setPageReview }), [pageReview, setPageReview]);
+  const totalPageReviewProvider = useMemo(() => ({ totalPageReview, setTotalPageReview }), [
+    totalPageReview,
+    setTotalPageReview,
   ]);
   const queryProvider = useMemo(
     () => ({
@@ -83,6 +102,8 @@ const GlobalStateProvider: React.FC = ({ children }) => {
         userProvider,
         pageProvider,
         totalPageProvider,
+        pageReviewProvider,
+        totalPageReviewProvider,
         queryProvider,
       }}
     >

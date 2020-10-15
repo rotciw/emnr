@@ -1,5 +1,5 @@
 import React, { useCallback, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import emnrLogo from '../assets/images/emnr_long.svg';
 import { Searchbar } from './Searchbar';
@@ -44,6 +44,7 @@ export const Navbar: React.FC = () => {
   const handleClickMe = useCallback(() => history.push('/me'), [history]);
   const { queryProvider } = useContext(GlobalStateContext)!;
 
+  const isOnLandingPage:boolean = useLocation().pathname === ("/");
 
   const onSelect = (e: string) => {
     queryProvider.setOrderByQuery(e);
@@ -53,15 +54,18 @@ export const Navbar: React.FC = () => {
   return (
     <NavBarContainer>
       <Logo src={emnrLogo} onClick={handleOnClick} />
-      <Searchbar />
-      <button onClick={handleClickMe}>Me page</button>
-      <DropdownContainer>
-        <Dropdown
-          options={options}
-          onChange={(e) => onSelect(e.value)}
-          placeholder='Sorter etter..'
-        />
-      </DropdownContainer>
+      {isOnLandingPage && (
+        <>
+          <Searchbar />
+          <DropdownContainer>
+            <Dropdown
+              options={options}
+              onChange={(e) => onSelect(e.value)}
+              placeholder='Sorter etter..'
+            />
+          </DropdownContainer>
+        </>
+      )}
     </NavBarContainer>
   );
 };
