@@ -54,7 +54,7 @@ export const Navbar: React.FC = () => {
     <NavBarContainer>
       <Logo src={emnrLogo} onClick={handleOnClick} />
       {isOnLandingPage && (
-        <React.Fragment>
+        <>
           <Searchbar />
           <DropdownContainer>
             <Dropdown
@@ -63,7 +63,7 @@ export const Navbar: React.FC = () => {
               placeholder='Sorter etter..'
             />
           </DropdownContainer>
-        </React.Fragment>
+        </>
       )}
     </NavBarContainer>
   );
