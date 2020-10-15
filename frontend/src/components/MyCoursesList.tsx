@@ -1,12 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Semester } from './Semester';
 import axios from 'axios';
-import { GlobalStateContext } from 'context/GlobalStateContext';
 import { FlexContainer, StyledTable, StyledTH } from 'styles/Containers';
-import styled from 'styled-components';
 import { getLocalToken } from '../utils/api';
 import { API_URL } from '../config';
-import { EmptyResult } from '../components/CourseList';
 
 interface MyCoursesListProps {}
 interface MyCourseProps {
@@ -17,8 +14,6 @@ interface MyCourseProps {
 interface Semesters {
   [semester: string]: MyCourseProps[];
 }
-
-
 
 export const MyCoursesList: React.FC<MyCoursesListProps> = () => {
   const [ myCourses, updateMyCourses ] = useState<MyCourseProps[]>([]);
@@ -40,19 +35,18 @@ export const MyCoursesList: React.FC<MyCoursesListProps> = () => {
           return semesters;
         }, {});
         updateMySemesters(sortedCourses)
-        updateMyCourses(response.data)
       })
       .catch( err => console.log(err));
     };
     getMyCourses();
   }, [])
-  console.log(mySemesters)
+
   return (
     <FlexContainer margin='15px 0 0 0'>
       <StyledTable>
         {Object.entries(mySemesters).map (([semester, courses]) => {
               return (
-                <Semester semester={semester} courses={courses} />
+                <Semester semester={semester} courses={courses} key={semester} />
               )
               
             })}

@@ -9,10 +9,6 @@ interface MyCourseProps {
   yourReview: String;
 }
 
-const handleCourseClick = () => {
-  console.log('Trykk på fag 1');
-};
-
 export const MyCourse: React.FC<MyCourseProps> = ({
   courseName,
   courseCode,
@@ -22,7 +18,7 @@ export const MyCourse: React.FC<MyCourseProps> = ({
     <tr>
       <td colSpan={3}>
         <Link to={`/course/${courseCode}`}>
-          <CourseButton clickHandler={handleCourseClick}>
+          <CourseButton >
             <CourseItemText width='25%'>{courseCode}</CourseItemText>
             <CourseItemText width='50%' textAlign='left'>
               {courseName}

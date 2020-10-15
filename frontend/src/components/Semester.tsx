@@ -1,10 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React from 'react';
 import { MyCourse } from './MyCourse';
-import axios from 'axios';
-import { GlobalStateContext } from 'context/GlobalStateContext';
-import { FlexContainer, SemesterContainer, StyledTable, StyledTH } from 'styles/Containers';
+import { SemesterContainer, StyledTable, StyledTH } from 'styles/Containers';
 import { BoldTitle } from 'styles/Text';
-import styled from 'styled-components';
 
 interface Semester {
   semester: string;
@@ -38,6 +35,7 @@ export const Semester: React.FC<Semester> = ({semester, courses}) => {
                   courseCode={currentCourse.course_code}
                   courseName={currentCourse.course_name}
                   yourReview={"- - - "}
+                  key={currentCourse.course_code}
               />
             )
           })}
