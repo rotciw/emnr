@@ -52,7 +52,6 @@ def verify_token(request):
     token = ExpiringToken.objects.create(user=user)
     access_token = response_json['access_token']
     has_token = False
-    print('user_mail', user_mail)
     try:
         has_token = UserAuth.objects.get(user_email=user_mail).exists()
     except:
