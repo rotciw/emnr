@@ -49,7 +49,7 @@ class GetMyCoursesTest(TestCase):
             c.credentials(HTTP_AUTHORIZATION='valid_token')
             response = c.get("/course/me/")
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(len(json.loads(response.data)),28)
+            self.assertEqual(len(json.loads(response.content)),28)
 
 
 
