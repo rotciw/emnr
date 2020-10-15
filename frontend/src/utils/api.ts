@@ -30,14 +30,14 @@ export const verifyFeideLogin = (code: string) => {
 };
 
 //used to verify if token is valid
-/*export const hasToken = () => {
+export const hasToken = () => {
   if (!localStorage.getItem('token')) {
     return false;
   }
   return axios.get(API_URL + 'auth/validate_token/').then(function (response) {
     return response.data === 'False';
   });
-};*/
+};
 
 //fetch local token
 export const getLocalToken = () => {
