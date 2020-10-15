@@ -19,9 +19,7 @@ export const SemesterContainer = styled.div`
   flex-direction: column;
   margin: ${(props: LayoutProps) => props.margin || 'auto'};
   border: 2px solid ${({theme}) => theme.darkBlue};
-  padding: 5px 10px 20px 10px;
-  border-radius: 2px; 
- 
+  padding: 5px 10px 20px 10px; 
 `;
 
 export const CenteredFlexContainer = styled.div`

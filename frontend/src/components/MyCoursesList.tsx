@@ -17,7 +17,7 @@ interface Semesters {
 
 export const MyCoursesList: React.FC<MyCoursesListProps> = () => {
   const [ myCourses, updateMyCourses ] = useState<MyCourseProps[]>([]);
-  const [ mySemesters, updateMySemesters ] = useState<Semesters>({});   //<MySemesterProps | undefined>(undefined);
+  const [ mySemesters, updateMySemesters ] = useState<Semesters>({});
 
   useEffect(() => {
     const token = getLocalToken();
@@ -57,7 +57,6 @@ export const MyCoursesList: React.FC<MyCoursesListProps> = () => {
               return (
                 <Semester semester={semester} courses={courses} key={semester} />
               )
-              
             })}
       </StyledTable>
     </FlexContainer>
