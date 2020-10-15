@@ -40,11 +40,20 @@ export const MyCoursesList: React.FC<MyCoursesListProps> = () => {
     };
     getMyCourses();
   }, [])
-
   return (
     <FlexContainer margin='15px 0 0 0'>
       <StyledTable>
-        {Object.entries(mySemesters).map (([semester, courses]) => {
+        {Object.entries(mySemesters).sort(
+          //Sorting the semesters
+          (semester1:[string, MyCourseProps[]], semester2:[string, MyCourseProps[]]) => {
+            if(parseInt(semester1[0].substring(1,5)) < parseInt(semester2[0].substring(1,5))){return 1;}
+            else if(parseInt(semester1[0].substring(1,5)) === parseInt(semester2[0].substring(1,5))){
+              if(semester1[0].substring(0,1) === "V"){return 1;}
+              else{return -1;}
+            }
+            else{return -1;}
+          }
+        ).map (([semester, courses]) => {
               return (
                 <Semester semester={semester} courses={courses} key={semester} />
               )
