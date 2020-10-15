@@ -23,6 +23,12 @@ const MeButton = styled.button`
   background-color: ${({ theme }) => theme.darkBlue};
   cursor: pointer;
   color: white;
+  font-family: gilroymedium;
+  outline: none;
+  border: none;
+  :hover {
+    background-color: ${({ theme }) => theme.blue};
+  }
 `;
 
 const TopRow = styled.div`
@@ -41,7 +47,7 @@ export const Navbar: React.FC = () => {
     <NavBarContainer>
       <TopRow id='top-row'>
         <Logo src={emnrLogo} onClick={handleOnClick} />
-        <MeButton onClick={handleClickMe}> Me page </MeButton>
+        <MeButton onClick={handleClickMe}> Min side </MeButton>
       </TopRow>
       <Searchbar />
     </NavBarContainer>
