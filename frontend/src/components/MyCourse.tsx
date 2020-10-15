@@ -6,7 +6,7 @@ import { CourseItemText } from 'styles/Text';
 interface MyCourseProps {
   courseName: String;
   courseCode: String;
-  semester: String;
+  yourReview: String;
 }
 
 const handleCourseClick = () => {
@@ -16,7 +16,7 @@ const handleCourseClick = () => {
 export const MyCourse: React.FC<MyCourseProps> = ({
   courseName,
   courseCode,
-  semester,
+  yourReview,
 }) => {
   return (
     <tr>
@@ -27,7 +27,7 @@ export const MyCourse: React.FC<MyCourseProps> = ({
             <CourseItemText width='50%' textAlign='left'>
               {courseName}
             </CourseItemText>
-            <CourseItemText width='25%'>{semester}</CourseItemText>
+            <CourseItemText width='25%'>{yourReview}</CourseItemText>
           </CourseButton>
         </Link>
       </td>

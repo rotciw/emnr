@@ -2,7 +2,8 @@ import React, { useEffect, useState, useContext } from 'react';
 import { MyCourse } from './MyCourse';
 import axios from 'axios';
 import { GlobalStateContext } from 'context/GlobalStateContext';
-import { FlexContainer, StyledTable, StyledTH } from 'styles/Containers';
+import { FlexContainer, SemesterContainer, StyledTable, StyledTH } from 'styles/Containers';
+import { BoldTitle } from 'styles/Text';
 import styled from 'styled-components';
 
 interface Semester {
@@ -18,7 +19,8 @@ interface MyCourseProps {
 
 export const Semester: React.FC<Semester> = ({semester, courses}) => {
   return (
-    <FlexContainer margin='15px 0 0 0'>
+    <SemesterContainer margin='5vh 0'>
+      <BoldTitle fontSize='24px' >{semester}</BoldTitle>
       <StyledTable>
         <thead>
           <tr>
@@ -26,7 +28,7 @@ export const Semester: React.FC<Semester> = ({semester, courses}) => {
             <StyledTH width='50%' textAlign='left'>
               Fagnavn
             </StyledTH>
-            <StyledTH width='25%'>Semester</StyledTH>
+            <StyledTH width='25%'>Din vurdering</StyledTH>
           </tr>
         </thead>
         <tbody>
@@ -35,12 +37,12 @@ export const Semester: React.FC<Semester> = ({semester, courses}) => {
               <MyCourse
                   courseCode={currentCourse.course_code}
                   courseName={currentCourse.course_name}
-                  semester={currentCourse.semester}
+                  yourReview={"- - - "}
               />
             )
           })}
         </tbody>
       </StyledTable>
-    </FlexContainer>
+    </SemesterContainer>
   );
 }
