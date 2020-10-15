@@ -42,3 +42,8 @@ export const CourseItemText = styled.p`
   text-align: ${(props: TitleProps) => props.textAlign || 'auto'};
   font-family: gilroymedium;
 `;
+
+export const ExtraBold = styled.span`
+  font-family: gilroyxbold;
+  font-weight: 900; /* In case the gilroy fonts aren't available, does not affect gilroyxbold */
+`;
