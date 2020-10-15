@@ -49,6 +49,7 @@ export const CourseButton: React.FC<ButtonProps> = ({
   return <StyledCourseBtn onClick={clickHandler}>{children}</StyledCourseBtn>;
 };
 
+/* Can possibly be removed, should be renamed or replaced with component RateCourseButton */
 export const RateCourseButton = styled.div`
   background-color: ${({ theme }) => theme.red};
   padding: 10px 20px;
@@ -56,4 +57,5 @@ export const RateCourseButton = styled.div`
   border: 1px solid black;
   width: fit-content;
   font-family: gilroyxbold;
+  cursor: pointer;
 `;

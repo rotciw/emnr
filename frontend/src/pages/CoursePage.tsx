@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import Modal from 'react-modal';
 import { Layout } from 'styles/Layout';
 import {
   FlexContainer,
@@ -8,10 +9,15 @@ import {
   LocalShapeContainer,
 } from 'styles/Containers';
 import { BoldTitle, Title, SubTitle, GoBackText } from 'styles/Text';
-import { RateCourseButton } from 'styles/Buttons';
+import { RateCourseButton } from 'components/RateCourseButton';
 import { Circle, RotatedSquare } from 'styles/Shapes';
 import { defaultTheme } from 'styles/theme';
 import axios from 'axios';
+import { ReviewList } from 'components/ReviewList';
+import { ReviewForm } from 'components/ReviewForm';
+import { ReviewPaginationContainer } from 'components/pagination/ReviewPaginationContainer';
+import { GlobalStateContext } from 'context/GlobalStateContext';
+import { modalStyles } from 'styles/Modals';
 
 interface CourseViewProps {
   courseName: String;
@@ -23,11 +29,24 @@ interface CourseViewProps {
 export const CoursePage: React.FC<CourseViewProps> = (
   props: CourseViewProps,
 ) => {
+  const { pageReviewProvider, totalPageReviewProvider } = useContext(
+    GlobalStateContext,
+  )!;
+
   const courseCode: string = useLocation().pathname.substr(8);
   const [courseInfo, setCourseInfo] = useState<any>({});
 
+  const [scoreAvg, setScoreAvg] = useState<number>(0);
+  const [numberOfReviews, setNumberOfReviews] = useState<number>(0);
+
   const history = useHistory();
   const handleBackClick = useCallback(() => history.push('/'), [history]);
+
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+
+  function toggleModalIsOpen() {
+    setModalIsOpen(!modalIsOpen);
+  }
 
   useEffect(() => {
     const getCourses = async () => {
@@ -41,16 +60,33 @@ export const CoursePage: React.FC<CourseViewProps> = (
 
   return (
     <Layout padding='0 20%'>
-      <FlexContainer>
+      <FlexContainer width='100%'>
         <FlexItem margin='0 0 0 10vh'>
           <FlexItem margin='2vh 0 4vh 0' onClick={handleBackClick}>
             <GoBackText>Tilbake</GoBackText>
           </FlexItem>
           <Title margin='0 0 5px 0'>{courseInfo.course_code}</Title>
           <BoldTitle fontSize='30px'>{courseInfo.course_name}</BoldTitle>
-          <BoldTitle margin='10px 0 0 0'>{courseInfo.score} / 5</BoldTitle>
-          <SubTitle margin='0 0 4vh 0'>Basert på x antall vurderinger</SubTitle>
-          <RateCourseButton>Vurder {courseCode}</RateCourseButton>
+          <BoldTitle margin='10px 0 0 0'>{scoreAvg} / 5</BoldTitle>
+          <SubTitle margin='0 0 4vh 0'>Basert på {numberOfReviews} vurdering(er).</SubTitle>
+          <RateCourseButton
+            onClickFunction={toggleModalIsOpen}
+            courseCode={courseCode}
+          >
+            Vurder {courseCode}
+          </RateCourseButton>
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={toggleModalIsOpen}
+            style={modalStyles}
+            contentLabel='Example Modal'
+          >
+            <ReviewForm
+              courseName={courseInfo.course_name}
+              courseCode={courseInfo.course_code}
+              closeModal={toggleModalIsOpen}
+            />
+          </Modal>
         </FlexItem>
         <LocalShapeContainer>
           <Circle
@@ -69,6 +105,15 @@ export const CoursePage: React.FC<CourseViewProps> = (
         </LocalShapeContainer>
       </FlexContainer>
       <HrLine />
+      <ReviewList
+        courseCode={courseCode}
+        pageNumber={pageReviewProvider.pageReview}
+        scoreAvgSetter={setScoreAvg}
+        numberOfReviewSetter={setNumberOfReviews}
+      />
+      <ReviewPaginationContainer
+        totalPages={totalPageReviewProvider.totalPageReview}
+      />
     </Layout>
   );
 };
