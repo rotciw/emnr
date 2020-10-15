@@ -1,109 +1,52 @@
-import React, { useState } from 'react';
-import { PaginationWrapper, PaginationBtn, Separator } from '../../styles/PaginationStyle';
+import { GlobalStateContext } from 'context/GlobalStateContext';
+import React, { useContext } from 'react';
+import styled from 'styled-components';
+import { PaginationButton } from './PaginationButton';
 
-export interface PaginationProps {
-  page: number;
-  totalPages: number;
-  handlePagination: (page: number) => void;
-}
-export const PaginationComponent: React.FC<PaginationProps> = ({
-  page,
-  totalPages,
-  handlePagination,
-}) => {
+const PaginationWrapper = styled.div`
+  padding: 2rem 0;
+  display: flex;
+  justify-content: center;
+`;
 
-    const [isActive,setIsActive] = useState(false);
+const Separator = styled.div`
+  width: 1rem;
+  margin: 0 0.25rem;
+`;
+export const PaginationComponent: React.FC = () => {
+  const { pageProvider, totalPageProvider } = useContext(GlobalStateContext)!;
+  let totalPages = totalPageProvider.totalPage;
+  let page = pageProvider.page;
 
   return (
     <div>
       <PaginationWrapper>
         {page !== 1 && (
-          <PaginationBtn
-            onClick={() => {handlePagination(page - 1)
-            setIsActive(!isActive)
-            }}
-            isActive
-          >
-            &lt;
-          </PaginationBtn>
+          <PaginationButton pageNumber={page - 1}>&lt;</PaginationButton>
         )}
-        <PaginationBtn
-            onClick={() => {handlePagination(1)
-            setIsActive(!isActive)
-            }}
-            isActive
-          >
-            {1}
-          </PaginationBtn>        
+        <PaginationButton pageNumber={1}>{1}</PaginationButton>
         {page > 3 && <Separator>...</Separator>}
         {page === totalPages && totalPages > 3 && (
-            <PaginationBtn
-            onClick={() => {handlePagination(page - 2)
-            setIsActive(!isActive)
-            }}
-            isActive
-        >
-                {page - 2}
-            </PaginationBtn>  
+          <PaginationButton pageNumber={page - 2}>{page - 2}</PaginationButton>
         )}
         {page > 2 && (
-            <PaginationBtn
-            onClick={() => {handlePagination(page - 1)
-            setIsActive(!isActive)
-            }}
-            isActive
-        >
-                {page - 1}
-            </PaginationBtn> 
+          <PaginationButton pageNumber={page - 1}>{page - 1}</PaginationButton>
         )}
         {page !== 1 && page !== totalPages && (
-            <PaginationBtn
-            onClick={() => {handlePagination(page)
-            setIsActive(!isActive)
-            }}
-            isActive
-        >
-                {page}
-            </PaginationBtn> 
+          <PaginationButton pageNumber={page}>{page}</PaginationButton>
         )}
         {page < totalPages - 1 && (
-            <PaginationBtn
-            onClick={() => {handlePagination(page + 1)
-            setIsActive(!isActive)
-            }}
-            isActive
-        >
-                {page + 1}
-            </PaginationBtn> 
+          <PaginationButton pageNumber={page + 1}>{page + 1}</PaginationButton>
         )}
         {page === 1 && totalPages > 3 && (
-            <PaginationBtn
-            onClick={() => {handlePagination(page + 2)
-            setIsActive(!isActive)
-            }}
-            isActive
-        >
-                {page + 2}
-            </PaginationBtn> 
+          <PaginationButton pageNumber={page + 2}>{page + 2}</PaginationButton>
         )}
         {page < totalPages - 2 && <Separator>...</Separator>}
-        <PaginationBtn
-            onClick={() => {handlePagination(totalPages)
-            setIsActive(!isActive)
-            }}
-            isActive
-        >
-                {totalPages}
-            </PaginationBtn> 
+        <PaginationButton pageNumber={totalPages}>
+          {totalPages}
+        </PaginationButton>
         {page !== totalPages && (
-            <PaginationBtn
-            onClick={() => {handlePagination(page + 1)
-            setIsActive(!isActive)
-            }}
-            isActive
-            >
-            &gt;
-            </PaginationBtn>
+          <PaginationButton pageNumber={page + 1}>&gt;</PaginationButton>
         )}
       </PaginationWrapper>
     </div>

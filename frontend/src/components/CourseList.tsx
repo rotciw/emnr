@@ -22,16 +22,18 @@ export const EmptyResult = styled.h3`
   flex: 1;
 `;
 
-export const CourseList: React.FC<CourseListProps> = ({ pageNumber }) => {
+export const CourseList: React.FC = () => {
   const [courses, updateCourses] = useState<CourseProps[]>([]);
-  const { totalPageProvider, queryProvider } = useContext(GlobalStateContext)!;
+  const { totalPageProvider, queryProvider, pageProvider } = useContext(
+    GlobalStateContext,
+  )!;
 
+  let pageNumber = pageProvider.page;
   // Search input
   // Reset page number when searching
   let searchQuery: string = ' ';
   if (queryProvider.searchQuery) {
     searchQuery = queryProvider.searchQuery;
-    pageNumber = 1;
   }
 
   // Sorting dropdown
@@ -41,8 +43,8 @@ export const CourseList: React.FC<CourseListProps> = ({ pageNumber }) => {
     : (orderByQuery = 'course_name');
 
   let orderToggle: number;
-  queryProvider.orderToggle ? (orderToggle = 0) : (orderToggle = 1);
   // The backend sorts ascending on 1 and descending on 0
+  queryProvider.orderToggle ? (orderToggle = 0) : (orderToggle = 1);
 
   const resultLimit: number = 25;
   let start: number = (pageNumber - 1) * resultLimit;
@@ -58,7 +60,10 @@ export const CourseList: React.FC<CourseListProps> = ({ pageNumber }) => {
             Math.ceil(res.data.count / resultLimit),
           );
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          pageProvider.setPage(1);
+        });
     };
     getCourses();
     start += resultLimit;
