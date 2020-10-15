@@ -9,7 +9,7 @@ import {
   LocalShapeContainer,
 } from 'styles/Containers';
 import { BoldTitle, Title, SubTitle, GoBackText } from 'styles/Text';
-import { RateCourseButton } from 'styles/Buttons';
+import { RateCourseButton } from 'components/RateCourseButton';
 import { Circle, RotatedSquare } from 'styles/Shapes';
 import { defaultTheme } from 'styles/theme';
 import axios from 'axios';
@@ -66,7 +66,7 @@ export const CoursePage: React.FC<CourseViewProps> = (
           <BoldTitle fontSize='30px'>{courseInfo.course_name}</BoldTitle>
           <BoldTitle margin='10px 0 0 0'>{courseInfo.score} / 5</BoldTitle>
           <SubTitle margin='0 0 4vh 0'>Basert på x antall vurderinger</SubTitle>
-          <RateCourseButton onClick={toggleModalIsOpen}>
+          <RateCourseButton onClickFunction={toggleModalIsOpen} courseCode={courseCode}>
             Vurder {courseCode}
           </RateCourseButton>
           <Modal
