@@ -11,6 +11,7 @@ class CanReviewTest(TestCase):
 
     def setUp(self) -> None:
         UserAuth(expiring_token="valid_token", access_token="valid_token", user_email="test@testesen.com").save()
+        UserAuth(expiring_token="expired_token", access_token="expired_token", user_email="abc@xyz.no").save()
 
     def test_can_review_invalid_token(self):
         c = APIClient()
@@ -21,16 +22,21 @@ class CanReviewTest(TestCase):
 
     def test_can_review_no_course_code(self):
         c = APIClient()
-        c.credentials(HTTP_AUTHORIZATION='invalid token')
-        res = c.get("/review/check/?courseCode=TMA4100")
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(res.data, 3)
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
+        res = c.get("/review/check/")
+        self.assertEqual(res.status_code, 400)
 
     def test_can_review_invalid_course_code(self):
-        pass
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
+        res = c.get("/review/check/?courseCode=Ikkeetfag")
+        self.assertEqual(res.status_code, 400)
 
     def test_can_review_nonreviewable_course(self):
-        pass
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
+        res = c.get("/review/check/?courseCode=")
+        self.assertEqual()
 
     def test_can_review_review_exists(self):
         pass
