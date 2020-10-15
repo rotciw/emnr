@@ -20,7 +20,11 @@ class CanReviewTest(TestCase):
         self.assertEqual(res.data, 3)
 
     def test_can_review_no_course_code(self):
-        pass
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='invalid token')
+        res = c.get("/review/check/?courseCode=TMA4100")
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.data, 3)
 
     def test_can_review_invalid_course_code(self):
         pass
