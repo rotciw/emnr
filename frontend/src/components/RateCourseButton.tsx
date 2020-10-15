@@ -54,6 +54,8 @@ export const RateCourseButton: React.FC<ReviewFormProps> = ({
   courseCode,
 }) => {
   const [reviewEligibility, setReviewEligibility] = useState<number>(1);
+
+  //TODO: move axios config (ref Casper code review comment @ !PR19)
   axios.defaults.headers.common['Authorization'] = `${getLocalToken()}`;
 
   useEffect(() => {
@@ -62,7 +64,6 @@ export const RateCourseButton: React.FC<ReviewFormProps> = ({
         .get('http://localhost:8000/review/check/?courseCode=' + courseCode)
         .then((res) => {
           setReviewEligibility(res.data);
-          console.log(res.data);
         })
         .catch((err) => console.log(err));
     };
