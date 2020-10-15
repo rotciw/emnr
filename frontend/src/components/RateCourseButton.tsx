@@ -82,7 +82,7 @@ export const RateCourseButton: React.FC<ReviewFormProps> = ({
       content = (
         <TooltipButtonContainer>
           <DisabledRateButton>Send inn</DisabledRateButton>
-          <TooltipText>You have not completed this course</TooltipText>
+          <TooltipText>Du har ikke fullført dette faget</TooltipText>
         </TooltipButtonContainer>
       );
       break;
@@ -91,7 +91,7 @@ export const RateCourseButton: React.FC<ReviewFormProps> = ({
         <TooltipButtonContainer>
           <DisabledRateButton>Send inn</DisabledRateButton>
           <TooltipText>
-            You have already posted a review for this course
+            Du har allerede vurdert dette faget
           </TooltipText>
         </TooltipButtonContainer>
       );
@@ -100,15 +100,14 @@ export const RateCourseButton: React.FC<ReviewFormProps> = ({
       content = (
         <TooltipButtonContainer>
           <DisabledRateButton>Send inn</DisabledRateButton>
-          <TooltipText>There was an error with user authentication</TooltipText>
+          <TooltipText>Noe gikk galt med brukerautentiseringen</TooltipText>
         </TooltipButtonContainer>
       );
       break;
     default:
       content = (
         <div>
-          Something went wrong when checking if you are eligible to review the
-          course.
+          Noe gikk galt mens vi sjekket om du kan vurdere dette faget
         </div>
       );
   }
