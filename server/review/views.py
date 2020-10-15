@@ -7,6 +7,7 @@ import requests
 from course.views import retrieve_courses_from_token, get_current_semester, perform_feide_api_call
 from auth.views import get_token
 from .models import Review
+from course.models import Course
 
 
 @api_view(['POST'])
@@ -50,6 +51,51 @@ def post_review(request):
 
     # Indicate successful posting
     return Response(status=200)
+
+
+@api_view(["GET"])
+def get_reviews(request):
+    try:
+        data = get_reviews_from_db(request)
+    except ValueError as e:
+        return Response(str(e), status=400)
+    return Response(data, status=200)
+
+
+def get_reviews_from_db(request):
+    """
+    Helper method for fetching all reviews for a given course code.
+
+    :param request: GET request containing a course code parameter, and optional parameters n (number of reviews)
+                    and offset (index to start the fetching at).
+    :raises ValueError: if course code, n or offset is invalid.
+    :return: JSON containing total number of reviews in database (count), and list of JSON objects (data),
+                each containing a review.
+    """
+    course_code = request.GET.get("courseCode", None)
+    if course_code is None:
+        raise ValueError("No course code provided")
+    elif not Course.objects.filter(course_code=course_code).exists():
+        raise ValueError("Course code {} does not exist in the course database.".format(course_code))
+
+    # Get and validate n parameter
+    number_of_reviews = Review.objects.all().count()
+    n = request.GET.get("n", number_of_reviews)
+    if isinstance(n, str) and not n.isdigit():
+        raise ValueError("Invalid value for n: {}".format(n))
+    n = int(n)
+
+    # Get and validate offset parameter
+    offset = request.GET.get("offset", 0)
+    if isinstance(offset, str) and not offset.isdigit():
+        raise ValueError("Invalid value for offset: {}".format(offset))
+    offset = int(offset)
+    if offset > number_of_reviews:
+        raise ValueError("offset is too large")
+
+    # Fetch reviews from database
+    data = Review.objects.filter(course_code=course_code)[offset:offset + n]
+    return {"count": number_of_reviews, "data": list(data.values())}
 
 
 def validate_review_post_request(request_data, reviewable_courses, email):
