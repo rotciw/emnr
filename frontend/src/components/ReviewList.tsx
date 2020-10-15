@@ -29,7 +29,7 @@ interface ReviewProps{
     workload: number | string | void;
     difficulty: number | string | void;
     review_text: string;
-    //date: string;
+    date: string;
   }
 
 export const ReviewList: React.FC<ReviewListProps> = ({
@@ -99,7 +99,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({
                 workLoad={currentReview.workload} 
                 difficulty={currentReview.difficulty} 
                 text={currentReview.review_text}
-                date={"01.01.20"}
+                date={currentReview.date}
                 />;
               })
             }
