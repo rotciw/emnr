@@ -98,8 +98,11 @@ def get_single_course_from_db(request):
 
 @api_view(["GET"])
 def get_current_user_courses(request):
-    course_info = retrieve_courses_from_token(request.META['HTTP_AUTHORIZATION'])
-    return HttpResponse(json.dumps(course_info))
+    try:
+        course_info = retrieve_courses_from_token(request.META['HTTP_AUTHORIZATION'])
+        return HttpResponse(json.dumps(course_info))
+    except TypeError as e:
+        return Response("Invalid expiring token", status=401)
 
 
 def retrieve_courses_from_token(token):
