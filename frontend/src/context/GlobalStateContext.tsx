@@ -5,7 +5,7 @@ interface GlobalStateContextProps {
   userProvider: UserProviderValue;
   pageProvider: PageProviderValue;
   totalPageProvider: TotalPageProviderValue;
-  searchQueryProvider: SearchQueryProviderValue;
+  queryProvider: QueryProviderValue;
 }
 
 interface AuthProviderValue {
@@ -28,9 +28,13 @@ interface TotalPageProviderValue {
   setTotalPage: (val: number) => void;
 }
 
-interface SearchQueryProviderValue {
+interface QueryProviderValue {
   searchQuery: string | null;
   setSearchQuery: (val: string) => void;
+  orderByQuery: string | null;
+  setOrderByQuery: (val: string) => void;
+  orderToggle: boolean;
+  setOrderToggle: (val: boolean) => void;
 }
 
 export const GlobalStateContext = createContext<GlobalStateContextProps | null>(
@@ -43,6 +47,8 @@ const GlobalStateProvider: React.FC = ({ children }) => {
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
+  const [orderByQuery, setOrderByQuery] = useState<string | null>(null);
+  const [orderToggle, setOrderToggle] = useState(false);
 
   const authProvider = useMemo(() => ({ token, setToken }), [token, setToken]);
   const userProvider = useMemo(() => ({ email, setEmail }), [email, setEmail]);
@@ -51,10 +57,24 @@ const GlobalStateProvider: React.FC = ({ children }) => {
     totalPage,
     setTotalPage,
   ]);
-  const searchQueryProvider = useMemo(() => ({ searchQuery, setSearchQuery }), [
-    searchQuery,
-    setSearchQuery,
-  ]);
+  const queryProvider = useMemo(
+    () => ({
+      searchQuery,
+      setSearchQuery,
+      orderByQuery,
+      setOrderByQuery,
+      orderToggle,
+      setOrderToggle,
+    }),
+    [
+      searchQuery,
+      setSearchQuery,
+      orderByQuery,
+      setOrderByQuery,
+      orderToggle,
+      setOrderToggle,
+    ],
+  );
 
   return (
     <GlobalStateContext.Provider
@@ -63,7 +83,7 @@ const GlobalStateProvider: React.FC = ({ children }) => {
         userProvider,
         pageProvider,
         totalPageProvider,
-        searchQueryProvider,
+        queryProvider,
       }}
     >
       {children}
