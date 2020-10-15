@@ -21,13 +21,13 @@ interface ReviewListProps {
 }
 
 interface ReviewProps{
-    name: string;
-    studyProgramme: string;
+    full_name: string;
+    study_programme: string;
     score: number;
-    workLoad: number | void;
-    difficulty: number | void;
-    text: string;
-    date: string;
+    workload: number | string | void;
+    difficulty: number | string | void;
+    review_text: string;
+    //date: string;
   }
 
 export const ReviewList: React.FC<ReviewListProps> = ({
@@ -61,19 +61,6 @@ export const ReviewList: React.FC<ReviewListProps> = ({
     start += resultLimit;
 
   }, [pageNumber]); 
-  
-    const tempReviews: ReviewProps[] = [{name:'haakon',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon2',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon3',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon4',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon5',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon6',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon7',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon8',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon9',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon10',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon11',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'},
-    {name:'haakon12',studyProgramme:'mtdt',score:3,workLoad:4,difficulty:5,text:'qwerty',date:'01.01.20'}];
 
   return (
     <Wrapper>
@@ -82,13 +69,19 @@ export const ReviewList: React.FC<ReviewListProps> = ({
           <tbody>
             {
               reviews.map(currentReview => {
-                return <Review name={currentReview.name} 
-                studyProgramme={currentReview.studyProgramme} 
+
+                //If the difficulty or workload value is not set in the review, they are replaced with an explaining string.
+                if(currentReview.difficulty === -1){currentReview.difficulty = "Not given";}
+                if(currentReview.workload === -1){currentReview.workload = "Not given";}
+
+                return <Review name={currentReview.full_name} 
+                studyProgramme={currentReview.study_programme} 
                 score={currentReview.score} 
-                workLoad={currentReview.workLoad} 
+                workLoad={currentReview.workload} 
                 difficulty={currentReview.difficulty} 
-                text={currentReview.text}
-                date={currentReview.date}/>;
+                text={currentReview.review_text}
+                date={"01.01.20"}
+                />;
               })
             }
           </tbody>

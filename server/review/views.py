@@ -117,10 +117,11 @@ def validate_review_post_request(request_data, reviewable_courses, email):
     # Validate score, difficulty and workload
     if not isinstance(request_data["score"], int) or request_data["score"] < 1 or request_data["score"] > 5:
         raise ValueError("Invalid score: {} (Must be between 1 and 5)".format(request_data["score"]))
-    if not isinstance(request_data["difficulty"], int) or request_data["difficulty"] < 1 or request_data[
-        "difficulty"] > 5:
+    if (not isinstance(request_data["difficulty"], int) or request_data["difficulty"] < -1 or request_data[
+        "difficulty"] > 5) and request_data["difficulty"] > 5:
         raise ValueError("Invalid difficulty: {} (Must be between 1 and 5)".format(request_data["difficulty"]))
-    if not isinstance(request_data["workload"], int) or request_data["workload"] < 1 or request_data["workload"] > 5:
+    if (not isinstance(request_data["workload"], int) or request_data["workload"] < -1 or request_data["workload"] > 5)\
+            and request_data["workload"] == -1:
         raise ValueError("Invalid workload: {} (Must be between 1 and 5)".format(request_data["workload"]))
 
 

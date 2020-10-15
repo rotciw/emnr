@@ -58,7 +58,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
       .post(API_URL + '/review/', {
         courseCode: courseCode,
         score: scoreValue,
-        workload: difficultyValue,
+        workload: workloadValue,
         difficulty: difficultyValue,
         reviewText: reviewText,
       })

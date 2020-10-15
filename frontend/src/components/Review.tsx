@@ -7,8 +7,8 @@ interface ReviewProps {
   name: String;
   studyProgramme: String;
   score: Number;
-  workLoad: Number | void;
-  difficulty: Number | void;
+  workLoad: number | string | void;
+  difficulty: number | string | void;
   text: String;
   date: String;
 }
