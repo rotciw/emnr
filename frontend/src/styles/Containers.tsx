@@ -14,6 +14,14 @@ export const FlexContainer = styled.div`
   width: ${(props: LayoutProps) => props.width || ''};
 `;
 
+export const SemesterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: ${(props: LayoutProps) => props.margin || 'auto'};
+  border: 2px solid ${({theme}) => theme.darkBlue};
+  padding: 5px 10px 20px 10px; 
+`;
+
 export const CenteredFlexContainer = styled.div`
   display: flex;
   justify-content: center;

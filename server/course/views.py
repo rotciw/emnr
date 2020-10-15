@@ -33,7 +33,7 @@ def get_courses_from_db(request):
                     input).
     :raises: ValueError if n or offset is invalid.
     :return: JSON containing total number of courses in database (count), and list of JSON objects (data),
-             each containing course information.
+                each containing course information.
     """
     # Get search parameter and combines the fields "course_code" and "course_name" into an OR field,
     # by making a Q object.
