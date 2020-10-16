@@ -15,7 +15,6 @@ import { defaultTheme } from 'styles/theme';
 import axios from 'axios';
 import { ReviewList } from 'components/ReviewList';
 import { ReviewForm } from 'components/ReviewForm';
-import { ReviewPaginationContainer } from 'components/pagination/ReviewPaginationContainer';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { modalStyles } from 'styles/Modals';
 
@@ -110,9 +109,6 @@ export const CoursePage: React.FC<CourseViewProps> = (
         pageNumber={pageReviewProvider.pageReview}
         scoreAvgSetter={setScoreAvg}
         numberOfReviewSetter={setNumberOfReviews}
-      />
-      <ReviewPaginationContainer
-        totalPages={totalPageReviewProvider.totalPageReview}
       />
     </Layout>
   );
