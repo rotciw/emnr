@@ -14,8 +14,8 @@ const Separator = styled.div`
   margin: 0 0.25rem;
 `;
 export const PaginationComponent: React.FC = () => {
-  const { pageProvider, totalPageProvider } = useContext(GlobalStateContext)!;
-  let totalPages = totalPageProvider.totalPage;
+  const { pageProvider } = useContext(GlobalStateContext)!;
+  let totalPages = pageProvider.totalPage;
   let page = pageProvider.page;
 
   return (

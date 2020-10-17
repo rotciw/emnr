@@ -24,14 +24,12 @@ export const EmptyResult = styled.h3`
 
 export const CourseList: React.FC = () => {
   const [courses, updateCourses] = useState<CourseProps[]>([]);
-  const { totalPageProvider, queryProvider, pageProvider } = useContext(
-    GlobalStateContext,
-  )!;
+  const { pageProvider, queryProvider } = useContext(GlobalStateContext)!;
 
   let pageNumber = pageProvider.page;
   // Search input
   // Reset page number when searching
-  let searchQuery: string = ' ';
+  let searchQuery: string = '';
   if (queryProvider.searchQuery) {
     searchQuery = queryProvider.searchQuery;
   }
@@ -43,11 +41,18 @@ export const CourseList: React.FC = () => {
     : (orderByQuery = 'course_name');
 
   let orderToggle: number;
+
   // The backend sorts ascending on 1 and descending on 0
   queryProvider.orderToggle ? (orderToggle = 0) : (orderToggle = 1);
 
   const resultLimit: number = 25;
   let start: number = (pageNumber - 1) * resultLimit;
+
+  // this useEffect is used for resetting page number to 1 when searching
+  useEffect(() => {
+    pageProvider.setPage(1);
+  }, [searchQuery]);
+
   useEffect(() => {
     const getCourses = async () => {
       await axios
@@ -56,13 +61,10 @@ export const CourseList: React.FC = () => {
         )
         .then((res) => {
           updateCourses(res.data.data);
-          totalPageProvider.setTotalPage(
-            Math.ceil(res.data.count / resultLimit),
-          );
+          pageProvider.setTotalPage(Math.ceil(res.data.count / resultLimit));
         })
         .catch((err) => {
           console.log(err);
-          pageProvider.setPage(1);
         });
     };
     getCourses();

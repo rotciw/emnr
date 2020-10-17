@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Semester } from './Semester';
 import axios from 'axios';
-import { FlexContainer, StyledTable, StyledTH } from 'styles/Containers';
+import { FlexContainer, StyledTable } from 'styles/Containers';
 import { getLocalToken } from '../utils/api';
 import { API_URL } from '../config';
 
