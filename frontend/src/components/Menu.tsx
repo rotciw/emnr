@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-import {defaultTheme} from '../styles/theme';
-import Hamburger from './Hamburger';
+import {Hamburger} from './Hamburger';
 import { useEffect, RefObject,useState, useRef } from "react";
 
 
@@ -30,11 +29,11 @@ const StyledMenu = styled.nav<{ open: boolean }>`
 const StyledLink = styled.a`
   padding: 0rem 2rem;
   font-size: 2rem;
-  color: ${defaultTheme.red}; //fiks
+  color: ${({ theme }) => theme.white}; 
   text-decoration: none;
 
   :hover {
-    color: ${defaultTheme.lightBlue}; //fiks
+    color: ${({ theme }) => theme.lightBlue};
   }
 `;
 
@@ -61,12 +60,16 @@ const useOnClickOutside = (
     }, [ref, closeMenu]);
   };
 
-const Menu = () => {
+
+
+
+export const Menu: React.FC = () => {
     const [open, setOpen] = useState<boolean>(false);
     const node = useRef<HTMLDivElement>(null);
     const close = () => setOpen(false);
   
     useOnClickOutside(node, () => setOpen(false));
+
   
     return (
       <div ref={node}>
@@ -80,6 +83,3 @@ const Menu = () => {
     );
   };
   
-  export default Menu;
-  
-

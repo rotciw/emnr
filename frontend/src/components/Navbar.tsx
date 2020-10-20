@@ -6,7 +6,7 @@ import { Searchbar } from './Searchbar';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import { GlobalStateContext } from 'context/GlobalStateContext';
-import Menu from './Menu';
+import {Menu} from './Menu';
 
 const NavBarContainer = styled.nav`
   width: 100%;

@@ -1,12 +1,11 @@
 import React from 'react';
 import styled from "styled-components";
-import {defaultTheme} from '../styles/theme';
 
 
 const StyledHamburger = styled.button<{ open: boolean }>`
   position: fixed;
   right: 3vw;
-  top: 3vw;
+  top: 1.5vw;
   width: 2rem;
   height: 2rem;
   padding: 0;
@@ -28,8 +27,7 @@ const StyledHamburger = styled.button<{ open: boolean }>`
     border-radius: 10px;
     transition: all 0.3s linear;
     transform-origin: 1px;
-    background-color: ${({ open }) =>
-      open ? defaultTheme.red : defaultTheme.white};
+    background-color: ${({ theme }) => theme.white};
 
     :first-child {
       transform: ${({ open }) => (open ? "rotate(45deg)" : "rotate(0)")};
@@ -46,7 +44,35 @@ const StyledHamburger = styled.button<{ open: boolean }>`
   }
 `;
 
-export type Props = {
+
+interface HamburgerProps {
+    open: boolean;
+    setOpen: (v: boolean) => void;
+  }
+  
+export const Hamburger: React.FC<HamburgerProps> = ({
+    open,
+    setOpen,
+  }) => {
+    return (
+    <StyledHamburger open={open} onClick={() => {setOpen(!open)}}>
+      <div />
+      <div />
+      <div />
+    </StyledHamburger>
+      
+    );
+  };
+  
+    
+
+
+
+
+
+
+
+/* export type Props = {
     open: boolean;
     setOpen: (v: boolean) => void;
   };
@@ -60,5 +86,5 @@ export type Props = {
   );
   
   export default Hamburger;
-
+ */
 
