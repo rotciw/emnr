@@ -7,19 +7,19 @@ import { useEffect, RefObject,useState, useRef } from "react";
 const StyledMenu = styled.nav<{ open: boolean }>`
   top: 0;
   left: 0;
-  height: 10%; 
+  height: 3%; 
   width: 100%;
   position: fixed;
-  background-color:  #457B9D;
+  background-color: ${({ theme }) => theme.blue};
   z-index: 1;
 
   display: flex;
   flex-direction: column;
-  padding: 5rem 0;
+  padding: 80px 0;
 
-  transition: transform 0.5s ease-in-out;
+  transition: transform 0.4s ease-in-out; //ease-ease-in-out
   transform: ${({ open }) =>
-    open ? "translateX(0)" : "translateX(100%)"}; //endret fra -100 til 100
+    open ? "translateX(0)" : "translateX(100%)"}; //endret fra -100 til 100 
 
   @media (max-width: 600px) {
     width: 100%;
@@ -27,10 +27,9 @@ const StyledMenu = styled.nav<{ open: boolean }>`
 `;
 
 const StyledLink = styled.a`
-  padding: 0rem 2rem;
-  font-size: 2rem;
+  padding: 3px 100px;
+  font-size: 18px;
   color: ${({ theme }) => theme.white}; 
-  text-decoration: none;
 
   :hover {
     color: ${({ theme }) => theme.lightBlue};
@@ -74,9 +73,9 @@ export const Menu: React.FC = () => {
     return (
       <div ref={node}>
         <StyledMenu open={open}>
-          <StyledLink onClick={() => close()}>Gå til min side</StyledLink>
-          <StyledLink onClick={() => close()}>Gå til tilbake til forsiden</StyledLink>
-          <StyledLink onClick={() => close()}>Logg ut</StyledLink>
+          <StyledLink>Gå til forsiden</StyledLink>
+          <StyledLink>Gå til min side</StyledLink>
+          <StyledLink>Logg ut</StyledLink>
         </StyledMenu>
         <Hamburger open={open} setOpen={setOpen} />
       </div>

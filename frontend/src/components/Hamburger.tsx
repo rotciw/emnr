@@ -5,9 +5,9 @@ import styled from "styled-components";
 const StyledHamburger = styled.button<{ open: boolean }>`
   position: fixed;
   right: 3vw;
-  top: 1.5vw;
-  width: 2rem;
-  height: 2rem;
+  top: 1vw;
+  width: 32px;
+  height: 32px;
   padding: 0;
   background: transparent;
 
@@ -22,10 +22,10 @@ const StyledHamburger = styled.button<{ open: boolean }>`
 
   div {
     position: relative;
-    width: 2rem;
-    height: 0.25rem;
+    width: 32px;
+    height: 4px;
     border-radius: 10px;
-    transition: all 0.3s linear;
+    transition: all 0s linear;
     transform-origin: 1px;
     background-color: ${({ theme }) => theme.white};
 
@@ -65,26 +65,3 @@ export const Hamburger: React.FC<HamburgerProps> = ({
   };
   
     
-
-
-
-
-
-
-
-/* export type Props = {
-    open: boolean;
-    setOpen: (v: boolean) => void;
-  };
-  
-  const Hamburger = (props: Props) => (
-    <StyledHamburger open={props.open} onClick={() => props.setOpen(!props.open)}>
-      <div />
-      <div />
-      <div />
-    </StyledHamburger>
-  );
-  
-  export default Hamburger;
- */
-
