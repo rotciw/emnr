@@ -73,8 +73,7 @@ export const Navbar: React.FC = () => {
     <NavBarContainer>
       <TopRow>
         <Logo src={emnrLogo} onClick={handleOnClick} />
-        <Menu></Menu>
-        <MeButton onClick={handleClickMe}> Min side </MeButton>
+        <Menu/>
       </TopRow>
       {isOnLandingPage && (
         <>

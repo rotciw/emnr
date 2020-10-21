@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, RefObject,useState, useRef } from 'react';
+import emnrLogo from '../assets/images/emnr_long.svg';
 import { useHistory} from 'react-router-dom';
 import styled from "styled-components";
 import {Hamburger} from './Hamburger';
+
 
 
 
@@ -16,11 +18,11 @@ const StyledMenu = styled.nav<{ open: boolean }>`
 
   display: flex;
   flex-direction: column;
-  padding: 80px 0;
+  padding: 100px 0;
 
   transition: transform 0.4s ease-in-out; //ease-ease-in-out
   transform: ${({ open }) =>
-    open ? "translateX(0)" : "translateX(100%)"}; //endret fra -100 til 100 
+    open ? "translateX(0)" : "translateX(100%)"}; 
 
   @media (max-width: 600px) {
     width: 100%;
@@ -28,8 +30,9 @@ const StyledMenu = styled.nav<{ open: boolean }>`
 `;
 
 const StyledLink = styled.a`
-  padding: 3px 100px;
+  padding: 7px 120px;
   font-size: 18px;
+  font-weight: bold;
   color: ${({ theme }) => theme.white}; 
   cursor: pointer;
 
@@ -39,17 +42,31 @@ const StyledLink = styled.a`
 `;
 
 const LogOutLink = styled(StyledLink)`
-  padding: 3px 100px;
-  font-size: 18px;
-  color: ${({ theme }) => theme.white}; 
+  margin-top: 60px;
   text-decoration: underline;
-  cursor: pointer;
-
-  
-  :hover {
-    color: ${({ theme }) => theme.lightBlue};
-  }
 `;
+
+const TopRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const Logo = styled.img`
+  padding: 10px;
+  cursor: pointer;
+  width: 100px;
+`;
+
+const Divider = styled.div`
+  width: 1px;
+  background-color: black;
+  margin-left: 20px;
+  margin-right: 20px;
+  height: 1cm;
+  `;
+
+
 
 const useOnClickOutside = (
     ref: RefObject<HTMLDivElement>,
@@ -89,9 +106,11 @@ export const Menu: React.FC = () => {
     const handleClickMe = useCallback(() => history.push('/me'), [history]);
   
 
+      // <Logo src={emnrLogo} onClick={handleOnClick} />
   
     return (
       <div ref={node}>
+
         <StyledMenu open={open}>
           <StyledLink onClick={handleOnClick}>Gå til forsiden</StyledLink>
           <StyledLink onClick={handleClickMe}>Gå til min side</StyledLink>
@@ -99,6 +118,8 @@ export const Menu: React.FC = () => {
           <LogOutLink onClick={() => close()}>Logg ut</LogOutLink>
         </StyledMenu>
         <Hamburger open={open} setOpen={setOpen} />
+  
+  
       </div>
     );
   };
