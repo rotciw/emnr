@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useCallback, useEffect, RefObject,useState, useRef } from 'react';
+import { useHistory} from 'react-router-dom';
 import styled from "styled-components";
 import {Hamburger} from './Hamburger';
-import { useEffect, RefObject,useState, useRef } from "react";
+
 
 
 const StyledMenu = styled.nav<{ open: boolean }>`
   top: 0;
   left: 0;
-  height: 3%; 
+  height: 15%; 
   width: 100%;
   position: fixed;
   background-color: ${({ theme }) => theme.blue};
@@ -30,7 +31,21 @@ const StyledLink = styled.a`
   padding: 3px 100px;
   font-size: 18px;
   color: ${({ theme }) => theme.white}; 
+  cursor: pointer;
 
+  :hover {
+    color: ${({ theme }) => theme.lightBlue};
+  }
+`;
+
+const LogOutLink = styled(StyledLink)`
+  padding: 3px 100px;
+  font-size: 18px;
+  color: ${({ theme }) => theme.white}; 
+  text-decoration: underline;
+  cursor: pointer;
+
+  
   :hover {
     color: ${({ theme }) => theme.lightBlue};
   }
@@ -69,13 +84,19 @@ export const Menu: React.FC = () => {
   
     useOnClickOutside(node, () => setOpen(false));
 
+    const history = useHistory();
+    const handleOnClick = useCallback(() => history.push('/'), [history]);
+    const handleClickMe = useCallback(() => history.push('/me'), [history]);
+  
+
   
     return (
       <div ref={node}>
         <StyledMenu open={open}>
-          <StyledLink>Gå til forsiden</StyledLink>
-          <StyledLink>Gå til min side</StyledLink>
-          <StyledLink>Logg ut</StyledLink>
+          <StyledLink onClick={handleOnClick}>Gå til forsiden</StyledLink>
+          <StyledLink onClick={handleClickMe}>Gå til min side</StyledLink>
+          <StyledLink onClick={() => close()}>Om EMNR</StyledLink>
+          <LogOutLink onClick={() => close()}>Logg ut</LogOutLink>
         </StyledMenu>
         <Hamburger open={open} setOpen={setOpen} />
       </div>
