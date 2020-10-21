@@ -1,8 +1,4 @@
-import React from 'react';
-import styled from 'styled-components';
 import { defaultTheme } from './theme';
-
-interface ModalProps {}
 
 export const modalStyles = {
   overlay:{

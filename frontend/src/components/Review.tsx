@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FlexContainer, FlexItem, HrLine } from 'styles/Containers';
-import { ExtraBold, SubTitle } from 'styles/Text';
+import { ExtraBold } from 'styles/Text';
 
 interface ReviewProps {
   name: String;

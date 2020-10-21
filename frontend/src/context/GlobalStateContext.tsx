@@ -4,9 +4,7 @@ interface GlobalStateContextProps {
   authProvider: AuthProviderValue;
   userProvider: UserProviderValue;
   pageProvider: PageProviderValue;
-  totalPageReviewProvider: TotalPageReviewProviderValue;
   pageReviewProvider: PageReviewProviderValue;
-  totalPageProvider: TotalPageProviderValue;
   queryProvider: QueryProviderValue;
 }
 
@@ -23,9 +21,6 @@ interface UserProviderValue {
 interface PageProviderValue {
   page: number;
   setPage: (val: number) => void;
-}
-
-interface TotalPageProviderValue {
   totalPage: number;
   setTotalPage: (val: number) => void;
 }
@@ -42,9 +37,6 @@ interface QueryProviderValue {
 interface PageReviewProviderValue {
   pageReview: number;
   setPageReview: (val: number) => void;
-}
-
-interface TotalPageReviewProviderValue {
   totalPageReview: number;
   setTotalPageReview: (val: number) => void;
 }
@@ -66,16 +58,14 @@ const GlobalStateProvider: React.FC = ({ children }) => {
 
   const authProvider = useMemo(() => ({ token, setToken }), [token, setToken]);
   const userProvider = useMemo(() => ({ email, setEmail }), [email, setEmail]);
-  const pageProvider = useMemo(() => ({ page, setPage }), [page, setPage]);
-  const totalPageProvider = useMemo(() => ({ totalPage, setTotalPage }), [
-    totalPage,
-    setTotalPage,
-  ]);
-  const pageReviewProvider = useMemo(() => ({ pageReview, setPageReview }), [pageReview, setPageReview]);
-  const totalPageReviewProvider = useMemo(() => ({ totalPageReview, setTotalPageReview }), [
-    totalPageReview,
-    setTotalPageReview,
-  ]);
+  const pageProvider = useMemo(
+    () => ({ page, setPage, totalPage, setTotalPage }),
+    [page, setPage, totalPage, setTotalPage],
+  );
+  const pageReviewProvider = useMemo(
+    () => ({ pageReview, setPageReview, totalPageReview, setTotalPageReview }),
+    [pageReview, setPageReview, totalPageReview, setTotalPageReview],
+  );
   const queryProvider = useMemo(
     () => ({
       searchQuery,
@@ -101,9 +91,7 @@ const GlobalStateProvider: React.FC = ({ children }) => {
         authProvider,
         userProvider,
         pageProvider,
-        totalPageProvider,
         pageReviewProvider,
-        totalPageReviewProvider,
         queryProvider,
       }}
     >

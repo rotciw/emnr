@@ -41,7 +41,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({
 
     const [reviews,updateReviews] = useState<ReviewProps[]>([]);
 
-    const { totalPageReviewProvider } = useContext(
+    const { pageReviewProvider } = useContext(
       GlobalStateContext,
     )!;
 
@@ -55,7 +55,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({
       .get(`http://localhost:8000/review/get/?courseCode=${courseCode}&n=25&offset=${start}`)
       .then(res => {
         updateReviews(res.data.data);
-        totalPageReviewProvider.setTotalPageReview(
+        pageReviewProvider.setTotalPageReview(
           Math.ceil(reviews.length / resultLimit),
           );
         scoreAvgSetter(calculateAvgScore(res.data.data))

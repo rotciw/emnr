@@ -11,7 +11,6 @@ const NavBarContainer = styled.nav`
   width: 100%;
   flex: 1;
   background-color: ${({ theme }) => theme.darkBlue};
-  padding-bottom: 25px;
   position: sticky;
   top: 0;
 `;
@@ -19,6 +18,7 @@ const NavBarContainer = styled.nav`
 const DropdownContainer = styled.div`
   background-color: ${({ theme }) => theme.darkBlue};
   margin: 1.2% 50% 0 25%;
+  padding-bottom: 25px;
   @media (max-width: 768px) {
     margin: 2.2% 25% 0 20%;
   }

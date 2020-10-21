@@ -28,7 +28,7 @@ interface CourseViewProps {
 export const CoursePage: React.FC<CourseViewProps> = (
   props: CourseViewProps,
 ) => {
-  const { pageReviewProvider, totalPageReviewProvider } = useContext(
+  const { pageReviewProvider } = useContext(
     GlobalStateContext,
   )!;
 
