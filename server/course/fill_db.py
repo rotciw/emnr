@@ -34,6 +34,10 @@ def add_pass_rate(course_list):
 		course_response = requests.get("https://grades.no/api/v2/courses/{}/grades/".format(course_dict["code"]))
 		course_response.encoding = "utf-8"
 		course_grades = course_response.json()
+		# If there's no grades from the grades api, set pass_rate to be -1.
+		if not course_grades:
+			course_dict["pass_rate"] = -1
+			continue
 		# This doesn't sort correctly within each year, not necessary.
 		course_grades.sort(key=lambda c: c.get("year"), reverse=True)
 		previous_held_exam_year = course_grades[0].get("year")
