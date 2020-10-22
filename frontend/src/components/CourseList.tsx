@@ -78,9 +78,9 @@ export const CourseList: React.FC = () => {
         <StyledTable>
           <thead>
             <tr>
-              <StyledTH width='25%'>Fagkode</StyledTH>
+              <StyledTH width='25%'>Emnekode</StyledTH>
               <StyledTH width='50%' textAlign='left'>
-                Fagnavn
+                Emnenavn
               </StyledTH>
               <StyledTH width='25%'>Vurdering</StyledTH>
             </tr>

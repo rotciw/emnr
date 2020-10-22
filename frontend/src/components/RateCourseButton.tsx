@@ -82,7 +82,7 @@ export const RateCourseButton: React.FC<ReviewFormProps> = ({
       content = (
         <TooltipButtonContainer>
           <DisabledRateButton>Send inn</DisabledRateButton>
-          <TooltipText>Du har ikke fullført dette faget</TooltipText>
+          <TooltipText>Du har ikke fullført dette emnet</TooltipText>
         </TooltipButtonContainer>
       );
       break;
@@ -91,7 +91,7 @@ export const RateCourseButton: React.FC<ReviewFormProps> = ({
         <TooltipButtonContainer>
           <DisabledRateButton>Send inn</DisabledRateButton>
           <TooltipText>
-            Du har allerede vurdert dette faget
+            Du har allerede vurdert dette emnet
           </TooltipText>
         </TooltipButtonContainer>
       );
@@ -107,7 +107,7 @@ export const RateCourseButton: React.FC<ReviewFormProps> = ({
     default:
       content = (
         <div>
-          Noe gikk galt mens vi sjekket om du kan vurdere dette faget
+          Noe gikk galt mens vi sjekket om du kan vurdere dette emnet
         </div>
       );
   }
