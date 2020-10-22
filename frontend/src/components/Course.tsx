@@ -27,9 +27,10 @@ export const Course: React.FC<CourseProps> = ({
               {courseName}
             </CourseItemText>
             <FlexColumn width='25%'>
-              <CourseItemText>{credit} / 5</CourseItemText>
+              {/*TODO: Remember to keep toFixed when credit is changed to score average*/}
+              <CourseItemText>{credit.toFixed(1)} / 5</CourseItemText>
               <CourseItemSubtext>
-                {reviewCount} {reviewCount === 1 ? "vurdering" : "vurderinger"}
+                {reviewCount} {reviewCount === 1 ? 'vurdering' : 'vurderinger'}
               </CourseItemSubtext>
             </FlexColumn>
           </CourseButton>
