@@ -3,6 +3,7 @@ import emnrLogo from '../assets/images/emnr_long.svg';
 import { useHistory} from 'react-router-dom';
 import styled from "styled-components";
 import {Hamburger} from './Hamburger';
+import {HrLine} from '../styles/Containers';
 
 
 
@@ -10,7 +11,7 @@ import {Hamburger} from './Hamburger';
 const StyledMenu = styled.nav<{ open: boolean }>`
   top: 0;
   left: 0;
-  height: 15%; 
+  height: 100%; 
   width: 100%;
   position: fixed;
   background-color: ${({ theme }) => theme.blue};
@@ -18,23 +19,31 @@ const StyledMenu = styled.nav<{ open: boolean }>`
 
   display: flex;
   flex-direction: column;
-  padding: 100px 0;
+  padding: 10% 0;
 
   transition: transform 0.4s ease-in-out; //ease-ease-in-out
   transform: ${({ open }) =>
-    open ? "translateX(0)" : "translateX(100%)"}; 
+    open ? "translateX(65%)" : "translateX(100%)"}; 
 
-  @media (max-width: 600px) {
-    width: 100%;
+  @media (max-width: 576px) {
+    transform: ${({ open }) =>
+    open ? "translateX(0%)" : "translateX(100%)"}; 
+    padding: 20% 0;
   }
 `;
 
 const StyledLink = styled.a`
-  padding: 7px 120px;
+  margin: 7px 0 7px 5%;
+
+  width: fit-content;
   font-size: 18px;
-  font-weight: bold;
+  font-family: gilroyxbold;
   color: ${({ theme }) => theme.white}; 
+  float: left;
   cursor: pointer;
+  @media (max-width: 576px) {
+    margin: 7px 0 7px 20%;
+  }
 
   :hover {
     color: ${({ theme }) => theme.lightBlue};
@@ -46,25 +55,12 @@ const LogOutLink = styled(StyledLink)`
   text-decoration: underline;
 `;
 
-const TopRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
 
 const Logo = styled.img`
   padding: 10px;
   cursor: pointer;
   width: 100px;
 `;
-
-const Divider = styled.div`
-  width: 1px;
-  background-color: black;
-  margin-left: 20px;
-  margin-right: 20px;
-  height: 1cm;
-  `;
 
 
 
@@ -107,6 +103,7 @@ export const Menu: React.FC = () => {
   
 
       // <Logo src={emnrLogo} onClick={handleOnClick} />
+      //   <HrLine></HrLine>
   
     return (
       <div ref={node}>
