@@ -6,7 +6,7 @@ class Course(models.Model):
     course_name = models.CharField(max_length=200)
     credit = models.FloatField()
     average_grade = models.FloatField()
-    pass_rate = models.FloatField()
+    pass_rate = models.FloatField(default=None)
     review_count = models.IntegerField(default=0)
 
     @classmethod
