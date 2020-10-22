@@ -54,6 +54,7 @@ const options = [
   { value: 'course_name', label: 'Fagnavn' },
   { value: 'credit', label: 'Studiepoeng' },
   { value: 'average_grade', label: 'Karaktersnitt' },
+  { value: 'review_count', label: 'Antall vurderinger' },
 ];
 
 export const Navbar: React.FC = () => {
