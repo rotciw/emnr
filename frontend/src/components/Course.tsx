@@ -20,7 +20,7 @@ export const Course: React.FC<CourseProps> = ({
   return (
     <tr>
       <td colSpan={3}>
-        <Link to={`/course/${courseCode}`} style={{textDecoration: "none"}}>
+        <Link to={`/course/${courseCode}`} style={{ textDecoration: 'none' }}>
           <CourseButton>
             <CourseItemText width='25%'>{courseCode}</CourseItemText>
             <CourseItemText width='50%' textAlign='left'>
@@ -28,7 +28,9 @@ export const Course: React.FC<CourseProps> = ({
             </CourseItemText>
             <FlexColumn width='25%'>
               <CourseItemText>{credit} / 5</CourseItemText>
-              <CourseItemSubtext>{reviewCount} vurderinger</CourseItemSubtext>
+              <CourseItemSubtext>
+                {reviewCount} {reviewCount === 1 ? "vurdering" : "vurderinger"}
+              </CourseItemSubtext>
             </FlexColumn>
           </CourseButton>
         </Link>
