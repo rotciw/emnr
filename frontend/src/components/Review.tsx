@@ -34,7 +34,7 @@ const MainMetric = styled.div`
 `;
 
 const SecondaryMetric = styled.p`
-  margin: 0 30px 0 0;
+  margin: 0 2vw 0 0;
 `;
 
 const DateText = styled.p`
@@ -54,21 +54,21 @@ export const Review: React.FC<ReviewProps> = ({
 }) => {
   return (
     <ReviewContainer>
-      <FlexItem flex={'none'} style={{ marginRight: '5vw' }}>
+      <FlexItem flex={'1'} style={{ marginRight: '5vw' }}>
         <div>
           <ExtraBold>{name}</ExtraBold>
           <div>{studyProgramme}</div>
           {/* Using div instead of p to avoid having to reduce line spacing */}
         </div>
       </FlexItem>
-      <FlexItem>
+      <FlexItem flex={'3'}>
         <ScoreDateContainer>
           <MainMetric>
             <ExtraBold>{score}/5</ExtraBold>
           </MainMetric>
-          <DateText>{date.substring(0,10)}</DateText>
+          <DateText>{date.substring(0, 10)}</DateText>
         </ScoreDateContainer>
-        <FlexContainer>
+        <FlexContainer flexWrap={'wrap'}>
           <SecondaryMetric>
             Arbeidsmengde: <ExtraBold>{workLoad}/5</ExtraBold>
           </SecondaryMetric>

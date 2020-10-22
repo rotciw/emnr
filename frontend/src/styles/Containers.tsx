@@ -5,11 +5,13 @@ interface LayoutProps {
   flex?: string;
   width?: string;
   textAlign?: string;
+  flexWrap?: string;
 }
 
 export const FlexContainer = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: ${(props: LayoutProps) => props.flexWrap || 'nowrap'};
   margin: ${(props: LayoutProps) => props.margin || 'auto'};
   width: ${(props: LayoutProps) => props.width || ''};
 `;
