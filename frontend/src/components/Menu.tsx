@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, RefObject,useState, useRef } from 'react';
-import emnrLogo from '../assets/images/emnr_long.svg';
 import { useHistory} from 'react-router-dom';
 import styled from "styled-components";
 import {Hamburger} from './Hamburger';
@@ -53,13 +52,6 @@ const LogOutLink = styled(StyledLink)`
   text-decoration: underline;
 `;
 
-const Logo = styled.img`
-  padding: 10px;
-  cursor: pointer;
-  width: 100px;
-`;
-
-
 
 const useOnClickOutside = (
     ref: RefObject<HTMLDivElement>,
@@ -99,8 +91,7 @@ export const Menu: React.FC = () => {
     const handleClickMe = useCallback(() => history.push('/me'), [history]);
   
 
-      //
-      // 
+    
   
     return (
       <div ref={node}>
