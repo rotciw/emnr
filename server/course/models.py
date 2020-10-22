@@ -7,6 +7,7 @@ class Course(models.Model):
     credit = models.FloatField()
     average_grade = models.FloatField()
     pass_rate = models.FloatField()
+    review_count = models.IntegerField(default=0)
 
     @classmethod
     def create(cls, code, name, credit, average_grade, pass_rate):
