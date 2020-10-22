@@ -67,7 +67,7 @@ export const Navbar: React.FC = () => {
   const onSelect = (e: Option) => {
     queryProvider.setOrderByQuery(e.value);
     queryProvider.setOrderToggle(!queryProvider.orderToggle);
-    queryProvider.orderToggle ? (e.label += ' ▲') : (e.label += ' ▼');
+    queryProvider.orderToggle ? (e.label += ` \u25B2`) : (e.label += ` \u25BC`);
   };
 
   return (
