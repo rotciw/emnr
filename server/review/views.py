@@ -51,7 +51,7 @@ def post_review(request):
 
     # Update the review counter in Course
     Course.objects.filter(course_code=request_data["courseCode"]).update(
-        review_count=Review.objects.filter(course_code=request_data["courseCode"].count()))
+        review_count=Review.objects.filter(course_code=request_data["courseCode"]).count())
 
     # Indicate successful posting
     return Response(status=200)
