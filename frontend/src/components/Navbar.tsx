@@ -3,7 +3,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import emnrLogo from '../assets/images/emnr_long.svg';
 import { Searchbar } from './Searchbar';
-import Dropdown from 'react-dropdown';
+import Dropdown, { Option } from 'react-dropdown';
 import 'react-dropdown/style.css';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 
@@ -48,11 +48,12 @@ const TopRow = styled.div`
   vertical-align: center;
   justify-content: space-between;
 `;
+
 const options = [
   { value: 'course_code', label: 'Fagkode' },
   { value: 'course_name', label: 'Fagnavn' },
   { value: 'credit', label: 'Studiepoeng' },
-  { value: 'average-grade', label: 'Gj. snitt karakter' },
+  { value: 'average_grade', label: 'Karaktersnitt' },
 ];
 
 export const Navbar: React.FC = () => {
@@ -63,9 +64,10 @@ export const Navbar: React.FC = () => {
   const { queryProvider } = useContext(GlobalStateContext)!;
   const isOnLandingPage: boolean = useLocation().pathname === '/';
 
-  const onSelect = (e: string) => {
-    queryProvider.setOrderByQuery(e);
+  const onSelect = (e: Option) => {
+    queryProvider.setOrderByQuery(e.value);
     queryProvider.setOrderToggle(!queryProvider.orderToggle);
+    queryProvider.orderToggle ? (e.label += ` \u25B2`) : (e.label += ` \u25BC`);
   };
 
   return (
@@ -80,7 +82,7 @@ export const Navbar: React.FC = () => {
           <DropdownContainer>
             <Dropdown
               options={options}
-              onChange={(e) => onSelect(e.value)}
+              onChange={(e) => onSelect(e)}
               placeholder='Sorter etter..'
             />
           </DropdownContainer>
