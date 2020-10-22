@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { getLocalToken } from 'utils/api';
 
-interface ReviewFormProps {
+interface RateCourseButtonProps {
   onClickFunction: () => void;
   courseCode: string;
 }
@@ -49,7 +49,7 @@ export const TooltipText = styled.div`
   }
 `;
 
-export const RateCourseButton: React.FC<ReviewFormProps> = ({
+export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
   onClickFunction,
   courseCode,
 }) => {
