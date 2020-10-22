@@ -49,6 +49,10 @@ def post_review(request):
            workload=request_data["workload"], difficulty=request_data["difficulty"],
            review_text=request_data["reviewText"], full_name=full_name, study_programme=study_prg).save()
 
+    # Update the review counter in Course
+    Course.objects.filter(course_code=request_data["courseCode"]).update(
+        review_count=Review.objects.filter(course_code=request_data["courseCode"].count()))
+
     # Indicate successful posting
     return Response(status=200)
 
@@ -162,8 +166,10 @@ def validate_review_post_request(request_data, reviewable_courses, email):
     if otherparams_is_invalid(request_data["workload"]):
         raise ValueError("Invalid workload: {} (Must be between 1 and 5)".format(request_data["workload"]))
 
+
 def score_is_invalid(score):
     return not isinstance(score, int) or score < 1 or score > 5
+
 
 def otherparams_is_invalid(param):
     if (not isinstance(param, int)):
@@ -172,6 +178,7 @@ def otherparams_is_invalid(param):
         if param != -1:
             return True
     return False
+
 
 def get_reviewable_courses(exp_token):
     """
