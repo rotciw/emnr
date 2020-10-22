@@ -67,7 +67,7 @@ export const CoursePage: React.FC<CourseViewProps> = (
           <Title margin='0 0 5px 0'>{courseInfo.course_code}</Title>
           <BoldTitle fontSize='30px'>{courseInfo.course_name}</BoldTitle>
           <BoldTitle margin='10px 0 0 0'>{scoreAvg} / 5</BoldTitle>
-          <SubTitle margin='0 0 4vh 0'>Basert på {numberOfReviews} vurdering(er).</SubTitle>
+          <SubTitle margin='0 0 4vh 0'>Basert på {numberOfReviews} {numberOfReviews === 1 ? "vurdering" : "vurderinger"}.</SubTitle>
           <RateCourseButton
             onClickFunction={toggleModalIsOpen}
             courseCode={courseCode}

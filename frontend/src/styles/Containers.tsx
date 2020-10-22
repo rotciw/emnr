@@ -14,6 +14,12 @@ export const FlexContainer = styled.div`
   width: ${(props: LayoutProps) => props.width || ''};
 `;
 
+export const FlexColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: ${(props: LayoutProps) => props.width || ''};
+`;
+
 export const SemesterContainer = styled.div`
   display: flex;
   flex-direction: column;
