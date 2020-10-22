@@ -3,8 +3,7 @@ import emnrLogo from '../assets/images/emnr_long.svg';
 import { useHistory} from 'react-router-dom';
 import styled from "styled-components";
 import {Hamburger} from './Hamburger';
-import {HrLine} from '../styles/Containers';
-
+import {HrLineWhite} from '../styles/Containers';
 
 
 
@@ -19,7 +18,7 @@ const StyledMenu = styled.nav<{ open: boolean }>`
 
   display: flex;
   flex-direction: column;
-  padding: 10% 0;
+  justify-content: center;
 
   transition: transform 0.4s ease-in-out; //ease-ease-in-out
   transform: ${({ open }) =>
@@ -28,7 +27,6 @@ const StyledMenu = styled.nav<{ open: boolean }>`
   @media (max-width: 576px) {
     transform: ${({ open }) =>
     open ? "translateX(0%)" : "translateX(100%)"}; 
-    padding: 20% 0;
   }
 `;
 
@@ -51,10 +49,9 @@ const StyledLink = styled.a`
 `;
 
 const LogOutLink = styled(StyledLink)`
-  margin-top: 60px;
+  margin-top: 10px;
   text-decoration: underline;
 `;
-
 
 const Logo = styled.img`
   padding: 10px;
@@ -102,8 +99,8 @@ export const Menu: React.FC = () => {
     const handleClickMe = useCallback(() => history.push('/me'), [history]);
   
 
-      // <Logo src={emnrLogo} onClick={handleOnClick} />
-      //   <HrLine></HrLine>
+      //
+      // 
   
     return (
       <div ref={node}>
@@ -112,6 +109,7 @@ export const Menu: React.FC = () => {
           <StyledLink onClick={handleOnClick}>Gå til forsiden</StyledLink>
           <StyledLink onClick={handleClickMe}>Gå til min side</StyledLink>
           <StyledLink onClick={() => close()}>Om EMNR</StyledLink>
+          <HrLineWhite/>
           <LogOutLink onClick={() => close()}>Logg ut</LogOutLink>
         </StyledMenu>
         <Hamburger open={open} setOpen={setOpen} />

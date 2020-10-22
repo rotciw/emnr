@@ -29,6 +29,7 @@ const Logo = styled.img`
   padding: 10px;
   cursor: pointer;
   width: 100px;
+  z-index: 2;
 `;
 
 const MeButton = styled.button`
@@ -59,7 +60,6 @@ const options = [
 export const Navbar: React.FC = () => {
   const history = useHistory();
   const handleOnClick = useCallback(() => history.push('/'), [history]);
-  const handleClickMe = useCallback(() => history.push('/me'), [history]);
 
   const { queryProvider } = useContext(GlobalStateContext)!;
   const isOnLandingPage: boolean = useLocation().pathname === '/';

@@ -4,12 +4,12 @@ import styled from "styled-components";
 
 const StyledHamburger = styled.button<{ open: boolean }>`
   position: fixed;
-  right: 3vw;
+  right: 1vw;
   top: 1vw;
   width: 32px;
   height: 32px;
-  padding: 0;
   background: transparent;
+  padding: 0;
 
   display: flex;
   flex-direction: column;
