@@ -30,7 +30,6 @@ const ScoreDateContainer = styled.div`
 
 const MainMetric = styled.div`
   padding: 5px 40px;
-  background-color: lightgreen;
 `;
 
 const SecondaryMetric = styled.p`
@@ -52,6 +51,20 @@ export const Review: React.FC<ReviewProps> = ({
   text,
   date,
 }) => {
+let scoreLabelColor = 'transparent';
+//TODO: Make this more elegant? Possibly use themes instead for example?
+switch(score){
+  case 1: scoreLabelColor = '#F94144';
+  break;
+  case 2: scoreLabelColor = '#F8961E';
+  break;
+  case 3: scoreLabelColor = '#F9C74F';
+  break;
+  case 4: scoreLabelColor = '#A0C85A';
+  break;
+  case 5: scoreLabelColor = '#47C964';
+}
+
   return (
     <ReviewContainer>
       <FlexItem flex={'1'} style={{ marginRight: '5vw' }}>
@@ -63,7 +76,7 @@ export const Review: React.FC<ReviewProps> = ({
       </FlexItem>
       <FlexItem flex={'3'}>
         <ScoreDateContainer>
-          <MainMetric>
+          <MainMetric style={{backgroundColor: scoreLabelColor}}>
             <ExtraBold>{score}/5</ExtraBold>
           </MainMetric>
           <DateText>{date.substring(0, 10)}</DateText>
