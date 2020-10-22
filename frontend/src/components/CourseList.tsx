@@ -14,6 +14,7 @@ interface CourseProps {
   course_code: string;
   average_grade: number;
   credit: number;
+  review_count: number;
 }
 
 export const EmptyResult = styled.h3`
@@ -91,6 +92,7 @@ export const CourseList: React.FC = () => {
                   courseCode={currentCourse.course_code}
                   courseName={currentCourse.course_name}
                   credit={currentCourse.credit}
+                  reviewCount={currentCourse.review_count}
                 />
               );
             })}
