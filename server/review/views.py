@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.db.models import Avg
 import json
 import requests
 from course.views import retrieve_courses_from_token, get_current_semester, perform_feide_api_call
@@ -52,6 +53,12 @@ def post_review(request):
     # Update the review counter in Course
     Course.objects.filter(course_code=request_data["courseCode"]).update(
         review_count=Review.objects.filter(course_code=request_data["courseCode"]).count())
+
+    # Update the average review score in Course
+    Course.objects.filter(course_code=request_data["courseCode"]).update(
+        average_review_score=Review.objects.filter(course_code=request_data["courseCode"]).aggregate(Avg("score"))[
+            "score__avg"]
+    )
 
     # Indicate successful posting
     return Response(status=200)
