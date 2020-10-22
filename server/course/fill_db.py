@@ -19,7 +19,7 @@ def save_courses(course_list):
 	:param course_list: List of dict, List of course information for courses
 	"""
 	for course_dict in course_info_list:
-		Course.create(code=course_dict["code"], name=course_dict["norwegian_name"], credit=course_dict["credit"],
+		Course.create(code=course_dict["code"], name=course_dict["norwegian_name"].strip(), credit=course_dict["credit"],
 					  average_grade=course_dict["average"], pass_rate=course_dict["pass_rate"]).save()
 
 
