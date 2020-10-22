@@ -75,13 +75,13 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
   switch (reviewEligibility) {
     case 0:
       content = (
-        <RateButton onClick={() => onClickFunction()}>Send inn</RateButton>
+        <RateButton onClick={() => onClickFunction()}>Vurder {courseCode}</RateButton>
       );
       break;
     case 1:
       content = (
         <TooltipButtonContainer>
-          <DisabledRateButton>Send inn</DisabledRateButton>
+          <DisabledRateButton>Vurder {courseCode}</DisabledRateButton>
           <TooltipText>Du har ikke fullført dette emnet</TooltipText>
         </TooltipButtonContainer>
       );
@@ -89,7 +89,7 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
     case 2:
       content = (
         <TooltipButtonContainer>
-          <DisabledRateButton>Send inn</DisabledRateButton>
+          <DisabledRateButton>Vurder {courseCode}</DisabledRateButton>
           <TooltipText>
             Du har allerede vurdert dette emnet
           </TooltipText>
@@ -99,7 +99,7 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
     case 3:
       content = (
         <TooltipButtonContainer>
-          <DisabledRateButton>Send inn</DisabledRateButton>
+          <DisabledRateButton>Vurder {courseCode}</DisabledRateButton>
           <TooltipText>Noe gikk galt med brukerautentiseringen</TooltipText>
         </TooltipButtonContainer>
       );
