@@ -2,7 +2,10 @@ import React, { useCallback, useEffect, RefObject,useState, useRef } from 'react
 import { useHistory} from 'react-router-dom';
 import styled from "styled-components";
 import {Hamburger} from './Hamburger';
-import {HrLineWhite} from '../styles/Containers';
+import {HrLineLight, FlexContainer, CenteredFlexContainer} from '../styles/Containers';
+import homeIcon from '../assets/icons/home.svg';
+import meIcon from '../assets/icons/me.svg';
+import infoIcon from '../assets/icons/info.svg';
 
 
 
@@ -29,28 +32,46 @@ const StyledMenu = styled.nav<{ open: boolean }>`
   }
 `;
 
+//margin: 7px 0 7px 5%;
+
 const StyledLink = styled.a`
   margin: 7px 0 7px 5%;
-
   width: fit-content;
   font-size: 18px;
   font-family: gilroyxbold;
-  color: ${({ theme }) => theme.white}; 
+  color: ${({ theme }) => theme.light}; 
   float: left;
   cursor: pointer;
   @media (max-width: 576px) {
     margin: 7px 0 7px 20%;
   }
-
   :hover {
     color: ${({ theme }) => theme.lightBlue};
   }
 `;
 
+
+const TopRow = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+
 const LogOutLink = styled(StyledLink)`
   margin-top: 10px;
   text-decoration: underline;
 `;
+
+const Icon = styled.img`
+  padding: 10px;
+  margin-left: 40px;
+  cursor: pointer;
+  width: 25px;
+  :hover {
+    color: ${({ theme }) => theme.lightBlue};
+  }
+`;
+
 
 
 const useOnClickOutside = (
@@ -91,16 +112,32 @@ export const Menu: React.FC = () => {
     const handleClickMe = useCallback(() => history.push('/me'), [history]);
   
 
+   
+    
+    
+
     
   
     return (
       <div ref={node}>
 
         <StyledMenu open={open}>
+          <TopRow>
+          <Icon src={homeIcon} onClick={handleOnClick}/>
           <StyledLink onClick={handleOnClick}>Gå til forsiden</StyledLink>
-          <StyledLink onClick={handleClickMe}>Gå til min side</StyledLink>
-          <StyledLink onClick={() => close()}>Om EMNR</StyledLink>
-          <HrLineWhite/>
+          </TopRow>
+
+          <TopRow>
+          <Icon src={meIcon} onClick={handleClickMe}/>
+          <StyledLink >Gå til min side</StyledLink>
+          </TopRow>
+
+          <TopRow>
+          <Icon src={infoIcon} onClick={handleOnClick}/>
+          <StyledLink onClick={() => close()}>Om EMNR</StyledLink> 
+          </TopRow>
+
+          <HrLineLight/>
           <LogOutLink onClick={() => close()}>Logg ut</LogOutLink>
         </StyledMenu>
         <Hamburger open={open} setOpen={setOpen} />
