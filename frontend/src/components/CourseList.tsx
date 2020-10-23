@@ -92,7 +92,7 @@ export const CourseList: React.FC = () => {
                 <Course
                   courseCode={currentCourse.course_code}
                   courseName={currentCourse.course_name}
-                  averageScore={currentCourse.average_review_score}
+                  averageReviewScore={currentCourse.average_review_score}
                   reviewCount={currentCourse.review_count}
                 />
               );
