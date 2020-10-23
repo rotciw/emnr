@@ -57,7 +57,8 @@ def get_courses_from_db(request):
 
     # Get and validate order_by and ascending parameters
     order_by = request.GET.get("order_by", "course_name")
-    valid_order_parameters = ["course_code", "course_name", "credit", "average_grade", "review_count"]
+    valid_order_parameters = ["course_code", "course_name", "credit", "average_grade", "review_count",
+                              "average_review_score"]
     if order_by not in valid_order_parameters:
         raise ValueError(
             "Invalid value for order_by: {}. Valid  values: {}".format(order_by, valid_order_parameters))
