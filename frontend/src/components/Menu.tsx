@@ -22,7 +22,7 @@ const StyledMenu = styled.nav<{ open: boolean }>`
   flex-direction: column;
   justify-content: center;
 
-  transition: transform 0.4s ease-in-out; //ease-ease-in-out
+  transition: transform 0.4s ease-in-out; 
   transform: ${({ open }) =>
     open ? "translateX(65%)" : "translateX(100%)"}; 
 
@@ -35,7 +35,7 @@ const StyledMenu = styled.nav<{ open: boolean }>`
 //margin: 7px 0 7px 5%;
 
 const StyledLink = styled.a`
-  margin: 7px 0 7px 5%;
+  //margin: 1px;
   width: fit-content;
   font-size: 18px;
   font-family: gilroyxbold;
@@ -43,7 +43,8 @@ const StyledLink = styled.a`
   float: left;
   cursor: pointer;
   @media (max-width: 576px) {
-    margin: 7px 0 7px 20%;
+    //margin: 7px 0 7px 20%;
+    //margin: 1px 0 1px 5%;
   }
   :hover {
     color: ${({ theme }) => theme.lightBlue};
@@ -58,18 +59,17 @@ const TopRow = styled.div`
 
 
 const LogOutLink = styled(StyledLink)`
-  margin-top: 10px;
+  margin: 20px 0 1px 4%;
   text-decoration: underline;
+  //@media (max-width: 576px) {
+  //  margin: 10px 0 1px 10%;
+  //}
 `;
 
 const Icon = styled.img`
-  padding: 10px;
+  padding: 8px;
   margin-left: 40px;
-  cursor: pointer;
   width: 25px;
-  :hover {
-    color: ${({ theme }) => theme.lightBlue};
-  }
 `;
 
 
@@ -123,17 +123,17 @@ export const Menu: React.FC = () => {
 
         <StyledMenu open={open}>
           <TopRow>
-          <Icon src={homeIcon} onClick={handleOnClick}/>
+          <Icon src={homeIcon}/>
           <StyledLink onClick={handleOnClick}>Gå til forsiden</StyledLink>
           </TopRow>
 
           <TopRow>
-          <Icon src={meIcon} onClick={handleClickMe}/>
+          <Icon src={meIcon}/>
           <StyledLink >Gå til min side</StyledLink>
           </TopRow>
 
           <TopRow>
-          <Icon src={infoIcon} onClick={handleOnClick}/>
+          <Icon src={infoIcon}/>
           <StyledLink onClick={() => close()}>Om EMNR</StyledLink> 
           </TopRow>
 
