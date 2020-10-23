@@ -17,7 +17,8 @@ def _create_models_without_saving():
 		courses.append(Course.create(code=course_dict["course_code"],
 									 name=course_dict["course_name"],
 									 credit=course_dict["credit"],
-									 average_grade=course_dict["average_grade"]))
+									 average_grade=course_dict["average_grade"],
+									 pass_rate=course_dict["pass_rate"]))
 	return courses
 
 
