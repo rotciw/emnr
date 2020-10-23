@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.db.models import Avg
 import json
 import requests
 from course.views import retrieve_courses_from_token, get_current_semester, perform_feide_api_call
