@@ -23,9 +23,9 @@ export const Semester: React.FC<Semester> = ({semester, courses}) => {
       <StyledTable>
         <thead>
           <tr>
-            <StyledTH width='25%'>Fagkode</StyledTH>
+            <StyledTH width='25%'>Emnekode</StyledTH>
             <StyledTH width='50%' textAlign='left'>
-              Fagnavn
+              Emnenavn
             </StyledTH>
             <StyledTH width='25%'>Din vurdering</StyledTH>
           </tr>

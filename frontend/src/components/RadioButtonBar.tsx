@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { FlexContainer } from 'styles/Containers';
 
-interface ReviewFormProps {
+interface RadioButtonProps {
   radioID: string;
   valueSetter: (value:number) => void;
 }
@@ -11,7 +11,7 @@ const MarginLabel = styled.label`
   margin-right: 8px;
 `;
 
-export const RadioButtonsBar: React.FC<ReviewFormProps> = ({ radioID, valueSetter }) => {
+export const RadioButtonsBar: React.FC<RadioButtonProps> = ({ radioID, valueSetter }) => {
   return (
     <FlexContainer>
       <input type='radio' id={radioID + '1'} name={radioID} value={1} onChange={() => valueSetter(1)} />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { RateCourseButton } from 'styles/Buttons';
+import { RateCourseButton } from './RateCourseButton';
 import { FlexContainer, HrLine } from 'styles/Containers';
 import { Title, BoldTitle } from 'styles/Text';
 import { RadioButtonsBar } from './RadioButtonBar';
@@ -9,8 +9,8 @@ import { getLocalToken } from '../utils/api';
 
 interface ReviewFormProps {
   closeModal: () => void;
-  courseName: String;
-  courseCode: String;
+  courseName: string;
+  courseCode: string;
 }
 
 const TextInput = styled.textarea`
@@ -91,7 +91,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
         maxLength={750}
         onChange={(e) => setReviewText(e.target.value)}
       />
-      <RateCourseButton onClick={postReview}>Send inn</RateCourseButton>
+      <RateCourseButton onClickFunction={postReview} courseCode={courseCode}>Send inn</RateCourseButton>
     </div>
   );
 };

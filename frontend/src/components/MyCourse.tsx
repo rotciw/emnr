@@ -17,7 +17,7 @@ export const MyCourse: React.FC<MyCourseProps> = ({
   return (
     <tr>
       <td colSpan={3}>
-        <Link to={`/course/${courseCode}`}>
+        <Link to={`/course/${courseCode}`} style={{ textDecoration: 'none' }}>
           <CourseButton >
             <CourseItemText width='25%'>{courseCode}</CourseItemText>
             <CourseItemText width='50%' textAlign='left'>
