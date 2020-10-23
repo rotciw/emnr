@@ -41,11 +41,14 @@ export const CoursePage: React.FC<CourseViewProps> = (
 
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
+  const [limitReviews, setLimitReviews] = useState<boolean>(false);
+
   function toggleModalIsOpen() {
     setModalIsOpen(!modalIsOpen);
   }
 
   useEffect(() => {
+    console.log("hei");
     const getCourses = async () => {
       await axios
         .get('http://localhost:8000/course/?code=' + courseCode)
@@ -53,7 +56,7 @@ export const CoursePage: React.FC<CourseViewProps> = (
         .catch((err) => console.log(err));
     };
     getCourses();
-  }, []);
+  }, [limitReviews]);
 
   return (
     <Layout padding='0 20%'>
@@ -103,6 +106,12 @@ export const CoursePage: React.FC<CourseViewProps> = (
         </LocalShapeContainer>
       </FlexContainer>
       <HrLine />
+      {(numberOfReviews > 0) && (
+        <FlexContainer>
+          <SubTitle>Se kun vurderinger fra ditt eget studieprogram.</SubTitle>
+          <input type='checkbox' onChange={() => setLimitReviews(!limitReviews)}></input>
+        </FlexContainer>
+      )}
       <ReviewList
         courseCode={courseCode}
         pageNumber={pageReviewProvider.pageReview}
