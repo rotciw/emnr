@@ -134,7 +134,7 @@ class PostReviewTest(TestCase):
                      "difficulty": 1,
                      "reviewText": "Lorem ipsum"}
         # Wrong difficulty
-        difficulties = [0, -1253, 6, float("inf"), "abasd"]
+        difficulties = [-1253, 3, float("inf"), "abasd"]
         for elem in difficulties:
             data = {k: test_data[k] for k in test_data.keys()}
             data["difficulty"] = elem
@@ -148,7 +148,7 @@ class PostReviewTest(TestCase):
                      "difficulty": 1,
                      "reviewText": "Lorem ipsum"}
         # Wrong workload
-        workloads = [0, -1253, 6, float("inf"), "abasd"]
+        workloads = [-1253, 3, float("inf"), "abasd"]
         for elem in workloads:
             data = {k: test_data[k] for k in test_data.keys()}
             data["workload"] = elem
