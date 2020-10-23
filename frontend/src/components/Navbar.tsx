@@ -50,8 +50,8 @@ const TopRow = styled.div`
 `;
 
 const options = [
-  { value: 'course_code', label: 'Fagkode' },
-  { value: 'course_name', label: 'Fagnavn' },
+  { value: 'course_code', label: 'Emnekode' },
+  { value: 'course_name', label: 'Emnenavn' },
   { value: 'average_review_score', label: 'Gjennomsnittlig vurdering'},
   { value: 'review_count', label: 'Antall vurderinger' },
   { value: 'credit', label: 'Studiepoeng' },
