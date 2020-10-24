@@ -56,7 +56,7 @@ export const CoursePage: React.FC<CourseViewProps> = (
         .catch((err) => console.log(err));
     };
     getCourses();
-  }, [limitReviews]);
+  }, []);
 
   return (
     <Layout padding='0 20%'>
