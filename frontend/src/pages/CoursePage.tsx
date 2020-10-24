@@ -41,7 +41,7 @@ export const CoursePage: React.FC<CourseViewProps> = (
 
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
-  const [limitReviews, setLimitReviews] = useState<boolean>(false);
+  const [limitReviews, setLimitReviews] = useState<boolean>(localStorage.getItem('seeOnlyOwnProgrammeReviews') === 'true');
 
   function toggleModalIsOpen() {
     setModalIsOpen(!modalIsOpen);
@@ -50,7 +50,7 @@ export const CoursePage: React.FC<CourseViewProps> = (
   useEffect(() => {
     const getCourses = async () => {
       await axios
-        .get(`http://localhost:8000/course/?code=` + courseCode +`&showMyProgramme=${limitReviews}`)
+        .get(`http://localhost:8000/course/?code=` + courseCode +`&showMyProgramme=${String(limitReviews)}`)
         .then((res) => setCourseInfo(res.data))
         .catch((err) => console.log(err));
     };
@@ -108,7 +108,10 @@ export const CoursePage: React.FC<CourseViewProps> = (
       {(numberOfReviews > 0) && (
         <FlexContainer>
           <SubTitle>Se kun vurderinger fra ditt eget studieprogram.</SubTitle>
-          <input type='checkbox' onChange={() => setLimitReviews(!limitReviews)}></input>
+          <input type='checkbox' checked={limitReviews} onChange={() => {
+            setLimitReviews(!limitReviews);
+            localStorage.setItem('seeOnlyOwnProgrammeReviews',String(!limitReviews));
+          }}></input>
         </FlexContainer>
       )}
       <ReviewList
