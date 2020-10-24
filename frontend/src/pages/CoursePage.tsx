@@ -50,8 +50,6 @@ export const CoursePage: React.FC<CourseViewProps> = (
 
   useEffect(() => {
     const getCourses = async () => {
-      const token = getLocalToken();
-      axios.defaults.headers.common['Authorization'] = `${token}`;
       await axios
         .get(`http://localhost:8000/course/?code=` + courseCode)
         .then((res) => setCourseInfo(res.data))
