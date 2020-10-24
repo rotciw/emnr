@@ -4,6 +4,7 @@ import axios from 'axios';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { FlexContainer, StyledTable, StyledTH } from 'styles/Containers';
 import styled from 'styled-components';
+import { API_URL } from 'config';
 
 interface CourseListProps {
   pageNumber: number;
@@ -59,7 +60,7 @@ export const CourseList: React.FC = () => {
     const getCourses = async () => {
       await axios
         .get(
-          `http://localhost:8000/course/all/?n=25&offset=${start}&search=${searchQuery}&order_by=${orderByQuery}&ascending=${orderToggle}`,
+          `${API_URL}/course/all/?n=25&offset=${start}&search=${searchQuery}&order_by=${orderByQuery}&ascending=${orderToggle}`,
         )
         .then((res) => {
           updateCourses(res.data.data);

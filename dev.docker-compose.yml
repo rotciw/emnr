@@ -1,0 +1,27 @@
+# NOT USED ATM
+version: "3.3"
+services:
+  postgres:
+    image: postgres:9.6
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      - POSTGRES_USER=emnr_user
+      - POSTGRES_PASSWORD=emnr_pwd
+      - POSTGRES_DB=emnr
+      - POSTGRES_HOST_AUTH_METHOD=trust
+  backend:
+    container_name: backend
+    build:
+      context: ./server
+    env_file: ./server/.env
+    depends_on:
+      - postgres
+    ports:
+      - "127.0.0.1:8000:8000"
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    ports:
+      - "127.0.0.1:3000:3000"
