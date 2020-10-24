@@ -48,10 +48,9 @@ export const CoursePage: React.FC<CourseViewProps> = (
   }
 
   useEffect(() => {
-    console.log("hei");
     const getCourses = async () => {
       await axios
-        .get('http://localhost:8000/course/?code=' + courseCode)
+        .get(`http://localhost:8000/course/?code=` + courseCode +`&showMyProgramme=${limitReviews}`)
         .then((res) => setCourseInfo(res.data))
         .catch((err) => console.log(err));
     };
