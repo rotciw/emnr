@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { getLocalToken } from 'utils/api';
+import { API_URL } from 'config';
 
 interface RateCourseButtonProps {
   onClickFunction: () => void;
@@ -61,7 +62,7 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
   useEffect(() => {
     const getReviewEligibility = async () => {
       await axios
-        .get('http://localhost:8000/review/check/?courseCode=' + courseCode)
+        .get(`${API_URL}/review/check/?courseCode=${courseCode}`)
         .then((res) => {
           setReviewEligibility(res.data);
         })
