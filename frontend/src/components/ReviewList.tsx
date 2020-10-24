@@ -18,6 +18,7 @@ const Wrapper = styled.div`
 interface ReviewListProps {
     courseCode: String;
     pageNumber: number;
+    limitReviews: Boolean;
     scoreAvgSetter: (value:number) => void;
     numberOfReviewSetter: (value:number) => void;
 }
@@ -35,6 +36,7 @@ interface ReviewProps{
 export const ReviewList: React.FC<ReviewListProps> = ({
     courseCode,
     pageNumber,
+    limitReviews,
     scoreAvgSetter,
     numberOfReviewSetter,
   }) => {
@@ -52,7 +54,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({
     
     const getReviews = async () => {
       await axios
-      .get(`http://localhost:8000/review/get/?courseCode=${courseCode}&n=25&offset=${start}`)
+      .get(`http://localhost:8000/review/get/?courseCode=${courseCode}&n=25&offset=${start}&showMyProgramme=${String(limitReviews)}`)
       .then(res => {
         updateReviews(res.data.data);
         pageReviewProvider.setTotalPageReview(
@@ -65,7 +67,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({
     getReviews();
     start += resultLimit;
 
-  }, [pageNumber]); 
+  }, [pageNumber,limitReviews]); 
 
   function calculateAvgScore(reviews:ReviewProps[]) {
     numberOfReviewSetter(reviews.length);

@@ -17,6 +17,7 @@ import { ReviewList } from 'components/ReviewList';
 import { ReviewForm } from 'components/ReviewForm';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { modalStyles } from 'styles/Modals';
+import { getLocalToken } from 'utils/api';
 
 interface CourseViewProps {
   courseName: String;
@@ -49,8 +50,10 @@ export const CoursePage: React.FC<CourseViewProps> = (
 
   useEffect(() => {
     const getCourses = async () => {
+      const token = getLocalToken();
+      axios.defaults.headers.common['Authorization'] = `${token}`;
       await axios
-        .get(`http://localhost:8000/course/?code=` + courseCode +`&showMyProgramme=${String(limitReviews)}`)
+        .get(`http://localhost:8000/course/?code=` + courseCode)
         .then((res) => setCourseInfo(res.data))
         .catch((err) => console.log(err));
     };
@@ -117,6 +120,7 @@ export const CoursePage: React.FC<CourseViewProps> = (
       <ReviewList
         courseCode={courseCode}
         pageNumber={pageReviewProvider.pageReview}
+        limitReviews={limitReviews}
         scoreAvgSetter={setScoreAvg}
         numberOfReviewSetter={setNumberOfReviews}
       />
