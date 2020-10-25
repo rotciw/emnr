@@ -18,6 +18,7 @@ import { ReviewForm } from 'components/ReviewForm';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { modalStyles } from 'styles/Modals';
 import { getLocalToken } from 'utils/api';
+import { API_URL } from 'config';
 
 interface CourseViewProps {
   courseName: String;
@@ -51,7 +52,7 @@ export const CoursePage: React.FC<CourseViewProps> = (
   useEffect(() => {
     const getCourses = async () => {
       await axios
-        .get(`http://localhost:8000/course/?code=` + courseCode)
+        .get(API_URL + '/course/?code=' + courseCode)
         .then((res) => setCourseInfo(res.data))
         .catch((err) => console.log(err));
     };

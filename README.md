@@ -62,14 +62,18 @@ Create a local admin user by entering the following command:
 
 Only username and password is required
 
-#### Start the app
+
+## Running the backend and frontend with local postgres
+`docker-compose -f dev.docker-compose.yml up -d`
+
+#### Start the app without Docker
 
 `python manage.py runserver`
 
 ## Technologies
 ### Frontend
 - TypeScript with React.js
-- Redux for state management with Duck pattern
+- Context for state management
 - Styled Components for styling
 
 ### Server

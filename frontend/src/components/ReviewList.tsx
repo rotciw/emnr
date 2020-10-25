@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Review } from './Review';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { EmptyResult } from './CourseList';
+import { API_URL } from 'config';
 
 const Wrapper = styled.div`
   border: 1px solid #ccc;
@@ -54,7 +55,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({
     
     const getReviews = async () => {
       await axios
-      .get(`http://localhost:8000/review/get/?courseCode=${courseCode}&n=25&offset=${start}&showMyProgramme=${String(limitReviews)}`)
+      .get(`${API_URL}/review/get/?courseCode=${courseCode}&n=25&offset=${start}&showMyProgramme=${String(limitReviews)}`)
       .then(res => {
         updateReviews(res.data.data);
         pageReviewProvider.setTotalPageReview(

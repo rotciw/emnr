@@ -6,6 +6,7 @@ import { Title, BoldTitle } from 'styles/Text';
 import { RadioButtonsBar } from './RadioButtonBar';
 import axios from 'axios';
 import { getLocalToken } from '../utils/api';
+import { API_URL } from 'config';
 
 interface ReviewFormProps {
   closeModal: () => void;
@@ -46,8 +47,6 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
   const [difficultyValue, setDifficultyValue] = useState<number>(-1);
   const [workloadValue, setWorkloadValue] = useState<number>(-1);
   const [reviewText, setReviewText] = useState<String>('');
-
-  const API_URL: String = 'http://localhost:8000';
 
   const postReview = () => {
     closeModal();
