@@ -60,7 +60,7 @@ export const CoursePage: React.FC<CourseViewProps> = (
   return (
     <Layout padding='0 20%'>
       <FlexContainer width='100%'>
-        <FlexItem margin='0 0 0 10vh'>
+        <FlexItem margin='0 0 0 2vh'>
           <FlexItem margin='2vh 0 4vh 0' onClick={handleBackClick}>
             <GoBackText>Tilbake</GoBackText>
           </FlexItem>
