@@ -47,13 +47,21 @@ export const CoursePage: React.FC<CourseViewProps> = (
   }
 
   useEffect(() => {
+    let isCancelled = false;
     const getCourses = async () => {
       await axios
         .get(API_URL + '/course/?code=' + courseCode)
-        .then((res) => setCourseInfo(res.data))
+        .then((res) => {
+          if (!isCancelled) {
+            setCourseInfo(res.data);
+          }
+        })
         .catch((err) => console.log(err));
     };
     getCourses();
+    return () => {
+      isCancelled = true;
+    };
   }, []);
 
   return (

@@ -7,6 +7,7 @@ import { RadioButtonsBar } from './RadioButtonBar';
 import axios from 'axios';
 import { getLocalToken } from '../utils/api';
 import { API_URL } from 'config';
+import Dropdown, { Option } from 'react-dropdown';
 
 interface ReviewFormProps {
   closeModal: () => void;
@@ -27,7 +28,7 @@ const InputDescription = styled.p`
 `;
 
 const BoldInputDescription = styled.p`
-  margin: 20px 0 5px 0;
+  margin: 20px 0 10px 0;
   font-family: 'gilroyxbold';
   color: ${({ theme }) => theme.darkBlue};
 `;
@@ -38,6 +39,12 @@ const ModalXButton = styled.span`
   cursor: pointer;
 `;
 
+const options = [
+  { value: '0', label: 'Lav' },
+  { value: '1', label: 'Middels' },
+  { value: '2', label: 'Høy' },
+];
+
 export const ReviewForm: React.FC<ReviewFormProps> = ({
   closeModal,
   courseName,
@@ -46,7 +53,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
   const [scoreValue, setScoreValue] = useState<number>(-1);
   const [difficultyValue, setDifficultyValue] = useState<number>(-1);
   const [workloadValue, setWorkloadValue] = useState<number>(-1);
-  const [reviewText, setReviewText] = useState<String>('');
+  const [reviewText, setReviewText] = useState<string>('');
 
   const postReview = () => {
     closeModal();
@@ -74,15 +81,20 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
       </FlexContainer>
       <BoldTitle fontSize='30px'>{courseName}</BoldTitle>
       <HrLine margin='15px 0 0 0' />
-      <BoldInputDescription>Totalvurdering:</BoldInputDescription>
+      <BoldInputDescription>Totalvurdering: *</BoldInputDescription>
       <RadioButtonsBar radioID='reviewScore' valueSetter={setScoreValue} />
-      <InputDescription>Vanskelighetsgrad:</InputDescription>
-      <RadioButtonsBar
-        radioID='difficultyScore'
-        valueSetter={setDifficultyValue}
-      />
       <InputDescription>Arbeidsmengde:</InputDescription>
-      <RadioButtonsBar radioID='workloadScore' valueSetter={setWorkloadValue} />
+      <Dropdown
+        options={options}
+        onChange={(e) => setWorkloadValue(parseInt(e.value))}
+        placeholder='Velg...'
+      />
+      <InputDescription>Vanskelighetsgrad:</InputDescription>
+      <Dropdown
+        options={options}
+        onChange={(e) => setDifficultyValue(parseInt(e.value))}
+        placeholder='Velg...'
+      />
       <InputDescription style={{ margin: '50px 0 0 0' }}>
         Kommentar (maks 750 tegn):
       </InputDescription>
@@ -90,7 +102,9 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
         maxLength={750}
         onChange={(e) => setReviewText(e.target.value)}
       />
-      <RateCourseButton onClickFunction={postReview} courseCode={courseCode}>Send inn</RateCourseButton>
+      <RateCourseButton onClickFunction={postReview} courseCode={courseCode}>
+        Send inn
+      </RateCourseButton>
     </div>
   );
 };

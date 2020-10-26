@@ -18,7 +18,7 @@ const NavBarContainer = styled.nav`
 
 const DropdownContainer = styled.div`
   background-color: ${({ theme }) => theme.darkBlue};
-  margin: 1.2% 50% 0 25%;
+  margin: 1.2% 40% 0 25%;
   padding-bottom: 25px;
   @media (max-width: 768px) {
     margin: 2.2% 25% 0 20%;

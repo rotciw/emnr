@@ -46,7 +46,7 @@ export const CourseList: React.FC = () => {
   let orderToggle: number;
 
   // The backend sorts ascending on 1 and descending on 0
-  queryProvider.orderToggle ? (orderToggle = 0) : (orderToggle = 1);
+  queryProvider.orderToggle ? (orderToggle = 1) : (orderToggle = 0);
 
   const resultLimit: number = 25;
   let start: number = (pageNumber - 1) * resultLimit;
@@ -91,6 +91,7 @@ export const CourseList: React.FC = () => {
             {courses.map((currentCourse) => {
               return (
                 <Course
+                  key={currentCourse.course_code}
                   courseCode={currentCourse.course_code}
                   courseName={currentCourse.course_name}
                   averageReviewScore={currentCourse.average_review_score}
