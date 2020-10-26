@@ -1,7 +1,7 @@
 import { defaultTheme } from './theme';
 
 export const modalStyles = {
-  overlay:{
+  overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   content: {
@@ -17,5 +17,6 @@ export const modalStyles = {
     minWidth: '40vw',
     maxWidth: '80vw',
     padding: '15px 20px',
+    overflow: 'auto',
   },
 };
