@@ -69,7 +69,7 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
         .catch((err) => console.log(err));
     };
     getReviewEligibility();
-  }, []);
+  });
 
   let content;
 
