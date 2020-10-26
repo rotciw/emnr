@@ -9,11 +9,10 @@ import { GlobalStateContext } from 'context/GlobalStateContext';
 
 const NavBarContainer = styled.nav`
   width: 100%;
-  height: auto;
-  /* flex: 1; */
+  flex: 1;
   background-color: ${({ theme }) => theme.darkBlue};
-  /* position: sticky; */
-  /* position: -webkit-sticky; */
+  position: sticky;
+  position: -webkit-sticky;
   top: 0;
 `;
 
@@ -45,7 +44,12 @@ const MeButton = styled.button`
 `;
 
 const TopRow = styled.div`
+  /* Add support for webkit */
+  display: -ms-flexbox;
+  display: -webkit-flex;
   display: flex;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
   flex-direction: row;
   vertical-align: center;
   justify-content: space-between;
@@ -54,7 +58,7 @@ const TopRow = styled.div`
 const options = [
   { value: 'course_code', label: 'Emnekode' },
   { value: 'course_name', label: 'Emnenavn' },
-  { value: 'average_review_score', label: 'Gjennomsnittlig vurdering'},
+  { value: 'average_review_score', label: 'Gjennomsnittlig vurdering' },
   { value: 'review_count', label: 'Antall vurderinger' },
   { value: 'credit', label: 'Studiepoeng' },
   { value: 'average_grade', label: 'Karaktersnitt' },
