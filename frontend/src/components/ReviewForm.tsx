@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { RateCourseButton } from 'styles/Buttons';
+import { RateCourseButton } from './RateCourseButton';
 import { FlexContainer, HrLine } from 'styles/Containers';
 import { Title, BoldTitle } from 'styles/Text';
 import { RadioButtonsBar } from './RadioButtonBar';
 import axios from 'axios';
 import { getLocalToken } from '../utils/api';
+import { API_URL } from 'config';
 
 interface ReviewFormProps {
   closeModal: () => void;
-  courseName: String;
-  courseCode: String;
+  courseName: string;
+  courseCode: string;
 }
 
 const TextInput = styled.textarea`
@@ -46,8 +47,6 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
   const [difficultyValue, setDifficultyValue] = useState<number>(-1);
   const [workloadValue, setWorkloadValue] = useState<number>(-1);
   const [reviewText, setReviewText] = useState<String>('');
-
-  const API_URL: String = 'http://localhost:8000';
 
   const postReview = () => {
     closeModal();
@@ -91,7 +90,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
         maxLength={750}
         onChange={(e) => setReviewText(e.target.value)}
       />
-      <RateCourseButton onClick={postReview}>Send inn</RateCourseButton>
+      <RateCourseButton onClickFunction={postReview} courseCode={courseCode}>Send inn</RateCourseButton>
     </div>
   );
 };

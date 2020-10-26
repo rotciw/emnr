@@ -7,14 +7,14 @@ import { FlexColumn } from 'styles/Containers';
 interface CourseProps {
   courseName: String;
   courseCode: String;
-  credit: Number;
+  averageReviewScore: Number;
   reviewCount: Number;
 }
 
 export const Course: React.FC<CourseProps> = ({
   courseName,
   courseCode,
-  credit,
+  averageReviewScore,
   reviewCount,
 }) => {
   return (
@@ -27,8 +27,7 @@ export const Course: React.FC<CourseProps> = ({
               {courseName}
             </CourseItemText>
             <FlexColumn width='25%'>
-              {/*TODO: Remember to keep toFixed when credit is changed to score average*/}
-              <CourseItemText>{credit.toFixed(1)} / 5</CourseItemText>
+              <CourseItemText>{averageReviewScore} / 5</CourseItemText>
               <CourseItemSubtext>
                 {reviewCount} {reviewCount === 1 ? 'vurdering' : 'vurderinger'}
               </CourseItemSubtext>
