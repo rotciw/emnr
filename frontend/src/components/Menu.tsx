@@ -13,6 +13,7 @@ const StyledMenu = styled.nav<{ open: boolean }>`
   left: 0;
   height: 100%; 
   width: 100%;
+  min-width: 80%;
   position: fixed;
   background-color: ${({ theme }) => theme.blue};
   z-index: 1;
@@ -102,6 +103,11 @@ export const Menu: React.FC = () => {
     const history = useHistory();
     const handleOnClick = useCallback(() => history.push('/'), [history]);
     const handleClickMe = useCallback(() => history.push('/me'), [history]);
+    const handleClickLogOut = useCallback(() => {
+      history.push('/login') 
+      localStorage.clear()
+    }, [history]);
+  
 
     
   
@@ -125,7 +131,7 @@ export const Menu: React.FC = () => {
           </TopRow>
 
           <HrLineLight/>
-          <LogOutLink onClick={() => close()}>Logg ut</LogOutLink>
+          <LogOutLink onClick={handleClickLogOut}>Logg ut</LogOutLink>
         </StyledMenu>
         <Hamburger open={open} setOpen={setOpen} />
   

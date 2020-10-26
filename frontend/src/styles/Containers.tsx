@@ -58,7 +58,7 @@ export const HrLine = styled.div`
 
 export const HrLineLight = styled(HrLine)`
   border-bottom: 2px solid ${({ theme }) => theme.light};
-  width: 33%;
+  width: 23%;
   margin-left: 1%;
   @media (max-width: 576px) {
     width: 90%;
