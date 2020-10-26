@@ -5,7 +5,7 @@ import { Review } from './Review';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { EmptyResult } from './CourseList';
 import { API_URL } from 'config';
-import { FlexContainer } from 'styles/Containers';
+import { FlexItem } from 'styles/Containers';
 
 const Wrapper = styled.div`
   padding: 5px;
@@ -87,7 +87,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({
   return (
     <Wrapper>
       {reviews.length ? (
-        <FlexContainer>
+        <FlexItem>
           {/* <tbody> */}
           {reviews.map((currentReview) => {
             //If the difficulty or workload value is not set in the review, they are replaced with an explaining string.
@@ -112,7 +112,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({
             );
           })}
           {/* </tbody> */}
-        </FlexContainer>
+        </FlexItem>
       ) : (
         <EmptyResult>Ingen vurderinger av {courseCode}. </EmptyResult>
       )}
