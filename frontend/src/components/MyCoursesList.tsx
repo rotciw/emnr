@@ -16,8 +16,8 @@ interface Semesters {
 }
 
 export const MyCoursesList: React.FC<MyCoursesListProps> = () => {
-  const [ myCourses, updateMyCourses ] = useState<MyCourseProps[]>([]);
-  const [ mySemesters, updateMySemesters ] = useState<Semesters>({});
+  // const [myCourses, updateMyCourses] = useState<MyCourseProps[]>([]);
+  const [mySemesters, updateMySemesters] = useState<Semesters>({});
 
   useEffect(() => {
     const token = getLocalToken();
