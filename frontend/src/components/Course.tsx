@@ -27,7 +27,7 @@ export const Course: React.FC<CourseProps> = ({
               {courseName}
             </CourseItemText>
             <FlexColumn width='25%'>
-              <CourseItemText>{averageReviewScore} / 5</CourseItemText>
+              <CourseItemText>{averageReviewScore.toFixed(1)} / 5</CourseItemText>
               <CourseItemSubtext>
                 {reviewCount} {reviewCount === 1 ? 'vurdering' : 'vurderinger'}
               </CourseItemSubtext>
