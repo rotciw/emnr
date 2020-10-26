@@ -10,7 +10,6 @@ interface ReviewFormProps {
 
 export const TooltipButtonContainer = styled.div`
   position: relative;
-  width: fit-content;
   display: flex;
 `;
 
@@ -31,10 +30,10 @@ export const DisabledRateButton = styled(RateButton)`
 `;
 
 export const TooltipText = styled.div`
-  font-size: 0.8em;
+  font-size: 0.7em;
   position: absolute;
-  left: 100%;
-  margin: 4px 0 0 10px;
+  top: 100%;
+  margin: 4px 0 0 0;
   padding: 8px;
   background-color: #444;
   color: ${({ theme }) => theme.white};
