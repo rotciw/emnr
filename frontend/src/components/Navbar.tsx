@@ -1,9 +1,9 @@
 import React, { useCallback, useContext } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import emnrLogo from '../assets/images/emnr_long.svg';
-import { Searchbar } from './Searchbar';
 import Dropdown, { Option } from 'react-dropdown';
+import emnrLogo from '../assets/images/emnr_long.svg';
+import Searchbar from './Searchbar';
 import 'react-dropdown/style.css';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 
@@ -52,13 +52,13 @@ const TopRow = styled.div`
 const options = [
   { value: 'course_code', label: 'Emnekode' },
   { value: 'course_name', label: 'Emnenavn' },
-  { value: 'average_review_score', label: 'Gjennomsnittlig vurdering'},
+  { value: 'average_review_score', label: 'Gjennomsnittlig vurdering' },
   { value: 'review_count', label: 'Antall vurderinger' },
   { value: 'credit', label: 'Studiepoeng' },
   { value: 'average_grade', label: 'Karaktersnitt' },
 ];
 
-export const Navbar: React.FC = () => {
+const Navbar: React.FC = () => {
   const history = useHistory();
   const handleOnClick = useCallback(() => history.push('/'), [history]);
   const handleClickMe = useCallback(() => history.push('/me'), [history]);
@@ -93,3 +93,5 @@ export const Navbar: React.FC = () => {
     </NavBarContainer>
   );
 };
+
+export default Navbar;
