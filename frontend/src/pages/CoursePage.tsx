@@ -26,7 +26,7 @@ interface CourseViewProps {
   location: any;
 }
 
-export const CoursePage: React.FC<CourseViewProps> = (
+const CoursePage: React.FC<CourseViewProps> = (
   props: CourseViewProps,
 ) => {
   const { pageReviewProvider } = useContext(GlobalStateContext)!;
@@ -113,3 +113,5 @@ export const CoursePage: React.FC<CourseViewProps> = (
     </Layout>
   );
 };
+
+export default CoursePage;

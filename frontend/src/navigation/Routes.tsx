@@ -1,11 +1,11 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { CoursePage } from 'pages/CoursePage';
 import PrivateRoute from '../components/PrivateRoute';
 
 // pages
 import App from '../App/App';
 import LoginPage from '../pages/LoginPage';
+import CoursePage from 'pages/CoursePage';
 import VerifyLogin from '../pages/VerifyLogin';
 import MePage from '../pages/MePage';
 
