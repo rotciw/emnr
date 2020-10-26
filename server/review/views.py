@@ -60,6 +60,18 @@ def post_review(request):
             "score__avg"]
     )
 
+    # Update the average difficulty in Course
+    Course.objects.filter(course_code=request_data["courseCode"]).update(
+        average_difficulty=Review.objects.filter(course_code=request_data["courseCode"]).aggregate(Avg("difficulty"))[
+            "difficulty__avg"]
+    )
+
+    # Update the average workload in Course
+    Course.objects.filter(course_code=request_data["courseCode"]).update(
+        average_workload=Review.objects.filter(course_code=request_data["courseCode"]).aggregate(Avg("workload"))[
+            "workload__avg"]
+    )
+
     # Indicate successful posting
     return Response(status=200)
 
