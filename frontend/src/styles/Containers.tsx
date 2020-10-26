@@ -58,11 +58,11 @@ export const HrLine = styled.div`
 
 export const HrLineLight = styled(HrLine)`
   border-bottom: 2px solid ${({ theme }) => theme.light};
-  width: 30%;
-  margin-left: 3%;
+  width: 33%;
+  margin-left: 1%;
   @media (max-width: 576px) {
-    width: 80%;
-    margin: 4% auto;
+    width: 90%;
+    margin: 10px 0 0 10px;
   }
 `;
 

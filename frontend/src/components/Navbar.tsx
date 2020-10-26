@@ -7,6 +7,7 @@ import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import {Menu} from './Menu';
+import {FlexContainer} from '../styles/Containers';
 
 const NavBarContainer = styled.nav`
   width: 100%;
@@ -32,24 +33,6 @@ const Logo = styled.img`
   z-index: 2;
 `;
 
-const MeButton = styled.button`
-  background-color: ${({ theme }) => theme.darkBlue};
-  cursor: pointer;
-  color: ${({ theme }) => theme.white};
-  font-family: gilroymedium;
-  outline: none;
-  border: none;
-  :hover {
-    background-color: ${({ theme }) => theme.blue};
-  }
-`;
-
-const TopRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  vertical-align: center;
-  justify-content: space-between;
-`;
 const options = [
   { value: 'course_code', label: 'Fagkode' },
   { value: 'course_name', label: 'Fagnavn' },
@@ -71,10 +54,10 @@ export const Navbar: React.FC = () => {
 
   return (
     <NavBarContainer>
-      <TopRow>
+      <FlexContainer>
         <Logo src={emnrLogo} onClick={handleOnClick} />
         <Menu/>
-      </TopRow>
+      </FlexContainer>
       {isOnLandingPage && (
         <>
           <Searchbar />

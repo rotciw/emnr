@@ -1,12 +1,11 @@
-import React, { useCallback, useEffect, RefObject,useState, useRef } from 'react';
+import React, { useCallback, useEffect, RefObject, useState, useRef } from 'react';
 import { useHistory} from 'react-router-dom';
 import styled from "styled-components";
 import {Hamburger} from './Hamburger';
-import {HrLineLight, FlexContainer, CenteredFlexContainer} from '../styles/Containers';
+import {HrLineLight} from '../styles/Containers';
 import homeIcon from '../assets/icons/home.svg';
 import meIcon from '../assets/icons/me.svg';
 import infoIcon from '../assets/icons/info.svg';
-
 
 
 const StyledMenu = styled.nav<{ open: boolean }>`
@@ -24,7 +23,7 @@ const StyledMenu = styled.nav<{ open: boolean }>`
 
   transition: transform 0.4s ease-in-out; 
   transform: ${({ open }) =>
-    open ? "translateX(65%)" : "translateX(100%)"}; 
+    open ? "translateX(75%)" : "translateX(100%)"}; 
 
   @media (max-width: 576px) {
     transform: ${({ open }) =>
@@ -32,46 +31,39 @@ const StyledMenu = styled.nav<{ open: boolean }>`
   }
 `;
 
-//margin: 7px 0 7px 5%;
 
 const StyledLink = styled.a`
-  //margin: 1px;
+  margin: 1px;
   width: fit-content;
   font-size: 18px;
   font-family: gilroyxbold;
   color: ${({ theme }) => theme.light}; 
   float: left;
   cursor: pointer;
-  @media (max-width: 576px) {
-    //margin: 7px 0 7px 20%;
-    //margin: 1px 0 1px 5%;
-  }
   :hover {
     color: ${({ theme }) => theme.lightBlue};
   }
 `;
 
 
+const LogOutLink = styled(StyledLink)`
+  margin: 25px 0 0 40px; 
+  text-decoration: underline;
+  @media (max-width: 576px) {
+    margin-left: 20px; 
+  }   
+`;
+
 const TopRow = styled.div`
   display: flex;
   align-items: center;
 `;
 
-
-const LogOutLink = styled(StyledLink)`
-  margin: 20px 0 1px 4%;
-  text-decoration: underline;
-  //@media (max-width: 576px) {
-  //  margin: 10px 0 1px 10%;
-  //}
-`;
-
 const Icon = styled.img`
-  padding: 8px;
-  margin-left: 40px;
+  padding: 10px;
+  margin-left: 2%;
   width: 25px;
 `;
-
 
 
 const useOnClickOutside = (
@@ -110,11 +102,6 @@ export const Menu: React.FC = () => {
     const history = useHistory();
     const handleOnClick = useCallback(() => history.push('/'), [history]);
     const handleClickMe = useCallback(() => history.push('/me'), [history]);
-  
-
-   
-    
-    
 
     
   
@@ -129,7 +116,7 @@ export const Menu: React.FC = () => {
 
           <TopRow>
           <Icon src={meIcon}/>
-          <StyledLink >Gå til min side</StyledLink>
+          <StyledLink onClick={handleClickMe}>Gå til min side</StyledLink>
           </TopRow>
 
           <TopRow>
