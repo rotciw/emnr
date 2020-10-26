@@ -57,8 +57,10 @@ def get_courses_from_db(request):
     if offset > number_of_courses:
         raise ValueError("offset is too large")
 
-    advanced_filtering = request.GET.get("advanced_filtering", False)
-    if advanced_filtering:
+    advanced_filtering = request.GET.get("advanced_filtering", "false")
+    if advanced_filtering not in ["true", "false"]:
+        raise ValueError("Invalid value for advanced_filtering: {}".format(advanced_filtering))
+    if advanced_filtering == "true":
         """
         Parameters:
         score_high: boolean
@@ -67,16 +69,19 @@ def get_courses_from_db(request):
         difficulty_weight: number from 0 to 5
         workload_high: boolean
         workload_weight: number from 0 to 5
-        passrate_high: boolean
-        passrate_weight: number from 0 to 5
+        pass_rate_high: boolean
+        pass_rate_weight: number from 0 to 5
         grade_high: boolean
         grade_weight: number from 0 to 5
         """
         params = get_advanced_filtering_parameters(request)  # Dictionary mapping parameters to their values
-        max_values = {"average_review_score": 5, "average_workload": 2, "average_difficulty": 2, "pass_rate": 100,
-                      "average_grade": 5}
+        max_values = {"score": 5, "difficulty": 2, "workload": 2, "pass_rate": 100, "grade": 5}
+        print("hei")
         data = list(map(lambda course: map_course_to_filter_score(course, params, max_values),
-                        Course.objects.filter(combined_search_filter).values())).sort()[offset:offset + n]
+                        Course.objects.filter(combined_search_filter).values()))
+        data.sort(key=lambda course: course["filter_score"], reverse=True)
+        data = data[offset:offset + n]
+        print("hallo")
     else:
         # Get and validate order_by and ascending parameters
         order_by = request.GET.get("order_by", "course_name")
@@ -96,15 +101,40 @@ def get_courses_from_db(request):
     return {"count": number_of_courses, "data": data}
 
 
+def get_advanced_filtering_parameters(request):
+    param_dict = {}
+    parameters = {"score": "average_review_score", "difficulty": "average_difficulty", "workload": "average_workload",
+                  "pass_rate": "pass_rate", "grade": "average_grade"}
+    for param in parameters:
+        high = request.GET.get(param+"_high", "true")
+        weight = request.GET.get(param+"_weight", "0")
+        if high in ["true", "false"]:
+            high = True if high == "true" else False
+        else:
+            raise ValueError("Invalid value for {}_high: {}".format(param, high))
+        if weight in ["0", "1", "2", "3", "4", "5"]:
+            weight = int(weight)
+        else:
+            raise ValueError("Invalid value for {}_weight: {}".format(param, weight))
+        param_dict[param] = [high, weight]
+    print(param_dict)
+    return param_dict
+
+
 def map_course_to_filter_score(course, params, max_values):
     filter_score = 0
-    for param in params.keys():  # Review score can possibly create problems here, since it defaults to 0
-        temp = course[param] / max_values[param]
+    param_names = {"score": "average_review_score", "difficulty": "average_difficulty", "workload": "average_workload",
+                   "pass_rate": "pass_rate", "grade": "average_grade"}
+    for param, values in params.items():  # Review score can possibly create problems here, since it defaults to 0
+        temp = course[param_names[param]] / max_values[param]
         if temp < 0:
             temp = 0.5  # If no reviews exist, the parameter gets a neutral value
-        if not params[param][0]:
+        if not values[0]:
             temp = 1 - temp
-        filter_score += temp * params[param][1]
+        filter_score += temp * values[1]
+        # print(temp, values[1])
+
+    print(filter_score)
     course["filter_score"] = filter_score
     return course
 
