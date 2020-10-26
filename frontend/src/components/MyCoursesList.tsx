@@ -10,6 +10,8 @@ interface MyCourseProps {
   course_name: string;
   course_code: string;
   semester: string;
+  has_reviewed: boolean;
+  my_review_score: string;
 }
 interface Semesters {
   [semester: string]: MyCourseProps[];

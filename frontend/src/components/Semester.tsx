@@ -12,6 +12,8 @@ interface MyCourseProps {
   course_name: string;
   course_code: string;
   semester: string;
+  has_reviewed: boolean;
+  my_review_score: string;
 }
 
 export const Semester: React.FC<Semester> = ({semester, courses}) => {
@@ -21,9 +23,9 @@ export const Semester: React.FC<Semester> = ({semester, courses}) => {
       <StyledTable>
         <thead>
           <tr>
-            <StyledTH width='25%'>Fagkode</StyledTH>
+            <StyledTH width='25%'>Emnekode</StyledTH>
             <StyledTH width='50%' textAlign='left'>
-              Fagnavn
+              Emnenavn
             </StyledTH>
             <StyledTH width='25%'>Din vurdering</StyledTH>
           </tr>
@@ -34,7 +36,7 @@ export const Semester: React.FC<Semester> = ({semester, courses}) => {
               <MyCourse
                   courseCode={currentCourse.course_code}
                   courseName={currentCourse.course_name}
-                  yourReview={"- - - "}
+                  yourReview={currentCourse.has_reviewed ? `${currentCourse.my_review_score} / 5` : `Gi vurdering`}
                   key={currentCourse.course_code}
               />
             )

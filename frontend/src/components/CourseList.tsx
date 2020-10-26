@@ -4,6 +4,7 @@ import axios from 'axios';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { FlexContainer, StyledTable, StyledTH } from 'styles/Containers';
 import styled from 'styled-components';
+import { API_URL } from 'config';
 
 interface CourseListProps {
   pageNumber: number;
@@ -15,6 +16,7 @@ interface CourseProps {
   average_grade: number;
   credit: number;
   review_count: number;
+  average_review_score: number;
 }
 
 export const EmptyResult = styled.h3`
@@ -39,7 +41,7 @@ export const CourseList: React.FC = () => {
   let orderByQuery: string;
   queryProvider.orderByQuery
     ? (orderByQuery = queryProvider.orderByQuery)
-    : (orderByQuery = 'course_name');
+    : (orderByQuery = 'review_count');
 
   let orderToggle: number;
 
@@ -58,7 +60,7 @@ export const CourseList: React.FC = () => {
     const getCourses = async () => {
       await axios
         .get(
-          `http://localhost:8000/course/all/?n=25&offset=${start}&search=${searchQuery}&order_by=${orderByQuery}&ascending=${orderToggle}`,
+          `${API_URL}/course/all/?n=25&offset=${start}&search=${searchQuery}&order_by=${orderByQuery}&ascending=${orderToggle}`,
         )
         .then((res) => {
           updateCourses(res.data.data);
@@ -78,9 +80,9 @@ export const CourseList: React.FC = () => {
         <StyledTable>
           <thead>
             <tr>
-              <StyledTH width='25%'>Fagkode</StyledTH>
+              <StyledTH width='25%'>Emnekode</StyledTH>
               <StyledTH width='50%' textAlign='left'>
-                Fagnavn
+                Emnenavn
               </StyledTH>
               <StyledTH width='25%'>Vurdering</StyledTH>
             </tr>
@@ -91,7 +93,7 @@ export const CourseList: React.FC = () => {
                 <Course
                   courseCode={currentCourse.course_code}
                   courseName={currentCourse.course_name}
-                  credit={currentCourse.credit}
+                  averageReviewScore={currentCourse.average_review_score}
                   reviewCount={currentCourse.review_count}
                 />
               );

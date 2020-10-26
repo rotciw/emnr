@@ -17,6 +17,7 @@ import { ReviewList } from 'components/ReviewList';
 import { ReviewForm } from 'components/ReviewForm';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { modalStyles } from 'styles/Modals';
+import { API_URL } from 'config';
 
 interface CourseViewProps {
   courseName: String;
@@ -28,9 +29,7 @@ interface CourseViewProps {
 export const CoursePage: React.FC<CourseViewProps> = (
   props: CourseViewProps,
 ) => {
-  const { pageReviewProvider } = useContext(
-    GlobalStateContext,
-  )!;
+  const { pageReviewProvider } = useContext(GlobalStateContext)!;
 
   const courseCode: string = useLocation().pathname.substr(8);
   const [courseInfo, setCourseInfo] = useState<any>({});
@@ -39,7 +38,7 @@ export const CoursePage: React.FC<CourseViewProps> = (
   const [numberOfReviews, setNumberOfReviews] = useState<number>(0);
 
   const history = useHistory();
-  const handleBackClick = useCallback(() => history.push('/'), [history]);
+  const handleBackClick = useCallback(() => history.goBack(), [history]);
 
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
@@ -50,7 +49,7 @@ export const CoursePage: React.FC<CourseViewProps> = (
   useEffect(() => {
     const getCourses = async () => {
       await axios
-        .get('http://localhost:8000/course/?code=' + courseCode)
+        .get(API_URL + '/course/?code=' + courseCode)
         .then((res) => setCourseInfo(res.data))
         .catch((err) => console.log(err));
     };
@@ -66,14 +65,15 @@ export const CoursePage: React.FC<CourseViewProps> = (
           </FlexItem>
           <Title margin='0 0 5px 0'>{courseInfo.course_code}</Title>
           <BoldTitle fontSize='30px'>{courseInfo.course_name}</BoldTitle>
-          <BoldTitle margin='10px 0 0 0'>{scoreAvg.toFixed(1)} / 5</BoldTitle>
-          <SubTitle margin='0 0 4vh 0'>Basert på {numberOfReviews} {numberOfReviews === 1 ? "vurdering" : "vurderinger"}.</SubTitle>
+          <BoldTitle margin='10px 0 0 0'>{scoreAvg} / 5</BoldTitle>
+          <SubTitle margin='0 0 4vh 0'>
+            Basert på {numberOfReviews}{' '}
+            {numberOfReviews === 1 ? 'vurdering' : 'vurderinger'}.
+          </SubTitle>
           <RateCourseButton
             onClickFunction={toggleModalIsOpen}
             courseCode={courseCode}
-          >
-            Vurder {courseCode}
-          </RateCourseButton>
+          />
           <Modal
             isOpen={modalIsOpen}
             onRequestClose={toggleModalIsOpen}

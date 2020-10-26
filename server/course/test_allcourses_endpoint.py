@@ -157,7 +157,7 @@ class GetAllCoursesTest(TestCase):
         self.assertEqual(res.data["data"], [])
 
     def test_get_courses_from_db_valid_order_by(self):
-        order_by_values = ["course_code", "course_name", "credit", "average_grade"]
+        order_by_values = ["course_code", "course_name", "credit", "average_grade", "pass_rate"]
 
         def get_data(order_by, ascending):
             if ascending is None:
