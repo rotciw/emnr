@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, RefObject, useState, useRef } from 'react';
 import {useHistory} from 'react-router-dom';
 import styled from "styled-components";
-import {HrLine} from '../styles/Containers';
+import {HrLineLight} from '../styles/Containers';
 import {Hamburger} from './Hamburger';
 import homeIcon from '../assets/icons/home.svg';
 import meIcon from '../assets/icons/me.svg';
@@ -38,12 +38,7 @@ const StyledMenu = styled.nav<{ open: boolean }>`
   
 `;
 
-const HrLineLight = styled(HrLine)`
-  border-bottom: 2px solid ${({ theme }) => theme.light};
-  width: 23%;
-  margin-left: 1%;
-
-
+const HrLineLightScaled = styled(HrLineLight)`
   @media (max-width: 1000px) {
     width: 29%;
     margin: 10px 0 0 10px;
@@ -54,8 +49,6 @@ const HrLineLight = styled(HrLine)`
     margin: 10px 0 0 10px;
   }
 `;
-
-
 
 const StyledLink = styled.a`
   margin: 1px;
@@ -70,7 +63,6 @@ const StyledLink = styled.a`
   }
 `;
 
-
 const LogOutLink = styled(StyledLink)`
   margin: 25px 0 0 40px; 
   text-decoration: underline;
@@ -79,7 +71,7 @@ const LogOutLink = styled(StyledLink)`
   }   
 `;
 
-const TopRow = styled.div`
+const FlexContainer = styled.div`
   display: flex;
   align-items: center;
 `;
@@ -115,8 +107,6 @@ const useOnClickOutside = (
   };
 
 
-
-
 export const Menu: React.FC = () => {
     const [open, setOpen] = useState<boolean>(false);
     const node = useRef<HTMLDivElement>(null);
@@ -132,33 +122,31 @@ export const Menu: React.FC = () => {
       localStorage.clear()
     }, [history]);
   
-
-    
   
     return (
       <div ref={node}>
 
         <StyledMenu open={open}>
-          <TopRow>
+          <FlexContainer>
           <Icon src={homeIcon}/>
           <StyledLink onClick={handleOnClick}>Gå til forsiden</StyledLink>
-          </TopRow>
+          </FlexContainer>
 
-          <TopRow>
+          <FlexContainer>
           <Icon src={meIcon}/>
           <StyledLink onClick={handleClickMe}>Gå til min side</StyledLink>
-          </TopRow>
+          </FlexContainer>
 
-          <TopRow>
+          <FlexContainer>
           <Icon src={infoIcon}/>
           <StyledLink onClick={() => close()}>Om EMNR</StyledLink> 
-          </TopRow>
+          </FlexContainer>
 
-          <HrLineLight/>
+          <HrLineLightScaled/>
           <LogOutLink onClick={handleClickLogOut}>Logg ut</LogOutLink>
         </StyledMenu>
+
         <Hamburger open={open} setOpen={setOpen} />
-  
   
       </div>
     );

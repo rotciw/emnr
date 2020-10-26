@@ -25,6 +25,7 @@ export const SemesterContainer = styled.div`
 export const CenteredFlexContainer = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
 `;
 
 // Used to hide shape overflow
@@ -54,6 +55,13 @@ export const FlexItem = styled.div`
 export const HrLine = styled.div`
   margin: ${(props: LayoutProps) => props.margin || '5vh 0 2vh 0'};
   border-bottom: 1px solid ${({theme}) => theme.darkBlue};
+`;
+
+
+export const HrLineLight = styled(HrLine)`
+  border-bottom: 2px solid ${({ theme }) => theme.light};
+  width: 23%;
+  margin-left: 1%;
 `;
 
 

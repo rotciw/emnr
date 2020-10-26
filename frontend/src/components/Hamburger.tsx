@@ -44,7 +44,6 @@ const StyledHamburger = styled.button<{ open: boolean }>`
   }
 `;
 
-
 interface HamburgerProps {
     open: boolean;
     setOpen: (v: boolean) => void;
@@ -60,7 +59,6 @@ export const Hamburger: React.FC<HamburgerProps> = ({
       <div />
       <div />
     </StyledHamburger>
-      
     );
   };
   
