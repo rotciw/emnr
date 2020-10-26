@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import Modal from 'react-modal';
-import { Layout } from 'styles/Layout';
+import Layout from 'styles/Layout';
 import {
   FlexContainer,
   FlexItem,
@@ -13,21 +13,20 @@ import { RateCourseButton } from 'components/RateCourseButton';
 import { Circle, RotatedSquare } from 'styles/Shapes';
 import { defaultTheme } from 'styles/theme';
 import axios from 'axios';
-import { ReviewList } from 'components/ReviewList';
-import { ReviewForm } from 'components/ReviewForm';
+import ReviewList from 'components/ReviewList';
+import ReviewForm from 'components/ReviewForm';
 import { GlobalStateContext } from 'context/GlobalStateContext';
-import { modalStyles } from 'styles/Modals';
-import { getLocalToken } from 'utils/api';
-import { API_URL } from 'config';
+import modalStyles from 'styles/Modals';
+import API_URL from 'config';
 
 interface CourseViewProps {
-  courseName: String;
-  courseCode: String;
-  score: Number;
+  courseName: string;
+  courseCode: string;
+  score: number;
   location: any;
 }
 
-export const CoursePage: React.FC<CourseViewProps> = (
+const CoursePage: React.FC<CourseViewProps> = (
   props: CourseViewProps,
 ) => {
   const { pageReviewProvider } = useContext(GlobalStateContext)!;
@@ -52,7 +51,7 @@ export const CoursePage: React.FC<CourseViewProps> = (
   useEffect(() => {
     const getCourses = async () => {
       await axios
-        .get(API_URL + '/course/?code=' + courseCode)
+        .get(`${API_URL}/course/?code=${courseCode}`)
         .then((res) => setCourseInfo(res.data))
         .catch((err) => console.log(err));
     };
@@ -126,3 +125,5 @@ export const CoursePage: React.FC<CourseViewProps> = (
     </Layout>
   );
 };
+
+export default CoursePage;

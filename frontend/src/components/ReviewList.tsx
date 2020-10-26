@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { Review } from './Review';
 import { GlobalStateContext } from 'context/GlobalStateContext';
+import API_URL from 'config';
+import Review from './Review';
 import { EmptyResult } from './CourseList';
-import { API_URL } from 'config';
 
 const Wrapper = styled.div`
   border: 1px solid #ccc;
@@ -17,71 +17,67 @@ const Wrapper = styled.div`
 `;
 
 interface ReviewListProps {
-    courseCode: String;
-    pageNumber: number;
-    limitReviews: Boolean;
-    scoreAvgSetter: (value:number) => void;
-    numberOfReviewSetter: (value:number) => void;
+  courseCode: string;
+  pageNumber: number;
+  limitReviews: Boolean;
+  scoreAvgSetter: (value: number) => void;
+  numberOfReviewSetter: (value: number) => void;
 }
 
-interface ReviewProps{
-    full_name: string;
-    study_programme: string;
-    score: number;
-    workload: number | string | void;
-    difficulty: number | string | void;
-    review_text: string;
-    date: string;
-  }
+interface ReviewProps {
+  full_name: string;
+  study_programme: string;
+  score: number;
+  workload: number | string | void;
+  difficulty: number | string | void;
+  review_text: string;
+  date: string;
+}
 
-export const ReviewList: React.FC<ReviewListProps> = ({
-    courseCode,
-    pageNumber,
-    limitReviews,
-    scoreAvgSetter,
-    numberOfReviewSetter,
-  }) => {
+const ReviewList: React.FC<ReviewListProps> = ({
+  courseCode,
+  pageNumber,
+  limitReviews,
+  scoreAvgSetter,
+  numberOfReviewSetter,
+}) => {
+  const [reviews, updateReviews] = useState<ReviewProps[]>([]);
 
-    const [reviews,updateReviews] = useState<ReviewProps[]>([]);
+  const { pageReviewProvider } = useContext(GlobalStateContext)!;
 
-    const { pageReviewProvider } = useContext(
-      GlobalStateContext,
-    )!;
+  const resultLimit = 5;
+  let start: number = (pageNumber - 1) * resultLimit;
 
-    const resultLimit: number = 5;
-    let start: number = (pageNumber - 1) * resultLimit;
-
-  useEffect (() => {
-    
+  useEffect(() => {
     const getReviews = async () => {
       await axios
-      .get(`${API_URL}/review/get/?courseCode=${courseCode}&n=25&offset=${start}&showMyProgramme=${String(limitReviews)}`)
+      .get(
+        `${API_URL}/review/get/?courseCode=${courseCode}&n=25&offset=${start}&showMyProgramme=${String(limitReviews)}`
+      )
       .then(res => {
         updateReviews(res.data.data);
         pageReviewProvider.setTotalPageReview(
           Math.ceil(reviews.length / resultLimit),
           );
-        scoreAvgSetter(calculateAvgScore(res.data.data))
-      })
-        .catch(err => console.log(err));        
-    }
+          scoreAvgSetter(calculateAvgScore(res.data.data));
+        })
+        .catch((err) => console.log(err));
+    };
     getReviews();
     start += resultLimit;
+  }, [pageNumber,limitReviews]);
 
-  }, [pageNumber,limitReviews]); 
-
-  function calculateAvgScore(reviews:ReviewProps[]) {
+  function calculateAvgScore(reviews: ReviewProps[]) {
     numberOfReviewSetter(reviews.length);
-    let scoreAvg:number = 0;
-    if(reviews.length > 0){
-      reviews.map(currentReview =>{
-        scoreAvg += currentReview.score; 
-      })
+    let scoreAvg = 0;
+    if (reviews.length > 0) {
+      reviews.map((currentReview) => {
+        scoreAvg += currentReview.score;
+      });
       return scoreAvg / reviews.length;
     }
-    else{
-      return 0;
-    }
+
+    return 0;
   }
 
   return (
@@ -89,29 +85,34 @@ export const ReviewList: React.FC<ReviewListProps> = ({
       {reviews.length ? (
         <table>
           <tbody>
-            {
-              reviews.map(currentReview => {
+            {reviews.map((currentReview) => {
+              // If the difficulty or workload value is not set in the review, they are replaced with an explaining string.
+              if (currentReview.difficulty === -1) {
+                currentReview.difficulty = 'Not given';
+              }
+              if (currentReview.workload === -1) {
+                currentReview.workload = 'Not given';
+              }
 
-                //If the difficulty or workload value is not set in the review, they are replaced with an explaining string.
-                if(currentReview.difficulty === -1){currentReview.difficulty = "Not given";}
-                if(currentReview.workload === -1){currentReview.workload = "Not given";}
-
-                return <Review name={currentReview.full_name} 
-                studyProgramme={currentReview.study_programme} 
-                score={currentReview.score} 
-                workLoad={currentReview.workload} 
-                difficulty={currentReview.difficulty} 
-                text={currentReview.review_text}
-                date={currentReview.date}
-                />;
-              })
-            }
+              return (
+                <Review
+                  name={currentReview.full_name}
+                  studyProgramme={currentReview.study_programme}
+                  score={currentReview.score}
+                  workLoad={currentReview.workload}
+                  difficulty={currentReview.difficulty}
+                  text={currentReview.review_text}
+                  date={currentReview.date}
+                />
+              );
+            })}
           </tbody>
-      </table>
+        </table>
       ) : (
         <EmptyResult>Ingen vurderinger av {courseCode}. </EmptyResult>
       )}
-
     </Wrapper>
   );
 };
+
+export default ReviewList;

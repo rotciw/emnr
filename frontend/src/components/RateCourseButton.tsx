@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { getLocalToken } from 'utils/api';
-import { API_URL } from 'config';
+import API_URL from 'config';
 
 interface RateCourseButtonProps {
   onClickFunction: () => void;
@@ -56,8 +56,8 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
 }) => {
   const [reviewEligibility, setReviewEligibility] = useState<number>(1);
 
-  //TODO: move axios config (ref Casper code review comment @ !PR19)
-  axios.defaults.headers.common['Authorization'] = `${getLocalToken()}`;
+  // TODO: move axios config (ref Casper code review comment @ !PR19)
+  axios.defaults.headers.common.Authorization = `${getLocalToken()}`;
 
   useEffect(() => {
     const getReviewEligibility = async () => {
@@ -76,7 +76,9 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
   switch (reviewEligibility) {
     case 0:
       content = (
-        <RateButton onClick={() => onClickFunction()}>Vurder {courseCode}</RateButton>
+        <RateButton onClick={() => onClickFunction()}>
+          Vurder {courseCode}
+        </RateButton>
       );
       break;
     case 1:
@@ -91,9 +93,7 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
       content = (
         <TooltipButtonContainer>
           <DisabledRateButton>Vurder {courseCode}</DisabledRateButton>
-          <TooltipText>
-            Du har allerede vurdert dette emnet
-          </TooltipText>
+          <TooltipText>Du har allerede vurdert dette emnet</TooltipText>
         </TooltipButtonContainer>
       );
       break;
@@ -107,9 +107,7 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
       break;
     default:
       content = (
-        <div>
-          Noe gikk galt mens vi sjekket om du kan vurdere dette emnet
-        </div>
+        <div>Noe gikk galt mens vi sjekket om du kan vurdere dette emnet</div>
       );
   }
 

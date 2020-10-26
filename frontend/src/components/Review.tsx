@@ -4,13 +4,13 @@ import { FlexContainer, FlexItem, HrLine } from 'styles/Containers';
 import { ExtraBold } from 'styles/Text';
 
 interface ReviewProps {
-  name: String;
-  studyProgramme: String;
-  score: Number;
+  name: string;
+  studyProgramme: string;
+  score: number;
   workLoad: number | string | void;
   difficulty: number | string | void;
-  text: String;
-  date: String;
+  text: string;
+  date: string;
 }
 
 const ReviewContainer = styled.div`
@@ -43,7 +43,7 @@ const DateText = styled.p`
   margin: 0;
 `;
 
-export const Review: React.FC<ReviewProps> = ({
+const Review: React.FC<ReviewProps> = ({
   name,
   studyProgramme,
   score,
@@ -54,7 +54,7 @@ export const Review: React.FC<ReviewProps> = ({
 }) => {
   return (
     <ReviewContainer>
-      <FlexItem flex={'none'} style={{ marginRight: '5vw' }}>
+      <FlexItem flex='none' style={{ marginRight: '5vw' }}>
         <div>
           <ExtraBold>{name}</ExtraBold>
           <div>{studyProgramme}</div>
@@ -66,7 +66,7 @@ export const Review: React.FC<ReviewProps> = ({
           <MainMetric>
             <ExtraBold>{score}/5</ExtraBold>
           </MainMetric>
-          <DateText>{date.substring(0,10)}</DateText>
+          <DateText>{date.substring(0, 10)}</DateText>
         </ScoreDateContainer>
         <FlexContainer>
           <SecondaryMetric>
@@ -76,7 +76,7 @@ export const Review: React.FC<ReviewProps> = ({
             Vanskelighetsgrad: <ExtraBold>{difficulty}/5</ExtraBold>
           </SecondaryMetric>
         </FlexContainer>
-        <HrLine margin={'20px 0 0 0'} />
+        <HrLine margin='20px 0 0 0' />
         <FlexContainer>
           <p>{text}</p>
         </FlexContainer>
@@ -84,3 +84,5 @@ export const Review: React.FC<ReviewProps> = ({
     </ReviewContainer>
   );
 };
+
+export default Review;
