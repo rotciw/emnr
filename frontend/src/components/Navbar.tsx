@@ -11,8 +11,8 @@ const NavBarContainer = styled.nav`
   width: 100%;
   flex: 1;
   background-color: ${({ theme }) => theme.darkBlue};
-  position: sticky;
-  position: -webkit-sticky;
+  /* position: sticky; */
+  /* position: -webkit-sticky; */
   top: 0;
 `;
 

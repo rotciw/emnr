@@ -6,10 +6,6 @@ import { FlexContainer, StyledTable, StyledTH } from 'styles/Containers';
 import styled from 'styled-components';
 import { API_URL } from 'config';
 
-interface CourseListProps {
-  pageNumber: number;
-}
-
 interface CourseProps {
   course_name: string;
   course_code: string;
