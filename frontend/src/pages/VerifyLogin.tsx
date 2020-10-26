@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import qs from 'qs';
+import { Redirect } from 'react-router-dom';
 import { verifyFeideLogin } from '../utils/api';
 import { GlobalStateContext } from '../context/GlobalStateContext';
-import { Redirect } from 'react-router-dom';
 
 interface VerifyLoginProps {
   callback: (val?: any) => void;

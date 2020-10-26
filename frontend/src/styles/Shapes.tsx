@@ -47,5 +47,3 @@ export const RotatedSquare = styled.div`
   background-color: ${(props: LayoutProps) => props.color || '#000'};
   transform: rotate(${(props: LayoutProps) => props.angle || '45deg'});
 `;
-
-

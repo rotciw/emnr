@@ -35,7 +35,7 @@ const PaginationBtn = styled.div`
   }
 `;
 
-export const PaginationButton: React.FC<PaginationInterface> = ({
+const PaginationButton: React.FC<PaginationInterface> = ({
   children,
   pageNumber,
 }) => {
@@ -62,3 +62,5 @@ export const PaginationButton: React.FC<PaginationInterface> = ({
     </PaginationBtn>
   );
 };
+
+export default PaginationButton;

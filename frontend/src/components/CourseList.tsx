@@ -1,14 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Course } from './Course';
 import axios from 'axios';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { FlexContainer, StyledTable, StyledTH } from 'styles/Containers';
 import styled from 'styled-components';
-import { API_URL } from 'config';
-
-interface CourseListProps {
-  pageNumber: number;
-}
+import API_URL from 'config';
+import Course from './Course';
 
 interface CourseProps {
   course_name: string;
@@ -29,10 +25,10 @@ export const CourseList: React.FC = () => {
   const [courses, updateCourses] = useState<CourseProps[]>([]);
   const { pageProvider, queryProvider } = useContext(GlobalStateContext)!;
 
-  let pageNumber = pageProvider.page;
+  const pageNumber = pageProvider.page;
   // Search input
   // Reset page number when searching
-  let searchQuery: string = '';
+  let searchQuery = '';
   if (queryProvider.searchQuery) {
     searchQuery = queryProvider.searchQuery;
   }
@@ -48,7 +44,7 @@ export const CourseList: React.FC = () => {
   // The backend sorts ascending on 1 and descending on 0
   queryProvider.orderToggle ? (orderToggle = 0) : (orderToggle = 1);
 
-  const resultLimit: number = 25;
+  const resultLimit = 25;
   let start: number = (pageNumber - 1) * resultLimit;
 
   // this useEffect is used for resetting page number to 1 when searching

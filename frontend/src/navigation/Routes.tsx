@@ -2,11 +2,11 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import PrivateRoute from '../components/PrivateRoute';
 
-//pages
+// pages
 import App from '../App/App';
 import LoginPage from '../pages/LoginPage';
+import CoursePage from 'pages/CoursePage';
 import VerifyLogin from '../pages/VerifyLogin';
-import { CoursePage } from 'pages/CoursePage';
 import MePage from '../pages/MePage';
 
 const Routes: React.FC = () => {

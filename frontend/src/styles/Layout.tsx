@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar } from 'components/Navbar';
+import Navbar from 'components/Navbar';
 import styled from 'styled-components';
 
 interface LayoutProps {
@@ -10,13 +10,14 @@ const Body = styled.main`
   margin: 0;
   display: flex;
   flex-direction: column;
-  padding: ${(props: LayoutProps) => props.padding || '0 20%'}; /* Flex wraps incorrectly if padding is 0 */
+  padding: ${(props: LayoutProps) =>
+    props.padding || '0 20%'}; /* Flex wraps incorrectly if padding is 0 */
   @media (max-width: 768px) {
     padding: 0 3%;
   }
 `;
 
-export const Layout: React.FC<LayoutProps> = ({ children, padding }) => {
+const Layout: React.FC<LayoutProps> = ({ children, padding }) => {
   return (
     <>
       <Navbar />
@@ -24,3 +25,5 @@ export const Layout: React.FC<LayoutProps> = ({ children, padding }) => {
     </>
   );
 };
+
+export default Layout;

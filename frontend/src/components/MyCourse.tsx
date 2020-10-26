@@ -1,15 +1,15 @@
 import React from 'react';
-import { CourseButton } from '../styles/Buttons';
 import { Link } from 'react-router-dom';
 import { CourseItemText } from 'styles/Text';
+import { CourseButton } from '../styles/Buttons';
 
 interface MyCourseProps {
-  courseName: String;
-  courseCode: String;
-  yourReview: String;
+  courseName: string;
+  courseCode: string;
+  yourReview: string;
 }
 
-export const MyCourse: React.FC<MyCourseProps> = ({
+const MyCourse: React.FC<MyCourseProps> = ({
   courseName,
   courseCode,
   yourReview,
@@ -18,7 +18,7 @@ export const MyCourse: React.FC<MyCourseProps> = ({
     <tr>
       <td colSpan={3}>
         <Link to={`/course/${courseCode}`} style={{ textDecoration: 'none' }}>
-          <CourseButton >
+          <CourseButton>
             <CourseItemText width='25%'>{courseCode}</CourseItemText>
             <CourseItemText width='50%' textAlign='left'>
               {courseName}
@@ -30,3 +30,5 @@ export const MyCourse: React.FC<MyCourseProps> = ({
     </tr>
   );
 };
+
+export default MyCourse;
