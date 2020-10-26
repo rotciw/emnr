@@ -25,7 +25,6 @@ export const SemesterContainer = styled.div`
 export const CenteredFlexContainer = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
 `;
 
 // Used to hide shape overflow
