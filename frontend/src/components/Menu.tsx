@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, RefObject, useState, useRef } from 'react';
-import { useHistory} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import styled from "styled-components";
+import {HrLine} from '../styles/Containers';
 import {Hamburger} from './Hamburger';
-import {HrLineLight} from '../styles/Containers';
 import homeIcon from '../assets/icons/home.svg';
 import meIcon from '../assets/icons/me.svg';
 import infoIcon from '../assets/icons/info.svg';
@@ -13,7 +13,6 @@ const StyledMenu = styled.nav<{ open: boolean }>`
   left: 0;
   height: 100%; 
   width: 100%;
-  min-width: 80%;
   position: fixed;
   background-color: ${({ theme }) => theme.blue};
   z-index: 1;
@@ -26,11 +25,36 @@ const StyledMenu = styled.nav<{ open: boolean }>`
   transform: ${({ open }) =>
     open ? "translateX(75%)" : "translateX(100%)"}; 
 
+
+  @media (max-width: 1000px) {
+      transform: ${({ open }) =>
+      open ? "translateX(68%)" : "translateX(100%)"}; 
+  }
+
   @media (max-width: 576px) {
     transform: ${({ open }) =>
     open ? "translateX(0%)" : "translateX(100%)"}; 
   }
+  
 `;
+
+const HrLineLight = styled(HrLine)`
+  border-bottom: 2px solid ${({ theme }) => theme.light};
+  width: 23%;
+  margin-left: 1%;
+
+
+  @media (max-width: 1000px) {
+    width: 29%;
+    margin: 10px 0 0 10px;
+  }
+
+  @media (max-width: 576px) {
+    width: 90%;
+    margin: 10px 0 0 10px;
+  }
+`;
+
 
 
 const StyledLink = styled.a`
