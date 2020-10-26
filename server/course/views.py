@@ -57,22 +57,56 @@ def get_courses_from_db(request):
     if offset > number_of_courses:
         raise ValueError("offset is too large")
 
-    # Get and validate order_by and ascending parameters
-    order_by = request.GET.get("order_by", "course_name")
-    valid_order_parameters = ["course_code", "course_name", "credit", "average_grade", "review_count", "pass_rate",
-                              "average_review_score"]
-    if order_by not in valid_order_parameters:
-        raise ValueError(
-            "Invalid value for order_by: {}. Valid  values: {}".format(order_by, valid_order_parameters))
-    ascending = request.GET.get("ascending", "1")
-    if ascending not in ["0", "1"]:
-        raise ValueError("Invalid value for ascending: {}".format(ascending))
-    if ascending == "0":
-        order_by = "-" + order_by
+    advanced_filtering = request.GET.get("advanced_filtering", False)
+    if advanced_filtering:
+        """
+        Parameters:
+        score_high: boolean
+        score_weight: number from 0 to 5
+        difficulty_high: boolean
+        difficulty_weight: number from 0 to 5
+        workload_high: boolean
+        workload_weight: number from 0 to 5
+        passrate_high: boolean
+        passrate_weight: number from 0 to 5
+        grade_high: boolean
+        grade_weight: number from 0 to 5
+        """
+        params = get_advanced_filtering_parameters(request)  # Dictionary mapping parameters to their values
+        max_values = {"average_review_score": 5, "average_workload": 2, "average_difficulty": 2, "pass_rate": 100,
+                      "average_grade": 5}
+        data = list(map(lambda course: map_course_to_filter_score(course, params, max_values),
+                        Course.objects.filter(combined_search_filter).values())).sort()[offset:offset + n]
+    else:
+        # Get and validate order_by and ascending parameters
+        order_by = request.GET.get("order_by", "course_name")
+        valid_order_parameters = ["course_code", "course_name", "credit", "average_grade", "review_count", "pass_rate",
+                                  "average_review_score"]
+        if order_by not in valid_order_parameters:
+            raise ValueError(
+                "Invalid value for order_by: {}. Valid  values: {}".format(order_by, valid_order_parameters))
+        ascending = request.GET.get("ascending", "1")
+        if ascending not in ["0", "1"]:
+            raise ValueError("Invalid value for ascending: {}".format(ascending))
+        if ascending == "0":
+            order_by = "-" + order_by
 
-    # Fetch data from database
-    data = Course.objects.filter(combined_search_filter).order_by(order_by)[offset:offset + n]
-    return {"count": number_of_courses, "data": list(data.values())}
+        # Fetch data from database
+        data = list(Course.objects.filter(combined_search_filter).order_by(order_by)[offset:offset + n].values())
+    return {"count": number_of_courses, "data": data}
+
+
+def map_course_to_filter_score(course, params, max_values):
+    filter_score = 0
+    for param in params.keys():  # Review score can possibly create problems here, since it defaults to 0
+        temp = course[param] / max_values[param]
+        if temp < 0:
+            temp = 0.5  # If no reviews exist, the parameter gets a neutral value
+        if not params[param][0]:
+            temp = 1 - temp
+        filter_score += temp * params[param][1]
+    course["filter_score"] = filter_score
+    return course
 
 
 @api_view(['GET'])
