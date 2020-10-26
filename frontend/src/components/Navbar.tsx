@@ -10,7 +10,7 @@ import { GlobalStateContext } from 'context/GlobalStateContext';
 const NavBarContainer = styled.nav`
   width: 100%;
   height: auto;
-  flex: 1;
+  /* flex: 1; */
   background-color: ${({ theme }) => theme.darkBlue};
   /* position: sticky; */
   /* position: -webkit-sticky; */
