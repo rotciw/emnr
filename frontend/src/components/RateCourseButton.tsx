@@ -29,6 +29,7 @@ export const RateButton = styled.div`
 export const DisabledRateButton = styled(RateButton)`
   background-color: #aaa;
   border: 1px solid #aaa;
+  z-index: -1;
 `;
 
 export const TooltipText = styled.div`
