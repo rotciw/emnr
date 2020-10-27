@@ -6,6 +6,8 @@ import emnrLogo from '../assets/images/emnr_long.svg';
 import Searchbar from './Searchbar';
 import 'react-dropdown/style.css';
 import { GlobalStateContext } from 'context/GlobalStateContext';
+import {Menu} from './Menu';
+import {FlexContainer} from '../styles/Containers';
 
 const NavBarContainer = styled.nav`
   width: 100%;
@@ -28,25 +30,7 @@ const Logo = styled.img`
   padding: 10px;
   cursor: pointer;
   width: 100px;
-`;
-
-const MeButton = styled.button`
-  background-color: ${({ theme }) => theme.darkBlue};
-  cursor: pointer;
-  color: ${({ theme }) => theme.white};
-  font-family: gilroymedium;
-  outline: none;
-  border: none;
-  :hover {
-    background-color: ${({ theme }) => theme.blue};
-  }
-`;
-
-const TopRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  vertical-align: center;
-  justify-content: space-between;
+  z-index: 2;
 `;
 
 const options = [
@@ -61,7 +45,6 @@ const options = [
 const Navbar: React.FC = () => {
   const history = useHistory();
   const handleOnClick = useCallback(() => history.push('/'), [history]);
-  const handleClickMe = useCallback(() => history.push('/me'), [history]);
 
   const { queryProvider } = useContext(GlobalStateContext)!;
   const isOnLandingPage: boolean = useLocation().pathname === '/';
@@ -74,10 +57,10 @@ const Navbar: React.FC = () => {
 
   return (
     <NavBarContainer>
-      <TopRow>
+      <FlexContainer>
         <Logo src={emnrLogo} onClick={handleOnClick} />
-        <MeButton onClick={handleClickMe}> Min side </MeButton>
-      </TopRow>
+        <Menu/>
+      </FlexContainer>
       {isOnLandingPage && (
         <>
           <Searchbar />
