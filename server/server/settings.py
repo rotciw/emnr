@@ -12,31 +12,45 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 import environ
+import dj_database_url
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# TODO set DEBUG to false in prod
+env = environ.Env(DEBUG=(bool, False))
+environ.Env.read_env('.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'pd_z(c+x8zw&&s3+^2tb6izn-gs&##5jgynwu+h*nir^mh75oy'
+SECRET_KEY = env('SECRET_KEY', default='foo')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'emnr-tdt4252.herokuapp.com']
 
 
-DEBUG = True
+DEBUG = int(env('DEBUG', default=0))
 
-CORS_ORIGIN_ALLOW_ALL = DEBUG
+CORS_ORIGIN_ALLOW_ALL = True
 
-#TODO set DEBUG to false in prod
-env = environ.Env(DEBUG=(bool, False))
-environ.Env.read_env('.env')
 
-# Dataporten settings
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+DATABASE_URL = env('DATABASE_URL')
+db_from_env = dj_database_url.config(
+    default=DATABASE_URL, conn_max_age=500, ssl_require=True)
+DATABASES['default'].update(db_from_env)
+
+# # Dataporten settings
 DATAPORTEN_ID = env('DATAPORTEN_CLIENT_ID')
 DATAPORTEN_OAUTH_AUTH_URL = env('DATAPORTEN_OAUTH_AUTH_URL')
 DATAPORTEN_OAUTH_TOKEN_URL = env('DATAPORTEN_OAUTH_TOKEN_URL')
@@ -98,14 +112,6 @@ WSGI_APPLICATION = 'server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
-
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -143,4 +149,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-

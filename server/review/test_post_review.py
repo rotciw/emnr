@@ -48,7 +48,7 @@ class PostReviewTest(TestCase):
              patch("course.views.Course") as mock_course_db:
             mock_curr_semester.return_value = "H2020"
             mock_course_db.return_value.objects.return_value.filter.return_value = [
-                Course.create("AAA9999", "Test course", 0, 0)]
+                Course.create("AAA9999", "Test course", 0, 0, 100.0)]
             actual_reviewables = [
                 'EXPH0004', 'TDT4137', 'TMA4140', 'TDT4136', 'TFE4101', 'TDT4112', 'TDT4113', 'TDT4110', 'TMA4100',
                 'TDT4180', 'HMS0002', 'TDT4160', 'TDT4186', 'TFY4125', 'TDT4100', 'TMA4135', 'TDT4145', 'TDT4120',
@@ -62,7 +62,7 @@ class PostReviewTest(TestCase):
              patch("course.views.Course") as mock_course_db:
             mock_curr_semester.return_value = "H2020"
             mock_course_db.return_value.objects.return_value.filter.return_value = [
-                Course.create("AAA9999", "Test course", 0, 0)]
+                Course.create("AAA9999", "Test course", 0, 0, 100.0)]
             with self.assertRaises(ValueError):
                 get_reviewable_courses("invalid token")
 
@@ -134,7 +134,7 @@ class PostReviewTest(TestCase):
                      "difficulty": 1,
                      "reviewText": "Lorem ipsum"}
         # Wrong difficulty
-        difficulties = [0, -1253, 6, float("inf"), "abasd"]
+        difficulties = [-1253, 3, float("inf"), "abasd"]
         for elem in difficulties:
             data = {k: test_data[k] for k in test_data.keys()}
             data["difficulty"] = elem
@@ -148,7 +148,7 @@ class PostReviewTest(TestCase):
                      "difficulty": 1,
                      "reviewText": "Lorem ipsum"}
         # Wrong workload
-        workloads = [0, -1253, 6, float("inf"), "abasd"]
+        workloads = [-1253, 3, float("inf"), "abasd"]
         for elem in workloads:
             data = {k: test_data[k] for k in test_data.keys()}
             data["workload"] = elem
@@ -180,7 +180,8 @@ class PostReviewTest(TestCase):
                              "score": -2,
                              "workload": "abx",
                              "difficulty": 0}
-        course = Course(course_code="TDT4290", course_name="Customer Driven Project", credit=15, average_grade=1)
+        course = Course(course_code="TDT4290", course_name="Customer Driven Project", credit=15, average_grade=1,
+                        pass_rate=100.0)
         course.save()
         c = APIClient()
         c.credentials(HTTP_AUTHORIZATION='valid_token')
@@ -210,7 +211,7 @@ class PostReviewTest(TestCase):
         c.credentials(HTTP_AUTHORIZATION='valid_token')
         with patch("course.views.Course") as mock_course_db:
             mock_course_db.return_value.objects.return_value.filter.return_value = [
-                Course.create("AAA9999", "Test course", 0, 0)]
+                Course.create("AAA9999", "Test course", 0, 0, 100.0)]
             response = c.post("/review/", data=valid_test_data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertTrue(Review.objects.filter(course_code="TDT4120", user_email="test@testesen.com").exists())

@@ -37,9 +37,7 @@ const FeideLogin: React.FC = () => {
   return (
     <Wrapper>
       <Logo src={emnrLoginLogo} />
-      <LoginButton clickHandler={handleFeideLogin}>
-        Logg på (Feide)
-      </LoginButton>
+      <LoginButton clickHandler={handleFeideLogin}>Logg på (Feide)</LoginButton>
     </Wrapper>
   );
 };

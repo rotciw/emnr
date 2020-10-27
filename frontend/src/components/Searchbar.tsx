@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import styled from 'styled-components';
 
@@ -29,15 +29,17 @@ const SearchInput = styled.input`
   }
 `;
 
-export const Searchbar: React.FC = () => {
+const Searchbar: React.FC = () => {
   const { queryProvider } = useContext(GlobalStateContext)!;
 
   return (
     <SearchbarContainer>
       <SearchInput
         onChange={(e) => queryProvider.setSearchQuery(e.target.value)}
-        placeholder='Søk etter fagkode eller navn..'
+        placeholder='Søk etter emnekode eller navn..'
       />
     </SearchbarContainer>
   );
 };
+
+export default Searchbar;

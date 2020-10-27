@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { RateCourseButton } from 'styles/Buttons';
 import { FlexContainer, HrLine } from 'styles/Containers';
 import { Title, BoldTitle } from 'styles/Text';
-import { RadioButtonsBar } from './RadioButtonBar';
 import axios from 'axios';
+import API_URL from 'config';
+import RadioButtonBar from './RadioButtonBar';
 import { getLocalToken } from '../utils/api';
+import { RateCourseButton } from './RateCourseButton';
 
 interface ReviewFormProps {
   closeModal: () => void;
-  courseName: String;
-  courseCode: String;
+  courseName: string;
+  courseCode: string;
 }
 
 const TextInput = styled.textarea`
@@ -37,7 +38,7 @@ const ModalXButton = styled.span`
   cursor: pointer;
 `;
 
-export const ReviewForm: React.FC<ReviewFormProps> = ({
+const ReviewForm: React.FC<ReviewFormProps> = ({
   closeModal,
   courseName,
   courseCode,
@@ -45,26 +46,26 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
   const [scoreValue, setScoreValue] = useState<number>(-1);
   const [difficultyValue, setDifficultyValue] = useState<number>(-1);
   const [workloadValue, setWorkloadValue] = useState<number>(-1);
-  const [reviewText, setReviewText] = useState<String>('');
-
-  const API_URL: String = 'http://localhost:8000';
+  const [reviewText, setReviewText] = useState<string>('');
 
   const postReview = () => {
     closeModal();
     const token = getLocalToken();
-    axios.defaults.headers.common['Authorization'] = `${token}`;
+    axios.defaults.headers.common.Authorization = `${token}`;
     return axios
-      .post(API_URL + '/review/', {
-        courseCode: courseCode,
+      .post(`${API_URL}/review/`, {
+        courseCode,
         score: scoreValue,
         workload: workloadValue,
         difficulty: difficultyValue,
-        reviewText: reviewText,
+        reviewText,
       })
       .then(function (response) {
         return response.data;
       })
-      .catch(function (error) {});
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   return (
@@ -76,14 +77,14 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
       <BoldTitle fontSize='30px'>{courseName}</BoldTitle>
       <HrLine margin='15px 0 0 0' />
       <BoldInputDescription>Totalvurdering:</BoldInputDescription>
-      <RadioButtonsBar radioID='reviewScore' valueSetter={setScoreValue} />
+      <RadioButtonBar radioID='reviewScore' valueSetter={setScoreValue} />
       <InputDescription>Vanskelighetsgrad:</InputDescription>
-      <RadioButtonsBar
+      <RadioButtonBar
         radioID='difficultyScore'
         valueSetter={setDifficultyValue}
       />
       <InputDescription>Arbeidsmengde:</InputDescription>
-      <RadioButtonsBar radioID='workloadScore' valueSetter={setWorkloadValue} />
+      <RadioButtonBar radioID='workloadScore' valueSetter={setWorkloadValue} />
       <InputDescription style={{ margin: '50px 0 0 0' }}>
         Kommentar (maks 750 tegn):
       </InputDescription>
@@ -91,7 +92,11 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
         maxLength={750}
         onChange={(e) => setReviewText(e.target.value)}
       />
-      <RateCourseButton onClick={postReview}>Send inn</RateCourseButton>
+      <RateCourseButton onClickFunction={postReview} courseCode={courseCode}>
+        Send inn
+      </RateCourseButton>
     </div>
   );
 };
+
+export default ReviewForm;

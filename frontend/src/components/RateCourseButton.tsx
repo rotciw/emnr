@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { getLocalToken } from 'utils/api';
+import API_URL from 'config';
 
-interface ReviewFormProps {
+interface RateCourseButtonProps {
   onClickFunction: () => void;
   courseCode: string;
 }
@@ -49,19 +50,19 @@ export const TooltipText = styled.div`
   }
 `;
 
-export const RateCourseButton: React.FC<ReviewFormProps> = ({
+export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
   onClickFunction,
   courseCode,
 }) => {
   const [reviewEligibility, setReviewEligibility] = useState<number>(1);
 
-  //TODO: move axios config (ref Casper code review comment @ !PR19)
-  axios.defaults.headers.common['Authorization'] = `${getLocalToken()}`;
+  // TODO: move axios config (ref Casper code review comment @ !PR19)
+  axios.defaults.headers.common.Authorization = `${getLocalToken()}`;
 
   useEffect(() => {
     const getReviewEligibility = async () => {
       await axios
-        .get('http://localhost:8000/review/check/?courseCode=' + courseCode)
+        .get(`${API_URL}/review/check/?courseCode=${courseCode}`)
         .then((res) => {
           setReviewEligibility(res.data);
         })
@@ -75,40 +76,38 @@ export const RateCourseButton: React.FC<ReviewFormProps> = ({
   switch (reviewEligibility) {
     case 0:
       content = (
-        <RateButton onClick={() => onClickFunction()}>Send inn</RateButton>
+        <RateButton onClick={() => onClickFunction()}>
+          Vurder {courseCode}
+        </RateButton>
       );
       break;
     case 1:
       content = (
         <TooltipButtonContainer>
-          <DisabledRateButton>Send inn</DisabledRateButton>
-          <TooltipText>Du har ikke fullført dette faget</TooltipText>
+          <DisabledRateButton>Vurder {courseCode}</DisabledRateButton>
+          <TooltipText>Du har ikke fullført dette emnet</TooltipText>
         </TooltipButtonContainer>
       );
       break;
     case 2:
       content = (
         <TooltipButtonContainer>
-          <DisabledRateButton>Send inn</DisabledRateButton>
-          <TooltipText>
-            Du har allerede vurdert dette faget
-          </TooltipText>
+          <DisabledRateButton>Vurder {courseCode}</DisabledRateButton>
+          <TooltipText>Du har allerede vurdert dette emnet</TooltipText>
         </TooltipButtonContainer>
       );
       break;
     case 3:
       content = (
         <TooltipButtonContainer>
-          <DisabledRateButton>Send inn</DisabledRateButton>
+          <DisabledRateButton>Vurder {courseCode}</DisabledRateButton>
           <TooltipText>Noe gikk galt med brukerautentiseringen</TooltipText>
         </TooltipButtonContainer>
       );
       break;
     default:
       content = (
-        <div>
-          Noe gikk galt mens vi sjekket om du kan vurdere dette faget
-        </div>
+        <div>Noe gikk galt mens vi sjekket om du kan vurdere dette emnet</div>
       );
   }
 

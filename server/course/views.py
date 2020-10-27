@@ -9,6 +9,8 @@ from auth.views import get_token
 import requests
 import json
 import time
+from review.models import Review
+from auth.models import UserAuth
 
 
 # Create your views here.
@@ -57,7 +59,8 @@ def get_courses_from_db(request):
 
     # Get and validate order_by and ascending parameters
     order_by = request.GET.get("order_by", "course_name")
-    valid_order_parameters = ["course_code", "course_name", "credit", "average_grade"]
+    valid_order_parameters = ["course_code", "course_name", "credit", "average_grade", "review_count", "pass_rate",
+                              "average_review_score"]
     if order_by not in valid_order_parameters:
         raise ValueError(
             "Invalid value for order_by: {}. Valid  values: {}".format(order_by, valid_order_parameters))
@@ -100,9 +103,23 @@ def get_single_course_from_db(request):
 def get_current_user_courses(request):
     try:
         course_info = retrieve_courses_from_token(request.META['HTTP_AUTHORIZATION'])
+        course_info = add_review_info_to_my_courses(course_info, request.META['HTTP_AUTHORIZATION'])
         return HttpResponse(json.dumps(course_info))
     except TypeError as e:
         return Response("Invalid expiring token", status=401)
+
+
+def add_review_info_to_my_courses(course_info, expiring_token):
+    user_email = UserAuth.objects.get(expiring_token=expiring_token).user_email
+    for course_dict in course_info:
+        if Review.objects.filter(course_code=course_dict["course_code"], user_email=user_email).exists():
+            course_dict["has_reviewed"] = True
+            course_dict["my_review_score"] = Review.objects.get(course_code=course_dict["course_code"],
+                                                                user_email=user_email).score
+        else:
+            course_dict["has_reviewed"] = False
+            course_dict["my_review_score"] = -1
+    return course_info
 
 
 def retrieve_courses_from_token(token):

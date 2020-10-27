@@ -1,9 +1,9 @@
 import React, { useCallback, useContext } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import Dropdown, { Option } from 'react-dropdown';
 import emnrLogo from '../assets/images/emnr_long.svg';
-import { Searchbar } from './Searchbar';
-import Dropdown from 'react-dropdown';
+import Searchbar from './Searchbar';
 import 'react-dropdown/style.css';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import {Menu} from './Menu';
@@ -13,7 +13,6 @@ const NavBarContainer = styled.nav`
   width: 100%;
   flex: 1;
   background-color: ${({ theme }) => theme.darkBlue};
-  padding-bottom: 25px;
   position: sticky;
   top: 0;
 `;
@@ -21,6 +20,7 @@ const NavBarContainer = styled.nav`
 const DropdownContainer = styled.div`
   background-color: ${({ theme }) => theme.darkBlue};
   margin: 1.2% 50% 0 25%;
+  padding-bottom: 25px;
   @media (max-width: 768px) {
     margin: 2.2% 25% 0 20%;
   }
@@ -34,22 +34,25 @@ const Logo = styled.img`
 `;
 
 const options = [
-  { value: 'course_code', label: 'Fagkode' },
-  { value: 'course_name', label: 'Fagnavn' },
+  { value: 'course_code', label: 'Emnekode' },
+  { value: 'course_name', label: 'Emnenavn' },
+  { value: 'average_review_score', label: 'Gjennomsnittlig vurdering' },
+  { value: 'review_count', label: 'Antall vurderinger' },
   { value: 'credit', label: 'Studiepoeng' },
-  { value: 'average-grade', label: 'Gj. snitt karakter' },
+  { value: 'average_grade', label: 'Karaktersnitt' },
 ];
 
-export const Navbar: React.FC = () => {
+const Navbar: React.FC = () => {
   const history = useHistory();
   const handleOnClick = useCallback(() => history.push('/'), [history]);
 
   const { queryProvider } = useContext(GlobalStateContext)!;
   const isOnLandingPage: boolean = useLocation().pathname === '/';
 
-  const onSelect = (e: string) => {
-    queryProvider.setOrderByQuery(e);
+  const onSelect = (e: Option) => {
+    queryProvider.setOrderByQuery(e.value);
     queryProvider.setOrderToggle(!queryProvider.orderToggle);
+    queryProvider.orderToggle ? (e.label += ` \u25B2`) : (e.label += ` \u25BC`);
   };
 
   return (
@@ -64,7 +67,7 @@ export const Navbar: React.FC = () => {
           <DropdownContainer>
             <Dropdown
               options={options}
-              onChange={(e) => onSelect(e.value)}
+              onChange={(e) => onSelect(e)}
               placeholder='Sorter etter..'
             />
           </DropdownContainer>
@@ -73,3 +76,5 @@ export const Navbar: React.FC = () => {
     </NavBarContainer>
   );
 };
+
+export default Navbar;

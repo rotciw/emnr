@@ -35,12 +35,17 @@ export const GoBackText = styled.p`
   color: ${({ theme }) => theme.darkBlue};
 `;
 
-export const CourseItemText = styled.p`
+export const CourseItemText = styled.span`
   display: inline-block;
   width: ${(props: TitleProps) => props.width || 'auto'};
   vertical-align: top;
   text-align: ${(props: TitleProps) => props.textAlign || 'auto'};
   font-family: gilroymedium;
+  margin-bottom: 3px;
+`;
+
+export const CourseItemSubtext = styled(CourseItemText)`
+  font-size: 0.75em;
 `;
 
 export const ExtraBold = styled.span`

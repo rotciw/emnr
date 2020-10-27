@@ -47,7 +47,7 @@ def verify_token(request):
     session.headers.update({'authorization': 'bearer {}'.format(response_json['access_token'])})
     user_info = session.get(settings.DATAPORTEN_USER_INFO_URL).json()['user']
     user_mail = user_info['email']
-    user, created = User.objects.get_or_create(email=user_mail)
+    user, created = User.objects.get_or_create(email=user_mail, username=user_mail)
     ExpiringToken.objects.filter(user=user).delete()
     token = ExpiringToken.objects.create(user=user)
     access_token = response_json['access_token']

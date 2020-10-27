@@ -14,12 +14,18 @@ export const FlexContainer = styled.div`
   width: ${(props: LayoutProps) => props.width || ''};
 `;
 
+export const FlexColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: ${(props: LayoutProps) => props.width || ''};
+`;
+
 export const SemesterContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin: ${(props: LayoutProps) => props.margin || 'auto'};
-  border: 2px solid ${({theme}) => theme.darkBlue};
-  padding: 5px 10px 20px 10px; 
+  border: 2px solid ${({ theme }) => theme.darkBlue};
+  padding: 5px 10px 20px 10px;
 `;
 
 export const CenteredFlexContainer = styled.div`
@@ -46,14 +52,14 @@ export const LocalShapeContainer = styled.div`
 `;
 
 export const FlexItem = styled.div`
-  flex: ${(props: LayoutProps) => props.flex || "1"};
+  flex: ${(props: LayoutProps) => props.flex || '1'};
   margin: ${(props: LayoutProps) => props.margin || 'auto'};
   width: '';
 `;
 
 export const HrLine = styled.div`
   margin: ${(props: LayoutProps) => props.margin || '5vh 0 2vh 0'};
-  border-bottom: 1px solid ${({theme}) => theme.darkBlue};
+  border-bottom: 1px solid ${({ theme }) => theme.darkBlue};
 `;
 
 

@@ -1,7 +1,7 @@
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { PaginationButton } from './PaginationButton';
+import PaginationButton from './PaginationButton';
 
 const PaginationWrapper = styled.div`
   padding: 2rem 0;
@@ -14,9 +14,9 @@ const Separator = styled.div`
   margin: 0 0.25rem;
 `;
 export const PaginationComponent: React.FC = () => {
-  const { pageProvider, totalPageProvider } = useContext(GlobalStateContext)!;
-  let totalPages = totalPageProvider.totalPage;
-  let page = pageProvider.page;
+  const { pageProvider } = useContext(GlobalStateContext)!;
+  const totalPages = pageProvider.totalPage;
+  const { page } = pageProvider;
 
   return (
     <div>

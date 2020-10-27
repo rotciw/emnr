@@ -1,6 +1,6 @@
-import { DefaultTheme } from "styled-components";
+import { DefaultTheme } from 'styled-components';
 
-declare module "styled-components" {
+declare module 'styled-components' {
   export interface DefaultTheme {
     red: string;
     light: string;
@@ -13,11 +13,11 @@ declare module "styled-components" {
 }
 
 export const defaultTheme: DefaultTheme = {
-	red: "#E63946",
-  light: "#F1FAEE",
-  lightBlue: "#A8DADC",
-  blue: "#457B9D",
-  darkBlue: "#1D3557",
-  white: "#FFF",
-  black: "#000",
+  red: '#E63946',
+  light: '#F1FAEE',
+  lightBlue: '#A8DADC',
+  blue: '#457B9D',
+  darkBlue: '#1D3557',
+  white: '#FFF',
+  black: '#000',
 };

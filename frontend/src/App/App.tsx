@@ -1,10 +1,10 @@
 import React from 'react';
-import { CourseListPage } from '../pages/CourseListPage';
+import CourseListPage from '../pages/CourseListPage';
 
 const App: React.FC = () => {
   return (
     <div>
-      <CourseListPage/>
+      <CourseListPage />
     </div>
   );
 };

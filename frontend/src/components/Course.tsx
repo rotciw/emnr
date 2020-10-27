@@ -1,32 +1,42 @@
 import React from 'react';
-import { CourseButton } from '../styles/Buttons';
 import { Link } from 'react-router-dom';
-import { CourseItemText } from 'styles/Text';
+import { CourseItemText, CourseItemSubtext } from 'styles/Text';
+import { FlexColumn } from 'styles/Containers';
+import { CourseButton } from '../styles/Buttons';
 
 interface CourseProps {
-  courseName: String;
-  courseCode: String;
-  credit: Number;
+  courseName: string;
+  courseCode: string;
+  averageReviewScore: number;
+  reviewCount: number;
 }
 
-export const Course: React.FC<CourseProps> = ({
+const Course: React.FC<CourseProps> = ({
   courseName,
   courseCode,
-  credit,
+  averageReviewScore,
+  reviewCount,
 }) => {
   return (
     <tr>
       <td colSpan={3}>
-        <Link to={`/course/${courseCode}`}>
-          <CourseButton >
+        <Link to={`/course/${courseCode}`} style={{ textDecoration: 'none' }}>
+          <CourseButton>
             <CourseItemText width='25%'>{courseCode}</CourseItemText>
             <CourseItemText width='50%' textAlign='left'>
               {courseName}
             </CourseItemText>
-            <CourseItemText width='25%'>{credit} / 5</CourseItemText>
+            <FlexColumn width='25%'>
+              <CourseItemText>{averageReviewScore} / 5</CourseItemText>
+              <CourseItemSubtext>
+                {reviewCount} {reviewCount === 1 ? 'vurdering' : 'vurderinger'}
+              </CourseItemSubtext>
+            </FlexColumn>
           </CourseButton>
         </Link>
       </td>
     </tr>
   );
 };
+
+export default Course;

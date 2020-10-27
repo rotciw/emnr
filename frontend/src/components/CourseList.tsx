@@ -1,19 +1,18 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Course } from './Course';
 import axios from 'axios';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { FlexContainer, StyledTable, StyledTH } from 'styles/Containers';
 import styled from 'styled-components';
-
-interface CourseListProps {
-  pageNumber: number;
-}
+import API_URL from 'config';
+import Course from './Course';
 
 interface CourseProps {
   course_name: string;
   course_code: string;
   average_grade: number;
   credit: number;
+  review_count: number;
+  average_review_score: number;
 }
 
 export const EmptyResult = styled.h3`
@@ -24,14 +23,12 @@ export const EmptyResult = styled.h3`
 
 export const CourseList: React.FC = () => {
   const [courses, updateCourses] = useState<CourseProps[]>([]);
-  const { totalPageProvider, queryProvider, pageProvider } = useContext(
-    GlobalStateContext,
-  )!;
+  const { pageProvider, queryProvider } = useContext(GlobalStateContext)!;
 
-  let pageNumber = pageProvider.page;
+  const pageNumber = pageProvider.page;
   // Search input
   // Reset page number when searching
-  let searchQuery: string = ' ';
+  let searchQuery = '';
   if (queryProvider.searchQuery) {
     searchQuery = queryProvider.searchQuery;
   }
@@ -43,26 +40,30 @@ export const CourseList: React.FC = () => {
     : (orderByQuery = 'course_name');
 
   let orderToggle: number;
+
   // The backend sorts ascending on 1 and descending on 0
   queryProvider.orderToggle ? (orderToggle = 0) : (orderToggle = 1);
 
-  const resultLimit: number = 25;
+  const resultLimit = 25;
   let start: number = (pageNumber - 1) * resultLimit;
+
+  // this useEffect is used for resetting page number to 1 when searching
+  useEffect(() => {
+    pageProvider.setPage(1);
+  }, [searchQuery]);
+
   useEffect(() => {
     const getCourses = async () => {
       await axios
         .get(
-          `http://localhost:8000/course/all/?n=25&offset=${start}&search=${searchQuery}&order_by=${orderByQuery}&ascending=${orderToggle}`,
+          `${API_URL}/course/all/?n=25&offset=${start}&search=${searchQuery}&order_by=${orderByQuery}&ascending=${orderToggle}`,
         )
         .then((res) => {
           updateCourses(res.data.data);
-          totalPageProvider.setTotalPage(
-            Math.ceil(res.data.count / resultLimit),
-          );
+          pageProvider.setTotalPage(Math.ceil(res.data.count / resultLimit));
         })
         .catch((err) => {
           console.log(err);
-          pageProvider.setPage(1);
         });
     };
     getCourses();
@@ -75,9 +76,9 @@ export const CourseList: React.FC = () => {
         <StyledTable>
           <thead>
             <tr>
-              <StyledTH width='25%'>Fagkode</StyledTH>
+              <StyledTH width='25%'>Emnekode</StyledTH>
               <StyledTH width='50%' textAlign='left'>
-                Fagnavn
+                Emnenavn
               </StyledTH>
               <StyledTH width='25%'>Vurdering</StyledTH>
             </tr>
@@ -88,7 +89,8 @@ export const CourseList: React.FC = () => {
                 <Course
                   courseCode={currentCourse.course_code}
                   courseName={currentCourse.course_name}
-                  credit={currentCourse.credit}
+                  averageReviewScore={currentCourse.average_review_score}
+                  reviewCount={currentCourse.review_count}
                 />
               );
             })}
