@@ -1,17 +1,22 @@
-import React, { useCallback, useEffect, RefObject, useState, useRef } from 'react';
-import {useHistory} from 'react-router-dom';
-import styled from "styled-components";
-import {HrLineLight} from '../styles/Containers';
-import {Hamburger} from './Hamburger';
+import React, {
+  useCallback,
+  useEffect,
+  RefObject,
+  useState,
+  useRef,
+} from 'react';
+import { useHistory } from 'react-router-dom';
+import styled from 'styled-components';
+import { HrLineLight } from '../styles/Containers';
+import { Hamburger } from './Hamburger';
 import homeIcon from '../assets/icons/home.svg';
 import meIcon from '../assets/icons/me.svg';
 import infoIcon from '../assets/icons/info.svg';
 
-
 const StyledMenu = styled.nav<{ open: boolean }>`
   top: 0;
   left: 0;
-  height: 100%; 
+  height: 100%;
   width: 100%;
   position: fixed;
   background-color: ${({ theme }) => theme.blue};
@@ -21,21 +26,16 @@ const StyledMenu = styled.nav<{ open: boolean }>`
   flex-direction: column;
   justify-content: center;
 
-  transition: transform 0.4s ease-in-out; 
-  transform: ${({ open }) =>
-    open ? "translateX(75%)" : "translateX(100%)"}; 
-
+  transition: transform 0.4s ease-in-out;
+  transform: ${({ open }) => (open ? 'translateX(75%)' : 'translateX(100%)')};
 
   @media (max-width: 1000px) {
-      transform: ${({ open }) =>
-      open ? "translateX(68%)" : "translateX(100%)"}; 
+    transform: ${({ open }) => (open ? 'translateX(68%)' : 'translateX(100%)')};
   }
 
   @media (max-width: 576px) {
-    transform: ${({ open }) =>
-    open ? "translateX(0%)" : "translateX(100%)"}; 
+    transform: ${({ open }) => (open ? 'translateX(0%)' : 'translateX(100%)')};
   }
-  
 `;
 
 const HrLineLightScaled = styled(HrLineLight)`
@@ -55,7 +55,7 @@ const StyledLink = styled.a`
   width: fit-content;
   font-size: 18px;
   font-family: gilroyxbold;
-  color: ${({ theme }) => theme.light}; 
+  color: ${({ theme }) => theme.light};
   float: left;
   cursor: pointer;
   :hover {
@@ -64,11 +64,11 @@ const StyledLink = styled.a`
 `;
 
 const LogOutLink = styled(StyledLink)`
-  margin: 25px 0 0 40px; 
+  margin: 25px 0 0 40px;
   text-decoration: underline;
   @media (max-width: 576px) {
-    margin-left: 20px; 
-  }   
+    margin-left: 20px;
+  }
 `;
 
 const FlexContainer = styled.div`
@@ -82,73 +82,67 @@ const Icon = styled.img`
   width: 25px;
 `;
 
-
 const useOnClickOutside = (
-    ref: RefObject<HTMLDivElement>,
-    closeMenu: () => void
-  ) => {
-    useEffect(() => {
-      const listener = (event: MouseEvent) => {
-        if (
-          ref.current &&
-          event.target &&
-          ref.current.contains(event.target as Node)
-        ) {
-          return;
-        }
-        closeMenu();
-      };
-  
-      document.addEventListener("mousedown", listener);
-      return () => {
-        document.removeEventListener("mousedown", listener);
-      };
-    }, [ref, closeMenu]);
-  };
+  ref: RefObject<HTMLDivElement>,
+  closeMenu: () => void,
+) => {
+  useEffect(() => {
+    const listener = (event: MouseEvent) => {
+      if (
+        ref.current &&
+        event.target &&
+        ref.current.contains(event.target as Node)
+      ) {
+        return;
+      }
+      closeMenu();
+    };
 
+    document.addEventListener('mousedown', listener);
+    return () => {
+      document.removeEventListener('mousedown', listener);
+    };
+  }, [ref, closeMenu]);
+};
 
 export const Menu: React.FC = () => {
-    const [open, setOpen] = useState<boolean>(false);
-    const node = useRef<HTMLDivElement>(null);
-    const close = () => setOpen(false);
-  
-    useOnClickOutside(node, () => setOpen(false));
+  const [open, setOpen] = useState<boolean>(false);
+  const node = useRef<HTMLDivElement>(null);
+  const close = () => setOpen(false);
 
-    const history = useHistory();
-    const handleOnClick = useCallback(() => history.push('/'), [history]);
-    const handleClickMe = useCallback(() => history.push('/me'), [history]);
-    const handleClickLogOut = useCallback(() => {
-      history.push('/login') 
-      localStorage.clear()
-    }, [history]);
-  
-  
-    return (
-      <div ref={node}>
+  useOnClickOutside(node, () => setOpen(false));
 
-        <StyledMenu open={open}>
-          <FlexContainer>
-          <Icon src={homeIcon}/>
+  const history = useHistory();
+  const handleOnClick = useCallback(() => history.push('/'), [history]);
+  const handleClickMe = useCallback(() => history.push('/me'), [history]);
+  const handleClickLogOut = useCallback(() => {
+    history.push('/login');
+    localStorage.clear();
+  }, [history]);
+
+  return (
+    <div ref={node}>
+      <StyledMenu open={open}>
+        <FlexContainer>
+          <Icon src={homeIcon} />
           <StyledLink onClick={handleOnClick}>Gå til forsiden</StyledLink>
-          </FlexContainer>
+        </FlexContainer>
 
-          <FlexContainer>
-          <Icon src={meIcon}/>
+        <FlexContainer>
+          <Icon src={meIcon} />
           <StyledLink onClick={handleClickMe}>Gå til min side</StyledLink>
-          </FlexContainer>
+        </FlexContainer>
 
-          <FlexContainer>
-          <Icon src={infoIcon}/>
-          <StyledLink onClick={() => close()}>Om EMNR</StyledLink> 
-          </FlexContainer>
+        <FlexContainer>
+          <Icon src={infoIcon} />
+          <StyledLink onClick={() => close()}>Om EMNR</StyledLink>
+        </FlexContainer>
 
-          <HrLineLightScaled/>
-          <LogOutLink onClick={handleClickLogOut}>Logg ut</LogOutLink>
-        </StyledMenu>
+        <HrLineLightScaled />
+        <LogOutLink onClick={handleClickLogOut}>Logg ut</LogOutLink>
+      </StyledMenu>
 
-        <Hamburger open={open} setOpen={setOpen} />
-  
-      </div>
-    );
-  };
-  
+      <Hamburger open={open} setOpen={setOpen} />
+    </div>
+  );
+};

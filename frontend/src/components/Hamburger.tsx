@@ -4,8 +4,8 @@ import styled from "styled-components";
 
 const StyledHamburger = styled.button<{ open: boolean }>`
   position: fixed;
-  right: 1vw;
-  top: 1vw;
+  right: 2%;
+  top: 1.5%;
   width: 32px;
   height: 32px;
   background: transparent;
