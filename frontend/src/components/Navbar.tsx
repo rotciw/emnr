@@ -6,8 +6,7 @@ import emnrLogo from '../assets/images/emnr_long.svg';
 import Searchbar from './Searchbar';
 import 'react-dropdown/style.css';
 import { GlobalStateContext } from 'context/GlobalStateContext';
-import {Menu} from './Menu';
-import {FlexContainer} from '../styles/Containers';
+import { Menu } from './Menu';
 
 const NavBarContainer = styled.nav`
   width: 100%;
@@ -72,7 +71,7 @@ const Navbar: React.FC = () => {
     <NavBarContainer>
       <TopRow>
         <Logo src={emnrLogo} onClick={handleOnClick} />
-        <Menu/>
+        <Menu />
       </TopRow>
       {isOnLandingPage && (
         <>
