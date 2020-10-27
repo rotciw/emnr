@@ -1,13 +1,10 @@
-image: node:12.13.0-alpine
-
-before_script:
-  - npm i -g firebase-tools
-
-cache:
-  paths:
-    - /frontend/node_modules/
-
 frontend-build-hosting:
+  cache:
+    paths:
+      - /frontend/node_modules/
+  before_script:
+    - npm i -g firebase-tools
+  image: node:12.13.0-alpine
   stage: deploy
   when: manual
   script:
