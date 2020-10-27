@@ -1,15 +1,12 @@
-image: docker:latest
-
-services:
-  - docker:dind
-
-variables:
-  DOCKER_DRIVER: overlay
-  DOCKER_TLS_CERTDIR: ""
-  HEROKU_APP_NAME: emnr-tdt4252
-  HEROKU_REGISTRY_NAME: registry.heroku.com/${HEROKU_APP_NAME}/web
-
 backend-docker-build-hosting:
+  variables:
+    DOCKER_DRIVER: overlay
+    DOCKER_TLS_CERTDIR: ""
+    HEROKU_APP_NAME: emnr-tdt4252
+    HEROKU_REGISTRY_NAME: registry.heroku.com/${HEROKU_APP_NAME}/web
+  image: docker:latest
+  services:
+    - docker:dind
   stage: deploy
   when: manual
   script:
