@@ -45,6 +45,7 @@ const CoursePage: React.FC<CourseViewProps> = (
   function toggleModalIsOpen() {
     setModalIsOpen(!modalIsOpen);
   }
+  Modal.setAppElement('#root');
 
   useEffect(() => {
     let isCancelled = false;

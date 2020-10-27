@@ -6,7 +6,7 @@ import axios from 'axios';
 import API_URL from 'config';
 import RadioButtonsBar from './RadioButtonBar';
 import { getLocalToken } from '../utils/api';
-import Dropdown, { Option } from 'react-dropdown';
+import Dropdown from 'react-dropdown';
 import { RateCourseButton } from './RateCourseButton';
 
 interface ReviewFormProps {
@@ -98,7 +98,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         onChange={(e) => setDifficultyValue(parseInt(e.value))}
         placeholder='Velg...'
       />
-      <InputDescription style={{ margin: '50px 0 0 0' }}>
+      <InputDescription style={{ margin: '30px 0 0 0' }}>
         Kommentar (maks 750 tegn):
       </InputDescription>
       <TextInput

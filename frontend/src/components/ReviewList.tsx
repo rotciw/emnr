@@ -43,8 +43,8 @@ const ReviewList: React.FC<ReviewListProps> = ({
 
   const { pageReviewProvider } = useContext(GlobalStateContext)!;
 
-  const resultLimit: number = 5;
-  let start: number = (pageNumber - 1) * resultLimit;
+  const resultLimit = 5;
+  let start = (pageNumber - 1) * resultLimit;
 
   useEffect(() => {
     let isCancelled = false;
@@ -88,7 +88,6 @@ const ReviewList: React.FC<ReviewListProps> = ({
     <Wrapper>
       {reviews.length ? (
         <div>
-          {/* <tbody> */}
           {reviews.map((currentReview) => {
             //If the difficulty or workload value is not set in the review, they are replaced with an explaining string.
             if (currentReview.difficulty === -1) {
@@ -111,7 +110,6 @@ const ReviewList: React.FC<ReviewListProps> = ({
               />
             );
           })}
-          {/* </tbody> */}
         </div>
       ) : (
         <EmptyResult>Ingen vurderinger av {courseCode}. </EmptyResult>
