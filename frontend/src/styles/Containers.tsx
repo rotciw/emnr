@@ -5,11 +5,13 @@ interface LayoutProps {
   flex?: string;
   width?: string;
   textAlign?: string;
+  flexWrap?: string;
 }
 
 export const FlexContainer = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: ${(props: LayoutProps) => props.flexWrap || 'nowrap'};
   margin: ${(props: LayoutProps) => props.margin || 'auto'};
   width: ${(props: LayoutProps) => props.width || ''};
 `;
@@ -22,6 +24,7 @@ export const FlexColumn = styled.div`
 
 export const SemesterContainer = styled.div`
   display: flex;
+  background-color: ${({ theme }) => theme.lightlightBlue};
   flex-direction: column;
   margin: ${(props: LayoutProps) => props.margin || 'auto'};
   border: 2px solid ${({ theme }) => theme.darkBlue};

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FlexContainer, StyledTable } from 'styles/Containers';
+import { FlexContainer, FlexItem } from 'styles/Containers';
 import { Semester } from './Semester';
 import { getLocalToken } from '../utils/api';
 import API_URL from '../config';
@@ -17,38 +17,46 @@ interface Semesters {
   [semester: string]: MyCourseProps[];
 }
 
-export const MyCoursesList: React.FC<MyCoursesListProps> = () => {
-  const [myCourses, updateMyCourses] = useState<MyCourseProps[]>([]);
+const MyCoursesList: React.FC<MyCoursesListProps> = () => {
+  // const [myCourses, updateMyCourses] = useState<MyCourseProps[]>([]);
   const [mySemesters, updateMySemesters] = useState<Semesters>({});
 
   useEffect(() => {
+    let isCancelled = false;
     const token = getLocalToken();
     axios.defaults.headers.common.Authorization = `${token}`;
     const getMyCourses = async () => {
       await axios
         .get(`${API_URL}/course/me/`)
         .then((response) => {
-          const allMyCourses = response.data;
-          const sortedCourses = allMyCourses.reduce(
-            (semesters: any, course: any) => {
-              if (!semesters[course.semester]) semesters[course.semester] = [];
-              semesters[course.semester].push(course);
-              return semesters;
-            },
-            {},
-          );
-          updateMySemesters(sortedCourses);
+          if (!isCancelled) {
+            const allMyCourses = response.data;
+            const sortedCourses = allMyCourses.reduce(
+              (semesters: any, course: any) => {
+                if (!semesters[course.semester])
+                  semesters[course.semester] = [];
+                semesters[course.semester].push(course);
+                return semesters;
+              },
+              {},
+            );
+            updateMySemesters(sortedCourses);
+          }
         })
         .catch((err) => console.log(err));
     };
     getMyCourses();
+    return () => {
+      isCancelled = true;
+    };
   }, []);
+
   return (
     <FlexContainer margin='15px 0 0 0'>
-      <StyledTable>
+      <FlexItem>
         {Object.entries(mySemesters)
           .sort(
-            // Sorting the semesters
+            //Sorting the semesters
             (
               semester1: [string, MyCourseProps[]],
               semester2: [string, MyCourseProps[]],
@@ -76,7 +84,9 @@ export const MyCoursesList: React.FC<MyCoursesListProps> = () => {
               <Semester semester={semester} courses={courses} key={semester} />
             );
           })}
-      </StyledTable>
+      </FlexItem>
     </FlexContainer>
   );
 };
+
+export default MyCoursesList;
