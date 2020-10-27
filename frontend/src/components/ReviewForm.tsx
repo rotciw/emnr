@@ -55,25 +55,28 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   const [difficultyValue, setDifficultyValue] = useState<number>(-1);
   const [workloadValue, setWorkloadValue] = useState<number>(-1);
   const [reviewText, setReviewText] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const postReview = () => {
-    closeModal();
+  const postReview = async () => {
+    setLoading(true);
     const token = getLocalToken();
     axios.defaults.headers.common.Authorization = `${token}`;
-    return axios
-      .post(`${API_URL}/review/`, {
-        courseCode,
-        score: scoreValue,
-        workload: workloadValue,
-        difficulty: difficultyValue,
-        reviewText,
-      })
-      .then(function (response) {
-        return response.data;
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    await axios
+    .post(`${API_URL}/review/`, {
+      courseCode,
+      score: scoreValue,
+      workload: workloadValue,
+      difficulty: difficultyValue,
+      reviewText,
+    })
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    setLoading(false);
+    closeModal();
   };
 
   return (
@@ -105,7 +108,11 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         maxLength={750}
         onChange={(e) => setReviewText(e.target.value)}
       />
-      <RateCourseButton onClickFunction={postReview} courseCode={courseCode}>
+      <RateCourseButton
+        loading={loading}
+        onClickFunction={postReview}
+        courseCode={courseCode}
+      >
         Send inn
       </RateCourseButton>
     </div>

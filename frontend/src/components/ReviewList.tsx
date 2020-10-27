@@ -73,7 +73,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
 
   function calculateAvgScore(reviews: ReviewProps[]) {
     numberOfReviewSetter(reviews.length);
-    let scoreAvg: number = 0;
+    let scoreAvg = 0;
     if (reviews.length > 0) {
       reviews.map((currentReview) => {
         scoreAvg += currentReview.score;

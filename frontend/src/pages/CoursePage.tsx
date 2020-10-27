@@ -26,9 +26,7 @@ interface CourseViewProps {
   location: any;
 }
 
-const CoursePage: React.FC<CourseViewProps> = (
-  props: CourseViewProps,
-) => {
+const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
   const { pageReviewProvider } = useContext(GlobalStateContext)!;
 
   const courseCode: string = useLocation().pathname.substr(8);
@@ -80,6 +78,7 @@ const CoursePage: React.FC<CourseViewProps> = (
             {numberOfReviews === 1 ? 'vurdering' : 'vurderinger'}.
           </SubTitle>
           <RateCourseButton
+            loading={false}
             onClickFunction={toggleModalIsOpen}
             courseCode={courseCode}
           />
