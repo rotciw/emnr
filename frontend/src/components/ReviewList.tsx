@@ -87,7 +87,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
   return (
     <Wrapper>
       {reviews.length ? (
-        <FlexItem>
+        <div>
           {/* <tbody> */}
           {reviews.map((currentReview) => {
             //If the difficulty or workload value is not set in the review, they are replaced with an explaining string.
@@ -112,7 +112,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
             );
           })}
           {/* </tbody> */}
-        </FlexItem>
+        </div>
       ) : (
         <EmptyResult>Ingen vurderinger av {courseCode}. </EmptyResult>
       )}

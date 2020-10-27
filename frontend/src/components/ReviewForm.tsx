@@ -40,6 +40,7 @@ const ModalXButton = styled.span`
 `;
 
 const options = [
+  { value: '-1', label: 'Ingen svar' },
   { value: '0', label: 'Lav' },
   { value: '1', label: 'Middels' },
   { value: '2', label: 'Høy' },
