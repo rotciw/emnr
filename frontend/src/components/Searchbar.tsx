@@ -31,11 +31,14 @@ const SearchInput = styled.input`
 
 const Searchbar: React.FC = () => {
   const { queryProvider } = useContext(GlobalStateContext)!;
+  let searchValue = queryProvider.searchQuery || '';
 
   return (
     <SearchbarContainer>
       <SearchInput
+        type='search'
         onChange={(e) => queryProvider.setSearchQuery(e.target.value)}
+        value={searchValue}
         placeholder='Søk etter emnekode eller navn..'
       />
     </SearchbarContainer>

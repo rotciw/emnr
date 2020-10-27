@@ -5,6 +5,7 @@ import { GlobalStateContext } from 'context/GlobalStateContext';
 import API_URL from 'config';
 import Review from './Review';
 import { EmptyResult } from './CourseList';
+import { FlexItem } from 'styles/Containers';
 
 const Wrapper = styled.div`
   padding: 5px;
@@ -72,7 +73,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
 
   function calculateAvgScore(reviews: ReviewProps[]) {
     numberOfReviewSetter(reviews.length);
-    let scoreAvg = 0;
+    let scoreAvg: number = 0;
     if (reviews.length > 0) {
       reviews.map((currentReview) => {
         scoreAvg += currentReview.score;
