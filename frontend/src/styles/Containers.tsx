@@ -65,6 +65,15 @@ export const HrLine = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.darkBlue};
 `;
 
+
+export const HrLineLight = styled(HrLine)`
+  border-bottom: 2px solid ${({ theme }) => theme.light};
+  width: 23%;
+  margin-left: 1%;
+`;
+
+
+
 export const StyledTable = styled.table`
   width: 100%;
 `;
