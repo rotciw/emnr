@@ -1,7 +1,7 @@
 import React from 'react';
-import { MyCourse } from './MyCourse';
 import { SemesterContainer, StyledTable, StyledTH } from 'styles/Containers';
 import { BoldTitle } from 'styles/Text';
+import MyCourse from './MyCourse';
 
 interface Semester {
   semester: string;
@@ -16,10 +16,10 @@ interface MyCourseProps {
   my_review_score: string;
 }
 
-export const Semester: React.FC<Semester> = ({semester, courses}) => {
+export const Semester: React.FC<Semester> = ({ semester, courses }) => {
   return (
     <SemesterContainer margin='5vh 0'>
-      <BoldTitle fontSize='24px' >{semester}</BoldTitle>
+      <BoldTitle fontSize='24px'>{semester}</BoldTitle>
       <StyledTable>
         <thead>
           <tr>
@@ -34,15 +34,19 @@ export const Semester: React.FC<Semester> = ({semester, courses}) => {
           {courses.map((currentCourse) => {
             return (
               <MyCourse
-                  courseCode={currentCourse.course_code}
-                  courseName={currentCourse.course_name}
-                  yourReview={currentCourse.has_reviewed ? `${currentCourse.my_review_score} / 5` : `Gi vurdering`}
-                  key={currentCourse.course_code}
+                courseCode={currentCourse.course_code}
+                courseName={currentCourse.course_name}
+                yourReview={
+                  currentCourse.has_reviewed
+                    ? `${currentCourse.my_review_score} / 5`
+                    : `Gi vurdering`
+                }
+                key={currentCourse.course_code}
               />
-            )
+            );
           })}
         </tbody>
       </StyledTable>
     </SemesterContainer>
   );
-}
+};

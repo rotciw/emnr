@@ -1,6 +1,6 @@
 import { defaultTheme } from './theme';
 
-export const modalStyles = {
+const modalStyles = {
   overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
@@ -12,7 +12,7 @@ export const modalStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
     backgroundColor: defaultTheme.light,
-    border: '3px solid ' + defaultTheme.darkBlue,
+    border: `3px solid ${defaultTheme.darkBlue}`,
     borderRadius: 0,
     minWidth: '40vw',
     maxWidth: '80vw',
@@ -20,3 +20,5 @@ export const modalStyles = {
     overflow: 'auto',
   },
 };
+
+export default modalStyles;

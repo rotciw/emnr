@@ -24,7 +24,7 @@ export const RadioButtonsBar: React.FC<RadioButtonProps> = ({
     <FlexContainer>
       <RadioButton
         type='radio'
-        id={radioID + '1'}
+        id={`${radioID}1`}
         name={radioID}
         value={1}
         onChange={() => valueSetter(1)}
@@ -32,7 +32,7 @@ export const RadioButtonsBar: React.FC<RadioButtonProps> = ({
       <MarginLabel htmlFor={radioID + '1'}>1</MarginLabel>
       <RadioButton
         type='radio'
-        id={radioID + '2'}
+        id={`${radioID}2`}
         name={radioID}
         value={2}
         onChange={() => valueSetter(2)}
@@ -40,7 +40,7 @@ export const RadioButtonsBar: React.FC<RadioButtonProps> = ({
       <MarginLabel htmlFor={radioID + '2'}>2</MarginLabel>
       <RadioButton
         type='radio'
-        id={radioID + '3'}
+        id={`${radioID}3`}
         name={radioID}
         value={3}
         onChange={() => valueSetter(3)}
@@ -48,7 +48,7 @@ export const RadioButtonsBar: React.FC<RadioButtonProps> = ({
       <MarginLabel htmlFor={radioID + '3'}>3</MarginLabel>
       <RadioButton
         type='radio'
-        id={radioID + '4'}
+        id={`${radioID}4`}
         name={radioID}
         value={4}
         onChange={() => valueSetter(4)}
@@ -56,12 +56,14 @@ export const RadioButtonsBar: React.FC<RadioButtonProps> = ({
       <MarginLabel htmlFor={radioID + '4'}>4</MarginLabel>
       <RadioButton
         type='radio'
-        id={radioID + '5'}
+        id={`${radioID}5`}
         name={radioID}
         value={5}
         onChange={() => valueSetter(5)}
       />
-      <MarginLabel htmlFor={radioID + '5'}>5</MarginLabel>
+      <MarginLabel htmlFor={`${radioID}5`}>5</MarginLabel>
     </FlexContainer>
   );
 };
+
+export default RadioButtonsBar;

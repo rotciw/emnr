@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { RateCourseButton } from './RateCourseButton';
 import { FlexContainer, HrLine } from 'styles/Containers';
 import { Title, BoldTitle } from 'styles/Text';
-import { RadioButtonsBar } from './RadioButtonBar';
 import axios from 'axios';
+import API_URL from 'config';
+import RadioButtonsBar from './RadioButtonBar';
 import { getLocalToken } from '../utils/api';
-import { API_URL } from 'config';
 import Dropdown, { Option } from 'react-dropdown';
+import { RateCourseButton } from './RateCourseButton';
 
 interface ReviewFormProps {
   closeModal: () => void;
@@ -45,7 +45,7 @@ const options = [
   { value: '2', label: 'Høy' },
 ];
 
-export const ReviewForm: React.FC<ReviewFormProps> = ({
+const ReviewForm: React.FC<ReviewFormProps> = ({
   closeModal,
   courseName,
   courseCode,
@@ -58,19 +58,21 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
   const postReview = () => {
     closeModal();
     const token = getLocalToken();
-    axios.defaults.headers.common['Authorization'] = `${token}`;
+    axios.defaults.headers.common.Authorization = `${token}`;
     return axios
-      .post(API_URL + '/review/', {
-        courseCode: courseCode,
+      .post(`${API_URL}/review/`, {
+        courseCode,
         score: scoreValue,
         workload: workloadValue,
         difficulty: difficultyValue,
-        reviewText: reviewText,
+        reviewText,
       })
       .then(function (response) {
         return response.data;
       })
-      .catch(function (error) {});
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   return (
@@ -108,3 +110,5 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
     </div>
   );
 };
+
+export default ReviewForm;

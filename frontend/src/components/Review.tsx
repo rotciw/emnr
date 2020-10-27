@@ -4,13 +4,13 @@ import { FlexContainer, FlexItem, HrLine } from 'styles/Containers';
 import { ExtraBold } from 'styles/Text';
 
 interface ReviewProps {
-  name: String;
-  studyProgramme: String;
-  score: Number;
+  name: string;
+  studyProgramme: string;
+  score: number;
   workLoad: number | string | void;
   difficulty: number | string | void;
-  text: String;
-  date: String;
+  text: string;
+  date: string;
 }
 
 const ReviewContainer = styled.div`
@@ -47,7 +47,7 @@ const CommentText = styled.p`
   text-align: left;
 `;
 
-export const Review: React.FC<ReviewProps> = ({
+const Review: React.FC<ReviewProps> = ({
   name,
   studyProgramme,
   score,
@@ -119,3 +119,5 @@ export const Review: React.FC<ReviewProps> = ({
     </ReviewContainer>
   );
 };
+
+export default Review;

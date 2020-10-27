@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Semester } from './Semester';
 import axios from 'axios';
 import { FlexContainer, FlexItem } from 'styles/Containers';
+import { Semester } from './Semester';
 import { getLocalToken } from '../utils/api';
-import { API_URL } from '../config';
+import API_URL from '../config';
 
 interface MyCoursesListProps {}
 interface MyCourseProps {
@@ -17,17 +17,17 @@ interface Semesters {
   [semester: string]: MyCourseProps[];
 }
 
-export const MyCoursesList: React.FC<MyCoursesListProps> = () => {
+const MyCoursesList: React.FC<MyCoursesListProps> = () => {
   // const [myCourses, updateMyCourses] = useState<MyCourseProps[]>([]);
   const [mySemesters, updateMySemesters] = useState<Semesters>({});
 
   useEffect(() => {
     let isCancelled = false;
     const token = getLocalToken();
-    axios.defaults.headers.common['Authorization'] = `${token}`;
+    axios.defaults.headers.common.Authorization = `${token}`;
     const getMyCourses = async () => {
       await axios
-        .get(API_URL + '/course/me/')
+        .get(`${API_URL}/course/me/`)
         .then((response) => {
           if (!isCancelled) {
             const allMyCourses = response.data;
@@ -66,18 +66,17 @@ export const MyCoursesList: React.FC<MyCoursesListProps> = () => {
                 parseInt(semester2[0].substring(1, 5))
               ) {
                 return 1;
-              } else if (
+              }
+              if (
                 parseInt(semester1[0].substring(1, 5)) ===
                 parseInt(semester2[0].substring(1, 5))
               ) {
                 if (semester1[0].substring(0, 1) === 'V') {
                   return 1;
-                } else {
-                  return -1;
                 }
-              } else {
                 return -1;
               }
+              return -1;
             },
           )
           .map(([semester, courses]) => {
@@ -89,3 +88,5 @@ export const MyCoursesList: React.FC<MyCoursesListProps> = () => {
     </FlexContainer>
   );
 };
+
+export default MyCoursesList;

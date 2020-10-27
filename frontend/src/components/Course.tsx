@@ -1,17 +1,17 @@
 import React from 'react';
-import { CourseButton } from '../styles/Buttons';
 import { Link } from 'react-router-dom';
 import { CourseItemText, CourseItemSubtext } from 'styles/Text';
 import { FlexColumn } from 'styles/Containers';
+import { CourseButton } from '../styles/Buttons';
 
 interface CourseProps {
-  courseName: String;
-  courseCode: String;
-  averageReviewScore: Number;
-  reviewCount: Number;
+  courseName: string;
+  courseCode: string;
+  averageReviewScore: number;
+  reviewCount: number;
 }
 
-export const Course: React.FC<CourseProps> = ({
+const Course: React.FC<CourseProps> = ({
   courseName,
   courseCode,
   averageReviewScore,
@@ -38,3 +38,5 @@ export const Course: React.FC<CourseProps> = ({
     </tr>
   );
 };
+
+export default Course;

@@ -29,7 +29,7 @@ const SearchInput = styled.input`
   }
 `;
 
-export const Searchbar: React.FC = () => {
+const Searchbar: React.FC = () => {
   const { queryProvider } = useContext(GlobalStateContext)!;
 
   return (
@@ -41,3 +41,5 @@ export const Searchbar: React.FC = () => {
     </SearchbarContainer>
   );
 };
+
+export default Searchbar;

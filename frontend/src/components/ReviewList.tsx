@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { Review } from './Review';
 import { GlobalStateContext } from 'context/GlobalStateContext';
+import API_URL from 'config';
+import Review from './Review';
 import { EmptyResult } from './CourseList';
-import { API_URL } from 'config';
 import { FlexItem } from 'styles/Containers';
 
 const Wrapper = styled.div`
@@ -17,7 +17,7 @@ const Wrapper = styled.div`
 `;
 
 interface ReviewListProps {
-  courseCode: String;
+  courseCode: string;
   pageNumber: number;
   scoreAvgSetter: (value: number) => void;
   numberOfReviewSetter: (value: number) => void;
@@ -33,7 +33,7 @@ interface ReviewProps {
   date: string;
 }
 
-export const ReviewList: React.FC<ReviewListProps> = ({
+const ReviewList: React.FC<ReviewListProps> = ({
   courseCode,
   pageNumber,
   scoreAvgSetter,
@@ -119,3 +119,5 @@ export const ReviewList: React.FC<ReviewListProps> = ({
     </Wrapper>
   );
 };
+
+export default ReviewList;
