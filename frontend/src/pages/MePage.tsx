@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from 'styles/Layout';
-import { MyCoursesList } from 'components/MyCoursesList';
+import MyCoursesList from 'components/MyCoursesList';
 
 interface MeProps {}
 
