@@ -17,6 +17,11 @@ interface MyCourseProps {
 }
 
 export const Semester: React.FC<Semester> = ({ semester, courses }) => {
+  let currentDate: Date = new Date();
+  let currentSemester: string =
+    (currentDate.getMonth() < 7 ? 'V' : 'H') + `${currentDate.getFullYear()}`;
+  let isCurrentSemester: boolean = currentSemester == semester;
+
   return (
     <SemesterContainer margin='5vh 0'>
       <BoldTitle fontSize='24px'>{semester}</BoldTitle>
@@ -37,7 +42,9 @@ export const Semester: React.FC<Semester> = ({ semester, courses }) => {
                 courseCode={currentCourse.course_code}
                 courseName={currentCourse.course_name}
                 yourReview={
-                  currentCourse.has_reviewed
+                  isCurrentSemester
+                    ? '- - -'
+                    : currentCourse.has_reviewed
                     ? `${currentCourse.my_review_score} / 5`
                     : `Gi vurdering`
                 }
