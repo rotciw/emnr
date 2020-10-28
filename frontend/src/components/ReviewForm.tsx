@@ -85,7 +85,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         <Title margin='0 0 5px 0'>{courseCode}</Title>
         <ModalXButton onClick={closeModal}>&#10006;</ModalXButton>
       </FlexContainer>
-      <BoldTitle fontSize='30px'>{courseName}</BoldTitle>
+      <BoldTitle>{courseName}</BoldTitle>
       <HrLine margin='15px 0 0 0' />
       <BoldInputDescription>Totalvurdering: *</BoldInputDescription>
       <RadioButtonsBar radioID='reviewScore' valueSetter={setScoreValue} />

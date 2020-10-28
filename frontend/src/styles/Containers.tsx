@@ -29,6 +29,9 @@ export const SemesterContainer = styled.div`
   margin: ${(props: LayoutProps) => props.margin || 'auto'};
   border: 2px solid ${({ theme }) => theme.darkBlue};
   padding: 5px 10px 20px 10px;
+  @media (max-width: 576px) {
+    padding: 5px 5px 20px 5px;
+  }
 `;
 
 export const CenteredFlexContainer = styled.div`

@@ -2,17 +2,21 @@ import styled from 'styled-components';
 
 interface TitleProps {
   fontSize?: string;
+  mobileFontSize?: string
   margin?: string;
   width?: string;
   textAlign?: string;
 }
 
 export const BoldTitle = styled.p`
-  font-size: ${(props: TitleProps) => props.fontSize || '50px'};
+  font-size: ${(props: TitleProps) => props.fontSize || '30px'};
   font-weight: bold;
   margin: ${(props: TitleProps) => props.margin || '0'};
   font-family: gilroyxbold;
   color: ${({ theme }) => theme.darkBlue};
+  @media (max-width: 576px) {
+    font-size: ${(props: TitleProps) => props.mobileFontSize || '22px'};
+  }
 `;
 
 export const Title = styled.p`
@@ -20,6 +24,9 @@ export const Title = styled.p`
   margin: ${(props: TitleProps) => props.margin || '0'};
   font-family: gilroymedium;
   color: ${({ theme }) => theme.darkBlue};
+  @media (max-width: 576px) {
+    font-size: ${(props: TitleProps) => props.fontSize || '16px'};
+  }
 `;
 
 export const SubTitle = styled.p`
