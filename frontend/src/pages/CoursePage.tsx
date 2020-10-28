@@ -68,69 +68,65 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
   }, []);
 
   return (
-    <>
+    <Layout padding='0 20%'>
       {loading ? (
         <Loading />
       ) : (
-        <Layout padding='0 20%'>
-          <FlexContainer width='100%'>
-            <FlexItem margin='0 0 0 2vh'>
-              <FlexItem margin='2vh 0 4vh 0' onClick={handleBackClick}>
-                <GoBackText>Tilbake</GoBackText>
-              </FlexItem>
-              <Title margin='0 0 5px 0'>{courseInfo.course_code}</Title>
-              <BoldTitle fontSize='30px'>{courseInfo.course_name}</BoldTitle>
-              <BoldTitle margin='10px 0 0 0'>
-                {scoreAvg.toFixed(1)} / 5
-              </BoldTitle>
-              <SubTitle margin='0 0 4vh 0'>
-                Basert på {numberOfReviews}{' '}
-                {numberOfReviews === 1 ? 'vurdering' : 'vurderinger'}.
-              </SubTitle>
-              <RateCourseButton
-                loading={false}
-                onClickFunction={toggleModalIsOpen}
-                courseCode={courseCode}
-              />
-              <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={toggleModalIsOpen}
-                style={modalStyles}
-                contentLabel='Example Modal'
-              >
-                <ReviewForm
-                  courseName={courseInfo.course_name}
-                  courseCode={courseInfo.course_code}
-                  closeModal={toggleModalIsOpen}
-                />
-              </Modal>
+        <FlexContainer width='100%'>
+          <FlexItem margin='0 0 0 2vh'>
+            <FlexItem margin='2vh 0 4vh 0' onClick={handleBackClick}>
+              <GoBackText>Tilbake</GoBackText>
             </FlexItem>
-            <LocalShapeContainer>
-              <Circle
-                color={defaultTheme.lightBlue}
-                size='215px'
-                left='0'
-                top='50px'
+            <Title margin='0 0 5px 0'>{courseInfo.course_code}</Title>
+            <BoldTitle fontSize='30px'>{courseInfo.course_name}</BoldTitle>
+            <BoldTitle margin='10px 0 0 0'>{scoreAvg.toFixed(1)} / 5</BoldTitle>
+            <SubTitle margin='0 0 4vh 0'>
+              Basert på {numberOfReviews}{' '}
+              {numberOfReviews === 1 ? 'vurdering' : 'vurderinger'}.
+            </SubTitle>
+            <RateCourseButton
+              loading={false}
+              onClickFunction={toggleModalIsOpen}
+              courseCode={courseCode}
+            />
+            <Modal
+              isOpen={modalIsOpen}
+              onRequestClose={toggleModalIsOpen}
+              style={modalStyles}
+              contentLabel='Example Modal'
+            >
+              <ReviewForm
+                courseName={courseInfo.course_name}
+                courseCode={courseInfo.course_code}
+                closeModal={toggleModalIsOpen}
               />
-              <RotatedSquare
-                color={defaultTheme.blue}
-                size='150px'
-                left='100px'
-                top='30px'
-                angle='20deg'
-              />
-            </LocalShapeContainer>
-          </FlexContainer>
-          <HrLine />
-          <ReviewList
-            courseCode={courseCode}
-            pageNumber={pageReviewProvider.pageReview}
-            scoreAvgSetter={setScoreAvg}
-            numberOfReviewSetter={setNumberOfReviews}
-          />
-        </Layout>
+            </Modal>
+          </FlexItem>
+          <LocalShapeContainer>
+            <Circle
+              color={defaultTheme.lightBlue}
+              size='215px'
+              left='0'
+              top='50px'
+            />
+            <RotatedSquare
+              color={defaultTheme.blue}
+              size='150px'
+              left='100px'
+              top='30px'
+              angle='20deg'
+            />
+          </LocalShapeContainer>
+        </FlexContainer>
       )}
-    </>
+      <HrLine />
+      <ReviewList
+        courseCode={courseCode}
+        pageNumber={pageReviewProvider.pageReview}
+        scoreAvgSetter={setScoreAvg}
+        numberOfReviewSetter={setNumberOfReviews}
+      />
+    </Layout>
   );
 };
 
