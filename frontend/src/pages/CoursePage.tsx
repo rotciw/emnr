@@ -6,7 +6,7 @@ import {
   FlexContainer,
   FlexItem,
   HrLine,
-  LocalShapeContainer,
+  ShapeContainer,
 } from 'styles/Containers';
 import { BoldTitle, Title, SubTitle, GoBackText } from 'styles/Text';
 import { RateCourseButton } from 'components/RateCourseButton';
@@ -65,6 +65,33 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
 
   return (
     <Layout padding='0 20%'>
+      <ShapeContainer>
+        <Circle
+          color={defaultTheme.lightBlue}
+          size='240px'
+          right='0'
+          top='130px'
+          margin='0 -170px 0 0'
+        />
+        <RotatedSquare
+          color={defaultTheme.blue}
+          size='240px'
+          left='0'
+          top='50vh'
+          angle='20deg'
+          margin='0 0 0 -200px'
+          mobileMargin='0 0 0 -400px'
+        />
+        <RotatedSquare
+          color={defaultTheme.blue}
+          size='240px'
+          right='0'
+          top='75vh'
+          angle='80deg'
+          margin='0 -225px 0 0'
+          mobileMargin='0 -400px 0 0'
+        />
+      </ShapeContainer>
       <FlexContainer width='100%'>
         <FlexItem margin='0 0 0 2vh'>
           <FlexItem margin='2vh 0 4vh 0' onClick={handleBackClick}>
@@ -95,21 +122,6 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
             />
           </Modal>
         </FlexItem>
-        <LocalShapeContainer>
-          <Circle
-            color={defaultTheme.lightBlue}
-            size='215px'
-            left='0'
-            top='50px'
-          />
-          <RotatedSquare
-            color={defaultTheme.blue}
-            size='150px'
-            left='100px'
-            top='30px'
-            angle='20deg'
-          />
-        </LocalShapeContainer>
       </FlexContainer>
       <HrLine />
       <ReviewList
