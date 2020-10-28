@@ -3,15 +3,16 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { getLocalToken } from 'utils/api';
 import API_URL from 'config';
+import { PulseLoader } from 'react-spinners';
 
 interface RateCourseButtonProps {
   onClickFunction: () => void;
   courseCode: string;
+  loading: boolean;
 }
 
 export const TooltipButtonContainer = styled.div`
   position: relative;
-  width: fit-content;
   display: flex;
 `;
 
@@ -27,15 +28,15 @@ export const RateButton = styled.div`
 
 export const DisabledRateButton = styled(RateButton)`
   background-color: #aaa;
-  cursor: default;
-  border: none;
+  border: 1px solid #aaa;
+  z-index: -1;
 `;
 
 export const TooltipText = styled.div`
-  font-size: 0.8em;
+  font-size: 0.7em;
   position: absolute;
-  left: 100%;
-  margin: 4px 0 0 10px;
+  top: 100%;
+  margin: 4px 0 0 0;
   padding: 8px;
   background-color: #444;
   color: ${({ theme }) => theme.white};
@@ -53,6 +54,7 @@ export const TooltipText = styled.div`
 export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
   onClickFunction,
   courseCode,
+  loading,
 }) => {
   const [reviewEligibility, setReviewEligibility] = useState<number>(1);
 
@@ -60,16 +62,22 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
   axios.defaults.headers.common.Authorization = `${getLocalToken()}`;
 
   useEffect(() => {
+    let isCancelled = false;
     const getReviewEligibility = async () => {
       await axios
         .get(`${API_URL}/review/check/?courseCode=${courseCode}`)
         .then((res) => {
-          setReviewEligibility(res.data);
+          if (!isCancelled) {
+            setReviewEligibility(res.data);
+          }
         })
         .catch((err) => console.log(err));
     };
     getReviewEligibility();
-  }, []);
+    return () => {
+      isCancelled = true;
+    };
+  });
 
   let content;
 
@@ -111,5 +119,15 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
       );
   }
 
-  return <div>{content}</div>;
+  return (
+    <>
+      {loading ? (
+        <DisabledRateButton>
+          <PulseLoader color='#FFF' size='10px' />
+        </DisabledRateButton>
+      ) : (
+        <div>{content}</div>
+      )}
+    </>
+  );
 };

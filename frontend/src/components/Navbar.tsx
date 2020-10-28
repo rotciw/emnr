@@ -6,18 +6,20 @@ import emnrLogo from '../assets/images/emnr_long.svg';
 import Searchbar from './Searchbar';
 import 'react-dropdown/style.css';
 import { GlobalStateContext } from 'context/GlobalStateContext';
+import { Menu } from './Menu';
 
 const NavBarContainer = styled.nav`
   width: 100%;
   flex: 1;
   background-color: ${({ theme }) => theme.darkBlue};
   position: sticky;
+  position: -webkit-sticky;
   top: 0;
 `;
 
 const DropdownContainer = styled.div`
   background-color: ${({ theme }) => theme.darkBlue};
-  margin: 1.2% 50% 0 25%;
+  margin: 1.2% 40% 0 25%;
   padding-bottom: 25px;
   @media (max-width: 768px) {
     margin: 2.2% 25% 0 20%;
@@ -30,23 +32,17 @@ const Logo = styled.img`
   width: 100px;
 `;
 
-const MeButton = styled.button`
-  background-color: ${({ theme }) => theme.darkBlue};
-  cursor: pointer;
-  color: ${({ theme }) => theme.white};
-  font-family: gilroymedium;
-  outline: none;
-  border: none;
-  :hover {
-    background-color: ${({ theme }) => theme.blue};
-  }
-`;
-
 const TopRow = styled.div`
+  /* Add support for webkit */
+  display: -ms-flexbox;
+  display: -webkit-flex;
   display: flex;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
   flex-direction: row;
   vertical-align: center;
   justify-content: space-between;
+  z-index: 2;
 `;
 
 const options = [
@@ -61,7 +57,6 @@ const options = [
 const Navbar: React.FC = () => {
   const history = useHistory();
   const handleOnClick = useCallback(() => history.push('/'), [history]);
-  const handleClickMe = useCallback(() => history.push('/me'), [history]);
 
   const { queryProvider } = useContext(GlobalStateContext)!;
   const isOnLandingPage: boolean = useLocation().pathname === '/';
@@ -76,7 +71,7 @@ const Navbar: React.FC = () => {
     <NavBarContainer>
       <TopRow>
         <Logo src={emnrLogo} onClick={handleOnClick} />
-        <MeButton onClick={handleClickMe}> Min side </MeButton>
+        <Menu />
       </TopRow>
       {isOnLandingPage && (
         <>

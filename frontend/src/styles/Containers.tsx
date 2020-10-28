@@ -5,11 +5,13 @@ interface LayoutProps {
   flex?: string;
   width?: string;
   textAlign?: string;
+  flexWrap?: string;
 }
 
 export const FlexContainer = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: ${(props: LayoutProps) => props.flexWrap || 'nowrap'};
   margin: ${(props: LayoutProps) => props.margin || 'auto'};
   width: ${(props: LayoutProps) => props.width || ''};
 `;
@@ -22,6 +24,7 @@ export const FlexColumn = styled.div`
 
 export const SemesterContainer = styled.div`
   display: flex;
+  background-color: ${({ theme }) => theme.lightlightBlue};
   flex-direction: column;
   margin: ${(props: LayoutProps) => props.margin || 'auto'};
   border: 2px solid ${({ theme }) => theme.darkBlue};
@@ -61,6 +64,15 @@ export const HrLine = styled.div`
   margin: ${(props: LayoutProps) => props.margin || '5vh 0 2vh 0'};
   border-bottom: 1px solid ${({ theme }) => theme.darkBlue};
 `;
+
+
+export const HrLineLight = styled(HrLine)`
+  border-bottom: 2px solid ${({ theme }) => theme.light};
+  width: 23%;
+  margin-left: 1%;
+`;
+
+
 
 export const StyledTable = styled.table`
   width: 100%;

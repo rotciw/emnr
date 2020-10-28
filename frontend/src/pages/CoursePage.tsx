@@ -26,9 +26,7 @@ interface CourseViewProps {
   location: any;
 }
 
-const CoursePage: React.FC<CourseViewProps> = (
-  props: CourseViewProps,
-) => {
+const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
   const { pageReviewProvider } = useContext(GlobalStateContext)!;
 
   const courseCode: string = useLocation().pathname.substr(8);
@@ -38,7 +36,7 @@ const CoursePage: React.FC<CourseViewProps> = (
   const [numberOfReviews, setNumberOfReviews] = useState<number>(0);
 
   const history = useHistory();
-  const handleBackClick = useCallback(() => history.push('/'), [history]);
+  const handleBackClick = useCallback(() => history.goBack(), [history]);
 
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
@@ -47,32 +45,42 @@ const CoursePage: React.FC<CourseViewProps> = (
   function toggleModalIsOpen() {
     setModalIsOpen(!modalIsOpen);
   }
+  Modal.setAppElement('#root');
 
   useEffect(() => {
+    let isCancelled = false;
     const getCourses = async () => {
       await axios
-        .get(`${API_URL}/course/?code=${courseCode}`)
-        .then((res) => setCourseInfo(res.data))
+        .get(API_URL + '/course/?code=' + courseCode)
+        .then((res) => {
+          if (!isCancelled) {
+            setCourseInfo(res.data);
+          }
+        })
         .catch((err) => console.log(err));
     };
     getCourses();
+    return () => {
+      isCancelled = true;
+    };
   }, []);
 
   return (
     <Layout padding='0 20%'>
       <FlexContainer width='100%'>
-        <FlexItem margin='0 0 0 10vh'>
+        <FlexItem margin='0 0 0 2vh'>
           <FlexItem margin='2vh 0 4vh 0' onClick={handleBackClick}>
             <GoBackText>Tilbake</GoBackText>
           </FlexItem>
           <Title margin='0 0 5px 0'>{courseInfo.course_code}</Title>
           <BoldTitle fontSize='30px'>{courseInfo.course_name}</BoldTitle>
-          <BoldTitle margin='10px 0 0 0'>{scoreAvg} / 5</BoldTitle>
+          <BoldTitle margin='10px 0 0 0'>{scoreAvg.toFixed(1)} / 5</BoldTitle>
           <SubTitle margin='0 0 4vh 0'>
             Basert på {numberOfReviews}{' '}
             {numberOfReviews === 1 ? 'vurdering' : 'vurderinger'}.
           </SubTitle>
           <RateCourseButton
+            loading={false}
             onClickFunction={toggleModalIsOpen}
             courseCode={courseCode}
           />
