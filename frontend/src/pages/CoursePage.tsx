@@ -3,6 +3,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import Modal from 'react-modal';
 import Layout from 'styles/Layout';
 import {
+  FlexColumn,
   FlexContainer,
   FlexItem,
   HrLine,
@@ -18,6 +19,7 @@ import ReviewForm from 'components/ReviewForm';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import modalStyles from 'styles/Modals';
 import API_URL from 'config';
+import { CourseInfoBox } from 'components/CourseInfoBox';
 
 interface CourseViewProps {
   courseName: string;
@@ -92,37 +94,42 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
           mobileMargin='0 -400px 0 0'
         />
       </ShapeContainer>
-      <FlexContainer width='100%'>
-        <FlexItem margin='0 0 0 2vh'>
-          <FlexItem margin='2vh 0 4vh 0' onClick={handleBackClick}>
-            <GoBackText>Tilbake</GoBackText>
-          </FlexItem>
-          <Title margin='0 0 5px 0'>{courseInfo.course_code}</Title>
-          <BoldTitle fontSize='30px'>{courseInfo.course_name}</BoldTitle>
-          <BoldTitle margin='10px 0 0 0'>{scoreAvg.toFixed(1)} / 5</BoldTitle>
-          <SubTitle margin='0 0 4vh 0'>
-            Basert på {numberOfReviews}{' '}
-            {numberOfReviews === 1 ? 'vurdering' : 'vurderinger'}.
-          </SubTitle>
-          <RateCourseButton
-            loading={false}
-            onClickFunction={toggleModalIsOpen}
-            courseCode={courseCode}
-          />
-          <Modal
-            isOpen={modalIsOpen}
-            onRequestClose={toggleModalIsOpen}
-            style={modalStyles}
-            contentLabel='Example Modal'
-          >
-            <ReviewForm
-              courseName={courseInfo.course_name}
-              courseCode={courseInfo.course_code}
-              closeModal={toggleModalIsOpen}
-            />
-          </Modal>
+      <FlexColumn width='100%' padding='0 1vw'>
+        <FlexItem margin='2vh 0 4vh 0' onClick={handleBackClick}>
+          <GoBackText>Tilbake</GoBackText>
         </FlexItem>
-      </FlexContainer>
+        <FlexContainer width='100%' flexWrap='wrap'>
+          <FlexItem margin='0 5vw 0 0'>
+            <Title margin='0 0 5px 0'>{courseInfo.course_code}</Title>
+            <BoldTitle fontSize='30px'>{courseInfo.course_name}</BoldTitle>
+            <BoldTitle margin='10px 0 0 0'>{scoreAvg.toFixed(1)} / 5</BoldTitle>
+            <SubTitle margin='0 0 4vh 0'>
+              Basert på {numberOfReviews}{' '}
+              {numberOfReviews === 1 ? 'vurdering' : 'vurderinger'}.
+            </SubTitle>
+            <RateCourseButton
+              loading={false}
+              onClickFunction={toggleModalIsOpen}
+              courseCode={courseCode}
+            />
+            <Modal
+              isOpen={modalIsOpen}
+              onRequestClose={toggleModalIsOpen}
+              style={modalStyles}
+              contentLabel='Example Modal'
+            >
+              <ReviewForm
+                courseName={courseInfo.course_name}
+                courseCode={courseInfo.course_code}
+                closeModal={toggleModalIsOpen}
+              />
+            </Modal>
+          </FlexItem>
+          <FlexItem>
+            <CourseInfoBox difficulty={1.2} workload={0.5} averageGrade={4.3} passRate={0.8} gradeDistribution={[0.1, 0.2, 0.3, 0.2, 0.05, 0.15]}/>
+          </FlexItem>
+        </FlexContainer>
+      </FlexColumn>
       <HrLine />
       <ReviewList
         courseCode={courseCode}

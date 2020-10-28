@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 interface LayoutProps {
   margin?: string;
+  padding?: string;
   flex?: string;
   width?: string;
   textAlign?: string;
@@ -20,6 +21,8 @@ export const FlexColumn = styled.div`
   display: flex;
   flex-direction: column;
   width: ${(props: LayoutProps) => props.width || ''};
+  padding: ${(props: LayoutProps) => props.padding || ''};
+  box-sizing: border-box;
 `;
 
 export const SemesterContainer = styled.div`
