@@ -78,8 +78,14 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
               <GoBackText>Tilbake</GoBackText>
             </FlexItem>
             <Title margin='0 0 5px 0'>{courseInfo.course_code}</Title>
-            <BoldTitle fontSize='30px'>{courseInfo.course_name}</BoldTitle>
-            <BoldTitle margin='10px 0 0 0'>{scoreAvg.toFixed(1)} / 5</BoldTitle>
+            <BoldTitle>{courseInfo.course_name}</BoldTitle>
+            <BoldTitle
+              fontSize='50px'
+              mobileFontSize='40px'
+              margin='10px 0 0 0'
+            >
+              {scoreAvg.toFixed(1)} / 5
+            </BoldTitle>
             <SubTitle margin='0 0 4vh 0'>
               Basert på {numberOfReviews}{' '}
               {numberOfReviews === 1 ? 'vurdering' : 'vurderinger'}.

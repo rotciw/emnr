@@ -13,7 +13,7 @@ const Body = styled.main`
   padding: ${(props: LayoutProps) =>
     props.padding || '0 20%'}; /* Flex wraps incorrectly if padding is 0 */
   @media (max-width: 768px) {
-    padding: 0 3%;
+    padding: 0 2%;
   }
 `;
 
