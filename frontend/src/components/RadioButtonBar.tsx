@@ -9,11 +9,13 @@ interface RadioButtonProps {
 
 const MarginLabel = styled.label`
   margin-right: 16px;
+  line-height: 20px;
+  font-family: gilroymedium;
 `;
 
 const RadioButton = styled.input`
-  transform: scale(2);
-  margin-right: 12px;
+  transform: scale(1.7);
+  margin-right: 10px;
 `;
 
 export const RadioButtonsBar: React.FC<RadioButtonProps> = ({

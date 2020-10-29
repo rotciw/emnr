@@ -5,7 +5,7 @@ import { GlobalStateContext } from 'context/GlobalStateContext';
 import API_URL from 'config';
 import Review from './Review';
 import { EmptyResult } from './CourseList';
-import { FlexItem } from 'styles/Containers';
+import Loading from './Loading';
 
 const Wrapper = styled.div`
   padding: 5px;
@@ -21,6 +21,7 @@ interface ReviewListProps {
   pageNumber: number;
   scoreAvgSetter: (value: number) => void;
   numberOfReviewSetter: (value: number) => void;
+  postedReview: boolean;
 }
 
 interface ReviewProps {
@@ -38,10 +39,11 @@ const ReviewList: React.FC<ReviewListProps> = ({
   pageNumber,
   scoreAvgSetter,
   numberOfReviewSetter,
+  postedReview,
 }) => {
   const [reviews, updateReviews] = useState<ReviewProps[]>([]);
-
   const { pageReviewProvider } = useContext(GlobalStateContext)!;
+  const [loading, setLoading] = useState<boolean>(false);
 
   const resultLimit = 5;
   let start = (pageNumber - 1) * resultLimit;
@@ -49,6 +51,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
   useEffect(() => {
     let isCancelled = false;
     const getReviews = async () => {
+      setLoading(true);
       await axios
         .get(
           `${API_URL}/review/get/?courseCode=${courseCode}&n=25&offset=${start}`,
@@ -59,62 +62,59 @@ const ReviewList: React.FC<ReviewListProps> = ({
             pageReviewProvider.setTotalPageReview(
               Math.ceil(reviews.length / resultLimit),
             );
-            scoreAvgSetter(calculateAvgScore(res.data.data));
+            scoreAvgSetter(
+              res.data.average_score != null ? res.data.average_score : 0,
+            );
+            numberOfReviewSetter(reviews.length);
           }
         })
         .catch((err) => console.log(err));
+      setLoading(false);
     };
     getReviews();
     start += resultLimit;
     return () => {
       isCancelled = true;
     };
-  }, [pageNumber, reviews]);
-
-  function calculateAvgScore(reviews: ReviewProps[]) {
-    numberOfReviewSetter(reviews.length);
-    let scoreAvg = 0;
-    if (reviews.length > 0) {
-      reviews.map((currentReview) => {
-        scoreAvg += currentReview.score;
-      });
-      return scoreAvg / reviews.length;
-    } else {
-      return 0;
-    }
-  }
+  }, [pageNumber, postedReview]);
 
   return (
-    <Wrapper>
-      {reviews.length ? (
-        <div>
-          {reviews.map((currentReview) => {
-            //If the difficulty or workload value is not set in the review, they are replaced with an explaining string.
-            if (currentReview.difficulty === -1) {
-              currentReview.difficulty = 'Not given';
-            }
-            if (currentReview.workload === -1) {
-              currentReview.workload = 'Not given';
-            }
-
-            return (
-              <Review
-                key={currentReview.full_name + currentReview.date}
-                name={currentReview.full_name}
-                studyProgramme={currentReview.study_programme}
-                score={currentReview.score}
-                workLoad={currentReview.workload}
-                difficulty={currentReview.difficulty}
-                text={currentReview.review_text}
-                date={currentReview.date}
-              />
-            );
-          })}
-        </div>
+    <>
+      {loading ? (
+        <Loading />
       ) : (
-        <EmptyResult>Ingen vurderinger av {courseCode}. </EmptyResult>
+        <Wrapper>
+          {reviews.length ? (
+            <div>
+              {reviews.map((currentReview) => {
+                //If the difficulty or workload value is not set in the review, they are replaced with an explaining string.
+                if (currentReview.difficulty === -1) {
+                  currentReview.difficulty = 'Not given';
+                }
+                if (currentReview.workload === -1) {
+                  currentReview.workload = 'Not given';
+                }
+
+                return (
+                  <Review
+                    key={currentReview.full_name + currentReview.date}
+                    name={currentReview.full_name}
+                    studyProgramme={currentReview.study_programme}
+                    score={currentReview.score}
+                    workLoad={currentReview.workload}
+                    difficulty={currentReview.difficulty}
+                    text={currentReview.review_text}
+                    date={currentReview.date}
+                  />
+                );
+              })}
+            </div>
+          ) : (
+            <EmptyResult>Ingen vurderinger av {courseCode}. </EmptyResult>
+          )}
+        </Wrapper>
       )}
-    </Wrapper>
+    </>
   );
 };
 

@@ -32,6 +32,9 @@ export const SemesterContainer = styled.div`
   margin: ${(props: LayoutProps) => props.margin || 'auto'};
   border: 2px solid ${({ theme }) => theme.darkBlue};
   padding: 5px 10px 20px 10px;
+  @media (max-width: 576px) {
+    padding: 5px 5px 20px 5px;
+  }
 `;
 
 export const MobileFlexContainer = styled.div`
@@ -79,14 +82,11 @@ export const HrLine = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.darkBlue};
 `;
 
-
 export const HrLineLight = styled(HrLine)`
   border-bottom: 2px solid ${({ theme }) => theme.light};
   width: 23%;
   margin-left: 1%;
 `;
-
-
 
 export const StyledTable = styled.table`
   width: 100%;

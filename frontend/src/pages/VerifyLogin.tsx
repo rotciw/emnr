@@ -3,6 +3,7 @@ import qs from 'qs';
 import { Redirect } from 'react-router-dom';
 import { verifyFeideLogin } from '../utils/api';
 import { GlobalStateContext } from '../context/GlobalStateContext';
+import Loading from 'components/Loading';
 
 interface VerifyLoginProps {
   callback: (val?: any) => void;
@@ -43,7 +44,7 @@ const VerifyLogin: React.FC<VerifyLoginProps> = (props) => {
   if (signedIn) {
     return <Redirect to='/' />;
   }
-  return <div>Permission denied</div>;
+  return <Loading />;
 };
 
 export default VerifyLogin;
