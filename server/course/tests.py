@@ -14,11 +14,14 @@ def _create_models_without_saving():
 		data = json.load(f)
 	courses = []
 	for course_dict in data:
-		courses.append(Course.create(code=course_dict["course_code"],
-									 name=course_dict["course_name"],
-									 credit=course_dict["credit"],
-									 average_grade=course_dict["average_grade"],
-									 pass_rate=course_dict["pass_rate"]))
+		courses.append(Course(course_code=course_dict["course_code"],
+							  course_name=course_dict["course_name"],
+							  credit=course_dict["credit"],
+							  average_grade=course_dict["average_grade"],
+							  pass_rate=course_dict["pass_rate"],
+							  average_review_score=course_dict["average_review_score"],
+							  average_difficulty=course_dict["average_difficulty"],
+							  average_workload=course_dict["average_workload"]))
 	return courses
 
 
