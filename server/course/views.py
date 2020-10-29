@@ -237,22 +237,29 @@ def get_grade_info_from_grades_api(course_code):
 
     # Set all letters to -1 if the course was pass/fail
     if no_letters:
-        info = {"course_id": course_code,
-                "godkjent_rate": previous_ordinary_exam["passed"] / previous_ordinary_exam["attendee_count"],
-                "a_rate": -1, "b_rate": -1, "c_rate": -1, "d_rate": -1, "e_rate": -1,
-                "f_rate": previous_ordinary_exam["f"] / previous_ordinary_exam["attendee_count"],
-                "semester": previous_ordinary_exam["semester_code"]}
+        info = create_gradeinfo_dict(course_id=course_code, semester=previous_ordinary_exam["semester_code"],
+                                     godkjent_rate=previous_ordinary_exam["passed"] / previous_ordinary_exam[
+                                         "attendee_count"],
+                                     f_rate=previous_ordinary_exam["f"] / previous_ordinary_exam["attendee_count"])
     # Else, set godkjent_rate to -1
     else:
-        info = {"course_id": course_code, "godkjent_rate": -1,
-                "a_rate": previous_ordinary_exam["a"] / previous_ordinary_exam["attendee_count"],
-                "b_rate": previous_ordinary_exam["b"] / previous_ordinary_exam["attendee_count"],
-                "c_rate": previous_ordinary_exam["c"] / previous_ordinary_exam["attendee_count"],
-                "d_rate": previous_ordinary_exam["d"] / previous_ordinary_exam["attendee_count"],
-                "e_rate": previous_ordinary_exam["e"] / previous_ordinary_exam["attendee_count"],
-                "f_rate": previous_ordinary_exam["f"] / previous_ordinary_exam["attendee_count"],
-                "semester": previous_ordinary_exam["semester_code"]}
+        info = create_gradeinfo_dict(course_id=course_code, semester=previous_ordinary_exam["semester_code"],
+                                     a_rate=previous_ordinary_exam["a"] / previous_ordinary_exam["attendee_count"],
+                                     b_rate=previous_ordinary_exam["b"] / previous_ordinary_exam["attendee_count"],
+                                     c_rate=previous_ordinary_exam["c"] / previous_ordinary_exam["attendee_count"],
+                                     d_rate=previous_ordinary_exam["d"] / previous_ordinary_exam["attendee_count"],
+                                     e_rate=previous_ordinary_exam["e"] / previous_ordinary_exam["attendee_count"],
+                                     f_rate=previous_ordinary_exam["f"] / previous_ordinary_exam["attendee_count"])
     return info
+
+
+def create_gradeinfo_dict(course_id, semester, godkjent_rate=-1, a_rate=-1, b_rate=-1, c_rate=-1, d_rate=-1, e_rate=-1,
+                          f_rate=-1):
+    return {
+        "course_id": course_id, "godkjent_rate": godkjent_rate,
+        "a_rate": a_rate, "b_rate": b_rate, "c_rate": c_rate, "d_rate": d_rate, "e_rate": e_rate,
+        "f_rate": f_rate, "semester": semester
+    }
 
 
 @api_view(["GET"])
@@ -270,7 +277,7 @@ def get_grade_info(request):
     if course_code is None:
         return Response("Course code not provided", status=400)
     if not Course.objects.filter(course_code=course_code).exists():
-        return Response("Course code does not exist in the database")
+        return Response("Course code does not exist in the database", status=400)
 
     # Get grade data from the grades API
     try:
