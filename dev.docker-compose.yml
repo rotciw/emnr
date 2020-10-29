@@ -19,9 +19,14 @@ services:
       - postgres
     ports:
       - "127.0.0.1:8000:8000"
+    volumes:
+      - ./server:/src/backend
   frontend:
     container_name: frontend
     build:
       context: ./frontend
     ports:
       - "127.0.0.1:3000:3000"
+    volumes:
+      - ./frontend:/app
+    stdin_open: true

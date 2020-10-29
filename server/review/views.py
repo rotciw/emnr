@@ -166,7 +166,7 @@ def get_reviews_from_db(request):
         "difficulty__avg"]
 
     # Fetch reviews from database
-    data = Review.objects.filter(course_code=course_code)[offset:offset + n]
+    data = Review.objects.filter(course_code=course_code).order_by("-date")[offset:offset + n]
 
     return {"count": number_of_reviews, "data": list(data.values()), "average_score": average_score,
             "average_workload": average_workload, "average_difficulty": average_difficulty}
