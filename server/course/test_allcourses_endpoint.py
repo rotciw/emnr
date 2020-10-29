@@ -1,6 +1,7 @@
 from django.test import TestCase
 import json
 from course.models import Course
+from review.models import Review
 from course.views import get_courses_from_db
 from django.test.client import RequestFactory
 from django.test import Client
@@ -22,6 +23,20 @@ class GetAllCoursesTest(TestCase):
         for course in courses:
             course.save()
         self.rf = RequestFactory()
+
+    def setUpReviews(self) -> None:
+        # Crowd database with courses
+        reviews = [
+            Review(course_code="TPG4190", user_email="test@test.com", score=5, workload=1, difficulty=2,
+                   review_text="Bra fag", full_name="Test test", study_programme="MTTEST"),
+            Review(course_code="TPG4190", user_email="kpro@kpro.com", score=2, workload=1.5, difficulty=1.5,
+                   review_text="Givende", full_name="KPro Kproson", study_programme="MTKPRO"),
+            Review(course_code="TN202406", user_email="hei@hallo.com", score=4, workload=0.4, difficulty=1,
+                   review_text="Lattice", full_name="Heman 2015", study_programme="MTHEI"),
+            Review(course_code="TMR4555", user_email="erasmus@montanus.com", score=1, workload=2, difficulty=0,
+                   review_text="Meget lett og mye arbe'", full_name="Erasmus Montanus", study_programme="MTFIL"),
+        ]
+        for r in reviews: r.save()
 
     def test_get_courses_from_db_no_parameters(self):
         mock_request = self.rf.get("/course/all/")
@@ -225,6 +240,38 @@ class GetAllCoursesTest(TestCase):
         for order_value in invalid_order_by_values:
             res = c.get("/course/all/?order_by={}".format(order_value))
             self.assertEqual(res.status_code, 400)
+
+    def test_get_courses_from_db_valid_advanced_sorting(self):
+        self.setUpReviews()
+        pass
+
+    def test_get_courses_from_db_invalid_advanced_sorting(self):
+        self.setUpReviews()
+        invalid_advanced_sortings = [1, "1", "TRUE", "FALSE", "@#!%&"]
+        invalid_highs =  [1, "1", "TRUE", "FALSE", "@#!%&"]
+        invalid_weights = [1, "-1", "6", "2.5", "2"]
+        params = ["score", "difficulty", "workload", "pass_rate", "grade"]
+        for bad_adv_sort in invalid_advanced_sortings:
+            with self.assertRaises(ValueError):
+                get_courses_from_db(self.rf.get("/courses/all/?advanced_sorting={}".format(bad_adv_sort)))
+        for bad_high in invalid_highs:
+            for param in params:
+                with self.assertRaises(ValueError):
+                    get_courses_from_db(self.rf.get(
+                        "/courses/all/?advanced_sorting=true&{}_high={}".format(param, bad_high)))
+        for bad_weight in invalid_weights:
+            for param in params:
+                with self.assertRaises(ValueError):
+                    get_courses_from_db(self.rf.get(
+                        "/courses/all/?advanced_sorting=true&{}_weight={}".format(param, bad_weight)))
+
+    def test_get_all_courses_valid_advanced_sorting(self):
+        self.setUpReviews()
+        pass
+
+    def test_get_all_courses_valid_advanced_sorting(self):
+        self.setUpReviews()
+        pass
 
     def test_get_courses_from_db_all_parameters(self):
         n = 10
