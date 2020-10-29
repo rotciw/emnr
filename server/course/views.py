@@ -112,8 +112,7 @@ def get_advanced_sorting_parameters(request):
     :return: dictionary, parameters as keys, value being sorting direction and weight as a list
     """
     param_dict = {}
-    parameters = {"score": "average_review_score", "difficulty": "average_difficulty", "workload": "average_workload",
-                  "pass_rate": "pass_rate", "grade": "average_grade"}
+    parameters = ["score", "difficulty", "workload", "pass_rate", "grade"]
     for param in parameters:
         # Sets default values
         high = request.GET.get(param+"_high", "true")
