@@ -124,15 +124,8 @@ class GetReviewsTest(TestCase):
         self.assertEqual(res.data["count"], 6)
         self.assertEqual(len(res.data["data"]), 6)
 
-    def test_get_reviews_from_db_filter_on_programme_invalid_param(self):
-        req = self.rf.get("/review/get/?courseCode=TMA4100&showMyProgramme=ikkeEnBoolskVerdi")
-        with self.assertRaises(ValueError):
-            get_reviews_from_db(req)
 
-    def test_get_reviews_from_db_filter_on_programme_invalid_token(self):
-        pass
-
-    def test_get_reviews_from_db_filter_on_programme_valid_token(self):
+    def test_get_reviews_endpoint_filter_on_programme_valid_token(self):
         c = APIClient()
         c.credentials(HTTP_AUTHORIZATION='valid_token')
         res = c.get("/review/get/?courseCode=TMA4100&showMyProgramme=true")
@@ -147,7 +140,9 @@ class GetReviewsTest(TestCase):
         self.assertEqual(res.status_code, 400)
 
     def test_get_reviews_endpoint_filter_programme_invalid_token(self):
-        pass
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='invalid_token')
+        res = c.get("/review/get/?courseCode=TMA4100&showMyProgramme=true")
+        self.assertEqual(res.status_code, 400)
 
-    def test_get_reviews_endpoint_filter_on_programme_valid_token(self):
-        pass
+
