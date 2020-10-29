@@ -1,9 +1,7 @@
 FROM node:12-alpine
-RUN npm install -g serve # A simple webserver
-WORKDIR /usr/src/app
-COPY package*.json ./
+WORKDIR /app
+COPY package.json /app
 RUN npm install
-COPY . .
-RUN npm run build
-EXPOSE 3000
-CMD ["serve", "-s", "build", "-l", "3000"]
+COPY . /app
+# RUN npm run build
+CMD ["npm", "start"]
