@@ -152,6 +152,8 @@ def map_course_to_sorting_score(course, params, max_values):
         # Subjects with grade 0 are pass / fail-subjects. Grade is irrelevant, and set to mid-value.
         elif temp == 0 and param == "grade":
             temp = 0.5
+        elif temp == -1 and param == "pass_rate":
+            temp = 0.5
         if not values[0]:
             temp = 1 - temp
         sorting_score += temp * values[1]
