@@ -34,6 +34,17 @@ export const SemesterContainer = styled.div`
   padding: 5px 10px 20px 10px;
 `;
 
+export const MobileFlexContainer = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: wrap; // As a backup to the @media solution
+
+  @media (max-width: 576px){
+    flex-direction: column;
+  }
+`
+
 export const CenteredFlexContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -64,7 +75,7 @@ export const FlexItem = styled.div`
 `;
 
 export const HrLine = styled.div`
-  margin: ${(props: LayoutProps) => props.margin || '5vh 0 2vh 0'};
+  margin: ${(props: LayoutProps) => props.margin || '3vh 0 2vh 0'};
   border-bottom: 1px solid ${({ theme }) => theme.darkBlue};
 `;
 

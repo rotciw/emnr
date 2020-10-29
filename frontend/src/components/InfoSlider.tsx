@@ -5,6 +5,7 @@ import { ExtraBold } from 'styles/Text';
 
 interface SliderProps {
   sliderProgress: number;
+  hasReview: boolean;
 }
 
 const SliderContainer = styled.div`
@@ -35,15 +36,22 @@ const SliderBall = styled.div`
   border-radius: 50%;
   position: absolute;
   margin: -5px 0 0 -6px;
-  left: ${(props: SliderProps) => props.sliderProgress*100 || '0'}%;
+  left: ${(props: SliderProps) => props.sliderProgress * 100 || '0'}%;
 `;
 
-export const InfoSlider: React.FC<SliderProps> = ({ sliderProgress }) => {
+export const InfoSlider: React.FC<SliderProps> = ({
+  sliderProgress,
+  hasReview,
+}) => {
   return (
     <SliderContainer>
       <SliderLabel>Lav</SliderLabel>
       <Slider>
-        <SliderBall sliderProgress={sliderProgress} />
+        {hasReview && (
+          <>
+            <SliderBall sliderProgress={sliderProgress} hasReview={hasReview}/>
+          </>
+        )}
       </Slider>
       <SliderLabel>Høy</SliderLabel>
     </SliderContainer>

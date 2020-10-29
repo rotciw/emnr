@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import Layout from 'styles/Layout';
 import {
   FlexColumn,
-  FlexContainer,
+  MobileFlexContainer,
   FlexItem,
   HrLine,
   ShapeContainer,
@@ -98,8 +98,8 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
         <FlexItem margin='2vh 0 4vh 0' onClick={handleBackClick}>
           <GoBackText>Tilbake</GoBackText>
         </FlexItem>
-        <FlexContainer width='100%' flexWrap='wrap'>
-          <FlexItem margin='0 5vw 0 0'>
+        <MobileFlexContainer>
+          <FlexItem margin='0 5vw 3vh 0'>
             <Title margin='0 0 5px 0'>{courseInfo.course_code}</Title>
             <BoldTitle fontSize='30px'>{courseInfo.course_name}</BoldTitle>
             <BoldTitle margin='10px 0 0 0'>{scoreAvg.toFixed(1)} / 5</BoldTitle>
@@ -125,10 +125,17 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
               />
             </Modal>
           </FlexItem>
-          <FlexItem>
-            <CourseInfoBox difficulty={1.2} workload={0.5} averageGrade={4.3} passRate={0.8} gradeDistribution={[0.1, 0.2, 0.3, 0.2, 0.05, 0.15]}/>
+          <FlexItem margin='0'>
+            <CourseInfoBox
+              difficulty={courseInfo.average_difficulty}
+              workload={courseInfo.average_workload}
+              averageGrade={courseInfo.average_grade?.toFixed(1)}
+              passRate={courseInfo.pass_rate?.toFixed(0)}
+              gradeDistribution={[0.1, 0.2, 0.3, 0.2, 0.05, 0.15]}
+              hasReview={numberOfReviews > 0}
+            />
           </FlexItem>
-        </FlexContainer>
+        </MobileFlexContainer>
       </FlexColumn>
       <HrLine />
       <ReviewList
