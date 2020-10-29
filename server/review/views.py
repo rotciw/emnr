@@ -163,10 +163,10 @@ def get_reviews_from_db(request):
     if show_my_programme == "true":
         exp_token = request.META["HTTP_AUTHORIZATION"]
         data = Review.objects.filter(course_code=course_code).filter(
-            study_programme=get_user_study_programme(exp_token))[
+            study_programme=get_user_study_programme(exp_token)).order_by("-date")[
                offset:offset + n]
     else:
-        data = Review.objects.filter(course_code=course_code)[offset:offset + n]
+        data = Review.objects.filter(course_code=course_code).order_by("-date")[offset:offset + n]
 
     return {"count": number_of_reviews, "data": list(data.values()), "average_score": average_score,
             "average_workload": average_workload, "average_difficulty": average_difficulty}
