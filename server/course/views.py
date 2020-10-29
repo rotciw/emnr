@@ -143,8 +143,15 @@ def map_course_to_sorting_score(course, params, max_values):
                    "pass_rate": "pass_rate", "grade": "average_grade"}
     for param, values in params.items():  # Review score can possibly create problems here, since it defaults to 0
         temp = course[param_names[param]] / max_values[param]
+        # Subjects with temp < 0 has a default value of -1. The param is then irrelevant, set to mid-value.
         if temp < 0:
             temp = 0.5  # If no reviews exist, the parameter gets a neutral value
+        # Subjects with score 0 has no reviews yet. Score is then irrelevant, and set to mid-value.
+        elif temp == 0 and param == "score":
+            temp = 0.5
+        # Subjects with grade 0 are pass / fail-subjects. Grade is irrelevant, and set to mid-value.
+        elif temp == 0 and param == "grade":
+            temp = 0.5
         if not values[0]:
             temp = 1 - temp
         sorting_score += temp * values[1]

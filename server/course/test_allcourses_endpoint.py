@@ -24,20 +24,6 @@ class GetAllCoursesTest(TestCase):
             course.save()
         self.rf = RequestFactory()
 
-    def setUpReviews(self) -> None:
-        # Crowd database with courses
-        reviews = [
-            Review(course_code="TPG4190", user_email="test@test.com", score=5, workload=1, difficulty=2,
-                   review_text="Bra fag", full_name="Test test", study_programme="MTTEST"),
-            Review(course_code="TPG4190", user_email="kpro@kpro.com", score=2, workload=1.5, difficulty=1.5,
-                   review_text="Givende", full_name="KPro Kproson", study_programme="MTKPRO"),
-            Review(course_code="TN202406", user_email="hei@hallo.com", score=4, workload=0.4, difficulty=1,
-                   review_text="Lattice", full_name="Heman 2015", study_programme="MTHEI"),
-            Review(course_code="TMR4555", user_email="erasmus@montanus.com", score=1, workload=2, difficulty=0,
-                   review_text="Meget lett og mye arbe'", full_name="Erasmus Montanus", study_programme="MTFIL"),
-        ]
-        for r in reviews: r.save()
-
     def test_get_courses_from_db_no_parameters(self):
         mock_request = self.rf.get("/course/all/")
         mock_response = get_courses_from_db(mock_request)
@@ -242,37 +228,124 @@ class GetAllCoursesTest(TestCase):
             self.assertEqual(res.status_code, 400)
 
     def test_get_courses_from_db_valid_advanced_sorting(self):
-        self.setUpReviews()
-        pass
+        valid_advanced_sortings = ["true", "false"]
+        valid_highs = ["true", "false"]
+        valid_weights = ["0", "1", "2", "3", "4", "5"]
+        params = ["score", "difficulty", "workload", "pass_rate", "grade"]
+        # Shouldn't raise ValueErrors:
+        for value in valid_advanced_sortings:
+            mock_request = get_courses_from_db(self.rf.get("/courses/all/?advanced_sorting={}".format(value)))
+        for param in params:
+            for value in valid_highs:
+                mock_request = get_courses_from_db(self.rf.get(
+                        "/courses/all/?advanced_sorting=true&{}_high={}".format(param, value)))
+            for value in valid_weights:
+                mock_request = get_courses_from_db(self.rf.get(
+                    "/courses/all/?advanced_sorting=true&{}_weight={}".format(param, value)))
+
+        # Request: [url, first hit course_code]
+        base_query = "/course/all/?advanced_sorting=true"
+        single_param_queries = {
+            "q0": [base_query+"&score_high=true&score_weight=5", "TN202406", 4.0],
+            "q1": [base_query+"&score_high=false&score_weight=5", "TMR4555", 4.0],
+            "q2": [base_query+"&difficulty_high=true&difficulty_weight=5", "TPG4190", 4.375],
+            "q3": [base_query+"&difficulty_high=false&difficulty_weight=5", "TMR4555", 5.0],
+            "q4": [base_query+"&workload_high=true&workload_weight=5", "TMR4555", 5.0],
+            "q5": [base_query+"&workload_high=false&workload_weight=5", "TN202406", 4.0],
+            "q6": [base_query+"&pass_rate_high=true&pass_rate_weight=5", "TMR4300", 5.0],
+            "q7": [base_query+"&pass_rate_high=false&pass_rate_weight=5", "AFR1003", 5.0],
+            "q8": [base_query+"&grade_high=true&grade_weight=5", "MFEL4852", 4.38315217391304],
+            "q9": [base_query+"&grade_high=false&grade_weight=5", "MFEL1010", 4.65872057936029],
+        }
+        # Code below is useful for printing what the different requests gives as first hit subject.
+        print("\n")
+        for index, query in enumerate(single_param_queries.values()):
+            mock_request = self.rf.get(query[0])
+            mock_response = get_courses_from_db(mock_request)
+            print("q{}: ".format(index) + mock_response["data"][0]["course_code"]
+                  + ": " + str(mock_response["data"][0]["advanced_sorting_score"]))
+        for query in single_param_queries.values():
+            mock_request = self.rf.get(query[0])
+            mock_response = get_courses_from_db(mock_request)
+            self.assertEqual(mock_response["data"][0]["course_code"], query[1])
+            self.assertEqual(mock_response["data"][0]["advanced_sorting_score"], query[2])
+        multiple_param_queries = {
+            # Looking for subjects with good score, low difficulty and sort of low workload
+            "q0": [base_query + "&score_high=true&score_weight=4"
+                                "&difficulty_high=false&difficulty_weight=5"
+                                "&workload_high=false&workload_weight=3", "TN202406", 8.600000000000001],
+            # Looking for subjects with good score and low difficulty and workload
+            "q1": [base_query + "&score_high=true&score_weight=5"
+                                "&difficulty_high=false&difficulty_weight=3"
+                                "&workload_high=false&workload_weight=3", "TN202406", 8.2],
+            # Looking for subjects with high difficulty and workload, and low score. Subjects to stay away from
+            "q2": [base_query + "&score_high=false&score_weight=3"
+                                "&difficulty_high=true&difficulty_weight=5"
+                                "&workload_high=true&workload_weight=4", "TPG4190", 7.775],
+            # Looking with subjects with low difficulty and workload, score is not that important
+            "q3": [base_query + "&score_high=true&score_weight=1"
+                                "&difficulty_high=false&difficulty_weight=5"
+                                "&workload_high=false&workload_weight=3", "TN202406", 6.2],
+            "q4": [base_query + "&score_high=true&score_weight=5"
+                                "&difficulty_high=false&difficulty_weight=0"
+                                "&workload_high=true&workload_weight=3", "TPG4190", 5.375],
+            "q5": [base_query + "&score_high=false&score_weight=0"
+                                "&difficulty_high=true&difficulty_weight=5"
+                                "&workload_high=false&workload_weight=5", "TPG4190", 6.25],
+            "q6": [base_query + "&score_high=true&score_weight=2"
+                                "&difficulty_high=false&difficulty_weight=4"
+                                "&workload_high=false&workload_weight=0", "TMR4555", 4.4],
+        }
+        for q, value in multiple_param_queries.items():
+            mock_request = self.rf.get(value[0])
+            mock_response = get_courses_from_db(mock_request)
+            print("{}: ".format(q) + mock_response["data"][0]["course_code"]
+                  + ": " + str(mock_response["data"][0]["advanced_sorting_score"]))
+        for query in multiple_param_queries.values():
+            mock_request = self.rf.get(query[0])
+            mock_response = get_courses_from_db(mock_request)
+            self.assertEqual(mock_response["data"][0]["course_code"], query[1])
+            self.assertEqual(mock_response["data"][0]["advanced_sorting_score"], query[2])
 
     def test_get_courses_from_db_invalid_advanced_sorting(self):
-        self.setUpReviews()
         invalid_advanced_sortings = [1, "1", "TRUE", "FALSE", "@#!%&"]
         invalid_highs =  [1, "1", "TRUE", "FALSE", "@#!%&"]
-        invalid_weights = [1, "-1", "6", "2.5", "2"]
+        invalid_weights = ["-1", "6", "2.5"]
         params = ["score", "difficulty", "workload", "pass_rate", "grade"]
         for bad_adv_sort in invalid_advanced_sortings:
             with self.assertRaises(ValueError):
                 get_courses_from_db(self.rf.get("/courses/all/?advanced_sorting={}".format(bad_adv_sort)))
-        for bad_high in invalid_highs:
-            for param in params:
+        for param in params:
+            for bad_high in invalid_highs:
                 with self.assertRaises(ValueError):
                     get_courses_from_db(self.rf.get(
                         "/courses/all/?advanced_sorting=true&{}_high={}".format(param, bad_high)))
-        for bad_weight in invalid_weights:
-            for param in params:
+            for bad_weight in invalid_weights:
                 with self.assertRaises(ValueError):
                     get_courses_from_db(self.rf.get(
                         "/courses/all/?advanced_sorting=true&{}_weight={}".format(param, bad_weight)))
 
     def test_get_all_courses_valid_advanced_sorting(self):
-        self.setUpReviews()
         pass
 
     def test_get_all_courses_valid_advanced_sorting(self):
-        self.setUpReviews()
-        pass
+        c = Client()
+        invalid_advanced_sortings = [1, "1", "TRUE", "FALSE", "@#!%&"]
+        invalid_highs =  [1, "1", "TRUE", "FALSE", "@#!%&"]
+        invalid_weights = ["-1", "6", "2.5"]
+        params = ["score", "difficulty", "workload", "pass_rate", "grade"]
+        for bad_adv_sort in invalid_advanced_sortings:
+            res = c.get("/course/all/?advanced_sorting={}".format(bad_adv_sort))
+            self.assertEqual(res.status_code, 400)
+        for param in params:
+            for bad_high in invalid_advanced_sortings:
+                res = c.get("/course/all/?advanced_sorting=true&{}_high={}".format(param, bad_high))
+                self.assertEqual(res.status_code, 400)
+            for bad_weight in invalid_weights:
+                res = c.get("/course/all/?advanced_sorting=true&{}_weight={}".format(param, bad_weight))
+                self.assertEqual(res.status_code, 400)
 
+    # Without advanced sorting for now
     def test_get_courses_from_db_all_parameters(self):
         n = 10
         offset = 2
@@ -294,6 +367,7 @@ class GetAllCoursesTest(TestCase):
         for i in range(len(data["data"]) - 1):
             self.assertTrue(data["data"][i]["course_code"] >= data["data"][i + 1]["course_code"])
 
+    # Without advanced sorting for now
     def test_get_all_courses_all_parameters(self):
         c = Client()
         n = 10
