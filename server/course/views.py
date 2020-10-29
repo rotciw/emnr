@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.db.models import Q
 import json
-from course.models import Course
+from .models import Course
 from auth.views import get_token
 import requests
 import json
@@ -199,3 +199,58 @@ def get_current_semester():
         semester += "H"
     semester += time.strftime("%Y")
     return semester
+
+
+def get_grade_info_from_grades_api(course_code):
+    """
+    Gets the grade distribution from the previous ordinary exam for the given course
+    (through calling the grades.no API).
+
+    :param course_code: string, Code for the course to get info from
+    :return: dict on the form {course_code=..., godkjent_rate=..., a_rate=..., b_rate=..., ...., f_rate=...}.
+                If godkjent_rate is -1, the previous ordinary exam was graded with letter grades,
+                otherwise the previous ordinary exam was pass/fail.
+    """
+    course_response = requests.get("https://grades.no/api/v2/courses/{}/grades/".format(course_code))
+    course_response.encoding = "utf-8"
+    course_grades = course_response.json()
+    if not course_grades:
+        raise ValueError("No course exam info provided from API")
+    course_grades.sort(key=lambda c: c.get("year"), reverse=True)
+    previous_ordinary_exam = None
+    for exam_results in course_grades:
+        if exam_results["semester"] != "SUMMER":
+            previous_ordinary_exam = exam_results
+            break
+    if previous_ordinary_exam is None:
+        raise ValueError("No ordinary exams found")
+
+    no_letters = previous_ordinary_exam["passed"] != 0
+    if no_letters:
+        info = {"course_id": course_code,
+                "godkjent_rate": previous_ordinary_exam["passed"] / previous_ordinary_exam["attendee_count"],
+                "a_rate": -1, "b_rate": -1, "c_rate": -1, "d_rate": -1, "e_rate": -1,
+                "f_rate": previous_ordinary_exam["f"] / previous_ordinary_exam["attendee_count"],
+                "semester": previous_ordinary_exam["semester_code"]}
+    else:
+        info = {"course_id": course_code, "godkjent_rate": -1,
+                "a_rate": previous_ordinary_exam["a"] / previous_ordinary_exam["attendee_count"],
+                "b_rate": previous_ordinary_exam["b"] / previous_ordinary_exam["attendee_count"],
+                "c_rate": previous_ordinary_exam["c"] / previous_ordinary_exam["attendee_count"],
+                "d_rate": previous_ordinary_exam["d"] / previous_ordinary_exam["attendee_count"],
+                "e_rate": previous_ordinary_exam["e"] / previous_ordinary_exam["attendee_count"],
+                "f_rate": previous_ordinary_exam["f"] / previous_ordinary_exam["attendee_count"],
+                "semester": previous_ordinary_exam["semester_code"]}
+    return info
+
+
+@api_view(["GET"])
+def get_grade_info(request):
+    course_code = request.GET.get("courseCode", None)
+    if course_code is None:
+        return Response("Course code not provided", status=400)
+    if not Course.objects.filter(course_code=course_code).exists():
+        return Response("Course code does not exist in the database")
+
+    data = get_grade_info_from_grades_api(course_code)
+    return Response(data)
