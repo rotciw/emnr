@@ -8,48 +8,55 @@ interface RadioButtonProps {
 }
 
 const MarginLabel = styled.label`
-  margin-right: 8px;
+  margin-right: 16px;
+  line-height: 20px;
+  font-family: gilroymedium;
 `;
 
-const RadioButtonBar: React.FC<RadioButtonProps> = ({
+const RadioButton = styled.input`
+  transform: scale(1.7);
+  margin-right: 10px;
+`;
+
+export const RadioButtonsBar: React.FC<RadioButtonProps> = ({
   radioID,
   valueSetter,
 }) => {
   return (
     <FlexContainer>
-      <input
+      <RadioButton
         type='radio'
         id={`${radioID}1`}
         name={radioID}
         value={1}
         onChange={() => valueSetter(1)}
       />
-      <MarginLabel htmlFor={`${radioID}1`}>1</MarginLabel>
-      <input
+      <MarginLabel htmlFor={radioID + '1'}>1</MarginLabel>
+      <RadioButton
         type='radio'
         id={`${radioID}2`}
         name={radioID}
         value={2}
         onChange={() => valueSetter(2)}
       />
-      <MarginLabel htmlFor={`${radioID}2`}>2</MarginLabel>
-      <input
+      <MarginLabel htmlFor={radioID + '2'}>2</MarginLabel>
+      <RadioButton
         type='radio'
         id={`${radioID}3`}
         name={radioID}
         value={3}
         onChange={() => valueSetter(3)}
       />
-      <MarginLabel htmlFor={`${radioID}3`}>3</MarginLabel>
-      <input
+      <MarginLabel htmlFor={radioID + '3'}>3</MarginLabel>
+      <RadioButton
         type='radio'
         id={`${radioID}4`}
         name={radioID}
         value={4}
         onChange={() => valueSetter(4)}
       />
-      <MarginLabel htmlFor={`${radioID}4`}>4</MarginLabel>
-      <input
+      <MarginLabel htmlFor={radioID + '4'}>4</MarginLabel>
+      <RadioButton
         type='radio'
         id={`${radioID}5`}
         name={radioID}
@@ -61,4 +68,4 @@ const RadioButtonBar: React.FC<RadioButtonProps> = ({
   );
 };
 
-export default RadioButtonBar;
+export default RadioButtonsBar;

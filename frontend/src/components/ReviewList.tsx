@@ -7,7 +7,6 @@ import Review from './Review';
 import { EmptyResult } from './CourseList';
 
 const Wrapper = styled.div`
-  border: 1px solid #ccc;
   padding: 5px;
   border-radius: 5px;
   text-align: center;
@@ -44,68 +43,61 @@ const ReviewList: React.FC<ReviewListProps> = ({
   const { pageReviewProvider } = useContext(GlobalStateContext)!;
 
   const resultLimit = 5;
-  let start: number = (pageNumber - 1) * resultLimit;
+  let start = (pageNumber - 1) * resultLimit;
 
   useEffect(() => {
+    let isCancelled = false;
     const getReviews = async () => {
       await axios
         .get(
           `${API_URL}/review/get/?courseCode=${courseCode}&n=25&offset=${start}`,
         )
         .then((res) => {
-          updateReviews(res.data.data);
-          pageReviewProvider.setTotalPageReview(
-            Math.ceil(reviews.length / resultLimit),
-          );
-          scoreAvgSetter(calculateAvgScore(res.data.data));
+          if (!isCancelled) {
+            updateReviews(res.data.data);
+            pageReviewProvider.setTotalPageReview(
+              Math.ceil(reviews.length / resultLimit),
+            );
+            scoreAvgSetter(res.data.average_score != null ? res.data.average_score : 0);
+            numberOfReviewSetter(reviews.length);
+          }
         })
         .catch((err) => console.log(err));
     };
     getReviews();
     start += resultLimit;
-  }, [pageNumber]);
-
-  function calculateAvgScore(reviews: ReviewProps[]) {
-    numberOfReviewSetter(reviews.length);
-    let scoreAvg = 0;
-    if (reviews.length > 0) {
-      reviews.map((currentReview) => {
-        scoreAvg += currentReview.score;
-      });
-      return scoreAvg / reviews.length;
-    }
-
-    return 0;
-  }
+    return () => {
+      isCancelled = true;
+    };
+  }, [pageNumber, reviews]);
 
   return (
     <Wrapper>
       {reviews.length ? (
-        <table>
-          <tbody>
-            {reviews.map((currentReview) => {
-              // If the difficulty or workload value is not set in the review, they are replaced with an explaining string.
-              if (currentReview.difficulty === -1) {
-                currentReview.difficulty = 'Not given';
-              }
-              if (currentReview.workload === -1) {
-                currentReview.workload = 'Not given';
-              }
+        <div>
+          {reviews.map((currentReview) => {
+            //If the difficulty or workload value is not set in the review, they are replaced with an explaining string.
+            if (currentReview.difficulty === -1) {
+              currentReview.difficulty = 'Not given';
+            }
+            if (currentReview.workload === -1) {
+              currentReview.workload = 'Not given';
+            }
 
-              return (
-                <Review
-                  name={currentReview.full_name}
-                  studyProgramme={currentReview.study_programme}
-                  score={currentReview.score}
-                  workLoad={currentReview.workload}
-                  difficulty={currentReview.difficulty}
-                  text={currentReview.review_text}
-                  date={currentReview.date}
-                />
-              );
-            })}
-          </tbody>
-        </table>
+            return (
+              <Review
+                key={currentReview.full_name + currentReview.date}
+                name={currentReview.full_name}
+                studyProgramme={currentReview.study_programme}
+                score={currentReview.score}
+                workLoad={currentReview.workload}
+                difficulty={currentReview.difficulty}
+                text={currentReview.review_text}
+                date={currentReview.date}
+              />
+            );
+          })}
+        </div>
       ) : (
         <EmptyResult>Ingen vurderinger av {courseCode}. </EmptyResult>
       )}

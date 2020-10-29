@@ -16,6 +16,7 @@ const modalStyles = {
     borderRadius: 0,
     minWidth: '40vw',
     maxWidth: '80vw',
+    maxHeight: '75vh',
     padding: '15px 20px',
   },
 };

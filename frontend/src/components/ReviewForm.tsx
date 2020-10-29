@@ -4,8 +4,9 @@ import { FlexContainer, HrLine } from 'styles/Containers';
 import { Title, BoldTitle } from 'styles/Text';
 import axios from 'axios';
 import API_URL from 'config';
-import RadioButtonBar from './RadioButtonBar';
+import RadioButtonsBar from './RadioButtonBar';
 import { getLocalToken } from '../utils/api';
+import Dropdown from 'react-dropdown';
 import { RateCourseButton } from './RateCourseButton';
 
 interface ReviewFormProps {
@@ -27,7 +28,7 @@ const InputDescription = styled.p`
 `;
 
 const BoldInputDescription = styled.p`
-  margin: 20px 0 5px 0;
+  margin: 20px 0 10px 0;
   font-family: 'gilroyxbold';
   color: ${({ theme }) => theme.darkBlue};
 `;
@@ -38,6 +39,13 @@ const ModalXButton = styled.span`
   cursor: pointer;
 `;
 
+const options = [
+  { value: '-1', label: 'Ingen svar' },
+  { value: '0', label: 'Lav' },
+  { value: '1', label: 'Middels' },
+  { value: '2', label: 'Høy' },
+];
+
 const ReviewForm: React.FC<ReviewFormProps> = ({
   closeModal,
   courseName,
@@ -47,25 +55,28 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   const [difficultyValue, setDifficultyValue] = useState<number>(-1);
   const [workloadValue, setWorkloadValue] = useState<number>(-1);
   const [reviewText, setReviewText] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const postReview = () => {
-    closeModal();
+  const postReview = async () => {
+    setLoading(true);
     const token = getLocalToken();
     axios.defaults.headers.common.Authorization = `${token}`;
-    return axios
-      .post(`${API_URL}/review/`, {
-        courseCode,
-        score: scoreValue,
-        workload: workloadValue,
-        difficulty: difficultyValue,
-        reviewText,
-      })
-      .then(function (response) {
-        return response.data;
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    await axios
+    .post(`${API_URL}/review/`, {
+      courseCode,
+      score: scoreValue,
+      workload: workloadValue,
+      difficulty: difficultyValue,
+      reviewText,
+    })
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    setLoading(false);
+    closeModal();
   };
 
   return (
@@ -74,25 +85,34 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         <Title margin='0 0 5px 0'>{courseCode}</Title>
         <ModalXButton onClick={closeModal}>&#10006;</ModalXButton>
       </FlexContainer>
-      <BoldTitle fontSize='30px'>{courseName}</BoldTitle>
+      <BoldTitle>{courseName}</BoldTitle>
       <HrLine margin='15px 0 0 0' />
-      <BoldInputDescription>Totalvurdering:</BoldInputDescription>
-      <RadioButtonBar radioID='reviewScore' valueSetter={setScoreValue} />
-      <InputDescription>Vanskelighetsgrad:</InputDescription>
-      <RadioButtonBar
-        radioID='difficultyScore'
-        valueSetter={setDifficultyValue}
-      />
+      <BoldInputDescription>Totalvurdering: *</BoldInputDescription>
+      <RadioButtonsBar radioID='reviewScore' valueSetter={setScoreValue} />
       <InputDescription>Arbeidsmengde:</InputDescription>
-      <RadioButtonBar radioID='workloadScore' valueSetter={setWorkloadValue} />
-      <InputDescription style={{ margin: '50px 0 0 0' }}>
+      <Dropdown
+        options={options}
+        onChange={(e) => setWorkloadValue(parseInt(e.value))}
+        placeholder='Velg...'
+      />
+      <InputDescription>Vanskelighetsgrad:</InputDescription>
+      <Dropdown
+        options={options}
+        onChange={(e) => setDifficultyValue(parseInt(e.value))}
+        placeholder='Velg...'
+      />
+      <InputDescription style={{ margin: '30px 0 0 0' }}>
         Kommentar (maks 750 tegn):
       </InputDescription>
       <TextInput
         maxLength={750}
         onChange={(e) => setReviewText(e.target.value)}
       />
-      <RateCourseButton onClickFunction={postReview} courseCode={courseCode}>
+      <RateCourseButton
+        loading={loading}
+        onClickFunction={postReview}
+        courseCode={courseCode}
+      >
         Send inn
       </RateCourseButton>
     </div>
