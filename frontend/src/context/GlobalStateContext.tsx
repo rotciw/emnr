@@ -68,7 +68,7 @@ interface AdvancedQueryProviderValue{
 
   workLoadHigh: boolean;
   setWorkLoadHigh: (val: boolean) => void;
-  workLoadWeight: number | null;
+  workLoadWeight: number;
   setWorkLoadWeight: (val: number) => void;
 }
 

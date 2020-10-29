@@ -73,6 +73,8 @@ const Navbar: React.FC = () => {
   const handleOnClick = useCallback(() => history.push('/'), [history]);
 
   const { queryProvider } = useContext(GlobalStateContext)!;
+  const { advancedQueryProvider } = useContext(GlobalStateContext)!;
+
   const isOnLandingPage: boolean = useLocation().pathname === '/';
 
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
@@ -114,6 +116,7 @@ const Navbar: React.FC = () => {
               />
             </DropdownContainer>
             <NavbarButton onClick={toggleModalIsOpen}>Avansert sortering</NavbarButton>
+            <NavbarButton onClick={(e) => {advancedQueryProvider.setAdvancedSorting(false)}}>Fjern avansert sortering</NavbarButton>
           </SortingContainer>
         </>
       )}

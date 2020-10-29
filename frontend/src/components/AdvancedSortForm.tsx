@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { FlexContainer, HrLine } from 'styles/Containers';
 import { Title, BoldTitle, ExtraBold } from 'styles/Text';
 import { SortFactor } from './SortFactor';
+import { GlobalStateContext } from 'context/GlobalStateContext';
 
 interface AdvancedSortFormProps {
   closeModal: () => void;
@@ -24,20 +25,35 @@ const SortButton = styled.button`
 `;
 
 const AdvancedSortForm: React.FC<AdvancedSortFormProps> = ({ closeModal }) => {
+
+  const { advancedQueryProvider } = useContext(GlobalStateContext)!;
+
   const doSort = () => {
+    advancedQueryProvider.setScoreHigh(scoreHighState);
+    advancedQueryProvider.setScoreWeight(scoreWeight);
+    advancedQueryProvider.setDiffHigh(difficultyHighState);
+    advancedQueryProvider.setDiffWeight(difficultyWeight);
+    advancedQueryProvider.setWorkLoadHigh(workloadHighState);
+    advancedQueryProvider.setWorkLoadWeight(workloadWeight);
+    advancedQueryProvider.setGradeHigh(gradeHighState);
+    advancedQueryProvider.setGradeWeight(gradeWeight);
+    advancedQueryProvider.setPassRateHigh(passrateHighState);
+    advancedQueryProvider.setPassRateWeight(passrateWeight);
+    advancedQueryProvider.setAdvancedSorting(true);
     closeModal();
   };
 
-  const [scoreHighState, setScoreHighState] = useState<boolean>(true);
-  const [scoreWeight, setScoreWeight] = useState<number>(0);
-  const [difficultyHighState, setDifficultyHighState] = useState<boolean>(true);
-  const [difficultyWeight, setDifficultyWeight] = useState<number>(0);
-  const [workloadHighState, setWorkloadHighState] = useState<boolean>(true);
-  const [workloadWeight, setWorkloadWeight] = useState<number>(0);
-  const [gradeHighState, setGradeHighState] = useState<boolean>(true);
-  const [gradeWeight, setGradeWeight] = useState<number>(0);
-  const [passrateHighState, setPassrateHighState] = useState<boolean>(true);
-  const [passrateWeight, setPassrateWeight] = useState<number>(0);
+
+  const [scoreHighState, setScoreHighState] = useState<boolean>(advancedQueryProvider.scoreHigh);
+  const [scoreWeight, setScoreWeight] = useState<number>(advancedQueryProvider.scoreWeight);
+  const [difficultyHighState, setDifficultyHighState] = useState<boolean>(advancedQueryProvider.diffHigh);
+  const [difficultyWeight, setDifficultyWeight] = useState<number>(advancedQueryProvider.diffWeight);
+  const [workloadHighState, setWorkloadHighState] = useState<boolean>(advancedQueryProvider.workLoadHigh);
+  const [workloadWeight, setWorkloadWeight] = useState<number>(advancedQueryProvider.workLoadWeight);
+  const [gradeHighState, setGradeHighState] = useState<boolean>(advancedQueryProvider.gradeHigh);
+  const [gradeWeight, setGradeWeight] = useState<number>(advancedQueryProvider.gradeWeight);
+  const [passrateHighState, setPassrateHighState] = useState<boolean>(advancedQueryProvider.passRateHigh);
+  const [passrateWeight, setPassrateWeight] = useState<number>(advancedQueryProvider.passRateWeight);
 
   return (
     <div>
@@ -89,7 +105,7 @@ const AdvancedSortForm: React.FC<AdvancedSortFormProps> = ({ closeModal }) => {
         idName={'passrate'}
       />
 
-      <SortButton onClick={doSort}>Send inn</SortButton>
+      <SortButton onClick={doSort}>Lagre innstillinger</SortButton>
     </div>
   );
 };
