@@ -5,7 +5,6 @@ import { GlobalStateContext } from 'context/GlobalStateContext';
 import API_URL from 'config';
 import Review from './Review';
 import { EmptyResult } from './CourseList';
-import { FlexItem } from 'styles/Containers';
 
 const Wrapper = styled.div`
   padding: 5px;
@@ -61,7 +60,8 @@ const ReviewList: React.FC<ReviewListProps> = ({
             pageReviewProvider.setTotalPageReview(
               Math.ceil(reviews.length / resultLimit),
             );
-            scoreAvgSetter(calculateAvgScore(res.data.data));
+            scoreAvgSetter(res.data.average_score != null ? res.data.average_score : 0);
+            numberOfReviewSetter(reviews.length);
           }
         })
         .catch((err) => console.log(err));
@@ -72,19 +72,6 @@ const ReviewList: React.FC<ReviewListProps> = ({
       isCancelled = true;
     };
   }, [pageNumber, reviews,limitReviews]);
-
-  function calculateAvgScore(reviews: ReviewProps[]) {
-    numberOfReviewSetter(reviews.length);
-    let scoreAvg = 0;
-    if (reviews.length > 0) {
-      reviews.map((currentReview) => {
-        scoreAvg += currentReview.score;
-      });
-      return scoreAvg / reviews.length;
-    } else {
-      return 0;
-    }
-  }
 
   return (
     <Wrapper>

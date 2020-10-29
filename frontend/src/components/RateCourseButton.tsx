@@ -24,6 +24,9 @@ export const RateButton = styled.div`
   width: fit-content;
   font-family: gilroyxbold;
   cursor: pointer;
+  @media (max-width: 576px) {
+    font-size: 14px;
+  }
 `;
 
 export const DisabledRateButton = styled(RateButton)`

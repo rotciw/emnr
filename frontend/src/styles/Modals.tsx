@@ -18,7 +18,6 @@ const modalStyles = {
     maxWidth: '80vw',
     maxHeight: '75vh',
     padding: '15px 20px',
-    overflow: 'auto',
   },
 };
 
