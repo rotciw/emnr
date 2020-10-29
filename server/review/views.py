@@ -129,8 +129,16 @@ def get_reviews_from_db(request):
     elif not Course.objects.filter(course_code=course_code).exists():
         raise ValueError("Course code {} does not exist in the course database.".format(course_code))
 
+    show_my_programme = request.GET.get("showMyProgramme", "false")
+    if show_my_programme not in ["true", "false"]:
+        raise ValueError("Illegal boolean value")
+
     # Get and validate n parameter
-    number_of_reviews = Review.objects.filter(course_code=course_code).count()
+    if show_my_programme == "true":
+        number_of_reviews = Review.objects.filter(course_code=course_code).filter(
+            study_programme=get_user_study_programme(request.META["HTTP_AUTHORIZATION"])).count()
+    else:
+        number_of_reviews = Review.objects.filter(course_code=course_code).count()
     n = request.GET.get("n", number_of_reviews)
     if isinstance(n, str) and not n.isdigit():
         raise ValueError("Invalid value for n: {}".format(n))
@@ -152,7 +160,13 @@ def get_reviews_from_db(request):
         "difficulty__avg"]
 
     # Fetch reviews from database
-    data = Review.objects.filter(course_code=course_code).order_by("-date")[offset:offset + n]
+    if show_my_programme == "true":
+        exp_token = request.META["HTTP_AUTHORIZATION"]
+        data = Review.objects.filter(course_code=course_code).filter(
+            study_programme=get_user_study_programme(exp_token)).order_by("-date")[
+               offset:offset + n]
+    else:
+        data = Review.objects.filter(course_code=course_code).order_by("-date")[offset:offset + n]
 
     return {"count": number_of_reviews, "data": list(data.values()), "average_score": average_score,
             "average_workload": average_workload, "average_difficulty": average_difficulty}
