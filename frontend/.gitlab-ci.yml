@@ -1,0 +1,17 @@
+frontend-build-hosting:
+  cache:
+    paths:
+      - /frontend/node_modules/
+  before_script:
+    - npm i -g firebase-tools
+  image: node:12.13.0-alpine
+  stage: deploy
+  when: manual
+  script:
+    - cd frontend
+    - npm install
+    - npm run build
+    - firebase use --token $FIREBASE_TOKEN default
+    - firebase deploy -m "Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_TOKEN
+  environment:
+    name: production

@@ -12,6 +12,7 @@ const SearchbarContainer = styled.div`
 `;
 
 const SearchInput = styled.input`
+  font-family: gilroylight;
   padding-left: 15px;
   height: 40px;
   width: 100%;
@@ -21,7 +22,7 @@ const SearchInput = styled.input`
   border-radius: 3px;
 
   &::placeholder {
-    color: #b3b3b3;
+    color: #333;
   }
 
   &:focus {
@@ -29,15 +30,20 @@ const SearchInput = styled.input`
   }
 `;
 
-export const Searchbar: React.FC = () => {
+const Searchbar: React.FC = () => {
   const { queryProvider } = useContext(GlobalStateContext)!;
+  let searchValue = queryProvider.searchQuery || '';
 
   return (
     <SearchbarContainer>
       <SearchInput
+        type='search'
         onChange={(e) => queryProvider.setSearchQuery(e.target.value)}
-        placeholder='Søk etter fagkode eller navn..'
+        value={searchValue}
+        placeholder='Søk etter emnekode eller navn..'
       />
     </SearchbarContainer>
   );
 };
+
+export default Searchbar;

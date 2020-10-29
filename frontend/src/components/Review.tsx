@@ -4,13 +4,13 @@ import { FlexContainer, FlexItem, HrLine } from 'styles/Containers';
 import { ExtraBold } from 'styles/Text';
 
 interface ReviewProps {
-  name: String;
-  studyProgramme: String;
-  score: Number;
+  name: string;
+  studyProgramme: string;
+  score: number;
   workLoad: number | string | void;
   difficulty: number | string | void;
-  text: String;
-  date: String;
+  text: string;
+  date: string;
 }
 
 const ReviewContainer = styled.div`
@@ -30,11 +30,10 @@ const ScoreDateContainer = styled.div`
 
 const MainMetric = styled.div`
   padding: 5px 40px;
-  background-color: lightgreen;
 `;
 
 const SecondaryMetric = styled.p`
-  margin: 0 30px 0 0;
+  margin: 0 2vw 0 0;
 `;
 
 const DateText = styled.p`
@@ -43,7 +42,12 @@ const DateText = styled.p`
   margin: 0;
 `;
 
-export const Review: React.FC<ReviewProps> = ({
+const CommentText = styled.p`
+  word-break: break-all;
+  text-align: left;
+`;
+
+const Review: React.FC<ReviewProps> = ({
   name,
   studyProgramme,
   score,
@@ -52,35 +56,68 @@ export const Review: React.FC<ReviewProps> = ({
   text,
   date,
 }) => {
+  let scoreLabelColor = 'transparent';
+  //TODO: Make this more elegant? Possibly use themes instead for example?
+  switch (score) {
+    case 1:
+      scoreLabelColor = '#F94144';
+      break;
+    case 2:
+      scoreLabelColor = '#F8961E';
+      break;
+    case 3:
+      scoreLabelColor = '#F9C74F';
+      break;
+    case 4:
+      scoreLabelColor = '#A0C85A';
+      break;
+    case 5:
+      scoreLabelColor = '#47C964';
+  }
+
+  const mapSecondaryMetric = (secondaryMetric: string | number) => {
+    switch (secondaryMetric) {
+      case 0:
+        return 'lav';
+      case 1:
+        return 'middels';
+      case 2:
+        return 'høy';
+    }
+  };
+
   return (
     <ReviewContainer>
-      <FlexItem flex={'none'} style={{ marginRight: '5vw' }}>
+      <FlexItem flex={'1'} style={{ marginRight: '5vw' }}>
         <div>
           <ExtraBold>{name}</ExtraBold>
           <div>{studyProgramme}</div>
           {/* Using div instead of p to avoid having to reduce line spacing */}
         </div>
       </FlexItem>
-      <FlexItem>
+      <FlexItem flex={'3'}>
         <ScoreDateContainer>
-          <MainMetric>
+          <MainMetric style={{ backgroundColor: scoreLabelColor }}>
             <ExtraBold>{score}/5</ExtraBold>
           </MainMetric>
-          <DateText>{date.substring(0,10)}</DateText>
+          <DateText>{date.substring(0, 10)}</DateText>
         </ScoreDateContainer>
-        <FlexContainer>
+        <FlexContainer flexWrap={'wrap'}>
           <SecondaryMetric>
-            Arbeidsmengde: <ExtraBold>{workLoad}/5</ExtraBold>
+            Arbeidsmengde: <ExtraBold>{mapSecondaryMetric(workLoad)}</ExtraBold>
           </SecondaryMetric>
           <SecondaryMetric>
-            Vanskelighetsgrad: <ExtraBold>{difficulty}/5</ExtraBold>
+            Vanskelighetsgrad:{' '}
+            <ExtraBold>{mapSecondaryMetric(difficulty)}</ExtraBold>
           </SecondaryMetric>
         </FlexContainer>
         <HrLine margin={'20px 0 0 0'} />
-        <FlexContainer>
-          <p>{text}</p>
+        <FlexContainer width='100%'>
+          <CommentText>{text}</CommentText>
         </FlexContainer>
       </FlexItem>
     </ReviewContainer>
   );
 };
+
+export default Review;

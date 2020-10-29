@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { RateCourseButton } from 'styles/Buttons';
 import { FlexContainer, HrLine } from 'styles/Containers';
 import { Title, BoldTitle } from 'styles/Text';
-import { RadioButtonsBar } from './RadioButtonBar';
 import axios from 'axios';
+import API_URL from 'config';
+import RadioButtonsBar from './RadioButtonBar';
 import { getLocalToken } from '../utils/api';
+import Dropdown from 'react-dropdown';
+import { RateCourseButton } from './RateCourseButton';
 
 interface ReviewFormProps {
   closeModal: () => void;
-  courseName: String;
-  courseCode: String;
+  courseName: string;
+  courseCode: string;
 }
 
 const TextInput = styled.textarea`
@@ -26,7 +28,7 @@ const InputDescription = styled.p`
 `;
 
 const BoldInputDescription = styled.p`
-  margin: 20px 0 5px 0;
+  margin: 20px 0 10px 0;
   font-family: 'gilroyxbold';
   color: ${({ theme }) => theme.darkBlue};
 `;
@@ -37,7 +39,14 @@ const ModalXButton = styled.span`
   cursor: pointer;
 `;
 
-export const ReviewForm: React.FC<ReviewFormProps> = ({
+const options = [
+  { value: '-1', label: 'Ingen svar' },
+  { value: '0', label: 'Lav' },
+  { value: '1', label: 'Middels' },
+  { value: '2', label: 'Høy' },
+];
+
+const ReviewForm: React.FC<ReviewFormProps> = ({
   closeModal,
   courseName,
   courseCode,
@@ -45,26 +54,29 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
   const [scoreValue, setScoreValue] = useState<number>(-1);
   const [difficultyValue, setDifficultyValue] = useState<number>(-1);
   const [workloadValue, setWorkloadValue] = useState<number>(-1);
-  const [reviewText, setReviewText] = useState<String>('');
+  const [reviewText, setReviewText] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const API_URL: String = 'http://localhost:8000';
-
-  const postReview = () => {
-    closeModal();
+  const postReview = async () => {
+    setLoading(true);
     const token = getLocalToken();
-    axios.defaults.headers.common['Authorization'] = `${token}`;
-    return axios
-      .post(API_URL + '/review/', {
-        courseCode: courseCode,
-        score: scoreValue,
-        workload: workloadValue,
-        difficulty: difficultyValue,
-        reviewText: reviewText,
-      })
-      .then(function (response) {
-        return response.data;
-      })
-      .catch(function (error) {});
+    axios.defaults.headers.common.Authorization = `${token}`;
+    await axios
+    .post(`${API_URL}/review/`, {
+      courseCode,
+      score: scoreValue,
+      workload: workloadValue,
+      difficulty: difficultyValue,
+      reviewText,
+    })
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    setLoading(false);
+    closeModal();
   };
 
   return (
@@ -73,25 +85,38 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
         <Title margin='0 0 5px 0'>{courseCode}</Title>
         <ModalXButton onClick={closeModal}>&#10006;</ModalXButton>
       </FlexContainer>
-      <BoldTitle fontSize='30px'>{courseName}</BoldTitle>
+      <BoldTitle>{courseName}</BoldTitle>
       <HrLine margin='15px 0 0 0' />
-      <BoldInputDescription>Totalvurdering:</BoldInputDescription>
+      <BoldInputDescription>Totalvurdering: *</BoldInputDescription>
       <RadioButtonsBar radioID='reviewScore' valueSetter={setScoreValue} />
-      <InputDescription>Vanskelighetsgrad:</InputDescription>
-      <RadioButtonsBar
-        radioID='difficultyScore'
-        valueSetter={setDifficultyValue}
-      />
       <InputDescription>Arbeidsmengde:</InputDescription>
-      <RadioButtonsBar radioID='workloadScore' valueSetter={setWorkloadValue} />
-      <InputDescription style={{ margin: '50px 0 0 0' }}>
+      <Dropdown
+        options={options}
+        onChange={(e) => setWorkloadValue(parseInt(e.value))}
+        placeholder='Velg...'
+      />
+      <InputDescription>Vanskelighetsgrad:</InputDescription>
+      <Dropdown
+        options={options}
+        onChange={(e) => setDifficultyValue(parseInt(e.value))}
+        placeholder='Velg...'
+      />
+      <InputDescription style={{ margin: '30px 0 0 0' }}>
         Kommentar (maks 750 tegn):
       </InputDescription>
       <TextInput
         maxLength={750}
         onChange={(e) => setReviewText(e.target.value)}
       />
-      <RateCourseButton onClick={postReview}>Send inn</RateCourseButton>
+      <RateCourseButton
+        loading={loading}
+        onClickFunction={postReview}
+        courseCode={courseCode}
+      >
+        Send inn
+      </RateCourseButton>
     </div>
   );
 };
+
+export default ReviewForm;

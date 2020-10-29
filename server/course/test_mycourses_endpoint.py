@@ -43,7 +43,7 @@ class GetMyCoursesTest(TestCase):
     def test_get_current_user_courses_valid_token(self):
         with patch("course.views.Course.objects.filter") as mock_course_db:
             mock_course_db.return_value = [
-                Course.create("AAA9999", "Test course", 0, 0)]
+                Course.create("AAA9999", "Test course", 0, 0, 100.0)]
 
             c = APIClient()
             c.credentials(HTTP_AUTHORIZATION='valid_token')
@@ -64,14 +64,14 @@ class GetMyCoursesTest(TestCase):
     def test_retrieve_courses_from_token_valid_token(self):
         with patch("course.views.Course") as mock_course_db:
             mock_course_db.return_value.objects.return_value.filter.return_value = [
-                Course.create("AAA9999", "Test course", 0, 0)]
+                Course.create("AAA9999", "Test course", 0, 0, 100.0)]
             number_of_courses = len(retrieve_courses_from_token("valid_token"))
             self.assertEqual(number_of_courses,28)
 
     def test_retrieve_courses_from_token_invalid_token(self):
         with patch("course.views.Course") as mock_course_db:
             mock_course_db.return_value.objects.return_value.filter.return_value = [
-                Course.create("AAA9999", "Test course", 0, 0)]
+                Course.create("AAA9999", "Test course", 0, 0, 100.0)]
         with self.assertRaises(TypeError):
             retrieve_courses_from_token("invalid_token")
 
@@ -81,7 +81,7 @@ class GetMyCoursesTest(TestCase):
 
     def test_parse_course_object_get_current_semester(self):
         test_data = {"id": "fc:fs:fs:emne:ntnu.no:TDT4290:1", "type": "fc:fs:emne", "parent": "fc:org:ntnu.no", "membership": {"basic": "member", "fsroles": ["STUDENT"], "active": True, "displayName": "Student"}, "displayName": "Kundestyrt prosjekt"}
-        course = Course(course_code = "TDT4290", course_name = "Kundestyrt prosjekt", credit = 15, average_grade = 0)
+        course = Course(course_code = "TDT4290", course_name = "Kundestyrt prosjekt", credit = 15, average_grade = 0, pass_rate = 100.0)
         course.save()
         course_info = parse_course_object(test_data)
         self.assertEqual(course_info["course_code"],"TDT4290")
@@ -91,7 +91,7 @@ class GetMyCoursesTest(TestCase):
 
     def test_parse_course_object(self):
         test_data = {"id": "fc:fs:fs:emne:ntnu.no:EXPH0004:1", "type": "fc:fs:emne", "parent": "fc:org:ntnu.no", "membership": {"basic": "member", "fsroles": ["STUDENT"], "active": True, "notAfter": "2017-12-14T23:00:00Z", "subjectRelations": "undervisning", "displayName": "Student"}, "displayName": "Examen philosophicum for naturvitenskap og teknologi"}
-        course = Course(course_code = "EXPH0004", course_name = "Examen philosophicum for naturvitenskap og teknologi", credit = 7.5, average_grade = 0)
+        course = Course(course_code = "EXPH0004", course_name = "Examen philosophicum for naturvitenskap og teknologi", credit = 7.5, average_grade = 0, pass_rate = 100.0)
         course.save()
         course_info = parse_course_object(test_data)
         self.assertEqual(course_info["course_code"], "EXPH0004")

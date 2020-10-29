@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+
 const GilroyLight = require('../fonts/gilroy-light.woff');
 const GilroyMedium = require('../fonts/gilroy-medium.woff');
 const GilroyXBold = require('../fonts/gilroy-extrabold.woff');
@@ -26,8 +27,9 @@ const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
+    min-width: 320px;
     background: ${({ theme }) => theme.light};
-    font-family: gilroylight, Open-Sans, Helvetica, Sans-Serif;
+    font-family: 'gilroylight', Open-Sans, Helvetica, Sans-Serif;
   }
 `;
 

@@ -8,6 +8,7 @@ from course.views import retrieve_courses_from_token, get_current_semester, perf
 from auth.models import UserAuth
 from .models import Review
 from course.models import Course
+from django.db.models import Avg
 
 
 @api_view(['POST'])
@@ -52,6 +53,12 @@ def post_review(request):
     # Update the review counter in Course
     Course.objects.filter(course_code=request_data["courseCode"]).update(
         review_count=Review.objects.filter(course_code=request_data["courseCode"]).count())
+
+    # Update the average review score in Course
+    Course.objects.filter(course_code=request_data["courseCode"]).update(
+        average_review_score=Review.objects.filter(course_code=request_data["courseCode"]).aggregate(Avg("score"))[
+            "score__avg"]
+    )
 
     # Indicate successful posting
     return Response(status=200)
@@ -126,7 +133,6 @@ def get_reviews_from_db(request):
     if show_my_programme not in ["true", "false"]:
         raise ValueError("Illegal boolean value")
 
-
     # Get and validate n parameter
     number_of_reviews = Review.objects.filter(course_code=course_code).count()
     n = request.GET.get("n", number_of_reviews)
@@ -142,6 +148,12 @@ def get_reviews_from_db(request):
     if offset > number_of_reviews:
         raise ValueError("offset is too large")
 
+    # Get total average review scores for course
+    average_score = Review.objects.filter(course_code=course_code).aggregate(Avg("score"))["score__avg"]
+    average_workload = Review.objects.filter(course_code=course_code, workload__gt=-1).aggregate(Avg("workload"))[
+        "workload__avg"]
+    average_difficulty = Review.objects.filter(course_code=course_code, difficulty__gt=-1).aggregate(Avg("difficulty"))[
+        "difficulty__avg"]
 
     # Fetch reviews from database
     if show_my_programme == "true":
@@ -150,7 +162,9 @@ def get_reviews_from_db(request):
                offset:offset + n]
     else:
         data = Review.objects.filter(course_code=course_code)[offset:offset + n]
-    return {"count": number_of_reviews, "data": list(data.values())}
+
+    return {"count": number_of_reviews, "data": list(data.values()), "average_score": average_score,
+            "average_workload": average_workload, "average_difficulty": average_difficulty}
 
 
 def validate_review_post_request(request_data, reviewable_courses, email):
@@ -173,9 +187,9 @@ def validate_review_post_request(request_data, reviewable_courses, email):
     if score_is_invalid(request_data["score"]):
         raise ValueError("Invalid score: {} (Must be between 1 and 5)".format(request_data["score"]))
     if otherparams_is_invalid(request_data["difficulty"]):
-        raise ValueError("Invalid difficulty: {} (Must be between 1 and 5)".format(request_data["difficulty"]))
+        raise ValueError("Invalid difficulty: {} (Must be between -1 and 2)".format(request_data["difficulty"]))
     if otherparams_is_invalid(request_data["workload"]):
-        raise ValueError("Invalid workload: {} (Must be between 1 and 5)".format(request_data["workload"]))
+        raise ValueError("Invalid workload: {} (Must be between -1 and 2)".format(request_data["workload"]))
 
 
 def score_is_invalid(score):
@@ -183,12 +197,7 @@ def score_is_invalid(score):
 
 
 def otherparams_is_invalid(param):
-    if (not isinstance(param, int)):
-        return True
-    if param < 1 or param > 5:
-        if param != -1:
-            return True
-    return False
+    return not isinstance(param, int) or param < -1 or param > 2
 
 
 def get_reviewable_courses(exp_token):

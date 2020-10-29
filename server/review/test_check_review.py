@@ -25,7 +25,7 @@ class CanReviewTest(TestCase):
     def setUp(self) -> None:
         UserAuth(expiring_token="valid_token", access_token="valid_token", user_email="test@testesen.com").save()
         UserAuth(expiring_token="expired_token", access_token="expired_token", user_email="abc@xyz.no").save()
-        Course(course_code="TMA4100", course_name="Matematikk 1", credit=7.5, average_grade=2).save()
+        Course(course_code="TMA4100", course_name="Matematikk 1", credit=7.5, average_grade=2, pass_rate=100.0).save()
 
     def test_can_review_invalid_token(self):
         c = APIClient()
@@ -51,7 +51,7 @@ class CanReviewTest(TestCase):
         c.credentials(HTTP_AUTHORIZATION='valid_token')
         with patch("course.views.Course.objects.filter") as mock_course_db:
             mock_course_db.return_value = MockQuerySet([
-                Course.create("AAA9999", "Test course", 0, 0)])
+                Course.create("AAA9999", "Test course", 0, 0, 100.0)])
             res = c.get("/review/check/?courseCode=TDT4290")
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.data, 1)
@@ -63,7 +63,7 @@ class CanReviewTest(TestCase):
                review_text="Bra fag", full_name="Test testesen", study_programme="MTDT").save()
         with patch("course.views.Course.objects.filter") as mock_course_db:
             mock_course_db.return_value = MockQuerySet([
-                Course.create("AAA9999", "Test course", 0, 0)])
+                Course.create("AAA9999", "Test course", 0, 0, 100.0)])
             res = c.get("/review/check/?courseCode=TMA4100")
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.data, 2)
@@ -73,7 +73,7 @@ class CanReviewTest(TestCase):
         c.credentials(HTTP_AUTHORIZATION='valid_token')
         with patch("course.views.Course.objects.filter") as mock_course_db:
             mock_course_db.return_value = MockQuerySet([
-                Course.create("AAA9999", "Test course", 0, 0)])
+                Course.create("AAA9999", "Test course", 0, 0, 100.0)])
             res = c.get("/review/check/?courseCode=TMA4100")
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.data, 0)

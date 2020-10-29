@@ -13,13 +13,13 @@ class GetReviewsTest(TestCase):
     def setUp(self) -> None:
         self.rf = RequestFactory()
         courses = [
-            Course(course_code="TDT4120", course_name="AlgDat", credit=7.5, average_grade=1),
-            Course(course_code="TMA4100", course_name="Matte 1", credit=7.5, average_grade=1),
-            Course(course_code="EXPH0004", course_name="Exphil", credit=7.5, average_grade=1),
-            Course(course_code="TFE4101", course_name="KretsDigtek", credit=7.5, average_grade=1),
-            Course(course_code="TFY4125", course_name="Fysikk", credit=7.5, average_grade=1),
-            Course(course_code="TDT4290", course_name="KPro", credit=7.5, average_grade=1),
-            Course(course_code="TDT4136", course_name="AI Intro", credit=7.5, average_grade=1),
+            Course(course_code="TDT4120", course_name="AlgDat", credit=7.5, average_grade=1, pass_rate=100.0),
+            Course(course_code="TMA4100", course_name="Matte 1", credit=7.5, average_grade=1, pass_rate=100.0),
+            Course(course_code="EXPH0004", course_name="Exphil", credit=7.5, average_grade=1, pass_rate=100.0),
+            Course(course_code="TFE4101", course_name="KretsDigtek", credit=7.5, average_grade=1, pass_rate=100.0),
+            Course(course_code="TFY4125", course_name="Fysikk", credit=7.5, average_grade=1, pass_rate=100.0),
+            Course(course_code="TDT4290", course_name="KPro", credit=7.5, average_grade=1, pass_rate=100.0),
+            Course(course_code="TDT4136", course_name="AI Intro", credit=7.5, average_grade=1, pass_rate=100.0),
         ]
         for c in courses: c.save()
         reviews = [
