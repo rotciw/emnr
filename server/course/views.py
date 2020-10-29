@@ -211,13 +211,20 @@ def get_grade_info_from_grades_api(course_code):
                 If godkjent_rate is -1, the previous ordinary exam was graded with letter grades,
                 otherwise the previous ordinary exam was pass/fail.
     """
+    # Get data from grades API
     course_response = requests.get("https://grades.no/api/v2/courses/{}/grades/".format(course_code))
     course_response.encoding = "utf-8"
     course_grades = course_response.json()
+
+    # Validate that response is not empty
     if not course_grades:
         raise ValueError("No course exam info provided from API")
+
+    # Sort the semester grade info on year, to extract last ordinary semester
     course_grades.sort(key=lambda c: c.get("year"), reverse=True)
     previous_ordinary_exam = None
+
+    # Find last ordinary grade results
     for exam_results in course_grades:
         if exam_results["semester"] != "SUMMER":
             previous_ordinary_exam = exam_results
@@ -225,13 +232,17 @@ def get_grade_info_from_grades_api(course_code):
     if previous_ordinary_exam is None:
         raise ValueError("No ordinary exams found")
 
+    # Check if last ordinary grades were letter grades or pass/fail
     no_letters = previous_ordinary_exam["passed"] != 0
+
+    # Set all letters to -1 if the course was pass/fail
     if no_letters:
         info = {"course_id": course_code,
                 "godkjent_rate": previous_ordinary_exam["passed"] / previous_ordinary_exam["attendee_count"],
                 "a_rate": -1, "b_rate": -1, "c_rate": -1, "d_rate": -1, "e_rate": -1,
                 "f_rate": previous_ordinary_exam["f"] / previous_ordinary_exam["attendee_count"],
                 "semester": previous_ordinary_exam["semester_code"]}
+    # Else, set godkjent_rate to -1
     else:
         info = {"course_id": course_code, "godkjent_rate": -1,
                 "a_rate": previous_ordinary_exam["a"] / previous_ordinary_exam["attendee_count"],
@@ -246,11 +257,26 @@ def get_grade_info_from_grades_api(course_code):
 
 @api_view(["GET"])
 def get_grade_info(request):
+    """
+    Returns the grade distribution for the last ordinary exam for a course,
+    as provided by the grades.no API.
+
+    :param request: GET request containing the parameter "courseCode"
+    :return: JSON object with grade info for the given course.
+    """
     course_code = request.GET.get("courseCode", None)
+
+    # Validate course code
     if course_code is None:
         return Response("Course code not provided", status=400)
     if not Course.objects.filter(course_code=course_code).exists():
         return Response("Course code does not exist in the database")
 
-    data = get_grade_info_from_grades_api(course_code)
+    # Get grade data from the grades API
+    try:
+        data = get_grade_info_from_grades_api(course_code)
+    except ValueError as e:
+        return Response(str(e), status=400)
+
+    # Return grade data
     return Response(data)
