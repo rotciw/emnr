@@ -24,7 +24,7 @@ export const EmptyResult = styled.h3`
 
 export const CourseList: React.FC = () => {
   const [courses, updateCourses] = useState<CourseProps[]>([]);
-  const { pageProvider, queryProvider } = useContext(GlobalStateContext)!;
+  const { pageProvider, queryProvider, advancedQueryProvider } = useContext(GlobalStateContext)!;
   const [loading, setLoading] = useState<boolean>(false);
 
   const pageNumber = pageProvider.page;
@@ -57,9 +57,21 @@ export const CourseList: React.FC = () => {
   useEffect(() => {
     const getCourses = async () => {
       setLoading(true);
+      let fetchURL:string;
+      if(advancedQueryProvider.advancedSorting){
+        fetchURL = `${API_URL}/course/all/?n=25&offset=${start}&search=${searchQuery}&advanced_sorting=true
+        &difficulty_weight=${advancedQueryProvider.diffWeight}&difficulty_high=${advancedQueryProvider.diffHigh}
+        &grade_weight=${advancedQueryProvider.gradeWeight}&grade_high=${advancedQueryProvider.gradeHigh}
+        &pass_rate_weight=${advancedQueryProvider.passRateWeight}&pass_rate_high=${advancedQueryProvider.passRateHigh}
+        &workload_weight=${advancedQueryProvider.workLoadWeight}&workload_high=${advancedQueryProvider.workLoadHigh}
+        &score_weight=${advancedQueryProvider.scoreWeight}&score_high=${advancedQueryProvider.scoreHigh}`;
+      }
+      else{
+        fetchURL = `${API_URL}/course/all/?n=25&offset=${start}&search=${searchQuery}&order_by=${orderByQuery}&ascending=${orderToggle}`;
+      }
       await axios
         .get(
-          `${API_URL}/course/all/?n=25&offset=${start}&search=${searchQuery}&order_by=${orderByQuery}&ascending=${orderToggle}`,
+          fetchURL,
         )
         .then((res) => {
           updateCourses(res.data.data);
