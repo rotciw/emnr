@@ -9,7 +9,7 @@ import Searchbar from './Searchbar';
 import 'react-dropdown/style.css';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { Menu } from './Menu';
-import { NavbarButton } from 'styles/Buttons';
+import { NavbarButton, NavbarRemoveButton } from 'styles/Buttons';
 import AdvancedSortForm from './AdvancedSortForm';
 
 const NavBarContainer = styled.nav`
@@ -24,6 +24,7 @@ const NavBarContainer = styled.nav`
 const SortingContainer = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.darkBlue};
@@ -31,12 +32,17 @@ const SortingContainer = styled.div`
   padding-bottom: 25px;
   @media (max-width: 768px) {
     flex-direction: column;
-    margin: 12px 20% 0 20%;;
+    margin: 12px 20% 0 20%;
   }
 `;
 
 const DropdownContainer = styled.div`
   flex: 1;
+`;
+
+const NavBarButtonContainer = styled.div`
+  flex: 1;
+  display: flex;
 `;
 
 const Logo = styled.img`
@@ -99,13 +105,13 @@ const Navbar: React.FC = () => {
       {isOnLandingPage && (
         <>
           <Modal
-              isOpen={modalIsOpen}
-              onRequestClose={toggleModalIsOpen}
-              style={modalStyles}
-              contentLabel='Example Modal'
-            >
-              <AdvancedSortForm closeModal={toggleModalIsOpen} />
-            </Modal>
+            isOpen={modalIsOpen}
+            onRequestClose={toggleModalIsOpen}
+            style={modalStyles}
+            contentLabel='Example Modal'
+          >
+            <AdvancedSortForm closeModal={toggleModalIsOpen} />
+          </Modal>
           <Searchbar />
           <SortingContainer>
             <DropdownContainer>
@@ -113,10 +119,23 @@ const Navbar: React.FC = () => {
                 options={options}
                 onChange={(e) => onSelect(e)}
                 placeholder='Sorter etter..'
+                // disabled={advancedQueryProvider.advancedSorting} // This might be useful, but there needs to be a visual indication that the dropdown is disabled.
               />
             </DropdownContainer>
-            <NavbarButton onClick={toggleModalIsOpen}>Avansert sortering</NavbarButton>
-            <NavbarButton onClick={(e) => {advancedQueryProvider.setAdvancedSorting(false)}}>Fjern avansert sortering</NavbarButton>
+            <NavBarButtonContainer>
+              <NavbarButton onClick={toggleModalIsOpen}>
+                Avansert sortering
+              </NavbarButton>
+              {advancedQueryProvider.advancedSorting && (
+                <NavbarRemoveButton
+                  onClick={(e) => {
+                    advancedQueryProvider.setAdvancedSorting(false);
+                  }}
+                >
+                  Fjern avansert sortering
+                </NavbarRemoveButton>
+              )}
+            </NavBarButtonContainer>
           </SortingContainer>
         </>
       )}

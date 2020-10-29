@@ -44,8 +44,10 @@ export const NavbarButton = styled.button`
   border-radius: 3px;
   padding: 8px 16px;
   margin: 0 0 0 12px;
+  font-family: gilroy;
   cursor: pointer;
   user-select: none;
+  flex: 1;
   :hover {
     background-color: ${({ theme }) => theme.lightBlue};
     color: ${({ theme }) => theme.darkBlue}
@@ -53,6 +55,11 @@ export const NavbarButton = styled.button`
   @media (max-width: 768px){
     margin: 12px 0 0 0;
   }
+`;
+
+export const NavbarRemoveButton = styled(NavbarButton)`
+  background-color: ${({ theme }) => theme.red};
+  margin-left: 12px;
 `;
 
 export const SortFormButton = styled.button`

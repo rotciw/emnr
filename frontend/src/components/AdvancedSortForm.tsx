@@ -20,8 +20,14 @@ const SortButton = styled.button`
   background-color: ${({ theme }) => theme.darkBlue};
   color: ${({ theme }) => theme.white};
   cursor: pointer;
-  padding: 6px 12px;
+  padding: 10px 30px;
   border-radius: 5px;
+  margin: 30px 10px 0 0;
+`;
+
+const ResetButton = styled(SortButton) `
+  background-color: ${({ theme }) => theme.lightBlue};
+  color: ${({ theme }) => theme.black};
 `;
 
 const AdvancedSortForm: React.FC<AdvancedSortFormProps> = ({ closeModal }) => {
@@ -40,6 +46,22 @@ const AdvancedSortForm: React.FC<AdvancedSortFormProps> = ({ closeModal }) => {
     advancedQueryProvider.setPassRateHigh(passrateHighState);
     advancedQueryProvider.setPassRateWeight(passrateWeight);
     advancedQueryProvider.setAdvancedSorting(true);
+    advancedQueryProvider.setAdvancedSortChangedFlag(!advancedQueryProvider.advancedSortChangedFlag);
+    closeModal();
+  };
+
+  const doReset = () => {
+    advancedQueryProvider.setScoreHigh(true);
+    advancedQueryProvider.setScoreWeight(0);
+    advancedQueryProvider.setDiffHigh(true);
+    advancedQueryProvider.setDiffWeight(0);
+    advancedQueryProvider.setWorkLoadHigh(true);
+    advancedQueryProvider.setWorkLoadWeight(0);
+    advancedQueryProvider.setGradeHigh(true);
+    advancedQueryProvider.setGradeWeight(0);
+    advancedQueryProvider.setPassRateHigh(true);
+    advancedQueryProvider.setPassRateWeight(0);
+    advancedQueryProvider.setAdvancedSorting(false);
     closeModal();
   };
 
@@ -69,7 +91,7 @@ const AdvancedSortForm: React.FC<AdvancedSortFormProps> = ({ closeModal }) => {
         directionVariable={scoreHighState}
         setWeightFunction={setScoreWeight}
         weightVariable={scoreWeight}
-        displayName={'score'}
+        displayName={'Score'}
         idName={'score'}
       />
       <SortFactor
@@ -77,7 +99,7 @@ const AdvancedSortForm: React.FC<AdvancedSortFormProps> = ({ closeModal }) => {
         directionVariable={difficultyHighState}
         setWeightFunction={setDifficultyWeight}
         weightVariable={difficultyWeight}
-        displayName={'vanskelighetsgrad'}
+        displayName={'Vanskelighetsgrad'}
         idName={'difficulty'}
       />
       <SortFactor
@@ -85,7 +107,7 @@ const AdvancedSortForm: React.FC<AdvancedSortFormProps> = ({ closeModal }) => {
         directionVariable={workloadHighState}
         setWeightFunction={setWorkloadWeight}
         weightVariable={workloadWeight}
-        displayName={'arbeidsmengde'}
+        displayName={'Arbeidsmengde'}
         idName={'workload'}
       />
       <SortFactor
@@ -93,7 +115,7 @@ const AdvancedSortForm: React.FC<AdvancedSortFormProps> = ({ closeModal }) => {
         directionVariable={gradeHighState}
         setWeightFunction={setGradeWeight}
         weightVariable={gradeWeight}
-        displayName={'karaktersnitt'}
+        displayName={'Karaktersnitt'}
         idName={'grade'}
       />
       <SortFactor
@@ -101,11 +123,12 @@ const AdvancedSortForm: React.FC<AdvancedSortFormProps> = ({ closeModal }) => {
         directionVariable={passrateHighState}
         setWeightFunction={setPassrateWeight}
         weightVariable={passrateWeight}
-        displayName={'andel bestått'}
+        displayName={'Andel bestått'}
         idName={'passrate'}
       />
 
-      <SortButton onClick={doSort}>Lagre innstillinger</SortButton>
+      <SortButton onClick={doSort}>Lagre og sorter</SortButton>
+      <ResetButton onClick={doReset}>Nullstill sortering</ResetButton>
     </div>
   );
 };

@@ -37,7 +37,7 @@ export const SortFactor: React.FC<RateCourseButtonProps> = ({
           {(directionVariable ? 'høy' : 'lav') + ` \u21C5`}
         </SortFormButton>
       </FactorWrapper>
-      <RadioButtonsBar radioID={`${idName}Weight`} valueSetter={setWeightFunction} />
+      <RadioButtonsBar radioID={`${idName}Weight`} valueSetter={setWeightFunction} defaultChecked={weightVariable}/>
     </div>
   );
 };

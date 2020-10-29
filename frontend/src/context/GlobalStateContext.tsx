@@ -45,6 +45,8 @@ interface PageReviewProviderValue {
 interface AdvancedQueryProviderValue{
   advancedSorting: boolean;
   setAdvancedSorting: (val: boolean) => void;
+  advancedSortChangedFlag: boolean; // Value is meaningless, is only used to update search. Is flipped every time advanced sorting is changed.
+  setAdvancedSortChangedFlag: (val: boolean) => void;
 
   diffHigh: boolean;
   setDiffHigh: (val: boolean) => void;
@@ -89,6 +91,7 @@ const GlobalStateProvider: React.FC = ({ children }) => {
   
   //Advanced query provider
   const [advancedSorting, setAdvancedSorting] = useState<boolean>(false);
+  const [advancedSortChangedFlag, setAdvancedSortChangedFlag] = useState<boolean>(false);
   const [diffHigh, setDiffHigh] = useState<boolean>(true);
   const [diffWeight, setDiffWeight] = useState<number>(0);
   const [gradeHigh, setGradeHigh] = useState<boolean>(true);
@@ -133,6 +136,8 @@ const GlobalStateProvider: React.FC = ({ children }) => {
     () => ({
       advancedSorting,
       setAdvancedSorting,
+      advancedSortChangedFlag,
+      setAdvancedSortChangedFlag,
       diffHigh,
       setDiffHigh,
       diffWeight,
@@ -157,6 +162,8 @@ const GlobalStateProvider: React.FC = ({ children }) => {
     [
       advancedSorting,
       setAdvancedSorting,
+      advancedSortChangedFlag,
+      setAdvancedSortChangedFlag,
       diffHigh,
       setDiffHigh,
       diffWeight,

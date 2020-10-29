@@ -24,7 +24,9 @@ export const EmptyResult = styled.h3`
 
 export const CourseList: React.FC = () => {
   const [courses, updateCourses] = useState<CourseProps[]>([]);
-  const { pageProvider, queryProvider, advancedQueryProvider } = useContext(GlobalStateContext)!;
+  const { pageProvider, queryProvider, advancedQueryProvider } = useContext(
+    GlobalStateContext,
+  )!;
   const [loading, setLoading] = useState<boolean>(false);
 
   const pageNumber = pageProvider.page;
@@ -34,6 +36,10 @@ export const CourseList: React.FC = () => {
   if (queryProvider.searchQuery) {
     searchQuery = queryProvider.searchQuery;
   }
+
+  // Flag that triggers useEffect, value doesn't matter
+  let advancedSortChangedFlag = advancedQueryProvider.advancedSortChangedFlag;
+  let useAdvancedSorting = advancedQueryProvider.advancedSorting;
 
   // Sorting dropdown
   let orderByQuery: string;
@@ -57,22 +63,15 @@ export const CourseList: React.FC = () => {
   useEffect(() => {
     const getCourses = async () => {
       setLoading(true);
-      let fetchURL:string;
-      if(advancedQueryProvider.advancedSorting){
-        fetchURL = `${API_URL}/course/all/?n=25&offset=${start}&search=${searchQuery}&advanced_sorting=true
-        &difficulty_weight=${advancedQueryProvider.diffWeight}&difficulty_high=${advancedQueryProvider.diffHigh}
-        &grade_weight=${advancedQueryProvider.gradeWeight}&grade_high=${advancedQueryProvider.gradeHigh}
-        &pass_rate_weight=${advancedQueryProvider.passRateWeight}&pass_rate_high=${advancedQueryProvider.passRateHigh}
-        &workload_weight=${advancedQueryProvider.workLoadWeight}&workload_high=${advancedQueryProvider.workLoadHigh}
-        &score_weight=${advancedQueryProvider.scoreWeight}&score_high=${advancedQueryProvider.scoreHigh}`;
-      }
-      else{
+      let fetchURL: string;
+      if (advancedQueryProvider.advancedSorting) {
+        // TODO: Break this line for readability
+        fetchURL = `${API_URL}/course/all/?n=25&offset=${start}&search=${searchQuery}&advanced_sorting=true&difficulty_weight=${advancedQueryProvider.diffWeight}&difficulty_high=${advancedQueryProvider.diffHigh}&grade_weight=${advancedQueryProvider.gradeWeight}&grade_high=${advancedQueryProvider.gradeHigh}&pass_rate_weight=${advancedQueryProvider.passRateWeight}&pass_rate_high=${advancedQueryProvider.passRateHigh}&workload_weight=${advancedQueryProvider.workLoadWeight}&workload_high=${advancedQueryProvider.workLoadHigh}&score_weight=${advancedQueryProvider.scoreWeight}&score_high=${advancedQueryProvider.scoreHigh}`
+      } else {
         fetchURL = `${API_URL}/course/all/?n=25&offset=${start}&search=${searchQuery}&order_by=${orderByQuery}&ascending=${orderToggle}`;
       }
       await axios
-        .get(
-          fetchURL,
-        )
+        .get(fetchURL)
         .then((res) => {
           updateCourses(res.data.data);
           pageProvider.setTotalPage(Math.ceil(res.data.count / resultLimit));
@@ -84,7 +83,14 @@ export const CourseList: React.FC = () => {
     };
     getCourses();
     start += resultLimit;
-  }, [pageNumber, searchQuery, orderByQuery, orderToggle]);
+  }, [
+    pageNumber,
+    searchQuery,
+    orderByQuery,
+    orderToggle,
+    advancedSortChangedFlag,
+    useAdvancedSorting,
+  ]);
 
   return (
     <>
