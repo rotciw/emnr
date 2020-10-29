@@ -17,10 +17,10 @@ interface MyCourseProps {
 }
 
 export const Semester: React.FC<Semester> = ({ semester, courses }) => {
-  let currentDate: Date = new Date();
-  let currentSemester: string =
+  let currentDate = new Date();
+  let currentSemester =
     (currentDate.getMonth() < 7 ? 'V' : 'H') + `${currentDate.getFullYear()}`;
-  let isCurrentSemester: boolean = currentSemester == semester;
+  let isCurrentSemester = currentSemester === semester;
 
   return (
     <SemesterContainer margin='5vh 0'>
