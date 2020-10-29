@@ -11,6 +11,7 @@ ARG DATABASE_PORT
 ARG DATABASE_NAME
 ARG DATABASE_USERNAME
 ARG DATABASE_PASSWORD
+ARG APP_ENV="development"
 
 ENV DATAPORTEN_CLIENT_ID=${DATAPORTEN_CLIENT_ID}
 ENV DATAPORTEN_OAUTH_AUTH_URL=${DATAPORTEN_OAUTH_AUTH_URL}
@@ -26,6 +27,7 @@ ENV DATABASE_PASSWORD=${DATABASE_PASSWORD}
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV DEBUG 0
+ENV APP_ENV $APP_ENV
 
 WORKDIR /src/backend
 # install psycopg2
@@ -39,4 +41,9 @@ RUN pip install -r requirements.txt
 COPY . /src/backend/
 RUN adduser -D myuser
 USER myuser
-CMD gunicorn server.wsgi:application --bind 0.0.0.0:$PORT
+CMD if [ ${APP_ENV} = "production" ]; \
+    then \
+    gunicorn server.wsgi:application --bind 0.0.0.0:$PORT; \
+    else \
+    gunicorn server.wsgi:application --bind 0.0.0.0:8000;\
+    fi
