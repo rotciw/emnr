@@ -69,7 +69,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
     return () => {
       isCancelled = true;
     };
-  }, [pageNumber]);
+  }, [pageNumber, reviews]);
 
   function calculateAvgScore(reviews: ReviewProps[]) {
     numberOfReviewSetter(reviews.length);
