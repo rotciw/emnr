@@ -18,7 +18,7 @@ const ReviewContainer = styled.div`
   border: 1px solid ${({ theme }) => theme.black};
   display: flex;
   margin: 0 0 4vh 0;
-  padding: 12px 5vw;
+  padding: 12px 3% 12px 2%;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
@@ -88,7 +88,7 @@ const Review: React.FC<ReviewProps> = ({
 
   return (
     <ReviewContainer>
-      <FlexItem flex={'1'} style={{ marginRight: '5vw' }}>
+      <FlexItem flex={'1'} style={{ marginRight: '2%' }}>
         <div>
           <ExtraBold>{name}</ExtraBold>
           <div>{studyProgramme}</div>

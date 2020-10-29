@@ -14,6 +14,8 @@ interface CourseProps {
   credit: number;
   review_count: number;
   average_review_score: number;
+  pass_rate: number;
+  sorting_param: string;
 }
 
 export const EmptyResult = styled.h3`
@@ -48,6 +50,19 @@ export const CourseList: React.FC = () => {
     : (orderByQuery = 'review_count');
 
   let orderToggle: number;
+
+  let orderByText:string = "";
+  switch (orderByQuery) {
+    case 'review_count': orderByText = "Antall vurderinger"; break;
+    case 'course_code': orderByText = "Emnekode"; break;
+    case 'course_name': orderByText = "Emnenavn"; break;
+    case 'average_review_score': orderByText = "Gjennomsnittlig vurdering"; break;
+    case 'review_count': orderByText = "Antall vurderinger"; break;
+    case 'credit': orderByText = "Studiepoeng"; break;
+    case 'average_grade': orderByText = "Snittkarakter"; break;
+    case 'pass_rate': orderByText = "Strykprosent"; break;
+    default: orderByText = "Egendefinert"; break;
+}
 
   // The backend sorts ascending on 1 and descending on 0
   queryProvider.orderToggle ? (orderToggle = 1) : (orderToggle = 0);
@@ -106,7 +121,7 @@ export const CourseList: React.FC = () => {
                   <StyledTH width='50%' textAlign='left'>
                     Emnenavn
                   </StyledTH>
-                  <StyledTH width='25%'>Vurdering</StyledTH>
+                  <StyledTH width='25%'>{orderByText}</StyledTH>
                 </tr>
               </thead>
               <tbody>
@@ -118,6 +133,10 @@ export const CourseList: React.FC = () => {
                       courseName={currentCourse.course_name}
                       averageReviewScore={currentCourse.average_review_score}
                       reviewCount={currentCourse.review_count}
+                      averageGrade={currentCourse.average_grade}
+                      passRate={currentCourse.pass_rate}
+                      credit={currentCourse.credit}
+                      sortingParam={orderByQuery}
                     />
                   );
                 })}
