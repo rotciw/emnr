@@ -6,6 +6,7 @@ interface GlobalStateContextProps {
   pageProvider: PageProviderValue;
   pageReviewProvider: PageReviewProviderValue;
   queryProvider: QueryProviderValue;
+  advancedQueryProvider: AdvancedQueryProviderValue;
 }
 
 interface AuthProviderValue {
@@ -41,6 +42,36 @@ interface PageReviewProviderValue {
   setTotalPageReview: (val: number) => void;
 }
 
+interface AdvancedQueryProviderValue{
+  advancedSorting: boolean;
+  setAdvancedSorting: (val: boolean) => void;
+
+  diffHigh: boolean;
+  setDiffHigh: (val: boolean) => void;
+  diffWeight: number;
+  setDiffWeight: (val: number) => void;
+  
+  gradeHigh: boolean;
+  setGradeHigh: (val: boolean) => void;
+  gradeWeight: number;
+  setGradeWeight: (val: number) => void;
+  
+  scoreHigh: boolean;
+  setScoreHigh: (val: boolean) => void;
+  scoreWeight: number;
+  setScoreWeight: (val: number) => void;
+
+  passRateHigh: boolean;
+  setPassRateHigh: (val: boolean) => void;
+  passRateWeight: number;
+  setPassRateWeight: (val: number) => void;
+
+  workLoadHigh: boolean;
+  setWorkLoadHigh: (val: boolean) => void;
+  workLoadWeight: number | null;
+  setWorkLoadWeight: (val: number) => void;
+}
+
 export const GlobalStateContext = createContext<GlobalStateContextProps | null>(
   null,
 );
@@ -55,6 +86,20 @@ const GlobalStateProvider: React.FC = ({ children }) => {
   const [totalPageReview, setTotalPageReview] = useState<number>(1);
   const [orderByQuery, setOrderByQuery] = useState<string | null>(null);
   const [orderToggle, setOrderToggle] = useState(false);
+  
+  //Advanced query provider
+  const [advancedSorting, setAdvancedSorting] = useState<boolean>(false);
+  const [diffHigh, setDiffHigh] = useState<boolean>(true);
+  const [diffWeight, setDiffWeight] = useState<number>(0);
+  const [gradeHigh, setGradeHigh] = useState<boolean>(true);
+  const [gradeWeight, setGradeWeight] = useState<number>(0);
+  const [scoreHigh, setScoreHigh] = useState<boolean>(true);
+  const [scoreWeight, setScoreWeight] = useState<number>(0);
+  const [passRateHigh, setPassRateHigh] = useState<boolean>(true);
+  const [passRateWeight, setPassRateWeight] = useState<number>(0);
+  const [workLoadHigh, setWorkLoadHigh] = useState<boolean>(true);
+  const [workLoadWeight, setWorkLoadWeight] = useState<number>(0);
+
 
   const authProvider = useMemo(() => ({ token, setToken }), [token, setToken]);
   const userProvider = useMemo(() => ({ email, setEmail }), [email, setEmail]);
@@ -84,6 +129,56 @@ const GlobalStateProvider: React.FC = ({ children }) => {
       setOrderToggle,
     ],
   );
+  const advancedQueryProvider = useMemo(
+    () => ({
+      advancedSorting,
+      setAdvancedSorting,
+      diffHigh,
+      setDiffHigh,
+      diffWeight,
+      setDiffWeight,
+      gradeHigh,
+      setGradeHigh,
+      gradeWeight,
+      setGradeWeight,
+      scoreHigh,
+      setScoreHigh,
+      scoreWeight,
+      setScoreWeight,
+      passRateHigh,
+      setPassRateHigh,
+      passRateWeight,
+      setPassRateWeight,
+      workLoadHigh,
+      setWorkLoadHigh,
+      workLoadWeight,
+      setWorkLoadWeight,
+    }),
+    [
+      advancedSorting,
+      setAdvancedSorting,
+      diffHigh,
+      setDiffHigh,
+      diffWeight,
+      setDiffWeight,
+      gradeHigh,
+      setGradeHigh,
+      gradeWeight,
+      setGradeWeight,
+      scoreHigh,
+      setScoreHigh,
+      scoreWeight,
+      setScoreWeight,
+      passRateHigh,
+      setPassRateHigh,
+      passRateWeight,
+      setPassRateWeight,
+      workLoadHigh,
+      setWorkLoadHigh,
+      workLoadWeight,
+      setWorkLoadWeight,
+    ],
+  );
 
   return (
     <GlobalStateContext.Provider
@@ -93,6 +188,7 @@ const GlobalStateProvider: React.FC = ({ children }) => {
         pageProvider,
         pageReviewProvider,
         queryProvider,
+        advancedQueryProvider,
       }}
     >
       {children}
