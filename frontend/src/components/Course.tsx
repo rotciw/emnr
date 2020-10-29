@@ -9,6 +9,10 @@ interface CourseProps {
   courseCode: string;
   averageReviewScore: number;
   reviewCount: number;
+  averageGrade: number;
+  passRate: number;
+  credit: number;
+  sortingParam: string;
 }
 
 const Course: React.FC<CourseProps> = ({
@@ -16,7 +20,26 @@ const Course: React.FC<CourseProps> = ({
   courseCode,
   averageReviewScore,
   reviewCount,
+  averageGrade,
+  passRate,
+  credit,
+  sortingParam,
 }) => {
+  
+  let paramMetric:String = "";
+  
+  switch (sortingParam) {
+    case 'review_count': paramMetric = String(reviewCount); break;
+    case 'course_code': paramMetric = ""; break;
+    case 'course_name': paramMetric = ""; break;
+    case 'average_review_score': paramMetric = String(averageReviewScore.toFixed(1)) + " / 5"; break;
+    case 'review_count': paramMetric = String(reviewCount); break;
+    case 'credit': paramMetric = String(credit); break;
+    case 'average_grade': paramMetric = String(averageGrade); break;
+    case 'pass_rate': paramMetric = String((100-passRate).toFixed(2)); break;
+    default: paramMetric = "X"; break;
+}
+
   return (
     <tr>
       <td colSpan={3}>
@@ -27,10 +50,12 @@ const Course: React.FC<CourseProps> = ({
               {courseName}
             </CourseItemText>
             <FlexColumn width='25%'>
-              <CourseItemText>{averageReviewScore.toFixed(1)} / 5</CourseItemText>
-              <CourseItemSubtext>
-                {reviewCount} {reviewCount === 1 ? 'vurdering' : 'vurderinger'}
-              </CourseItemSubtext>
+              <CourseItemText>{paramMetric}</CourseItemText>
+              {(sortingParam === 'average_review_score') && (
+                <CourseItemSubtext>
+                  {reviewCount} {reviewCount === 1 ? 'vurdering' : 'vurderinger'}
+                </CourseItemSubtext>
+              )}
             </FlexColumn>
           </CourseButton>
         </Link>
