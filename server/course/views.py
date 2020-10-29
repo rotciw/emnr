@@ -40,7 +40,7 @@ def get_courses_from_db(request):
     # Get search parameter and combines the fields "course_code" and "course_name" into an OR field,
     # by making a Q object.
     search = request.GET.get("search", "")
-    combined_search_filter = Q(course_code__contains=search) | Q(course_name__contains=search)
+    combined_search_filter = Q(course_code__icontains=search) | Q(course_name__icontains=search)
 
     # Get and validate n parameter
     number_of_courses = Course.objects.filter(combined_search_filter).count()
