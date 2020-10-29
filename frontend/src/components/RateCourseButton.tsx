@@ -9,6 +9,7 @@ interface RateCourseButtonProps {
   onClickFunction: () => void;
   courseCode: string;
   loading: boolean;
+  postedReview?: boolean;
 }
 
 export const TooltipButtonContainer = styled.div`
@@ -58,8 +59,10 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
   onClickFunction,
   courseCode,
   loading,
+  postedReview,
 }) => {
   const [reviewEligibility, setReviewEligibility] = useState<number>(1);
+  const [courseButtonLoading, setCourseButtonLoading] = useState<boolean>(loading);
 
   // TODO: move axios config (ref Casper code review comment @ !PR19)
   axios.defaults.headers.common.Authorization = `${getLocalToken()}`;
@@ -67,6 +70,7 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
   useEffect(() => {
     let isCancelled = false;
     const getReviewEligibility = async () => {
+      setCourseButtonLoading(true);
       await axios
         .get(`${API_URL}/review/check/?courseCode=${courseCode}`)
         .then((res) => {
@@ -75,12 +79,13 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
           }
         })
         .catch((err) => console.log(err));
+      setCourseButtonLoading(false);
     };
     getReviewEligibility();
     return () => {
       isCancelled = true;
     };
-  });
+  }, [loading, postedReview]);
 
   let content;
 
@@ -124,7 +129,7 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
 
   return (
     <>
-      {loading ? (
+      {courseButtonLoading ? (
         <DisabledRateButton>
           <PulseLoader color='#FFF' size='10px' />
         </DisabledRateButton>
