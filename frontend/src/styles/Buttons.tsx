@@ -37,6 +37,25 @@ const StyledCourseBtn = styled.button`
   }
 `;
 
+export const NavbarButton = styled.button`
+  display: block;
+  color: ${({ theme }) => theme.light};
+  background-color: ${({ theme }) => theme.blue};
+  border: none;
+  border-radius: 3px;
+  padding: 8px 16px;
+  margin: 0 0 0 12px;
+  cursor: pointer;
+  user-select: none;
+  :hover {
+    background-color: ${({ theme }) => theme.lightBlue};
+    color: ${({ theme }) => theme.darkBlue}
+  }
+  @media (max-width: 768px){
+    margin: 12px 0 0 0;
+  }
+`;
+
 export const LoginButton: React.FC<ButtonProps> = ({
   clickHandler,
   children,
