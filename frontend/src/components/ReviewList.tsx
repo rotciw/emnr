@@ -19,7 +19,7 @@ const Wrapper = styled.div`
 interface ReviewListProps {
   courseCode: string;
   pageNumber: number;
-  limitReviews: Boolean;
+  limitReviews: boolean;
   scoreAvgSetter: (value: number) => void;
   numberOfReviewSetter: (value: number) => void;
 }
