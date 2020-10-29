@@ -8,7 +8,8 @@ from auth.models import UserAuth
 from rest_framework.test import APIClient
 from review.tests import mock_feide_apis
 
-# @patch("review.views.requests.get", new=mock_feide_apis)
+
+@patch("review.views.requests.get", new=mock_feide_apis)
 class GetReviewsTest(TestCase):
     def setUp(self) -> None:
         self.rf = RequestFactory()
@@ -132,29 +133,12 @@ class GetReviewsTest(TestCase):
         pass
 
     def test_get_reviews_from_db_filter_on_programme_valid_token(self):
-        # with patch("review.views.Review.objects.filter") as mock_review_db:
-        #     mock_review_db.return_value = [
-        #         Review(course_code="TMA4100", user_email="test@test.com", score=5, workload=1, difficulty=2,
-        #                review_text="Bra fag", full_name="Test test", study_programme="MTDT"),
-        #         Review(course_code="TMA4100", user_email="kpro@kpro.com", score=3, workload=1, difficulty=2,
-        #                review_text="Givende", full_name="KPro Kproson", study_programme="MTKPRO"),
-        #         Review(course_code="TMA4100", user_email="hei@hallo.com", score=4, workload=1, difficulty=2,
-        #                review_text="Lattice", full_name="Heman 2015", study_programme="MTDT"),
-        #         Review(course_code="TMA4100", user_email="hallo@hei.com", score=2, workload=1, difficulty=2,
-        #                review_text="Helt ok fag", full_name="Hanna Montana", study_programme="MTTEST"),
-        #         Review(course_code="TMA4100", user_email="pu@pu.com", score=5, workload=1, difficulty=1,
-        #                review_text="Sykt lett", full_name="PU PUsen", study_programme="MTDT"),
-        #         Review(course_code="TMA4100", user_email="morn@morna.com", score=4, workload=1, difficulty=2,
-        #                review_text="Morn du", full_name="Mons Bertilsen", study_programme="MTHEI"),
-        #         Review(course_code="EXPH0004", user_email="erasmus@montanus.com", score=1, workload=5, difficulty=2,
-        #                review_text="Meget filosofisk", full_name="Erasmus Montanus", study_programme="MTDT"),
-        #     ]
-        #
-        #     c = APIClient()
-        #     c.credentials(HTTP_AUTHORIZATION='valid_token')
-        #     res = c.get("/review/get/?courseCode=TMA4100&showMyProgramme=true")
-        #     self.assertEqual(res.status_code, 200)
-        pass
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
+        res = c.get("/review/get/?courseCode=TMA4100&showMyProgramme=true")
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(len(res.data["data"]), 3)
+        self.assertEqual(res.data["count"], 3)
 
     def test_get_reviews_endpoint_filter_on_programme_invalid_param(self):
         c = APIClient()

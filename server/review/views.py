@@ -134,7 +134,11 @@ def get_reviews_from_db(request):
         raise ValueError("Illegal boolean value")
 
     # Get and validate n parameter
-    number_of_reviews = Review.objects.filter(course_code=course_code).count()
+    if show_my_programme == "true":
+        number_of_reviews = Review.objects.filter(course_code=course_code).filter(
+            study_programme=get_user_study_programme(request.META["HTTP_AUTHORIZATION"])).count()
+    else:
+        number_of_reviews = Review.objects.filter(course_code=course_code).count()
     n = request.GET.get("n", number_of_reviews)
     if isinstance(n, str) and not n.isdigit():
         raise ValueError("Invalid value for n: {}".format(n))
@@ -158,7 +162,8 @@ def get_reviews_from_db(request):
     # Fetch reviews from database
     if show_my_programme == "true":
         exp_token = request.META["HTTP_AUTHORIZATION"]
-        data = Review.objects.filter(course_code=course_code).filter(study_programme=get_user_study_programme(exp_token))[
+        data = Review.objects.filter(course_code=course_code).filter(
+            study_programme=get_user_study_programme(exp_token))[
                offset:offset + n]
     else:
         data = Review.objects.filter(course_code=course_code)[offset:offset + n]
