@@ -10,6 +10,7 @@ import 'react-dropdown/style.css';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { Menu } from './Menu';
 import { NavbarButton } from 'styles/Buttons';
+import AdvancedSortForm from './AdvancedSortForm';
 
 const NavBarContainer = styled.nav`
   width: 100%;
@@ -101,7 +102,7 @@ const Navbar: React.FC = () => {
               style={modalStyles}
               contentLabel='Example Modal'
             >
-              <p>test</p>
+              <AdvancedSortForm closeModal={toggleModalIsOpen} />
             </Modal>
           <Searchbar />
           <SortingContainer>

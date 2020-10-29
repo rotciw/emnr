@@ -38,7 +38,12 @@ const Searchbar: React.FC = () => {
     <SearchbarContainer>
       <SearchInput
         type='search'
-        onChange={(e) => queryProvider.setSearchQuery(e.target.value)}
+        onChange={
+          (e) => {
+            queryProvider.setSearchQuery(e.target.value)
+            //advancedQueryProvider.setSearchQuery(e.target.value)
+          }
+        }
         value={searchValue}
         placeholder='Søk etter emnekode eller navn..'
       />
