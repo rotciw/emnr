@@ -243,7 +243,7 @@ class GetAllCoursesTest(TestCase):
                 mock_request = get_courses_from_db(self.rf.get(
                     "/courses/all/?advanced_sorting=true&{}_weight={}".format(param, value)))
 
-        # Request: [url, first hit course_code]
+        # Query number: [query, first hit course_code, sorting_score]
         base_query = "/course/all/?advanced_sorting=true"
         single_param_queries = {
             "q0": [base_query+"&score_high=true&score_weight=5", "TN202406", 4.0],
@@ -257,18 +257,12 @@ class GetAllCoursesTest(TestCase):
             "q8": [base_query+"&grade_high=true&grade_weight=5", "MFEL4852", 4.38315217391304],
             "q9": [base_query+"&grade_high=false&grade_weight=5", "MFEL1010", 4.65872057936029],
         }
-        # Code below is useful for printing what the different requests gives as first hit subject.
-        print("\n")
-        for index, query in enumerate(single_param_queries.values()):
-            mock_request = self.rf.get(query[0])
-            mock_response = get_courses_from_db(mock_request)
-            print("q{}: ".format(index) + mock_response["data"][0]["course_code"]
-                  + ": " + str(mock_response["data"][0]["advanced_sorting_score"]))
         for query in single_param_queries.values():
             mock_request = self.rf.get(query[0])
             mock_response = get_courses_from_db(mock_request)
             self.assertEqual(mock_response["data"][0]["course_code"], query[1])
             self.assertEqual(mock_response["data"][0]["advanced_sorting_score"], query[2])
+        # Query number: [query, first hit course_code, sorting_score]
         multiple_param_queries = {
             # Looking for subjects with good score, low difficulty and sort of low workload
             "q0": [base_query + "&score_high=true&score_weight=4"
@@ -296,11 +290,6 @@ class GetAllCoursesTest(TestCase):
                                 "&difficulty_high=false&difficulty_weight=4"
                                 "&workload_high=false&workload_weight=0", "TMR4555", 4.4],
         }
-        for q, value in multiple_param_queries.items():
-            mock_request = self.rf.get(value[0])
-            mock_response = get_courses_from_db(mock_request)
-            print("{}: ".format(q) + mock_response["data"][0]["course_code"]
-                  + ": " + str(mock_response["data"][0]["advanced_sorting_score"]))
         for query in multiple_param_queries.values():
             mock_request = self.rf.get(query[0])
             mock_response = get_courses_from_db(mock_request)
@@ -387,7 +376,7 @@ class GetAllCoursesTest(TestCase):
             res = c.get("/course/all/?advanced_sorting={}".format(bad_adv_sort))
             self.assertEqual(res.status_code, 400)
         for param in params:
-            for bad_high in invalid_advanced_sortings:
+            for bad_high in invalid_highs:
                 res = c.get("/course/all/?advanced_sorting=true&{}_high={}".format(param, bad_high))
                 self.assertEqual(res.status_code, 400)
             for bad_weight in invalid_weights:
