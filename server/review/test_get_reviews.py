@@ -124,7 +124,6 @@ class GetReviewsTest(TestCase):
         self.assertEqual(res.data["count"], 6)
         self.assertEqual(len(res.data["data"]), 6)
 
-
     def test_get_reviews_endpoint_filter_on_programme_valid_token(self):
         c = APIClient()
         c.credentials(HTTP_AUTHORIZATION='valid_token')
