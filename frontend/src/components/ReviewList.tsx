@@ -19,6 +19,7 @@ const Wrapper = styled.div`
 interface ReviewListProps {
   courseCode: string;
   pageNumber: number;
+  limitReviews: boolean;
   scoreAvgSetter: (value: number) => void;
   numberOfReviewSetter: (value: number) => void;
   postedReview: boolean;
@@ -37,6 +38,7 @@ interface ReviewProps {
 const ReviewList: React.FC<ReviewListProps> = ({
   courseCode,
   pageNumber,
+  limitReviews,
   scoreAvgSetter,
   numberOfReviewSetter,
   postedReview,
@@ -54,7 +56,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
       setLoading(true);
       await axios
         .get(
-          `${API_URL}/review/get/?courseCode=${courseCode}&n=25&offset=${start}`,
+          `${API_URL}/review/get/?courseCode=${courseCode}&n=${resultLimit}&offset=${start}&showMyProgramme=${String(limitReviews)}`,
         )
         .then((res) => {
           if (!isCancelled) {
@@ -65,7 +67,6 @@ const ReviewList: React.FC<ReviewListProps> = ({
             scoreAvgSetter(
               res.data.average_score != null ? res.data.average_score : 0,
             );
-            numberOfReviewSetter(reviews.length);
           }
         })
         .catch((err) => console.log(err));
@@ -76,8 +77,8 @@ const ReviewList: React.FC<ReviewListProps> = ({
     return () => {
       isCancelled = true;
     };
-  }, [pageNumber, postedReview]);
-
+  }, [pageNumber, postedReview, limitReviews]);
+  numberOfReviewSetter(reviews.length);
   return (
     <>
       {loading ? (
