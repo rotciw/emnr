@@ -139,7 +139,7 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
       <HrLine />
       {(numberOfReviews > 0) && (
         <FlexContainer>
-          <SubTitle>Se kun vurderinger fra ditt eget studieprogram.</SubTitle>
+          <SubTitle>Se kun vurderinger fra ditt eget studieprogram:</SubTitle>
           <input type='checkbox' checked={limitReviews} onChange={() => {
             setLimitReviews(!limitReviews);
             localStorage.setItem('seeOnlyOwnProgrammeReviews',String(!limitReviews));

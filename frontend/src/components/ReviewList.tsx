@@ -56,7 +56,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
       setLoading(true);
       await axios
         .get(
-          `${API_URL}/review/get/?courseCode=${courseCode}&n=25&offset=${start}&showMyProgramme=${String(limitReviews)}`,
+          `${API_URL}/review/get/?courseCode=${courseCode}&n=${resultLimit}&offset=${start}&showMyProgramme=${String(limitReviews)}`,
         )
         .then((res) => {
           if (!isCancelled) {
