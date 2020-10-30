@@ -51,18 +51,36 @@ export const CourseList: React.FC = () => {
 
   let orderToggle: number;
 
-  let orderByText:string = "";
+  let orderByText: string = '';
   switch (orderByQuery) {
-    case 'review_count': orderByText = "Antall vurderinger"; break;
-    case 'course_code': orderByText = "Emnekode"; break;
-    case 'course_name': orderByText = "Emnenavn"; break;
-    case 'average_review_score': orderByText = "Gjennomsnittlig vurdering"; break;
-    case 'review_count': orderByText = "Antall vurderinger"; break;
-    case 'credit': orderByText = "Studiepoeng"; break;
-    case 'average_grade': orderByText = "Snittkarakter"; break;
-    case 'pass_rate': orderByText = "Strykprosent"; break;
-    default: orderByText = "Egendefinert"; break;
-}
+    case 'review_count':
+      orderByText = 'Antall vurderinger';
+      break;
+    case 'course_code':
+      orderByText = 'Emnekode';
+      break;
+    case 'course_name':
+      orderByText = 'Emnenavn';
+      break;
+    case 'average_review_score':
+      orderByText = 'Gjennomsnittlig vurdering';
+      break;
+    case 'review_count':
+      orderByText = 'Antall vurderinger';
+      break;
+    case 'credit':
+      orderByText = 'Studiepoeng';
+      break;
+    case 'average_grade':
+      orderByText = 'Snittkarakter';
+      break;
+    case 'pass_rate':
+      orderByText = 'Strykprosent';
+      break;
+    default:
+      orderByText = 'Egendefinert';
+      break;
+  }
 
   // The backend sorts ascending on 1 and descending on 0
   queryProvider.orderToggle ? (orderToggle = 1) : (orderToggle = 0);
@@ -81,7 +99,7 @@ export const CourseList: React.FC = () => {
       let fetchURL: string;
       if (advancedQueryProvider.advancedSorting) {
         // TODO: Break this line for readability
-        fetchURL = `${API_URL}/course/all/?n=25&offset=${start}&search=${searchQuery}&advanced_sorting=true&difficulty_weight=${advancedQueryProvider.diffWeight}&difficulty_high=${advancedQueryProvider.diffHigh}&grade_weight=${advancedQueryProvider.gradeWeight}&grade_high=${advancedQueryProvider.gradeHigh}&pass_rate_weight=${advancedQueryProvider.passRateWeight}&pass_rate_high=${advancedQueryProvider.passRateHigh}&workload_weight=${advancedQueryProvider.workLoadWeight}&workload_high=${advancedQueryProvider.workLoadHigh}&score_weight=${advancedQueryProvider.scoreWeight}&score_high=${advancedQueryProvider.scoreHigh}`
+        fetchURL = `${API_URL}/course/all/?n=25&offset=${start}&search=${searchQuery}&advanced_sorting=true&difficulty_weight=${advancedQueryProvider.diffWeight}&difficulty_high=${advancedQueryProvider.diffHigh}&grade_weight=${advancedQueryProvider.gradeWeight}&grade_high=${advancedQueryProvider.gradeHigh}&pass_rate_weight=${advancedQueryProvider.passRateWeight}&pass_rate_high=${advancedQueryProvider.passRateHigh}&workload_weight=${advancedQueryProvider.workLoadWeight}&workload_high=${advancedQueryProvider.workLoadHigh}&score_weight=${advancedQueryProvider.scoreWeight}&score_high=${advancedQueryProvider.scoreHigh}`;
       } else {
         fetchURL = `${API_URL}/course/all/?n=25&offset=${start}&search=${searchQuery}&order_by=${orderByQuery}&ascending=${orderToggle}`;
       }

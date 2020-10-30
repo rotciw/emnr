@@ -73,7 +73,7 @@ const options = [
   { value: 'review_count', label: 'Antall vurderinger' },
   { value: 'credit', label: 'Studiepoeng' },
   { value: 'average_grade', label: 'Karaktersnitt' },
-  { value: 'pass_rate', label: 'Strykprosent'}
+  { value: 'pass_rate', label: 'Strykprosent' },
 ];
 
 const Navbar: React.FC = () => {
@@ -95,7 +95,7 @@ const Navbar: React.FC = () => {
   const onSelect = (e: Option) => {
     queryProvider.setOrderByQuery(e.value);
     queryProvider.setOrderToggle(!queryProvider.orderToggle);
-    queryProvider.orderToggle ? (e.label += ` \u25B2`) : (e.label += ` \u25BC`);
+    queryProvider.orderToggle ? (e.label += ` \u25BC`) : (e.label += ` \u25B2`);
   };
 
   return (
