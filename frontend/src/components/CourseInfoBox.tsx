@@ -48,7 +48,7 @@ export const CourseInfoBox: React.FC<CourseInfoProps> = ({
       <InfoSlider sliderProgress={workload / 2} hasReview={hasReview}/>
       <ExtraBold>Karakterer for faget:</ExtraBold>
       <InfoText>
-        Snittkarakter: <ExtraBold>{averageGrade}</ExtraBold>
+        Karaktersnitt: <ExtraBold>{averageGrade}</ExtraBold>
       </InfoText>
       <InfoText>
         Ståprosent: <ExtraBold>{passRate}%</ExtraBold>

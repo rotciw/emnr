@@ -47,7 +47,7 @@ export const InfoSlider: React.FC<SliderProps> = ({
     <SliderContainer>
       <SliderLabel>Lav</SliderLabel>
       <Slider>
-        {hasReview && (
+        {hasReview && 0 <= sliderProgress && sliderProgress <= 2 && (
           <>
             <SliderBall sliderProgress={sliderProgress} hasReview={hasReview}/>
           </>
