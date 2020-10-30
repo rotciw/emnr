@@ -1,7 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FlexColumn } from 'styles/Containers';
-import { ExtraBold } from 'styles/Text';
 
 interface SliderProps {
   sliderProgress: number;
@@ -16,7 +14,6 @@ const SliderContainer = styled.div`
 `;
 
 const Slider = styled.div`
-  position: relative;
   border-bottom: 3px dashed ${({ theme }) => theme.black};
   flex: 1;
   height: 0;
@@ -34,9 +31,8 @@ const SliderBall = styled.div`
   height: 13px;
   background-color: ${({ theme }) => theme.darkBlue};
   border-radius: 50%;
-  position: absolute;
-  margin: -5px 0 0 -6px;
-  left: ${(props: SliderProps) => props.sliderProgress * 100 || '0'}%;
+  margin: -5px 0 0 0;
+  margin-left: ${(props: SliderProps) => props.sliderProgress * 100 || '0'}%;
 `;
 
 export const InfoSlider: React.FC<SliderProps> = ({

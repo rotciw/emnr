@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FlexColumn } from 'styles/Containers';
 import { ExtraBold } from 'styles/Text';
 import InfoSlider from './InfoSlider';
 
@@ -11,10 +10,6 @@ interface CourseInfoProps {
   passRate: number;
   hasReview: boolean;
   gradeDistribution: [number, number, number, number, number, number]; //There is probably a better way to do this (specify array of 6 numbers)
-}
-
-interface SliderProps {
-  sliderProgress: number;
 }
 
 const InfoContainer = styled.div`
