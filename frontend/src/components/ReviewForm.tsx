@@ -94,7 +94,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       <BoldTitle>{courseName}</BoldTitle>
       <HrLine margin='15px 0 0 0' />
       <BoldInputDescription>Totalvurdering: *</BoldInputDescription>
-      <RadioButtonsBar radioID='reviewScore' valueSetter={setScoreValue} />
+      <RadioButtonsBar radioID='reviewScore' valueSetter={setScoreValue} defaultChecked={0}/>
       <InputDescription>Arbeidsmengde:</InputDescription>
       <Dropdown
         options={options}

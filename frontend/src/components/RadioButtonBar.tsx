@@ -4,6 +4,7 @@ import { FlexContainer } from 'styles/Containers';
 
 interface RadioButtonProps {
   radioID: string;
+  defaultChecked: number; // Number between 0 and 5. 0 Means no button is checked by default.
   valueSetter: (value: number) => void;
 }
 
@@ -20,6 +21,7 @@ const RadioButton = styled.input`
 
 export const RadioButtonsBar: React.FC<RadioButtonProps> = ({
   radioID,
+  defaultChecked,
   valueSetter,
 }) => {
   return (
@@ -30,6 +32,7 @@ export const RadioButtonsBar: React.FC<RadioButtonProps> = ({
         name={radioID}
         value={1}
         onChange={() => valueSetter(1)}
+        checked={defaultChecked === 1}
       />
       <MarginLabel htmlFor={radioID + '1'}>1</MarginLabel>
       <RadioButton
@@ -38,6 +41,7 @@ export const RadioButtonsBar: React.FC<RadioButtonProps> = ({
         name={radioID}
         value={2}
         onChange={() => valueSetter(2)}
+        checked={defaultChecked === 2}
       />
       <MarginLabel htmlFor={radioID + '2'}>2</MarginLabel>
       <RadioButton
@@ -46,6 +50,7 @@ export const RadioButtonsBar: React.FC<RadioButtonProps> = ({
         name={radioID}
         value={3}
         onChange={() => valueSetter(3)}
+        checked={defaultChecked === 3}
       />
       <MarginLabel htmlFor={radioID + '3'}>3</MarginLabel>
       <RadioButton
@@ -54,6 +59,7 @@ export const RadioButtonsBar: React.FC<RadioButtonProps> = ({
         name={radioID}
         value={4}
         onChange={() => valueSetter(4)}
+        checked={defaultChecked === 4}
       />
       <MarginLabel htmlFor={radioID + '4'}>4</MarginLabel>
       <RadioButton
@@ -62,6 +68,7 @@ export const RadioButtonsBar: React.FC<RadioButtonProps> = ({
         name={radioID}
         value={5}
         onChange={() => valueSetter(5)}
+        checked={defaultChecked === 5}
       />
       <MarginLabel htmlFor={`${radioID}5`}>5</MarginLabel>
     </FlexContainer>
