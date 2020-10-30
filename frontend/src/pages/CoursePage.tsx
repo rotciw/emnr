@@ -8,6 +8,7 @@ import {
   FlexItem,
   HrLine,
   ShapeContainer,
+  FlexContainer,
 } from 'styles/Containers';
 import { BoldTitle, Title, SubTitle, GoBackText } from 'styles/Text';
 import { RateCourseButton } from 'components/RateCourseButton';
