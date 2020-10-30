@@ -42,6 +42,8 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const [limitReviews, setLimitReviews] = useState<boolean>(localStorage.getItem('seeOnlyOwnProgrammeReviews') === 'true');
+
   function toggleModalIsOpen() {
     setModalIsOpen(!modalIsOpen);
   }
@@ -135,9 +137,19 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
         </FlexContainer>
       )}
       <HrLine />
+      {(numberOfReviews > 0) && (
+        <FlexContainer>
+          <SubTitle>Se kun vurderinger fra ditt eget studieprogram:</SubTitle>
+          <input type='checkbox' checked={limitReviews} onChange={() => {
+            setLimitReviews(!limitReviews);
+            localStorage.setItem('seeOnlyOwnProgrammeReviews',String(!limitReviews));
+          }}></input>
+        </FlexContainer>
+      )}
       <ReviewList
         courseCode={courseCode}
         pageNumber={pageReviewProvider.pageReview}
+        limitReviews={limitReviews}
         scoreAvgSetter={setScoreAvg}
         numberOfReviewSetter={setNumberOfReviews}
         postedReview={postedReview}
