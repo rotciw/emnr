@@ -1,5 +1,7 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import Modal from 'react-modal';
+import modalStyles from 'styles/Modals';
 import styled from 'styled-components';
 import Dropdown, { Option } from 'react-dropdown';
 import emnrLogo from '../assets/images/emnr_long.svg';
@@ -7,6 +9,8 @@ import Searchbar from './Searchbar';
 import 'react-dropdown/style.css';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { Menu } from './Menu';
+import { NavbarButton, NavbarRemoveButton } from 'styles/Buttons';
+import AdvancedSortForm from './AdvancedSortForm';
 
 const NavBarContainer = styled.nav`
   width: 100%;
@@ -17,19 +21,35 @@ const NavBarContainer = styled.nav`
   top: 0;
 `;
 
-const DropdownContainer = styled.div`
+const SortingContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  box-sizing: border-box;
   background-color: ${({ theme }) => theme.darkBlue};
-  margin: 1.2% 40% 0 25%;
+  margin: 12px 25% 0 25%;
   padding-bottom: 25px;
   @media (max-width: 768px) {
-    margin: 2.2% 25% 0 20%;
+    flex-direction: column;
+    margin: 12px 20% 0 20%;
   }
+`;
+
+const DropdownContainer = styled.div`
+  flex: 1;
+`;
+
+const NavBarButtonContainer = styled.div`
+  flex: 1;
+  display: flex;
 `;
 
 const Logo = styled.img`
   padding: 10px;
   cursor: pointer;
   width: 100px;
+  z-index: 99;
 `;
 
 const TopRow = styled.div`
@@ -37,6 +57,7 @@ const TopRow = styled.div`
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
+  align-items: center;
   -ms-flex-align: center;
   -webkit-align-items: center;
   flex-direction: row;
@@ -60,7 +81,16 @@ const Navbar: React.FC = () => {
   const handleOnClick = useCallback(() => history.push('/'), [history]);
 
   const { queryProvider } = useContext(GlobalStateContext)!;
+  const { advancedQueryProvider } = useContext(GlobalStateContext)!;
+
   const isOnLandingPage: boolean = useLocation().pathname === '/';
+
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+
+  function toggleModalIsOpen() {
+    setModalIsOpen(!modalIsOpen);
+  }
+  Modal.setAppElement('#root');
 
   const onSelect = (e: Option) => {
     queryProvider.setOrderByQuery(e.value);
@@ -76,14 +106,39 @@ const Navbar: React.FC = () => {
       </TopRow>
       {isOnLandingPage && (
         <>
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={toggleModalIsOpen}
+            style={modalStyles}
+            contentLabel='Example Modal'
+          >
+            <AdvancedSortForm closeModal={toggleModalIsOpen} />
+          </Modal>
           <Searchbar />
-          <DropdownContainer>
-            <Dropdown
-              options={options}
-              onChange={(e) => onSelect(e)}
-              placeholder='Sorter etter..'
-            />
-          </DropdownContainer>
+          <SortingContainer>
+            <DropdownContainer>
+              <Dropdown
+                options={options}
+                onChange={(e) => onSelect(e)}
+                placeholder='Sorter etter..'
+                // disabled={advancedQueryProvider.advancedSorting} // This might be useful, but there needs to be a visual indication that the dropdown is disabled.
+              />
+            </DropdownContainer>
+            <NavBarButtonContainer>
+              <NavbarButton onClick={toggleModalIsOpen}>
+                Avansert sortering
+              </NavbarButton>
+              {advancedQueryProvider.advancedSorting && (
+                <NavbarRemoveButton
+                  onClick={(e) => {
+                    advancedQueryProvider.setAdvancedSorting(false);
+                  }}
+                >
+                  Fjern avansert sortering
+                </NavbarRemoveButton>
+              )}
+            </NavBarButtonContainer>
+          </SortingContainer>
         </>
       )}
     </NavBarContainer>

@@ -37,6 +37,47 @@ const StyledCourseBtn = styled.button`
   }
 `;
 
+export const NavbarButton = styled.button`
+  color: ${({ theme }) => theme.light};
+  background-color: ${({ theme }) => theme.blue};
+  border: none;
+  border-radius: 3px;
+  padding: 8px 16px;
+  margin: 0 0 0 12px;
+  font-family: gilroymedium;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  flex: 1;
+  :hover {
+    background-color: ${({ theme }) => theme.lightBlue};
+    color: ${({ theme }) => theme.darkBlue}
+  }
+  @media (max-width: 768px){
+    margin: 12px 0 0 0;
+  }
+`;
+
+export const NavbarRemoveButton = styled(NavbarButton)`
+  background-color: ${({ theme }) => theme.red};
+  margin-left: 12px;
+`;
+
+export const SortFormButton = styled.button`
+  color: ${({ theme }) => theme.black};
+  background-color: ${({ theme }) => theme.lightBlue};
+  border: solid 2px ${({ theme }) => theme.lightBlue};
+  border-radius: 3px;
+  padding: 4px 4px;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  :hover {
+    background-color: ${({ theme }) => theme.lightlightBlue};
+    color: ${({ theme }) => theme.darkBlue};
+  }
+`;
+
 export const LoginButton: React.FC<ButtonProps> = ({
   clickHandler,
   children,
