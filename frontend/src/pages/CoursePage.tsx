@@ -20,7 +20,7 @@ import ReviewForm from 'components/ReviewForm';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import modalStyles from 'styles/Modals';
 import API_URL from 'config';
-import { CourseInfoBox } from 'components/CourseInfoBox';
+import CourseInfoBox from 'components/CourseInfoBox';
 import Loading from 'components/Loading';
 
 interface CourseViewProps {
