@@ -32,6 +32,7 @@ const SearchInput = styled.input`
 
 const Searchbar: React.FC = () => {
   const { queryProvider } = useContext(GlobalStateContext)!;
+  const { advancedQueryProvider } = useContext(GlobalStateContext)!;
   let searchValue = queryProvider.searchQuery || '';
 
   return (
@@ -41,7 +42,6 @@ const Searchbar: React.FC = () => {
         onChange={
           (e) => {
             queryProvider.setSearchQuery(e.target.value)
-            //advancedQueryProvider.setSearchQuery(e.target.value)
           }
         }
         value={searchValue}

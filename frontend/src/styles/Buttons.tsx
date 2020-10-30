@@ -44,9 +44,10 @@ export const NavbarButton = styled.button`
   border-radius: 3px;
   padding: 8px 16px;
   margin: 0 0 0 12px;
-  font-family: gilroy;
+  font-family: gilroymedium;
   cursor: pointer;
   user-select: none;
+  outline: none;
   flex: 1;
   :hover {
     background-color: ${({ theme }) => theme.lightBlue};
@@ -70,6 +71,7 @@ export const SortFormButton = styled.button`
   padding: 4px 4px;
   cursor: pointer;
   user-select: none;
+  outline: none;
   :hover {
     background-color: ${({ theme }) => theme.lightlightBlue};
     color: ${({ theme }) => theme.darkBlue};

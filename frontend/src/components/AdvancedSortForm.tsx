@@ -23,6 +23,7 @@ const SortButton = styled.button`
   padding: 10px 30px;
   border-radius: 5px;
   margin: 30px 10px 0 0;
+  outline: none;
 `;
 
 const ResetButton = styled(SortButton) `
@@ -84,7 +85,7 @@ const AdvancedSortForm: React.FC<AdvancedSortFormProps> = ({ closeModal }) => {
         <ModalXButton onClick={closeModal}>&#10006;</ModalXButton>
       </FlexContainer>
       <HrLine margin='5px 0 15px 0' />
-      <p>Ranger hvor viktig det er at...</p>
+      <p>Hvor viktig det er at?</p>
 
       <SortFactor
         setDirectionFunction={setScoreHighState}
