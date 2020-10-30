@@ -28,7 +28,7 @@ const InfoText = styled.p`
   margin: 10px 0 0 0;
 `;
 
-export const CourseInfoBox: React.FC<CourseInfoProps> = ({
+const CourseInfoBox: React.FC<CourseInfoProps> = ({
   difficulty,
   workload,
   averageGrade,
@@ -53,4 +53,4 @@ export const CourseInfoBox: React.FC<CourseInfoProps> = ({
   );
 };
 
-export default CourseInfoProps;
+export default CourseInfoBox;
