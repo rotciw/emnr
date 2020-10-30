@@ -18,7 +18,7 @@ const ReviewContainer = styled.div`
   border: 1px solid ${({ theme }) => theme.black};
   display: flex;
   margin: 0 0 4vh 0;
-  padding: 12px 3% 12px 2%;
+  padding: 12px 3% 12px 3%;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
@@ -34,6 +34,10 @@ const MainMetric = styled.div`
 
 const SecondaryMetric = styled.p`
   margin: 0 2vw 0 0;
+  font-size: 16px;
+  @media (max-width: 576px) {
+    font-size: 14px;
+  }
 `;
 
 const DateText = styled.p`
@@ -56,6 +60,11 @@ const Review: React.FC<ReviewProps> = ({
   text,
   date,
 }) => {
+  const dateObject = new Date(date);
+  let europeanDate = `${dateObject.getDate()}/${
+    dateObject.getMonth() + 1
+  }/${dateObject.getFullYear().toString().substr(-2)}`;
+
   let scoreLabelColor = 'transparent';
   //TODO: Make this more elegant? Possibly use themes instead for example?
   switch (score) {
@@ -88,7 +97,7 @@ const Review: React.FC<ReviewProps> = ({
 
   return (
     <ReviewContainer>
-      <FlexItem flex={'1'} style={{ marginRight: '2%' }}>
+      <FlexItem flex={'1'} style={{ marginRight: '3%' }}>
         <div>
           <ExtraBold>{name}</ExtraBold>
           <div>{studyProgramme}</div>
@@ -100,7 +109,7 @@ const Review: React.FC<ReviewProps> = ({
           <MainMetric style={{ backgroundColor: scoreLabelColor }}>
             <ExtraBold>{score}/5</ExtraBold>
           </MainMetric>
-          <DateText>{date.substring(0, 10)}</DateText>
+          <DateText>{europeanDate}</DateText>
         </ScoreDateContainer>
         <FlexContainer flexWrap={'wrap'}>
           <SecondaryMetric>

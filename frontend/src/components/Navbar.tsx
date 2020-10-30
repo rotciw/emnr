@@ -49,6 +49,7 @@ const Logo = styled.img`
   padding: 10px;
   cursor: pointer;
   width: 100px;
+  z-index: 99;
 `;
 
 const TopRow = styled.div`
