@@ -52,6 +52,7 @@ const options = [
   { value: 'review_count', label: 'Antall vurderinger' },
   { value: 'credit', label: 'Studiepoeng' },
   { value: 'average_grade', label: 'Karaktersnitt' },
+  { value: 'pass_rate', label: 'Strykprosent'}
 ];
 
 const Navbar: React.FC = () => {

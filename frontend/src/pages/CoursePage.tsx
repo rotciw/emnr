@@ -8,6 +8,7 @@ import {
   FlexItem,
   HrLine,
   ShapeContainer,
+  FlexContainer,
 } from 'styles/Containers';
 import { BoldTitle, Title, SubTitle, GoBackText } from 'styles/Text';
 import { RateCourseButton } from 'components/RateCourseButton';
@@ -20,6 +21,7 @@ import { GlobalStateContext } from 'context/GlobalStateContext';
 import modalStyles from 'styles/Modals';
 import API_URL from 'config';
 import { CourseInfoBox } from 'components/CourseInfoBox';
+import Loading from 'components/Loading';
 
 interface CourseViewProps {
   courseName: string;
@@ -41,15 +43,26 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
   const handleBackClick = useCallback(() => history.goBack(), [history]);
 
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [limitReviews, setLimitReviews] = useState<boolean>(localStorage.getItem('seeOnlyOwnProgrammeReviews') === 'true');
 
   function toggleModalIsOpen() {
     setModalIsOpen(!modalIsOpen);
   }
+
+  const [postedReview, setPostedReview] = useState<boolean>(false);
+
+  const handleSentReview = (value: boolean) => {
+    setPostedReview(value);
+  };
+
   Modal.setAppElement('#root');
 
   useEffect(() => {
     let isCancelled = false;
     const getCourses = async () => {
+      setLoading(true);
       await axios
         .get(API_URL + '/course/?code=' + courseCode)
         .then((res) => {
@@ -58,6 +71,7 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
           }
         })
         .catch((err) => console.log(err));
+      setLoading(false);
     };
     getCourses();
     return () => {
@@ -94,55 +108,78 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
           mobileMargin='0 -400px 0 0'
         />
       </ShapeContainer>
-      <FlexColumn width='100%' padding='0 1vw'>
-        <FlexItem margin='2vh 0 4vh 0' onClick={handleBackClick}>
-          <GoBackText>Tilbake</GoBackText>
-        </FlexItem>
-        <MobileFlexContainer>
-          <FlexItem margin='0 5vw 3vh 0'>
-            <Title margin='0 0 5px 0'>{courseInfo.course_code}</Title>
-            <BoldTitle fontSize='30px'>{courseInfo.course_name}</BoldTitle>
-            <BoldTitle margin='10px 0 0 0'>{scoreAvg.toFixed(1)} / 5</BoldTitle>
-            <SubTitle margin='0 0 4vh 0'>
-              Basert på {numberOfReviews}{' '}
-              {numberOfReviews === 1 ? 'vurdering' : 'vurderinger'}.
-            </SubTitle>
-            <RateCourseButton
-              loading={false}
-              onClickFunction={toggleModalIsOpen}
-              courseCode={courseCode}
-            />
-            <Modal
-              isOpen={modalIsOpen}
-              onRequestClose={toggleModalIsOpen}
-              style={modalStyles}
-              contentLabel='Example Modal'
-            >
-              <ReviewForm
-                courseName={courseInfo.course_name}
-                courseCode={courseInfo.course_code}
-                closeModal={toggleModalIsOpen}
+      {loading ? (
+        <Loading />
+      ) : (
+        <FlexColumn width='100%' padding='0 1vw'>
+          <FlexItem margin='2vh 0 4vh 0' onClick={handleBackClick}>
+            <GoBackText>Tilbake</GoBackText>
+          </FlexItem>
+          <MobileFlexContainer>
+            <FlexItem margin='0 5vw 3vh 0'>
+              <Title margin='0 0 5px 0'>{courseInfo.course_code}</Title>
+              <BoldTitle>{courseInfo.course_name}</BoldTitle>
+              <BoldTitle
+                fontSize='50px'
+                mobileFontSize='40px'
+                margin='10px 0 0 0'
+              >
+                {scoreAvg.toFixed(1)} / 5
+              </BoldTitle>
+              <SubTitle margin='0 0 4vh 0'>
+                Basert på {numberOfReviews}{' '}
+                {numberOfReviews === 1 ? 'vurdering' : 'vurderinger'}.
+              </SubTitle>
+              <RateCourseButton
+                loading={false}
+                onClickFunction={toggleModalIsOpen}
+                courseCode={courseCode}
+                postedReview={postedReview}
               />
-            </Modal>
-          </FlexItem>
-          <FlexItem margin='0'>
-            <CourseInfoBox
-              difficulty={courseInfo.average_difficulty}
-              workload={courseInfo.average_workload}
-              averageGrade={courseInfo.average_grade?.toFixed(1)}
-              passRate={courseInfo.pass_rate?.toFixed(0)}
-              gradeDistribution={[0.1, 0.2, 0.3, 0.2, 0.05, 0.15]}
-              hasReview={numberOfReviews > 0}
-            />
-          </FlexItem>
-        </MobileFlexContainer>
-      </FlexColumn>
+              <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={toggleModalIsOpen}
+                style={modalStyles}
+                contentLabel='Example Modal'
+              >
+                <ReviewForm
+                  courseName={courseInfo.course_name}
+                  courseCode={courseInfo.course_code}
+                  closeModal={toggleModalIsOpen}
+                  reviewSent={(value: boolean) => handleSentReview(value)}
+                />
+              </Modal>
+            </FlexItem>
+            <FlexItem margin='0'>
+              <CourseInfoBox
+                difficulty={courseInfo.average_difficulty}
+                workload={courseInfo.average_workload}
+                averageGrade={courseInfo.average_grade?.toFixed(1)}
+                passRate={courseInfo.pass_rate?.toFixed(0)}
+                gradeDistribution={[0.1, 0.2, 0.3, 0.2, 0.05, 0.15]}
+                hasReview={numberOfReviews > 0}
+              />
+            </FlexItem>
+          </MobileFlexContainer>
+        </FlexColumn>
+      )}
       <HrLine />
+      {(numberOfReviews > 0) && (
+        <FlexContainer>
+          <SubTitle>Se kun vurderinger fra ditt eget studieprogram:</SubTitle>
+          <input type='checkbox' checked={limitReviews} onChange={() => {
+            setLimitReviews(!limitReviews);
+            localStorage.setItem('seeOnlyOwnProgrammeReviews',String(!limitReviews));
+          }}></input>
+        </FlexContainer>
+      )}
       <ReviewList
         courseCode={courseCode}
         pageNumber={pageReviewProvider.pageReview}
+        limitReviews={limitReviews}
         scoreAvgSetter={setScoreAvg}
         numberOfReviewSetter={setNumberOfReviews}
+        postedReview={postedReview}
       />
     </Layout>
   );

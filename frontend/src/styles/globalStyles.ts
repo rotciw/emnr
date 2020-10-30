@@ -27,8 +27,9 @@ const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
+    min-width: 320px;
     background: ${({ theme }) => theme.light};
-    font-family: gilroylight, Open-Sans, Helvetica, Sans-Serif;
+    font-family: 'gilroylight', Open-Sans, Helvetica, Sans-Serif;
   }
 `;
 

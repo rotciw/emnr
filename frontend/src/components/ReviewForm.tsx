@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { FlexContainer, HrLine } from 'styles/Containers';
 import { Title, BoldTitle } from 'styles/Text';
@@ -8,11 +8,13 @@ import RadioButtonsBar from './RadioButtonBar';
 import { getLocalToken } from '../utils/api';
 import Dropdown from 'react-dropdown';
 import { RateCourseButton } from './RateCourseButton';
+import { GlobalStateContext } from 'context/GlobalStateContext';
 
 interface ReviewFormProps {
   closeModal: () => void;
   courseName: string;
   courseCode: string;
+  reviewSent: (value: boolean) => void;
 }
 
 const TextInput = styled.textarea`
@@ -50,31 +52,35 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   closeModal,
   courseName,
   courseCode,
+  reviewSent,
 }) => {
   const [scoreValue, setScoreValue] = useState<number>(-1);
   const [difficultyValue, setDifficultyValue] = useState<number>(-1);
   const [workloadValue, setWorkloadValue] = useState<number>(-1);
   const [reviewText, setReviewText] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [postedReview, setPostedReview] = useState<boolean>(false);
 
   const postReview = async () => {
     setLoading(true);
+    setPostedReview(!postedReview);
+    reviewSent(!postedReview);
     const token = getLocalToken();
     axios.defaults.headers.common.Authorization = `${token}`;
     await axios
-    .post(`${API_URL}/review/`, {
-      courseCode,
-      score: scoreValue,
-      workload: workloadValue,
-      difficulty: difficultyValue,
-      reviewText,
-    })
-    .then(function (response) {
-      return response.data;
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+      .post(`${API_URL}/review/`, {
+        courseCode,
+        score: scoreValue,
+        workload: workloadValue,
+        difficulty: difficultyValue,
+        reviewText,
+      })
+      .then(function (response) {
+        return response.data;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     setLoading(false);
     closeModal();
   };
@@ -85,7 +91,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         <Title margin='0 0 5px 0'>{courseCode}</Title>
         <ModalXButton onClick={closeModal}>&#10006;</ModalXButton>
       </FlexContainer>
-      <BoldTitle fontSize='30px'>{courseName}</BoldTitle>
+      <BoldTitle>{courseName}</BoldTitle>
       <HrLine margin='15px 0 0 0' />
       <BoldInputDescription>Totalvurdering: *</BoldInputDescription>
       <RadioButtonsBar radioID='reviewScore' valueSetter={setScoreValue} />
