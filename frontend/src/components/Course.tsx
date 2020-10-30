@@ -25,20 +25,34 @@ const Course: React.FC<CourseProps> = ({
   credit,
   sortingParam,
 }) => {
-  
-  let paramMetric:String = "";
-  
+  let paramMetric: String = '';
+
   switch (sortingParam) {
-    case 'review_count': paramMetric = String(reviewCount); break;
-    case 'course_code': paramMetric = ""; break;
-    case 'course_name': paramMetric = ""; break;
-    case 'average_review_score': paramMetric = String(averageReviewScore.toFixed(1)) + " / 5"; break;
-    case 'review_count': paramMetric = String(reviewCount); break;
-    case 'credit': paramMetric = String(credit); break;
-    case 'average_grade': paramMetric = String(averageGrade); break;
-    case 'pass_rate': paramMetric = String((100-passRate).toFixed(2)); break;
-    default: paramMetric = "X"; break;
-}
+    case 'course_code':
+      paramMetric = '';
+      break;
+    case 'course_name':
+      paramMetric = '';
+      break;
+    case 'average_review_score':
+      paramMetric = String(averageReviewScore.toFixed(1)) + ' / 5';
+      break;
+    case 'review_count':
+      paramMetric = String(averageReviewScore.toFixed(1)) + ' / 5';
+      break;
+    case 'credit':
+      paramMetric = String(credit);
+      break;
+    case 'average_grade':
+      paramMetric = String(averageGrade);
+      break;
+    case 'pass_rate':
+      paramMetric = String((100 - passRate).toFixed(2));
+      break;
+    default:
+      paramMetric = 'X';
+      break;
+  }
 
   return (
     <tr>
@@ -51,9 +65,11 @@ const Course: React.FC<CourseProps> = ({
             </CourseItemText>
             <FlexColumn width='25%'>
               <CourseItemText>{paramMetric}</CourseItemText>
-              {(sortingParam === 'average_review_score') && (
+              {(sortingParam === 'average_review_score' ||
+                sortingParam === 'review_count') && (
                 <CourseItemSubtext>
-                  {reviewCount} {reviewCount === 1 ? 'vurdering' : 'vurderinger'}
+                  {reviewCount}{' '}
+                  {reviewCount === 1 ? 'vurdering' : 'vurderinger'}
                 </CourseItemSubtext>
               )}
             </FlexColumn>
