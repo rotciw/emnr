@@ -20,7 +20,7 @@ const StyledMenu = styled.nav<{ open: boolean }>`
   width: 100%;
   position: fixed;
   background-color: ${({ theme }) => theme.blue};
-
+  z-index: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
