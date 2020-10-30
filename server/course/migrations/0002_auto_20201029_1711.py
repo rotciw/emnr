@@ -20,4 +20,4 @@ class Migration(migrations.Migration):
             name='average_workload',
             field=models.FloatField(default=-1),
         ),
-    ]
+    ] 

@@ -18,7 +18,6 @@ class Migration(migrations.Migration):
                 ('expiring_token', models.TextField(max_length=50)),
                 ('access_token', models.TextField(max_length=50)),
                 ('user_email', models.TextField(max_length=200)),
-
             ],
         ),
     ]

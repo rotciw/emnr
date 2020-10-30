@@ -23,4 +23,4 @@ class Migration(migrations.Migration):
                 ('average_review_score', models.FloatField(default=0)),
             ],
         ),
-    ]
+    ] 
