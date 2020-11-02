@@ -129,7 +129,7 @@ const AdvancedSortForm: React.FC<AdvancedSortFormProps> = ({ closeModal }) => {
       />
 
       <SortButton onClick={doSort}>Lagre og sorter</SortButton>
-      <ResetButton onClick={doReset}>Nullstill sortering</ResetButton>
+      <ResetButton onClick={doReset}>Avslutt egendefinert sortering</ResetButton>
     </div>
   );
 };

@@ -135,7 +135,7 @@ const Navbar: React.FC = () => {
                     advancedQueryProvider.setAdvancedSorting(false);
                   }}
                 >
-                  Fjern egendefinert sortering
+                  Avslutt egendefinert sortering
                 </NavbarRemoveButton>
               )}
             </NavBarButtonContainer>
