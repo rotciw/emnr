@@ -290,12 +290,6 @@ class GetAllCoursesTest(TestCase):
                                 "&difficulty_high=false&difficulty_weight=4"
                                 "&workload_high=false&workload_weight=0", "TMR4555", 73.33333333333334],
         }
-        print("\n")
-        for name, query in multiple_param_queries.items():
-            mock_request = self.rf.get(query[0])
-            mock_response = get_courses_from_db(mock_request)
-            print("{}: {} - {}".format(name, mock_response["data"][0]["course_code"],
-                                       mock_response["data"][0]["advanced_sorting_score"]))
         for query in multiple_param_queries.values():
             mock_request = self.rf.get(query[0])
             mock_response = get_courses_from_db(mock_request)
