@@ -246,16 +246,16 @@ class GetAllCoursesTest(TestCase):
         # Query number: [query, first hit course_code, sorting_score]
         base_query = "/course/all/?advanced_sorting=true"
         single_param_queries = {
-            "q0": [base_query+"&score_high=true&score_weight=5", "TN202406", 4.0],
-            "q1": [base_query+"&score_high=false&score_weight=5", "TMR4555", 4.0],
-            "q2": [base_query+"&difficulty_high=true&difficulty_weight=5", "TPG4190", 4.375],
-            "q3": [base_query+"&difficulty_high=false&difficulty_weight=5", "TMR4555", 5.0],
-            "q4": [base_query+"&workload_high=true&workload_weight=5", "TMR4555", 5.0],
-            "q5": [base_query+"&workload_high=false&workload_weight=5", "TN202406", 4.0],
-            "q6": [base_query+"&pass_rate_high=true&pass_rate_weight=5", "TMR4300", 5.0],
-            "q7": [base_query+"&pass_rate_high=false&pass_rate_weight=5", "AFR1003", 5.0],
-            "q8": [base_query+"&grade_high=true&grade_weight=5", "MFEL4852", 4.38315217391304],
-            "q9": [base_query+"&grade_high=false&grade_weight=5", "MFEL1010", 4.65872057936029],
+            "q0": [base_query+"&score_high=true&score_weight=5", "TN202406", 80.0],
+            "q1": [base_query+"&score_high=false&score_weight=5", "TMR4555", 80.0],
+            "q2": [base_query+"&difficulty_high=true&difficulty_weight=5", "TPG4190", 87.5],
+            "q3": [base_query+"&difficulty_high=false&difficulty_weight=5", "TMR4555", 100.0],
+            "q4": [base_query+"&workload_high=true&workload_weight=5", "TMR4555", 100.0],
+            "q5": [base_query+"&workload_high=false&workload_weight=5", "TN202406", 85.0],
+            "q6": [base_query+"&pass_rate_high=true&pass_rate_weight=5", "TMR4300", 100.0],
+            "q7": [base_query+"&pass_rate_high=false&pass_rate_weight=5", "AFR1003", 100.0],
+            "q8": [base_query+"&grade_high=true&grade_weight=5", "MFEL4852", 87.6630434782608],
+            "q9": [base_query+"&grade_high=false&grade_weight=5", "MFEL1010", 93.17441158720581],
         }
         for query in single_param_queries.values():
             mock_request = self.rf.get(query[0])
@@ -267,28 +267,28 @@ class GetAllCoursesTest(TestCase):
             # Looking for subjects with good score, low difficulty and sort of low workload
             "q0": [base_query + "&score_high=true&score_weight=4"
                                 "&difficulty_high=false&difficulty_weight=5"
-                                "&workload_high=false&workload_weight=3", "TN202406", 8.600000000000001],
+                                "&workload_high=false&workload_weight=3", "TN202406", 72.91666666666666],
             # Looking for subjects with good score and low difficulty and workload
             "q1": [base_query + "&score_high=true&score_weight=5"
                                 "&difficulty_high=false&difficulty_weight=3"
-                                "&workload_high=false&workload_weight=3", "TN202406", 8.2],
+                                "&workload_high=false&workload_weight=3", "TN202406", 75.9090909090909],
             # Looking for subjects with high difficulty and workload, and low score. Subjects to stay away from
             "q2": [base_query + "&score_high=false&score_weight=3"
                                 "&difficulty_high=true&difficulty_weight=5"
-                                "&workload_high=true&workload_weight=4", "TPG4190", 7.775],
+                                "&workload_high=true&workload_weight=4", "TPG4190", 64.79166666666667],
             # Looking with subjects with low difficulty and workload, score is not that important
             "q3": [base_query + "&score_high=true&score_weight=1"
                                 "&difficulty_high=false&difficulty_weight=5"
-                                "&workload_high=false&workload_weight=3", "TN202406", 6.2],
+                                "&workload_high=false&workload_weight=3", "TN202406", 70.55555555555554],
             "q4": [base_query + "&score_high=true&score_weight=5"
                                 "&difficulty_high=false&difficulty_weight=0"
-                                "&workload_high=true&workload_weight=3", "TPG4190", 5.375],
+                                "&workload_high=true&workload_weight=3", "TPG4190", 67.1875],
             "q5": [base_query + "&score_high=false&score_weight=0"
                                 "&difficulty_high=true&difficulty_weight=5"
-                                "&workload_high=false&workload_weight=5", "TPG4190", 6.25],
+                                "&workload_high=false&workload_weight=5", "TN202406", 62.5],
             "q6": [base_query + "&score_high=true&score_weight=2"
                                 "&difficulty_high=false&difficulty_weight=4"
-                                "&workload_high=false&workload_weight=0", "TMR4555", 4.4],
+                                "&workload_high=false&workload_weight=0", "TMR4555", 73.33333333333334],
         }
         for query in multiple_param_queries.values():
             mock_request = self.rf.get(query[0])
