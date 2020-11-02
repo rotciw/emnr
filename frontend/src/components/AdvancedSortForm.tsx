@@ -81,7 +81,7 @@ const AdvancedSortForm: React.FC<AdvancedSortFormProps> = ({ closeModal }) => {
   return (
     <div>
       <FlexContainer style={{ justifyContent: 'space-between' }}>
-        <Title margin='0 0 5px 0'>Avansert sortering</Title>
+        <Title margin='0 0 5px 0'>Egendefinert sortering</Title>
         <ModalXButton onClick={closeModal}>&#10006;</ModalXButton>
       </FlexContainer>
       <HrLine margin='5px 0 15px 0' />

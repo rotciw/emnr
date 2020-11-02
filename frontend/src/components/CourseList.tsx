@@ -15,6 +15,7 @@ interface CourseProps {
   review_count: number;
   average_review_score: number;
   pass_rate: number;
+  advanced_sorting_score: number;
   sorting_param: string;
 }
 
@@ -42,12 +43,12 @@ export const CourseList: React.FC = () => {
   // Flag that triggers useEffect, value doesn't matter
   let advancedSortChangedFlag = advancedQueryProvider.advancedSortChangedFlag;
   let useAdvancedSorting = advancedQueryProvider.advancedSorting;
-
   // Sorting dropdown
   let orderByQuery: string;
-  queryProvider.orderByQuery
-    ? (orderByQuery = queryProvider.orderByQuery)
-    : (orderByQuery = 'review_count');
+  useAdvancedSorting ? (orderByQuery = 'advanced_sorting_score') 
+    : queryProvider.orderByQuery
+      ? (orderByQuery = queryProvider.orderByQuery)
+      : (orderByQuery = 'review_count');
 
   let orderToggle: number;
 
@@ -76,6 +77,9 @@ export const CourseList: React.FC = () => {
       break;
     case 'pass_rate':
       orderByText = 'Strykprosent';
+      break;
+    case 'advanced_sorting_score':
+      orderByText = 'Egen match';
       break;
     default:
       orderByText = 'Egendefinert';
@@ -154,6 +158,7 @@ export const CourseList: React.FC = () => {
                       averageGrade={currentCourse.average_grade}
                       passRate={currentCourse.pass_rate}
                       credit={currentCourse.credit}
+                      advancedSortingMatch={currentCourse.advanced_sorting_score}
                       sortingParam={orderByQuery}
                     />
                   );

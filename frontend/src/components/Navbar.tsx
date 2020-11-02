@@ -126,7 +126,7 @@ const Navbar: React.FC = () => {
             </DropdownContainer>
             <NavBarButtonContainer>
               <NavbarButton onClick={toggleModalIsOpen}>
-                Avansert sortering
+                Egendefinert sortering
               </NavbarButton>
               {advancedQueryProvider.advancedSorting && (
                 <NavbarRemoveButton
@@ -134,7 +134,7 @@ const Navbar: React.FC = () => {
                     advancedQueryProvider.setAdvancedSorting(false);
                   }}
                 >
-                  Fjern avansert sortering
+                  Fjern egendefinert sortering
                 </NavbarRemoveButton>
               )}
             </NavBarButtonContainer>
