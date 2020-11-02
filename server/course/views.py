@@ -11,12 +11,21 @@ import json
 import time
 from review.models import Review
 from auth.models import UserAuth
-
+from django.db.models import Avg
 
 # Create your views here.
 def health(request):
     return HttpResponse("OK")
 
+@api_view(['GET'])
+def get_averages(request):
+    """
+    Helper for getting average values. Needed to determine what default values should be for
+    """
+    data = [Course.objects.exclude(average_grade=0).aggregate(Avg("average_grade")),
+            Course.objects.exclude(pass_rate=-1).aggregate(Avg("pass_rate"))
+    ]
+    return Response(data)
 
 @api_view(['GET'])
 def get_all_courses(request):
@@ -148,17 +157,18 @@ def map_course_to_sorting_score(course, params, max_values):
         if temp == 0 and param == "score":
             temp = 0.5
         # Subjects with grade 0 are pass / fail-subjects. Grade is irrelevant, and set to mid-value.
-        # TODO: this needs a better mid-value, the average subject at NTNU does not have an average grade of 2.5
+        # Average grade omitting these subjects is pr. 02/11/2020: 3.322360523333
         elif temp == 0 and param == "grade":
-            temp = 0.5
+            temp = 3.322360523333 / max_values["grade"]
         # Subjects with temp < 0 has a default value of -1. The param is then irrelevant, set to mid-value.
         elif temp < 0 and param == "difficulty":
             temp = 0.5
         elif temp < 0 and param == "workload":
             temp = 0.5
-        # TODO: This needs a better mid-value, the average subject at NTNU does not have a pass rate of 50%
+        # From the grades API, we get subjects with pass_rate: -1. This gives those a mid-value.
+        # Average pass rate omitting these subjects is pr 02/11/2020: 95.18423917240152
         elif temp < 0 and param == "pass_rate":
-            temp = 0.5
+            temp = 95.18423917240152 / max_values["pass_rate"]
         if not values[0]:
             temp = 1 - temp
         sorting_score += temp * values[1]
