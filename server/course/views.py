@@ -163,7 +163,10 @@ def map_course_to_sorting_score(course, params, max_values):
             temp = 1 - temp
         sorting_score += temp * values[1]
         max_possible_score += values[1]
-    sorting_score = sorting_score / max_possible_score * 100
+    if max_possible_score:
+        sorting_score = sorting_score / max_possible_score * 100
+    else:
+        sorting_score = 0
     course["advanced_sorting_score"] = sorting_score
     return course
 
