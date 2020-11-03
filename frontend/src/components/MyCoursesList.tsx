@@ -5,6 +5,7 @@ import { Semester } from './Semester';
 import { getLocalToken } from '../utils/api';
 import API_URL from '../config';
 import Loading from './Loading';
+import { EmptyResult } from './CourseList';
 
 interface MyCoursesListProps {}
 interface MyCourseProps {
@@ -60,42 +61,46 @@ const MyCoursesList: React.FC<MyCoursesListProps> = () => {
         <Loading />
       ) : (
         <FlexContainer margin='15px 0 0 0'>
-          <FlexItem>
-            {Object.entries(mySemesters)
-              .sort(
-                //Sorting the semesters
-                (
-                  semester1: [string, MyCourseProps[]],
-                  semester2: [string, MyCourseProps[]],
-                ) => {
-                  if (
-                    parseInt(semester1[0].substring(1, 5)) <
-                    parseInt(semester2[0].substring(1, 5))
-                  ) {
-                    return 1;
-                  }
-                  if (
-                    parseInt(semester1[0].substring(1, 5)) ===
-                    parseInt(semester2[0].substring(1, 5))
-                  ) {
-                    if (semester1[0].substring(0, 1) === 'V') {
+          {Object.entries(mySemesters).length ? (
+            <FlexItem>
+              {Object.entries(mySemesters)
+                .sort(
+                  //Sorting the semesters
+                  (
+                    semester1: [string, MyCourseProps[]],
+                    semester2: [string, MyCourseProps[]],
+                  ) => {
+                    if (
+                      parseInt(semester1[0].substring(1, 5)) <
+                      parseInt(semester2[0].substring(1, 5))
+                    ) {
                       return 1;
                     }
+                    if (
+                      parseInt(semester1[0].substring(1, 5)) ===
+                      parseInt(semester2[0].substring(1, 5))
+                    ) {
+                      if (semester1[0].substring(0, 1) === 'V') {
+                        return 1;
+                      }
+                      return -1;
+                    }
                     return -1;
-                  }
-                  return -1;
-                },
-              )
-              .map(([semester, courses]) => {
-                return (
-                  <Semester
-                    semester={semester}
-                    courses={courses}
-                    key={semester}
-                  />
-                );
-              })}
-          </FlexItem>
+                  },
+                )
+                .map(([semester, courses]) => {
+                  return (
+                    <Semester
+                      semester={semester}
+                      courses={courses}
+                      key={semester}
+                    />
+                  );
+                })}
+            </FlexItem>
+          ) : (
+            <EmptyResult>Beklager! Vi fant ingen data. </EmptyResult>
+          )}
         </FlexContainer>
       )}
     </>
