@@ -4,6 +4,7 @@ import { FlexContainer, HrLine } from 'styles/Containers';
 import { Title, BoldTitle, ExtraBold } from 'styles/Text';
 import { SortFactor } from './SortFactor';
 import { GlobalStateContext } from 'context/GlobalStateContext';
+import { ResetButton, SortButton } from 'styles/Buttons';
 
 interface AdvancedSortFormProps {
   closeModal: () => void;
@@ -13,22 +14,6 @@ const ModalXButton = styled.span`
   font-size: 1.5em;
   margin-top: -5px;
   cursor: pointer;
-`;
-
-const SortButton = styled.button`
-  border: none;
-  background-color: ${({ theme }) => theme.darkBlue};
-  color: ${({ theme }) => theme.white};
-  cursor: pointer;
-  padding: 10px 30px;
-  border-radius: 5px;
-  margin: 30px 10px 0 0;
-  outline: none;
-`;
-
-const ResetButton = styled(SortButton) `
-  background-color: ${({ theme }) => theme.lightBlue};
-  color: ${({ theme }) => theme.black};
 `;
 
 const AdvancedSortForm: React.FC<AdvancedSortFormProps> = ({ closeModal }) => {
