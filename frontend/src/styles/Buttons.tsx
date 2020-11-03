@@ -107,19 +107,15 @@ export const Checkbox = styled.input`
   text-align: center;
   display: inline-block;
 
-  &:focus{
+  &:focus {
     outline: none;
-    border: 2px solid ${({ theme }) => theme.darkBlue}
+    border: 2px solid ${({ theme }) => theme.darkBlue};
   }
 
-  &:checked {
-    color: #99a1a7;
-
-    &::after {
-      content: '\u2714';
-      font-size: 12px;
-      color:${({ theme }) => theme.black};
-    }
+  &:checked::after {
+    content: '\u2714';
+    font-size: 12px;
+    color: ${({ theme }) => theme.black};
   }
 `;
 
