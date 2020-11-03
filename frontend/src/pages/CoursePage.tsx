@@ -22,6 +22,7 @@ import modalStyles from 'styles/Modals';
 import API_URL from 'config';
 import CourseInfoBox from 'components/CourseInfoBox';
 import Loading from 'components/Loading';
+import { Checkbox } from 'styles/Buttons';
 
 interface CourseViewProps {
   courseName: string;
@@ -165,12 +166,12 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
       )}
       <HrLine />
       {(numberOfReviews > 0 || limitReviews) && (
-        <FlexContainer>
-          <SubTitle>Se kun vurderinger fra ditt eget studieprogram:</SubTitle>
-          <input type='checkbox' checked={limitReviews} onChange={() => {
+        <FlexContainer margin='0 0 0 5px'>
+          <SubTitle fontSize='0.9em'>Mitt studieprogram:</SubTitle>
+          <Checkbox type='checkbox' checked={limitReviews} onChange={() => {
             setLimitReviews(!limitReviews);
             localStorage.setItem('seeOnlyOwnProgrammeReviews',String(!limitReviews));
-          }}></input>
+          }} />
         </FlexContainer>
       )}
       <ReviewList

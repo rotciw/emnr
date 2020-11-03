@@ -52,9 +52,9 @@ export const NavbarButton = styled.button`
   flex: 1;
   :hover {
     background-color: ${({ theme }) => theme.lightBlue};
-    color: ${({ theme }) => theme.darkBlue}
+    color: ${({ theme }) => theme.darkBlue};
   }
-  @media (max-width: 768px){
+  @media (max-width: 768px) {
     margin: 12px 0 0 0;
   }
 `;
@@ -92,9 +92,43 @@ export const SortButton = styled.button`
   outline: none;
 `;
 
-export const ResetButton = styled(SortButton) `
+export const ResetButton = styled(SortButton)`
   background-color: ${({ theme }) => theme.lightBlue};
   color: ${({ theme }) => theme.black};
+`;
+
+export const Checkbox = styled.input`
+  margin-top: 0;
+  appearance: none;
+  background-color: ${({ theme }) => theme.white};
+  border: 1px solid ${({ theme }) => theme.black};
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  display: inline-block;
+
+  &:focus{
+    outline: none;
+    border: 2px solid ${({ theme }) => theme.darkBlue}
+  }
+
+  &:active {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
+      inset 0px 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  &:checked {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
+      inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05),
+      inset 15px 10px -12px rgba(255, 255, 255, 0.1);
+    color: #99a1a7;
+
+    &::after {
+      content: '\u2714';
+      font-size: 12px;
+      color:${({ theme }) => theme.black};
+    }
+  }
 `;
 
 export const LoginButton: React.FC<ButtonProps> = ({
