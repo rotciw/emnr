@@ -164,7 +164,7 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
         </FlexColumn>
       )}
       <HrLine />
-      {(numberOfReviews > 0) && (
+      {(numberOfReviews > 0 || limitReviews) && (
         <FlexContainer>
           <SubTitle>Se kun vurderinger fra ditt eget studieprogram:</SubTitle>
           <input type='checkbox' checked={limitReviews} onChange={() => {
