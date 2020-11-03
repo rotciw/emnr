@@ -8,8 +8,6 @@ interface ButtonProps {
 
 const StyledLoginBtn = styled.button`
   display: block;
-  margin: auto;
-  width: max-content;
   color: ${({ theme }) => theme.light};
   background-color: ${({ theme }) => theme.darkBlue};
   border: none;
