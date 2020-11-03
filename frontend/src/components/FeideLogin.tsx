@@ -17,6 +17,14 @@ const Logo = styled.img`
   user-select: none;
 `;
 
+const MottoText = styled.p`
+  font-family: gilroyxbold;
+  color: ${({ theme }) => theme.darkBlue};
+  max-width: 30vmax;
+  margin: -10px 0 3vh 0;
+  text-align: center;
+`;
+
 const FeideLogin: React.FC = () => {
   const [feideURI, setFeideURI] = useState<string>('');
 
@@ -37,6 +45,9 @@ const FeideLogin: React.FC = () => {
   return (
     <Wrapper>
       <Logo src={emnrLoginLogo} />
+      <MottoText>
+        Hjelp til å velge emner på NTNU, av og for studenter
+      </MottoText>
       <LoginButton clickHandler={handleFeideLogin}>Logg på (Feide)</LoginButton>
     </Wrapper>
   );
