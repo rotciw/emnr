@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { ExtraBold } from 'styles/Text';
-import { SortFormButton } from 'styles/Buttons';
+import { SortHighLowButton } from 'styles/Buttons';
 import RadioButtonsBar from './RadioButtonBar';
 
 interface RateCourseButtonProps {
@@ -29,13 +29,13 @@ export const SortFactor: React.FC<RateCourseButtonProps> = ({
     <div>
       <FactorWrapper>
         <ExtraBold>{displayName}</ExtraBold> {' er '}
-        <SortFormButton
+        <SortHighLowButton
           onClick={(e) => {
             setDirectionFunction(!directionVariable);
           }}
         >
           {(directionVariable ? 'høy' : 'lav') + ` \u21C5`}
-        </SortFormButton>
+        </SortHighLowButton>
       </FactorWrapper>
       <RadioButtonsBar radioID={`${idName}Weight`} valueSetter={setWeightFunction} defaultChecked={weightVariable}/>
     </div>

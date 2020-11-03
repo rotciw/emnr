@@ -12,6 +12,7 @@ const StyledLoginBtn = styled.button`
   background-color: ${({ theme }) => theme.darkBlue};
   border: none;
   border-radius: 5px;
+  font-family: gilroymedium;
   padding: 15px 50px;
   text-align: center;
   cursor: pointer;
@@ -63,11 +64,12 @@ export const NavbarRemoveButton = styled(NavbarButton)`
   margin-left: 12px;
 `;
 
-export const SortFormButton = styled.button`
+export const SortHighLowButton = styled.button`
   color: ${({ theme }) => theme.black};
   background-color: ${({ theme }) => theme.lightBlue};
   border: solid 2px ${({ theme }) => theme.lightBlue};
   border-radius: 3px;
+  font-family: gilroylight;
   padding: 4px 4px;
   cursor: pointer;
   user-select: none;
@@ -76,6 +78,23 @@ export const SortFormButton = styled.button`
     background-color: ${({ theme }) => theme.lightlightBlue};
     color: ${({ theme }) => theme.darkBlue};
   }
+`;
+
+export const SortButton = styled.button`
+  border: none;
+  background-color: ${({ theme }) => theme.darkBlue};
+  color: ${({ theme }) => theme.white};
+  cursor: pointer;
+  font-family: gilroymedium;
+  padding: 10px 30px;
+  border-radius: 5px;
+  margin: 30px 10px 0 0;
+  outline: none;
+`;
+
+export const ResetButton = styled(SortButton) `
+  background-color: ${({ theme }) => theme.lightBlue};
+  color: ${({ theme }) => theme.black};
 `;
 
 export const LoginButton: React.FC<ButtonProps> = ({
