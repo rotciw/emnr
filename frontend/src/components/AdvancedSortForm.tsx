@@ -66,7 +66,7 @@ const AdvancedSortForm: React.FC<AdvancedSortFormProps> = ({ closeModal }) => {
   return (
     <div>
       <FlexContainer style={{ justifyContent: 'space-between' }}>
-        <Title margin='0 0 5px 0'>Egendefinert sortering</Title>
+        <Title margin='0 0 5px 0'>Egendefinert EMNR-sortering</Title>
         <ModalXButton onClick={closeModal}>&#10006;</ModalXButton>
       </FlexContainer>
       <HrLine margin='5px 0 15px 0' />
@@ -114,7 +114,7 @@ const AdvancedSortForm: React.FC<AdvancedSortFormProps> = ({ closeModal }) => {
       />
 
       <SortButton onClick={doSort}>Lagre og sorter</SortButton>
-      <ResetButton onClick={doReset}>Avslutt egendefinert sortering</ResetButton>
+      <ResetButton onClick={doReset}>Nullstill og avslutt EMNR-sortering</ResetButton>
     </div>
   );
 };

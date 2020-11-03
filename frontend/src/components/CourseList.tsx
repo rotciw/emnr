@@ -79,7 +79,7 @@ export const CourseList: React.FC = () => {
       orderByText = 'Strykprosent';
       break;
     case 'advanced_sorting_score':
-      orderByText = 'Egen match';
+      orderByText = 'EMNR-match';
       break;
     default:
       orderByText = 'Egendefinert';

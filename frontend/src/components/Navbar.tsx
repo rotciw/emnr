@@ -122,12 +122,12 @@ const Navbar: React.FC = () => {
                 options={options}
                 onChange={(e) => onSelect(e)}
                 placeholder='Sorter etter..'
-                disabled={advancedQueryProvider.advancedSorting} // This might be useful, but there needs to be a visual indication that the dropdown is disabled.
+                disabled={advancedQueryProvider.advancedSorting}
               />
             </DropdownContainer>
             <NavBarButtonContainer>
               <NavbarButton onClick={toggleModalIsOpen}>
-                Egendefinert sortering
+                EMNR-sortering
               </NavbarButton>
               {advancedQueryProvider.advancedSorting && (
                 <NavbarRemoveButton
@@ -135,7 +135,7 @@ const Navbar: React.FC = () => {
                     advancedQueryProvider.setAdvancedSorting(false);
                   }}
                 >
-                  Avslutt egendefinert sortering
+                  Avslutt EMNR-sortering
                 </NavbarRemoveButton>
               )}
             </NavBarButtonContainer>
