@@ -22,6 +22,8 @@ interface ReviewListProps {
   limitReviews: boolean;
   scoreAvgSetter: (value: number) => void;
   numberOfReviewSetter: (value: number) => void;
+  difficultyAvgSetter: (value: number) => void;
+  workloadAvgSetter: (value: number) => void;
   postedReview: boolean;
 }
 
@@ -41,6 +43,8 @@ const ReviewList: React.FC<ReviewListProps> = ({
   limitReviews,
   scoreAvgSetter,
   numberOfReviewSetter,
+  difficultyAvgSetter,
+  workloadAvgSetter,
   postedReview,
 }) => {
   const [reviews, updateReviews] = useState<ReviewProps[]>([]);
@@ -66,6 +70,12 @@ const ReviewList: React.FC<ReviewListProps> = ({
             );
             scoreAvgSetter(
               res.data.average_score != null ? res.data.average_score : 0,
+            );
+            difficultyAvgSetter(
+              res.data.average_difficulty
+            );
+            workloadAvgSetter(
+              res.data.average_workload
             );
           }
         })
