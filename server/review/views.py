@@ -63,7 +63,8 @@ def post_review(request):
     # Update the average difficulty in Course
     if request_data["difficulty"] > -1:
         Course.objects.filter(course_code=request_data["courseCode"]).update(
-            average_difficulty=Review.objects.filter(course_code=request_data["courseCode"]).aggregate(Avg("difficulty"))[
+            average_difficulty=
+            Review.objects.filter(course_code=request_data["courseCode"]).aggregate(Avg("difficulty"))[
                 "difficulty__avg"]
         )
 
@@ -167,11 +168,24 @@ def get_reviews_from_db(request):
         raise ValueError("offset is too large")
 
     # Get total average review scores for course
-    average_score = Review.objects.filter(course_code=course_code).aggregate(Avg("score"))["score__avg"]
-    average_workload = Review.objects.filter(course_code=course_code, workload__gt=-1).aggregate(Avg("workload"))[
-        "workload__avg"]
-    average_difficulty = Review.objects.filter(course_code=course_code, difficulty__gt=-1).aggregate(Avg("difficulty"))[
-        "difficulty__avg"]
+    if show_my_programme == "true":
+        average_score = Review.objects.filter(course_code=course_code, study_programme=get_user_study_programme(
+            request.META["HTTP_AUTHORIZATION"])).aggregate(Avg("score"))["score__avg"]
+        average_workload = Review.objects.filter(course_code=course_code, workload__gt=-1,
+                                                 study_programme=get_user_study_programme(
+                                                     request.META["HTTP_AUTHORIZATION"])).aggregate(Avg("workload"))[
+            "workload__avg"]
+        average_difficulty = Review.objects.filter(course_code=course_code, difficulty__gt=-1,
+                                                   study_programme=get_user_study_programme(
+                                                       request.META["HTTP_AUTHORIZATION"])).aggregate(
+            Avg("difficulty"))["difficulty__avg"]
+    else:
+        average_score = Review.objects.filter(course_code=course_code).aggregate(Avg("score"))["score__avg"]
+        average_workload = Review.objects.filter(course_code=course_code, workload__gt=-1).aggregate(Avg("workload"))[
+            "workload__avg"]
+        average_difficulty = \
+        Review.objects.filter(course_code=course_code, difficulty__gt=-1).aggregate(Avg("difficulty"))[
+            "difficulty__avg"]
 
     # Fetch reviews from database
     if show_my_programme == "true":
