@@ -52,7 +52,8 @@ class PostReviewTest(TestCase):
             actual_reviewables = [
                 'EXPH0004', 'TDT4137', 'TMA4140', 'TDT4136', 'TFE4101', 'TDT4112', 'TDT4113', 'TDT4110', 'TMA4100',
                 'TDT4180', 'HMS0002', 'TDT4160', 'TDT4186', 'TFY4125', 'TDT4100', 'TMA4135', 'TDT4145', 'TDT4120',
-                'TDT4140', 'TDT4171', 'TMA4115', 'TMA4240', 'TIØ4252', 'TTM4100']
+                'TDT4140', 'TDT4171', 'TMA4115', 'TMA4240', 'TIØ4252', 'TTM4100', 'TDT4290', 'TDT4165',
+                'TDT4173', 'TIØ4146']
             for course in get_reviewable_courses("valid_token"):
                 if course not in actual_reviewables:
                     self.fail("Invalid course in reviewable courses")
