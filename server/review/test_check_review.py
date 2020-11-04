@@ -46,16 +46,6 @@ class CanReviewTest(TestCase):
         res = c.get("/review/check/?courseCode=Ikkeetfag")
         self.assertEqual(res.status_code, 400)
 
-    def test_can_review_nonreviewable_course(self):
-        c = APIClient()
-        c.credentials(HTTP_AUTHORIZATION='valid_token')
-        with patch("course.views.Course.objects.filter") as mock_course_db:
-            mock_course_db.return_value = MockQuerySet([
-                Course.create("AAA9999", "Test course", 0, 0, 100.0)])
-            res = c.get("/review/check/?courseCode=TDT4290")
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(res.data, 1)
-
     def test_can_review_review_exists(self):
         c = APIClient()
         c.credentials(HTTP_AUTHORIZATION='valid_token')

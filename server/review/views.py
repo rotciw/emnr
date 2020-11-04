@@ -63,7 +63,8 @@ def post_review(request):
     # Update the average difficulty in Course
     if request_data["difficulty"] > -1:
         Course.objects.filter(course_code=request_data["courseCode"]).update(
-            average_difficulty=Review.objects.filter(course_code=request_data["courseCode"]).aggregate(Avg("difficulty"))[
+            average_difficulty=
+            Review.objects.filter(course_code=request_data["courseCode"]).aggregate(Avg("difficulty"))[
                 "difficulty__avg"]
         )
 
@@ -221,17 +222,13 @@ def otherparams_is_invalid(param):
 
 def get_reviewable_courses(exp_token):
     """
-    Gets a list of course codes for the courses that the user can review (i.e. courses that have been passed in
-    semesters earlier than the current).
+    Gets a list of course codes for the courses that the user can review (i.e. courses that have been taken or
+    are being taken this semester).
 
-    The filtering removes courses that are being taken right now,
-    and the mapping maps from course object to course code.
+    The mapping maps from course object to course code.
     """
     try:
-        return list(
-            map(lambda filtered_ci: filtered_ci["course_code"],
-                filter(lambda course_info: course_info["semester"] != get_current_semester(),
-                       retrieve_courses_from_token(exp_token))))
+        return list(map(lambda filtered_ci: filtered_ci["course_code"], retrieve_courses_from_token(exp_token)))
     except TypeError as e:
         raise ValueError("Invalid response from Groups API. May be wrong token.")
 
