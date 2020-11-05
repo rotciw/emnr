@@ -44,53 +44,69 @@ class GetReviewsTest(TestCase):
 
     def test_get_reviews_from_db_invalid_course_code(self):
         # Course code not in Course db
-        req = self.rf.get("/review/get/?courseCode=TMA4900")
+        req = self.rf.get("/review/get/?courseCode=TMA4900", HTTP_AUTHORIZATION="valid_token")
         with self.assertRaises(ValueError):
             get_reviews_from_db(req)
 
     def test_get_reviews_from_db_no_course_code(self):
         # No course code argument passed
-        req = self.rf.get("/review/get/?n=25&offset=10")
+        req = self.rf.get("/review/get/?n=25&offset=10", HTTP_AUTHORIZATION="valid_token")
+        with self.assertRaises(ValueError):
+            get_reviews_from_db(req)
+
+    def test_get_reviews_from_db_no_token(self):
+        # No expiring token provided
+        req = self.rf.get("/review/get/?courseCode=TMA4100")
+        with self.assertRaises(KeyError):
+            get_reviews_from_db(req)
+
+    def test_get_reviews_from_db_invalid_token(self):
+        # Invalid token provided
+        req = self.rf.get("/review/get/?courseCode=TMA4100", HTTP_AUTHORIZATION="invalid_token")
+        with self.assertRaises(ValueError):
+            get_reviews_from_db(req)
+        req = self.rf.get("/review/get/?courseCode=TMA4100&showMyProgramme=true", HTTP_AUTHORIZATION="invalid_token")
         with self.assertRaises(ValueError):
             get_reviews_from_db(req)
 
     def test_get_reviews_from_db_invalid_n(self):
         # N not a number
-        req = self.rf.get("/review/get/?courseCode=TMA4100&n=abc")
+        req = self.rf.get("/review/get/?courseCode=TMA4100&n=abc", HTTP_AUTHORIZATION="valid_token")
         with self.assertRaises(ValueError):
             get_reviews_from_db(req)
 
     def test_get_reviews_from_db_invalid_offset(self):
         # Not number, and larger than num_reviews
-        req = self.rf.get("/review/get/?courseCode=TMA4100&offset=abc")
+        req = self.rf.get("/review/get/?courseCode=TMA4100&offset=abc", HTTP_AUTHORIZATION="valid_token")
         with self.assertRaises(ValueError):
             get_reviews_from_db(req)
-        req = self.rf.get("/review/get/?courseCode=TMA4100&offset=10")
+        req = self.rf.get("/review/get/?courseCode=TMA4100&offset=10", HTTP_AUTHORIZATION="valid_token")
         with self.assertRaises(ValueError):
             get_reviews_from_db(req)
 
     def test_get_reviews_from_db_no_reviews_for_course(self):
         # Check count = 0
-        req = self.rf.get("/review/get/?courseCode=TDT4136")
+        req = self.rf.get("/review/get/?courseCode=TDT4136", HTTP_AUTHORIZATION="valid_token")
         res = get_reviews_from_db(req)
         self.assertEqual(res["count"], 0)
         self.assertFalse(res["data"])
 
     def test_get_reviews_from_db_valid_request(self):
         # Check correct count and number of reviews returned
-        req = self.rf.get("/review/get/?courseCode=TMA4100&n=2")
+        req = self.rf.get("/review/get/?courseCode=TMA4100&n=2", HTTP_AUTHORIZATION="valid_token")
         res = get_reviews_from_db(req)
         self.assertEqual(res["count"], 6)
         self.assertEqual(len(res["data"]), 2)
 
-        req = self.rf.get("/review/get/?courseCode=TMA4100")
+        req = self.rf.get("/review/get/?courseCode=TMA4100", HTTP_AUTHORIZATION="valid_token")
         res = get_reviews_from_db(req)
         self.assertEqual(res["count"], 6)
         self.assertEqual(len(res["data"]), 6)
 
     def test_get_reviews_endpoint_invalid_course(self):
         # invalid and no course code
-        c = Client()
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
         res = c.get("/review/get/?courseCode=TDT101")
         self.assertEqual(res.status_code, 400)
         res = c.get("/review/get/?n=40")
@@ -98,7 +114,8 @@ class GetReviewsTest(TestCase):
 
     def test_get_reviews_endpoint_invalid_params(self):
         # n and offset
-        c = Client()
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
         ress = [
             c.get("/review/get/?courseCode=TMA4100&n=abc"),
             c.get("/review/get/?courseCode=TMA4100&n=100&offset=abc"),
@@ -107,15 +124,21 @@ class GetReviewsTest(TestCase):
         for r in ress:
             self.assertEqual(r.status_code, 400)
 
+    def test_get_reviews_endpoint_no_token(self):
+        c = APIClient()
+        res = c.get("/review/get/?courseCode=TMA4100")
+        self.assertEqual(res.status_code, 401)
 
     def test_get_reviews_endpoint_no_reviews(self):
-        c = Client()
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
         res = c.get("/review/get/?courseCode=TDT4290")
         self.assertEqual(res.data["count"], 0)
         self.assertEqual(len(res.data["data"]), 0)
 
     def test_get_reviews_endpoint_valid_request(self):
-        c = Client()
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
         res = c.get("/review/get/?courseCode=TMA4100&n=2")
         self.assertEqual(res.data["count"], 6)
         self.assertEqual(len(res.data["data"]), 2)
@@ -123,6 +146,12 @@ class GetReviewsTest(TestCase):
         res = c.get("/review/get/?courseCode=TMA4100")
         self.assertEqual(res.data["count"], 6)
         self.assertEqual(len(res.data["data"]), 6)
+
+    def test_get_reviews_endpoint_invalid_token(self):
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='invalid_token')
+        res = c.get("/review/get/?courseCode=TMA4100")
+        self.assertEqual(res.status_code, 400)
 
     def test_get_reviews_endpoint_filter_on_programme_valid_token(self):
         c = APIClient()

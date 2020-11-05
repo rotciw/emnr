@@ -85,6 +85,8 @@ def get_reviews(request):
         data = get_reviews_from_db(request)
     except ValueError as e:
         return Response(str(e), status=400)
+    except KeyError as e:
+        return Response(str(e), status=401)
     return Response(data, status=200)
 
 
@@ -138,7 +140,10 @@ def get_reviews_from_db(request):
     :return: JSON containing total number of reviews in database (count), and list of JSON objects (data),
                 each containing a review.
     """
-    exp_token = request.META["HTTP_AUTHORIZATION"]
+    try:
+        exp_token = request.META["HTTP_AUTHORIZATION"]
+    except KeyError:
+        raise KeyError("No expiring token provided")
 
     # Get and validate course_code parameter
     course_code = request.GET.get("courseCode", None)
