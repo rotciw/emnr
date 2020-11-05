@@ -83,7 +83,6 @@ def post_review(request):
 def get_reviews(request):
     try:
         data = get_reviews_from_db(request)
-        print(data)
     except ValueError as e:
         return Response(str(e), status=400)
     return Response(data, status=200)
