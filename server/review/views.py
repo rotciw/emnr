@@ -186,11 +186,22 @@ def get_reviews_from_db(request):
     # Append if user can delete review to the list of reviews
     _, user_email = get_user_full_name_and_email(request.META["HTTP_AUTHORIZATION"])
     for review in data:
-        review["can_delete"] = review["user_email"] == user_email
+        review["can_delete"] = check_if_can_delete(review, user_email)
 
     # Return the data
     return {"count": number_of_reviews, "data": data, "average_score": average_score,
             "average_workload": average_workload, "average_difficulty": average_difficulty}
+
+
+def check_if_can_delete(review, user_email):
+    """
+    Checks if the user can delete a given review.
+
+    :param review: dict, Dictionary representation of a Review instance.
+    :param user_email: str, The currently logged in user's email.
+    :return: bool, Whether the user can delete a review or not.
+    """
+    return review["user_email"] == user_email
 
 
 def validate_review_post_request(request_data, reviewable_courses, email):
