@@ -11,12 +11,21 @@ import json
 import time
 from review.models import Review
 from auth.models import UserAuth
-
+from django.db.models import Avg
 
 # Create your views here.
 def health(request):
     return HttpResponse("OK")
 
+@api_view(['GET'])
+def get_averages(request):
+    """
+    Helper for getting average values. Needed to determine what default values should be for
+    """
+    data = [Course.objects.exclude(average_grade=0).aggregate(Avg("average_grade")),
+            Course.objects.exclude(pass_rate=-1).aggregate(Avg("pass_rate"))
+    ]
+    return Response(data)
 
 @api_view(['GET'])
 def get_all_courses(request):
@@ -139,24 +148,35 @@ def map_course_to_sorting_score(course, params, max_values):
     :return: A single course object
     """
     sorting_score = 0
+    max_possible_score = 0
     param_names = {"score": "average_review_score", "difficulty": "average_difficulty", "workload": "average_workload",
                    "pass_rate": "pass_rate", "grade": "average_grade"}
     for param, values in params.items():  # Review score can possibly create problems here, since it defaults to 0
         temp = course[param_names[param]] / max_values[param]
-        # Subjects with temp < 0 has a default value of -1. The param is then irrelevant, set to mid-value.
-        if temp < 0:
-            temp = 0.5  # If no reviews exist, the parameter gets a neutral value
         # Subjects with score 0 has no reviews yet. Score is then irrelevant, and set to mid-value.
-        elif temp == 0 and param == "score":
+        if temp == 0 and param == "score":
             temp = 0.5
         # Subjects with grade 0 are pass / fail-subjects. Grade is irrelevant, and set to mid-value.
+        # Average grade omitting these subjects is pr. 02/11/2020: 3.322360523333
         elif temp == 0 and param == "grade":
+            temp = 3.322360523333 / max_values["grade"]
+        # Subjects with temp < 0 has a default value of -1. The param is then irrelevant, set to mid-value.
+        elif temp < 0 and param == "difficulty":
             temp = 0.5
-        elif temp == -1 and param == "pass_rate":
+        elif temp < 0 and param == "workload":
             temp = 0.5
+        # From the grades API, we get subjects with pass_rate: -1. This gives those a mid-value.
+        # Average pass rate omitting these subjects is pr 02/11/2020: 95.18423917240152
+        elif temp < 0 and param == "pass_rate":
+            temp = 95.18423917240152 / max_values["pass_rate"]
         if not values[0]:
             temp = 1 - temp
         sorting_score += temp * values[1]
+        max_possible_score += values[1]
+    if max_possible_score:
+        sorting_score = sorting_score / max_possible_score * 100
+    else:
+        sorting_score = 0
     course["advanced_sorting_score"] = sorting_score
     return course
 

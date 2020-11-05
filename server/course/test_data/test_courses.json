@@ -172,7 +172,7 @@
 "pass_rate": 98.86363636363636,
 "average_review_score": 4.0,
 "average_difficulty": 0.8,
-"average_workload": 0.4
+"average_workload": 0.3
 },
 {
 "course_code": "TPG4105",
@@ -422,7 +422,7 @@
 "credit": 15.0,
 "average_grade": 0.0,
 "review_count": 0,
-"pass_rate": 0,
+"pass_rate": 80.4054054054054,
 "average_review_score": 0.0,
 "average_difficulty": -1.0,
 "average_workload": -1.0
