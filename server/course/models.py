@@ -11,6 +11,7 @@ class Course(models.Model):
     average_review_score = models.FloatField(default=0)
     average_difficulty = models.FloatField(default=-1)
     average_workload = models.FloatField(default=-1)
+    advanced_sorting_score = models.FloatField(default=-1)
 
     @classmethod
     def create(cls, code, name, credit, average_grade, pass_rate):
