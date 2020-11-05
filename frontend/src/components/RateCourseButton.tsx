@@ -76,10 +76,10 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
         .then((res) => {
           if (!isCancelled) {
             setReviewEligibility(res.data);
+            setCourseButtonLoading(false);
           }
         })
         .catch((err) => console.log(err));
-      setCourseButtonLoading(false);
     };
     getReviewEligibility();
     return () => {

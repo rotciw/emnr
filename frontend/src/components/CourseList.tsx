@@ -108,11 +108,11 @@ export const CourseList: React.FC = () => {
         .then((res) => {
           updateCourses(res.data.data);
           pageProvider.setTotalPage(Math.ceil(res.data.count / resultLimit));
+          setLoading(false);
         })
         .catch((err) => {
           console.log(err);
         });
-      setLoading(false);
     };
     getCourses();
     start += resultLimit;

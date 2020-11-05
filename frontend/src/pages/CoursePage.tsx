@@ -69,10 +69,10 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
         .then((res) => {
           if (!isCancelled) {
             setCourseInfo(res.data);
+            setLoading(false);
           }
         })
         .catch((err) => console.log(err));
-      setLoading(false);
     };
     getCourses();
     return () => {
@@ -113,7 +113,7 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
         <Loading />
       ) : (
         <FlexColumn width='100%' padding='0 1vw'>
-          <FlexItem margin='2vh 0 4vh 0' onClick={handleBackClick}>
+          <FlexItem margin='1vh 0 3vh 0' onClick={handleBackClick}>
             <GoBackText>Tilbake</GoBackText>
           </FlexItem>
           <MobileFlexContainer>
@@ -122,7 +122,7 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
               <BoldTitle>{courseInfo.course_name}</BoldTitle>
               <BoldTitle
                 fontSize='50px'
-                mobileFontSize='40px'
+                mobileFontSize='50px'
                 margin='10px 0 0 0'
               >
                 {scoreAvg.toFixed(1)} / 5
