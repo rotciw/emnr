@@ -7,6 +7,7 @@ interface LayoutProps {
   width?: string;
   textAlign?: string;
   flexWrap?: string;
+  flexDirection?: string;
 }
 
 export const FlexContainer = styled.div`
@@ -43,14 +44,16 @@ export const MobileFlexContainer = styled.div`
   flex-direction: row;
   flex-wrap: wrap; // As a backup to the @media solution
 
-  @media (max-width: 576px){
+  @media (max-width: 576px) {
     flex-direction: column;
   }
-`
+`;
 
 export const CenteredFlexContainer = styled.div`
   display: flex;
+  flex-direction: ${(props: LayoutProps) => props.flexDirection || 'row'};
   justify-content: center;
+  margin: ${(props: LayoutProps) => props.margin || 'auto'};
 `;
 
 // Used to hide shape overflow
