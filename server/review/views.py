@@ -85,6 +85,8 @@ def get_reviews(request):
         data = get_reviews_from_db(request)
     except ValueError as e:
         return Response(str(e), status=400)
+    except KeyError as e:
+        return Response(str(e), status=401)
     return Response(data, status=200)
 
 
@@ -138,22 +140,31 @@ def get_reviews_from_db(request):
     :return: JSON containing total number of reviews in database (count), and list of JSON objects (data),
                 each containing a review.
     """
+    try:
+        exp_token = request.META["HTTP_AUTHORIZATION"]
+    except KeyError:
+        raise KeyError("No expiring token provided")
+
+    # Get and validate course_code parameter
     course_code = request.GET.get("courseCode", None)
     if course_code is None:
         raise ValueError("No course code provided")
     elif not Course.objects.filter(course_code=course_code).exists():
         raise ValueError("Course code {} does not exist in the course database.".format(course_code))
 
+    # Get and validate show_my_programme parameter
     show_my_programme = request.GET.get("showMyProgramme", "false")
     if show_my_programme not in ["true", "false"]:
         raise ValueError("Illegal boolean value")
+    show_my_programme = show_my_programme == "true"
+
+    # Define a base queryset, which is used for all queries later in the method
+    base_qs = Review.objects.filter(course_code=course_code)
+    if show_my_programme:
+        base_qs = base_qs.filter(study_programme=get_user_study_programme(exp_token))
 
     # Get and validate n parameter
-    if show_my_programme == "true":
-        number_of_reviews = Review.objects.filter(course_code=course_code).filter(
-            study_programme=get_user_study_programme(request.META["HTTP_AUTHORIZATION"])).count()
-    else:
-        number_of_reviews = Review.objects.filter(course_code=course_code).count()
+    number_of_reviews = base_qs.count()
     n = request.GET.get("n", number_of_reviews)
     if isinstance(n, str) and not n.isdigit():
         raise ValueError("Invalid value for n: {}".format(n))
@@ -168,22 +179,15 @@ def get_reviews_from_db(request):
         raise ValueError("offset is too large")
 
     # Get total average review scores for course
-    average_score = Review.objects.filter(course_code=course_code).aggregate(Avg("score"))["score__avg"]
-    average_workload = Review.objects.filter(course_code=course_code, workload__gt=-1).aggregate(Avg("workload"))[
-        "workload__avg"]
-    average_difficulty = Review.objects.filter(course_code=course_code, difficulty__gt=-1).aggregate(Avg("difficulty"))[
-        "difficulty__avg"]
+    average_score = base_qs.aggregate(Avg("score"))["score__avg"]
+    average_workload = base_qs.filter(workload__gt=-1).aggregate(Avg("workload"))["workload__avg"]
+    average_difficulty = base_qs.filter(difficulty__gt=-1).aggregate(Avg("difficulty"))["difficulty__avg"]
 
     # Fetch reviews from database
-    if show_my_programme == "true":
-        exp_token = request.META["HTTP_AUTHORIZATION"]
-        data = list(Review.objects.filter(course_code=course_code).filter(
-            study_programme=get_user_study_programme(exp_token)).order_by("-date")[
-               offset:offset + n].values())
-    else:
-        data = list(Review.objects.filter(course_code=course_code).order_by("-date")[offset:offset + n].values())
+    data = list(base_qs.order_by("-date")[offset:offset + n].values())
 
-    _, user_email = get_user_full_name_and_email(request.META["HTTP_AUTHORIZATION"])
+    # Append if user can delete review to the list of reviews
+    _, user_email = get_user_full_name_and_email(exp_token)
 
     # Check if user is admin
     is_admin = check_if_is_admin(user_email)
@@ -200,7 +204,6 @@ def get_reviews_from_db(request):
 def check_if_is_admin(user_email):
     """
     Checks if the currently logged in user is an admin (based on the .admins file).
-
     :param user_email: str, Email of the logged in user.
     :return: bool, Whether the user is an admin.
     """

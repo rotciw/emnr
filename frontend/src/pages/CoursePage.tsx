@@ -40,6 +40,9 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
   const [scoreAvg, setScoreAvg] = useState<number>(0);
   const [numberOfReviews, setNumberOfReviews] = useState<number>(0);
 
+  const [workloadAvg, setWorkloadAvg] = useState<number>(0);
+  const [difficultyAvg, setDifficultyAvg] = useState<number>(0);
+
   const history = useHistory();
   const handleBackClick = useCallback(() => history.goBack(), [history]);
 
@@ -153,8 +156,8 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
             </FlexItem>
             <FlexItem margin='0'>
               <CourseInfoBox
-                difficulty={courseInfo.average_difficulty}
-                workload={courseInfo.average_workload}
+                difficulty={difficultyAvg}
+                workload={workloadAvg}
                 averageGrade={courseInfo.average_grade?.toFixed(1)}
                 passRate={courseInfo.pass_rate?.toFixed(0)}
                 gradeDistribution={[0.1, 0.2, 0.3, 0.2, 0.05, 0.15]}
@@ -181,6 +184,8 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
         scoreAvgSetter={setScoreAvg}
         numberOfReviewSetter={setNumberOfReviews}
         postedReview={postedReview}
+        difficultyAvgSetter={setDifficultyAvg}
+        workloadAvgSetter={setWorkloadAvg}
       />
     </Layout>
   );
