@@ -177,13 +177,19 @@ def get_reviews_from_db(request):
     # Fetch reviews from database
     if show_my_programme == "true":
         exp_token = request.META["HTTP_AUTHORIZATION"]
-        data = Review.objects.filter(course_code=course_code).filter(
+        data = list(Review.objects.filter(course_code=course_code).filter(
             study_programme=get_user_study_programme(exp_token)).order_by("-date")[
-               offset:offset + n]
+               offset:offset + n].values())
     else:
-        data = Review.objects.filter(course_code=course_code).order_by("-date")[offset:offset + n]
+        data = list(Review.objects.filter(course_code=course_code).order_by("-date")[offset:offset + n].values())
 
-    return {"count": number_of_reviews, "data": list(data.values()), "average_score": average_score,
+    # Append if user can delete review to the list of reviews
+    _, user_email = get_user_full_name_and_email(request.META["HTTP_AUTHORIZATION"])
+    for review in data:
+        review["can_delete"] = review["user_email"] == user_email
+
+    # Return the data
+    return {"count": number_of_reviews, "data": data, "average_score": average_score,
             "average_workload": average_workload, "average_difficulty": average_difficulty}
 
 
