@@ -215,8 +215,11 @@ def check_if_is_admin(user_email):
     :param user_email: str, Email of the logged in user.
     :return: bool, Whether the user is an admin.
     """
-    with open(".admins", "r") as admin_file:
-        admins = json.load(admin_file)
+    try:
+        with open(".admins", "r") as admin_file:
+            admins = json.load(admin_file)
+    except FileNotFoundError:
+        return False
     return user_email in admins
 
 
