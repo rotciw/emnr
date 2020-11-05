@@ -1,6 +1,5 @@
 from django.test import TestCase
 from unittest.mock import patch
-from review.views import delete_review
 from course.models import Course
 from review.models import Review
 from auth.models import UserAuth
@@ -11,7 +10,6 @@ from review.tests import mock_feide_apis
 @patch("review.views.requests.get", new=mock_feide_apis)
 class DeleteReviewTest(TestCase):
     def setUp(self) -> None:
-        self.rf = RequestFactory()
         courses = [
             Course(course_code="TDT4120", course_name="AlgDat", credit=7.5, average_grade=1, pass_rate=100.0),
             Course(course_code="TMA4100", course_name="Matte 1", credit=7.5, average_grade=1, pass_rate=100.0),
@@ -23,7 +21,7 @@ class DeleteReviewTest(TestCase):
         ]
         for c in courses: c.save()
         reviews = [
-            Review(course_code="TMA4100", user_email="test@test.com", score=5, workload=1, difficulty=2,
+            Review(course_code="TMA4100", user_email="test@testesen.com", score=5, workload=1, difficulty=2,
                    review_text="Bra fag", full_name="Test test", study_programme="MTDT"),
             Review(course_code="TMA4100", user_email="kpro@kpro.com", score=3, workload=1, difficulty=2,
                    review_text="Givende", full_name="KPro Kproson", study_programme="MTKPRO"),
@@ -39,26 +37,64 @@ class DeleteReviewTest(TestCase):
                    review_text="Meget filosofisk", full_name="Erasmus Montanus", study_programme="MTDT"),
         ]
         for r in reviews: r.save()
-        UserAuth(expiring_token="valid_token", access_token="valid_token", user_email="test@test.com").save()
+        UserAuth(expiring_token="valid_token", access_token="valid_token", user_email="test@testesen.com").save()
 
     def test_delete_review_no_token(self):
         c = APIClient()
-        res = c.delete("/review/delete/?courseCode=TMA4100&userEmail=test@test.com")
+        res = c.delete("/review/delete/?courseCode=TMA4100&userEmail=test@testesen.com")
         self.assertEqual(res.status_code, 401)
 
     def test_delete_review_nonexistent_token(self):
-        pass
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='invalid_token')
+        res = c.delete("/review/delete/?courseCode=TMA4100&userEmail=test@testesen.com")
+        self.assertEqual(res.status_code, 401)
 
     def test_delete_review_invalid_course_code(self):
         # No course code
-        # Course code doesn't exist
-        pass
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
+        res = c.delete("/review/delete/?userEmail=test@test.com")
+        self.assertEqual(res.status_code, 400)
 
-    def test_delete_review_invalid_user_email(self):
-        pass
+        # Course code doesn't exist
+        res = c.delete("/review/delete/?courseCode=TEST123&userEmail=test@testesen.com")
+        self.assertEqual(res.status_code, 400)
+
+    def test_delete_review_no_user_email(self):
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
+        res = c.delete("/review/delete/?courseCode=TMA4100")
+        self.assertEqual(res.status_code, 400)
 
     def test_delete_review_user_cannot_delete(self):
-        pass
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
+        with patch("review.views.check_if_is_admin") as mock_admin_check:
+            mock_admin_check.return_value = False
+            res = c.delete("/review/delete/?courseCode=TMA4100&userEmail=kpro@kpro.com")
+        self.assertEqual(res.status_code, 401)
 
-    def test_delete_review_valid_request(self):
-        pass
+    def test_delete_review_valid_request_non_admin(self):
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
+        with patch("review.views.check_if_is_admin") as mock_admin_check:
+            mock_admin_check.return_value = False
+            res = c.delete("/review/delete/?courseCode=TMA4100&userEmail=test@testesen.com")
+        self.assertEqual(res.status_code, 200)
+
+    def test_delete_review_valid_request_admin_and_correct_email(self):
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
+        with patch("review.views.check_if_is_admin") as mock_admin_check:
+            mock_admin_check.return_value = True
+            res = c.delete("/review/delete/?courseCode=TMA4100&userEmail=test@testesen.com")
+        self.assertEqual(res.status_code, 200)
+
+    def test_delete_review_valid_request_admin_and_different_email(self):
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
+        with patch("review.views.check_if_is_admin") as mock_admin_check:
+            mock_admin_check.return_value = True
+            res = c.delete("/review/delete/?courseCode=TMA4100&userEmail=kpro@kpro.com")
+        self.assertEqual(res.status_code, 200)
