@@ -8,6 +8,7 @@ import { defaultTheme } from './styles/theme';
 import Routes from './navigation/Routes';
 import firebase from 'firebase/app';
 import 'firebase/analytics';
+import * as serviceWorker from './serviceWorker';
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -36,3 +37,5 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root'),
 );
+
+serviceWorker.register();
