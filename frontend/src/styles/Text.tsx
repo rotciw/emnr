@@ -15,7 +15,7 @@ export const BoldTitle = styled.p`
   font-family: gilroyxbold;
   color: ${({ theme }) => theme.darkBlue};
   @media (max-width: 576px) {
-    font-size: ${(props: TitleProps) => props.mobileFontSize || '22px'};
+    font-size: ${(props: TitleProps) => props.mobileFontSize || '25px'};
   }
 `;
 
@@ -25,7 +25,7 @@ export const Title = styled.p`
   font-family: gilroymedium;
   color: ${({ theme }) => theme.darkBlue};
   @media (max-width: 576px) {
-    font-size: ${(props: TitleProps) => props.fontSize || '16px'};
+    font-size: ${(props: TitleProps) => props.fontSize || '18px'};
   }
 `;
 

@@ -12,6 +12,7 @@ interface CourseProps {
   averageGrade: number;
   passRate: number;
   credit: number;
+  advancedSortingMatch: number,
   sortingParam: string;
 }
 
@@ -23,6 +24,7 @@ const Course: React.FC<CourseProps> = ({
   averageGrade,
   passRate,
   credit,
+  advancedSortingMatch,
   sortingParam,
 }) => {
   let paramMetric: String = '';
@@ -48,6 +50,9 @@ const Course: React.FC<CourseProps> = ({
       break;
     case 'pass_rate':
       paramMetric = String((100 - passRate).toFixed(2));
+      break;
+    case 'advanced_sorting_score':
+      paramMetric = String((advancedSortingMatch).toFixed(1)) + '%';
       break;
     default:
       paramMetric = 'X';

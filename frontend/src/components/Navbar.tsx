@@ -7,6 +7,7 @@ import Dropdown, { Option } from 'react-dropdown';
 import emnrLogo from '../assets/images/emnr_long.svg';
 import Searchbar from './Searchbar';
 import 'react-dropdown/style.css';
+import '../utils/dropdown.css';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { Menu } from './Menu';
 import { NavbarButton, NavbarRemoveButton } from 'styles/Buttons';
@@ -121,12 +122,12 @@ const Navbar: React.FC = () => {
                 options={options}
                 onChange={(e) => onSelect(e)}
                 placeholder='Sorter etter..'
-                // disabled={advancedQueryProvider.advancedSorting} // This might be useful, but there needs to be a visual indication that the dropdown is disabled.
+                disabled={advancedQueryProvider.advancedSorting}
               />
             </DropdownContainer>
             <NavBarButtonContainer>
               <NavbarButton onClick={toggleModalIsOpen}>
-                Avansert sortering
+                EMNR-sortering
               </NavbarButton>
               {advancedQueryProvider.advancedSorting && (
                 <NavbarRemoveButton
@@ -134,7 +135,7 @@ const Navbar: React.FC = () => {
                     advancedQueryProvider.setAdvancedSorting(false);
                   }}
                 >
-                  Fjern avansert sortering
+                  Avslutt EMNR-sortering
                 </NavbarRemoveButton>
               )}
             </NavBarButtonContainer>
