@@ -40,6 +40,9 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
   const [scoreAvg, setScoreAvg] = useState<number>(0);
   const [numberOfReviews, setNumberOfReviews] = useState<number>(0);
 
+  const [workloadAvg, setWorkloadAvg] = useState<number>(0);
+  const [difficultyAvg, setDifficultyAvg] = useState<number>(0);
+
   const history = useHistory();
   const handleBackClick = useCallback(() => history.goBack(), [history]);
 
@@ -69,10 +72,10 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
         .then((res) => {
           if (!isCancelled) {
             setCourseInfo(res.data);
+            setLoading(false);
           }
         })
         .catch((err) => console.log(err));
-      setLoading(false);
     };
     getCourses();
     return () => {
@@ -113,7 +116,7 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
         <Loading />
       ) : (
         <FlexColumn width='100%' padding='0 1vw'>
-          <FlexItem margin='2vh 0 4vh 0' onClick={handleBackClick}>
+          <FlexItem margin='1vh 0 3vh 0' onClick={handleBackClick}>
             <GoBackText>Tilbake</GoBackText>
           </FlexItem>
           <MobileFlexContainer>
@@ -122,7 +125,7 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
               <BoldTitle>{courseInfo.course_name}</BoldTitle>
               <BoldTitle
                 fontSize='50px'
-                mobileFontSize='40px'
+                mobileFontSize='50px'
                 margin='10px 0 0 0'
               >
                 {scoreAvg.toFixed(1)} / 5
@@ -153,8 +156,8 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
             </FlexItem>
             <FlexItem margin='0'>
               <CourseInfoBox
-                difficulty={courseInfo.average_difficulty}
-                workload={courseInfo.average_workload}
+                difficulty={difficultyAvg}
+                workload={workloadAvg}
                 averageGrade={courseInfo.average_grade?.toFixed(1)}
                 passRate={courseInfo.pass_rate?.toFixed(0)}
                 gradeDistribution={[0.1, 0.2, 0.3, 0.2, 0.05, 0.15]}
@@ -181,6 +184,8 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
         scoreAvgSetter={setScoreAvg}
         numberOfReviewSetter={setNumberOfReviews}
         postedReview={postedReview}
+        difficultyAvgSetter={setDifficultyAvg}
+        workloadAvgSetter={setWorkloadAvg}
       />
     </Layout>
   );

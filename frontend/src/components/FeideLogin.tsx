@@ -19,10 +19,14 @@ const Logo = styled.img`
 
 const MottoText = styled.p`
   font-family: gilroyxbold;
+  font-style: italic;
   color: ${({ theme }) => theme.darkBlue};
   max-width: 30vmax;
   margin: -10px auto 3vh auto;
   text-align: center;
+  @media (max-width: 576px) {
+    font-size: 14px;
+  }
 `;
 
 const FeideLogin: React.FC = () => {
@@ -45,9 +49,7 @@ const FeideLogin: React.FC = () => {
   return (
     <Wrapper>
       <Logo src={emnrLoginLogo} />
-      <MottoText>
-        Hjelp til å velge NTNU-emner, for og av studenter
-      </MottoText>
+      <MottoText>Hjelp til å velge NTNU-emner, for og av studenter</MottoText>
       <LoginButton clickHandler={handleFeideLogin}>Logg på (Feide)</LoginButton>
     </Wrapper>
   );
