@@ -1,7 +1,7 @@
 {
   "name": "Emnr",
   "short_name": "Emnr",
-  "background_color": "#1D3557",
+  "background_color": "#FFF",
   "theme_color": "#1D3557",
   "description": "Emnr er en side der du kan anmelde emner",
   "start_url": "/",
