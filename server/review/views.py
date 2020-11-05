@@ -83,6 +83,7 @@ def post_review(request):
 def get_reviews(request):
     try:
         data = get_reviews_from_db(request)
+        print(data)
     except ValueError as e:
         return Response(str(e), status=400)
     return Response(data, status=200)
@@ -183,25 +184,42 @@ def get_reviews_from_db(request):
     else:
         data = list(Review.objects.filter(course_code=course_code).order_by("-date")[offset:offset + n].values())
 
-    # Append if user can delete review to the list of reviews
     _, user_email = get_user_full_name_and_email(request.META["HTTP_AUTHORIZATION"])
+
+    # Check if user is admin
+    is_admin = check_if_is_admin(user_email)
+
+    # Append if user can delete review to the list of reviews
     for review in data:
-        review["can_delete"] = check_if_can_delete(review, user_email)
+        review["can_delete"] = check_if_can_delete(review, user_email, is_admin)
 
     # Return the data
     return {"count": number_of_reviews, "data": data, "average_score": average_score,
-            "average_workload": average_workload, "average_difficulty": average_difficulty}
+            "average_workload": average_workload, "average_difficulty": average_difficulty, "is_admin": is_admin}
 
 
-def check_if_can_delete(review, user_email):
+def check_if_is_admin(user_email):
+    """
+    Checks if the currently logged in user is an admin (based on the .admins file).
+
+    :param user_email: str, Email of the logged in user.
+    :return: bool, Whether the user is an admin.
+    """
+    with open(".admins", "r") as admin_file:
+        admins = json.load(admin_file)
+    return user_email in admins
+
+
+def check_if_can_delete(review, user_email, is_admin):
     """
     Checks if the user can delete a given review.
 
     :param review: dict, Dictionary representation of a Review instance.
     :param user_email: str, The currently logged in user's email.
+    :param is_admin: bool, If the user is an admin
     :return: bool, Whether the user can delete a review or not.
     """
-    return review["user_email"] == user_email
+    return is_admin or review["user_email"] == user_email
 
 
 def validate_review_post_request(request_data, reviewable_courses, email):
