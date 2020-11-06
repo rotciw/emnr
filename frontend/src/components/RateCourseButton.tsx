@@ -121,6 +121,14 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
         </TooltipButtonContainer>
       );
       break;
+    case 4:
+      content = (
+        <TooltipButtonContainer>
+          <DisabledRateButton>Vurder {courseCode}</DisabledRateButton>
+          <TooltipText>Du har blitt utestengt fra å vurdere emner</TooltipText>
+        </TooltipButtonContainer>
+      );
+      break;
     default:
       content = (
         <div>Noe gikk galt mens vi sjekket om du kan vurdere dette emnet</div>

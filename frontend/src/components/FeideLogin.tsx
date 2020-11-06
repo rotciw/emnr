@@ -48,7 +48,7 @@ const FeideLogin: React.FC = () => {
 
   return (
     <Wrapper>
-      <Logo src={emnrLoginLogo} />
+      <Logo src={emnrLoginLogo} alt='emnr logo' />
       <MottoText>Hjelp til å velge NTNU-emner, for og av studenter</MottoText>
       <LoginButton clickHandler={handleFeideLogin}>Logg på (Feide)</LoginButton>
     </Wrapper>
