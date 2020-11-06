@@ -24,7 +24,6 @@ interface ReviewListProps {
   numberOfReviewSetter: (value: number) => void;
   difficultyAvgSetter: (value: number) => void;
   workloadAvgSetter: (value: number) => void;
-  postedReview: boolean;
 }
 
 interface ReviewProps {
@@ -35,6 +34,9 @@ interface ReviewProps {
   difficulty: number | string | void;
   review_text: string;
   date: string;
+  can_delete: boolean;
+  user_email: string;
+  course_code: string;
 }
 
 const ReviewList: React.FC<ReviewListProps> = ({
@@ -45,14 +47,20 @@ const ReviewList: React.FC<ReviewListProps> = ({
   numberOfReviewSetter,
   difficultyAvgSetter,
   workloadAvgSetter,
-  postedReview,
 }) => {
   const [reviews, updateReviews] = useState<ReviewProps[]>([]);
-  const { pageReviewProvider } = useContext(GlobalStateContext)!;
+  const { pageReviewProvider, refreshProvider } = useContext(
+    GlobalStateContext,
+  )!;
   const [loading, setLoading] = useState<boolean>(false);
+  const [isReviewDeleted, setReviewDeleted] = useState<boolean>(false);
 
   const resultLimit = 5;
   let start = (pageNumber - 1) * resultLimit;
+
+  useEffect(() => {
+    numberOfReviewSetter(reviews.length);
+  }, [reviews]);
 
   useEffect(() => {
     let isCancelled = false;
@@ -60,7 +68,9 @@ const ReviewList: React.FC<ReviewListProps> = ({
       setLoading(true);
       await axios
         .get(
-          `${API_URL}/review/get/?courseCode=${courseCode}&n=${resultLimit}&offset=${start}&showMyProgramme=${String(limitReviews)}`,
+          `${API_URL}/review/get/?courseCode=${courseCode}&n=${resultLimit}&offset=${start}&showMyProgramme=${String(
+            limitReviews,
+          )}`,
         )
         .then((res) => {
           if (!isCancelled) {
@@ -83,7 +93,12 @@ const ReviewList: React.FC<ReviewListProps> = ({
     return () => {
       isCancelled = true;
     };
-  }, [pageNumber, postedReview, limitReviews]);
+  }, [
+    pageNumber,
+    refreshProvider.postReviewHaveRefreshed,
+    limitReviews,
+    refreshProvider.deleteReviewHaveRefreshed,
+  ]);
 
   return (
     <>
@@ -112,6 +127,9 @@ const ReviewList: React.FC<ReviewListProps> = ({
                     difficulty={currentReview.difficulty}
                     text={currentReview.review_text}
                     date={currentReview.date}
+                    canDelete={currentReview.can_delete}
+                    userEmail={currentReview.user_email}
+                    courseCode={currentReview.course_code}
                   />
                 );
               })}

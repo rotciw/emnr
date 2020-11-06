@@ -7,6 +7,7 @@ interface GlobalStateContextProps {
   pageReviewProvider: PageReviewProviderValue;
   queryProvider: QueryProviderValue;
   advancedQueryProvider: AdvancedQueryProviderValue;
+  refreshProvider: RefreshProviderValue;
 }
 
 interface AuthProviderValue {
@@ -42,7 +43,7 @@ interface PageReviewProviderValue {
   setTotalPageReview: (val: number) => void;
 }
 
-interface AdvancedQueryProviderValue{
+interface AdvancedQueryProviderValue {
   advancedSorting: boolean;
   setAdvancedSorting: (val: boolean) => void;
   advancedSortChangedFlag: boolean; // Value is meaningless, is only used to update search. Is flipped every time advanced sorting is changed.
@@ -52,12 +53,12 @@ interface AdvancedQueryProviderValue{
   setDiffHigh: (val: boolean) => void;
   diffWeight: number;
   setDiffWeight: (val: number) => void;
-  
+
   gradeHigh: boolean;
   setGradeHigh: (val: boolean) => void;
   gradeWeight: number;
   setGradeWeight: (val: number) => void;
-  
+
   scoreHigh: boolean;
   setScoreHigh: (val: boolean) => void;
   scoreWeight: number;
@@ -74,6 +75,13 @@ interface AdvancedQueryProviderValue{
   setWorkLoadWeight: (val: number) => void;
 }
 
+interface RefreshProviderValue {
+  postReviewHaveRefreshed: boolean;
+  setPostReviewHaveRefreshed: (val: boolean) => void;
+  deleteReviewHaveRefreshed: boolean;
+  setDeleteReviewHaveRefreshed: (val: boolean) => void;
+}
+
 export const GlobalStateContext = createContext<GlobalStateContextProps | null>(
   null,
 );
@@ -88,10 +96,12 @@ const GlobalStateProvider: React.FC = ({ children }) => {
   const [totalPageReview, setTotalPageReview] = useState<number>(1);
   const [orderByQuery, setOrderByQuery] = useState<string | null>(null);
   const [orderToggle, setOrderToggle] = useState(false);
-  
+
   //Advanced query provider
   const [advancedSorting, setAdvancedSorting] = useState<boolean>(false);
-  const [advancedSortChangedFlag, setAdvancedSortChangedFlag] = useState<boolean>(false);
+  const [advancedSortChangedFlag, setAdvancedSortChangedFlag] = useState<
+    boolean
+  >(false);
   const [diffHigh, setDiffHigh] = useState<boolean>(true);
   const [diffWeight, setDiffWeight] = useState<number>(0);
   const [gradeHigh, setGradeHigh] = useState<boolean>(true);
@@ -102,7 +112,12 @@ const GlobalStateProvider: React.FC = ({ children }) => {
   const [passRateWeight, setPassRateWeight] = useState<number>(0);
   const [workLoadHigh, setWorkLoadHigh] = useState<boolean>(true);
   const [workLoadWeight, setWorkLoadWeight] = useState<number>(0);
-
+  const [postReviewHaveRefreshed, setPostReviewHaveRefreshed] = useState<
+    boolean
+  >(false);
+  const [deleteReviewHaveRefreshed, setDeleteReviewHaveRefreshed] = useState<
+    boolean
+  >(false);
 
   const authProvider = useMemo(() => ({ token, setToken }), [token, setToken]);
   const userProvider = useMemo(() => ({ email, setEmail }), [email, setEmail]);
@@ -187,6 +202,21 @@ const GlobalStateProvider: React.FC = ({ children }) => {
     ],
   );
 
+  const refreshProvider = useMemo(
+    () => ({
+      postReviewHaveRefreshed,
+      setPostReviewHaveRefreshed,
+      deleteReviewHaveRefreshed,
+      setDeleteReviewHaveRefreshed,
+    }),
+    [
+      postReviewHaveRefreshed,
+      setPostReviewHaveRefreshed,
+      deleteReviewHaveRefreshed,
+      setDeleteReviewHaveRefreshed,
+    ],
+  );
+
   return (
     <GlobalStateContext.Provider
       value={{
@@ -196,6 +226,7 @@ const GlobalStateProvider: React.FC = ({ children }) => {
         pageReviewProvider,
         queryProvider,
         advancedQueryProvider,
+        refreshProvider,
       }}
     >
       {children}
