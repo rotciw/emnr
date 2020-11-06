@@ -341,5 +341,23 @@ def delete_review(request):
     # Delete review
     Review.objects.get(course_code=course_code, user_email=passed_email).delete()
 
+    # Update course review data
+    course_qs = Course.objects.filter(course_code=course_code)
+    review_qs = Review.objects.filter(course_code=course_code)
+
+    course_qs.update(review_count=review_qs.count())
+    course_qs.update(average_review_score=get_avg_or_default(review_qs, "score"))
+    course_qs.update(average_difficulty=get_avg_or_default(review_qs.filter(difficulty__gt=-1), "difficulty", -1))
+    course_qs.update(average_workload=get_avg_or_default(review_qs.filter(workload__gt=-1), "workload", -1))
+
     # Return 200 if successful
     return Response("Review successfully deleted.", status=200)
+
+
+def get_avg_or_default(queryset, field, default=0):
+    """
+    Helper method for getting the average of a field in a QuerySet,
+    or a default value if it is None.
+    """
+    result = queryset.aggregate(Avg(field))["{}__avg".format(field)]
+    return default if result is None else result
