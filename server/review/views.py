@@ -8,7 +8,7 @@ from course.views import retrieve_courses_from_token, get_current_semester, perf
 from auth.models import UserAuth
 from .models import Review
 from course.models import Course
-from user.models import AdminUser
+from user.models import AdminUser, BannedUser
 from django.db.models import Avg
 
 
@@ -38,6 +38,10 @@ def post_review(request):
     except IndexError as e:
         return Response("Course does not exist in the database", status=400)
 
+    # Check if user is banned from posting reviews
+    if BannedUser.objects.filter(user_email=email).exists():
+        return Response("User is banned from posting reviews", status=401)
+
     # Validate request
     try:
         validate_review_post_request(request_data, reviewable_courses, email)
@@ -52,29 +56,20 @@ def post_review(request):
            review_text=request_data["reviewText"], full_name=full_name, study_programme=study_prg).save()
 
     # Update the review counter in Course
-    Course.objects.filter(course_code=request_data["courseCode"]).update(
-        review_count=Review.objects.filter(course_code=request_data["courseCode"]).count())
+    course_qs = Course.objects.filter(course_code=request_data["courseCode"])
+    review_qs = Review.objects.filter(course_code=request_data["courseCode"])
+    course_qs.update(review_count=review_qs.count())
 
     # Update the average review score in Course
-    Course.objects.filter(course_code=request_data["courseCode"]).update(
-        average_review_score=Review.objects.filter(course_code=request_data["courseCode"]).aggregate(Avg("score"))[
-            "score__avg"]
-    )
+    course_qs.update(average_review_score=review_qs.aggregate(Avg("score"))["score__avg"])
 
     # Update the average difficulty in Course
     if request_data["difficulty"] > -1:
-        Course.objects.filter(course_code=request_data["courseCode"]).update(
-            average_difficulty=
-            Review.objects.filter(course_code=request_data["courseCode"]).aggregate(Avg("difficulty"))[
-                "difficulty__avg"]
-        )
+        course_qs.update(average_difficulty=review_qs.aggregate(Avg("difficulty"))["difficulty__avg"])
 
     # Update the average workload in Course
     if request_data["workload"] > -1:
-        Course.objects.filter(course_code=request_data["courseCode"]).update(
-            average_workload=Review.objects.filter(course_code=request_data["courseCode"]).aggregate(Avg("workload"))[
-                "workload__avg"]
-        )
+        course_qs.update(average_workload=review_qs.aggregate(Avg("workload"))["workload__avg"])
 
     # Indicate successful posting
     return Response(status=200)
@@ -101,12 +96,17 @@ def can_review(request):
     1: User cannot review because it has not taken the course
     2: User cannot review because it has already reviewed the course
     3: User cannot review because its expiring token does not exist.
+    4: User cannot review because it is banned from reviewing
     """
     # Check if expiring token is stored in db
     exp_token = request.META["HTTP_AUTHORIZATION"]
     if not UserAuth.objects.filter(expiring_token=exp_token).exists():
         return Response(3)
     user_email = UserAuth.objects.filter(expiring_token=exp_token)[0].user_email
+
+    # Check if user is banned from posting reviews
+    if BannedUser.objects.filter(user_email=user_email).exists():
+        return Response(4)
 
     # Check if user has had the course
     course_code = request.GET.get("courseCode", None)
