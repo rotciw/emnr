@@ -65,13 +65,22 @@ def delete_user(request):
         course_qs.update(review_count=review_qs.count())
 
         # Update average review score
-        course_qs.update(average_review_score=review_qs.aggregate(Avg("score"))["score__avg"])
+        course_qs.update(average_review_score=get_avg_or_default(review_qs, "score"))
 
         # Update average difficulty
-        course_qs.update(average_difficulty=review_qs.aggregate(Avg("difficulty"))["difficulty__avg"])
+        course_qs.update(average_difficulty=get_avg_or_default(review_qs.filter(difficulty__gt=-1), "difficulty", -1))
 
         # Update average workload
-        course_qs.update(average_workload=review_qs.aggregate(Avg("workload"))["workload__avg"])
+        course_qs.update(average_workload=get_avg_or_default(review_qs.filter(workload__gt=-1), "workload", -1))
 
     # Return a 200 indicating that the user is successfully banned
     return Response("User successfully banned, with all reviews deleted.", status=200)
+
+
+def get_avg_or_default(queryset, field, default=0):
+    """
+    Helper method for getting the average of a field in a QuerySet,
+    or a default value if it is None.
+    """
+    result = queryset.aggregate(Avg(field))["{}__avg".format(field)]
+    return default if result is None else result
