@@ -1,8 +1,0 @@
-# This list must contain emails of Feide users that should be admins for the service, and should be copied
-# to a file .admins.
-#
-# Admins are able to delete all reviews and delete users.
-[
-"example_admin@example.com",
-"example_admin2@example.com"
-]
