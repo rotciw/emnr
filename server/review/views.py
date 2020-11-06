@@ -85,6 +85,8 @@ def get_reviews(request):
         data = get_reviews_from_db(request)
     except ValueError as e:
         return Response(str(e), status=400)
+    except KeyError as e:
+        return Response(str(e), status=401)
     return Response(data, status=200)
 
 
@@ -138,7 +140,10 @@ def get_reviews_from_db(request):
     :return: JSON containing total number of reviews in database (count), and list of JSON objects (data),
                 each containing a review.
     """
-    exp_token = request.META["HTTP_AUTHORIZATION"]
+    try:
+        exp_token = request.META["HTTP_AUTHORIZATION"]
+    except KeyError:
+        raise KeyError("No expiring token provided")
 
     # Get and validate course_code parameter
     course_code = request.GET.get("courseCode", None)
@@ -179,10 +184,27 @@ def get_reviews_from_db(request):
     average_difficulty = base_qs.filter(difficulty__gt=-1).aggregate(Avg("difficulty"))["difficulty__avg"]
 
     # Fetch reviews from database
-    data = base_qs.order_by("-date")[offset:offset + n]
+    data = list(base_qs.order_by("-date")[offset:offset + n].values())
 
-    return {"count": number_of_reviews, "data": list(data.values()), "average_score": average_score,
+    # Append if user can delete review to the list of reviews
+    _, user_email = get_user_full_name_and_email(exp_token)
+    for review in data:
+        review["can_delete"] = check_if_can_delete(review, user_email)
+
+    # Return the data
+    return {"count": number_of_reviews, "data": data, "average_score": average_score,
             "average_workload": average_workload, "average_difficulty": average_difficulty}
+
+
+def check_if_can_delete(review, user_email):
+    """
+    Checks if the user can delete a given review.
+
+    :param review: dict, Dictionary representation of a Review instance.
+    :param user_email: str, The currently logged in user's email.
+    :return: bool, Whether the user can delete a review or not.
+    """
+    return review["user_email"] == user_email
 
 
 def validate_review_post_request(request_data, reviewable_courses, email):
