@@ -86,6 +86,9 @@ celerybeat-schedule
 # dotenv
 .env
 
+# Admins file
+.admins
+
 # virtualenv
 .venv
 venv/

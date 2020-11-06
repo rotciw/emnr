@@ -85,6 +85,8 @@ def get_reviews(request):
         data = get_reviews_from_db(request)
     except ValueError as e:
         return Response(str(e), status=400)
+    except KeyError as e:
+        return Response(str(e), status=401)
     return Response(data, status=200)
 
 
@@ -138,14 +140,13 @@ def get_reviews_from_db(request):
     :return: JSON containing total number of reviews in database (count), and list of JSON objects (data),
                 each containing a review.
     """
-    exp_token = request.META["HTTP_AUTHORIZATION"]
+    try:
+        exp_token = request.META["HTTP_AUTHORIZATION"]
+    except KeyError:
+        raise KeyError("No expiring token provided")
 
     # Get and validate course_code parameter
-    course_code = request.GET.get("courseCode", None)
-    if course_code is None:
-        raise ValueError("No course code provided")
-    elif not Course.objects.filter(course_code=course_code).exists():
-        raise ValueError("Course code {} does not exist in the course database.".format(course_code))
+    course_code = get_course_code_parameter(request)
 
     # Get and validate show_my_programme parameter
     show_my_programme = request.GET.get("showMyProgramme", "false")
@@ -179,10 +180,59 @@ def get_reviews_from_db(request):
     average_difficulty = base_qs.filter(difficulty__gt=-1).aggregate(Avg("difficulty"))["difficulty__avg"]
 
     # Fetch reviews from database
-    data = base_qs.order_by("-date")[offset:offset + n]
+    data = list(base_qs.order_by("-date")[offset:offset + n].values())
 
-    return {"count": number_of_reviews, "data": list(data.values()), "average_score": average_score,
-            "average_workload": average_workload, "average_difficulty": average_difficulty}
+    # Append if user can delete review to the list of reviews
+    _, user_email = get_user_full_name_and_email(exp_token)
+
+    # Check if user is admin
+    is_admin = check_if_is_admin(user_email)
+
+    # Append if user can delete review to the list of reviews
+    for review in data:
+        review["can_delete"] = check_if_can_delete(review, user_email, is_admin)
+
+    # Return the data
+    return {"count": number_of_reviews, "data": data, "average_score": average_score,
+            "average_workload": average_workload, "average_difficulty": average_difficulty, "is_admin": is_admin}
+
+
+def get_course_code_parameter(request):
+    """
+    Helper method for extracting and validation the courseCode parameter from a request.
+    """
+    course_code = request.GET.get("courseCode", None)
+    if course_code is None:
+        raise ValueError("No course code provided")
+    elif not Course.objects.filter(course_code=course_code).exists():
+        raise ValueError("Course code {} does not exist in the course database.".format(course_code))
+    return course_code
+
+
+def check_if_is_admin(user_email):
+    """
+    Checks if the currently logged in user is an admin (based on the .admins file).
+    :param user_email: str, Email of the logged in user.
+    :return: bool, Whether the user is an admin.
+    """
+    try:
+        with open(".admins", "r") as admin_file:
+            admins = json.load(admin_file)
+    except FileNotFoundError:
+        return False
+    return user_email in admins
+
+
+def check_if_can_delete(review, user_email, is_admin):
+    """
+    Checks if the user can delete a given review.
+
+    :param review: dict, Dictionary representation of a Review instance.
+    :param user_email: str, The currently logged in user's email.
+    :param is_admin: bool, If the user is an admin
+    :return: bool, Whether the user can delete a review or not.
+    """
+    return is_admin or review["user_email"] == user_email
 
 
 def validate_review_post_request(request_data, reviewable_courses, email):
@@ -256,3 +306,44 @@ def get_user_study_programme(expiring_token):
     if not study_programmes:
         raise ValueError("No study programme found for the given student.")
     return study_programmes[0]
+
+
+@api_view(["DELETE"])
+def delete_review(request):
+    """
+    Deletes a given review, based on course code and user email passed as a parameter
+    """
+    # Get and authenticate expiring token
+    try:
+        exp_token = request.META["HTTP_AUTHORIZATION"]
+    except KeyError:
+        return Response("No expiring token provided", 401)
+    if not UserAuth.objects.filter(expiring_token=exp_token).exists():
+        return Response("Invalid expiring token provided", 401)
+
+    # Get and validate course code parameter
+    try:
+        course_code = get_course_code_parameter(request)
+    except ValueError as e:
+        return Response(str(e), status=400)
+
+    # Get and validate user email parameter
+    passed_email = request.GET.get("userEmail", None)
+    if passed_email is None:
+        return Response("No user email provided", status=400)
+
+    # Check if user can delete review
+    try:
+        _, user_email = get_user_full_name_and_email(exp_token)
+    except ValueError as e:
+        return Response(str(e), status=400)
+
+    is_admin = check_if_is_admin(user_email)
+    if not (is_admin or user_email == passed_email):
+        return Response("User cannot delete this review", status=401)
+
+    # Delete review
+    Review.objects.get(course_code=course_code, user_email=passed_email).delete()
+
+    # Return 200 if successful
+    return Response("Review successfully deleted.", status=200)
