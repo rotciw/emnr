@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { ExtraBold } from 'styles/Text';
 import { SortHighLowButton } from 'styles/Buttons';
-import RadioButtonsBar from './RadioButtonBar';
+import { WeightRadioButtonsBar } from './RadioButtonBar';
 
 interface RateCourseButtonProps {
   setDirectionFunction: (isHigh: boolean) => void;
@@ -37,7 +37,7 @@ export const SortFactor: React.FC<RateCourseButtonProps> = ({
           {(directionVariable ? 'høy' : 'lav') + ` \u21C5`}
         </SortHighLowButton>
       </FactorWrapper>
-      <RadioButtonsBar radioID={`${idName}Weight`} valueSetter={setWeightFunction} defaultChecked={weightVariable}/>
+      <WeightRadioButtonsBar radioID={`${idName}Weight`} valueSetter={setWeightFunction} valueVariable={weightVariable}/>
     </div>
   );
 };

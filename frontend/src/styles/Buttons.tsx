@@ -85,10 +85,11 @@ export const SortButton = styled.button`
   background-color: ${({ theme }) => theme.darkBlue};
   color: ${({ theme }) => theme.white};
   cursor: pointer;
+  flex: 1;
   font-family: gilroymedium;
   padding: 10px 30px;
   border-radius: 5px;
-  margin: 30px 10px 0 0;
+  margin: 5px 10px 0 0;
   outline: none;
 `;
 

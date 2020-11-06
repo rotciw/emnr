@@ -4,11 +4,10 @@ import { FlexContainer, HrLine } from 'styles/Containers';
 import { Title, BoldTitle } from 'styles/Text';
 import axios from 'axios';
 import API_URL from 'config';
-import RadioButtonsBar from './RadioButtonBar';
+import { ScoreRadioButtonsBar } from './RadioButtonBar';
 import { getLocalToken } from '../utils/api';
 import Dropdown from 'react-dropdown';
 import { RateCourseButton } from './RateCourseButton';
-import { GlobalStateContext } from 'context/GlobalStateContext';
 
 interface ReviewFormProps {
   closeModal: () => void;
@@ -94,7 +93,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       <BoldTitle>{courseName}</BoldTitle>
       <HrLine margin='15px 0 0 0' />
       <BoldInputDescription>Totalvurdering: *</BoldInputDescription>
-      <RadioButtonsBar radioID='reviewScore' valueSetter={setScoreValue} defaultChecked={0}/>
+      <ScoreRadioButtonsBar radioID='reviewScore' valueSetter={setScoreValue} valueVariable={-1}/>
       <InputDescription>Arbeidsmengde:</InputDescription>
       <Dropdown
         options={options}
