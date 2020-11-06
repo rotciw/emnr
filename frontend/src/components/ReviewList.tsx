@@ -81,8 +81,12 @@ const ReviewList: React.FC<ReviewListProps> = ({
             scoreAvgSetter(
               res.data.average_score != null ? res.data.average_score : 0,
             );
-            difficultyAvgSetter(res.data.average_difficulty);
-            workloadAvgSetter(res.data.average_workload);
+            difficultyAvgSetter(
+              res.data.average_difficulty != null ? res.data.average_difficulty : -1
+            );
+            workloadAvgSetter(
+              res.data.average_workload != null ? res.data.average_workload : -1
+            );
             setLoading(false);
           }
         })
