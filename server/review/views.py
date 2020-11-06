@@ -8,6 +8,7 @@ from course.views import retrieve_courses_from_token, get_current_semester, perf
 from auth.models import UserAuth
 from .models import Review
 from course.models import Course
+from user.models import AdminUser
 from django.db.models import Avg
 
 
@@ -188,23 +189,38 @@ def get_reviews_from_db(request):
 
     # Append if user can delete review to the list of reviews
     _, user_email = get_user_full_name_and_email(exp_token)
+
+    # Check if user is admin
+    is_admin = check_if_is_admin(user_email)
+
+    # Append if user can delete review to the list of reviews
     for review in data:
-        review["can_delete"] = check_if_can_delete(review, user_email)
+        review["can_delete"] = check_if_can_delete(review, user_email, is_admin)
 
     # Return the data
     return {"count": number_of_reviews, "data": data, "average_score": average_score,
-            "average_workload": average_workload, "average_difficulty": average_difficulty}
+            "average_workload": average_workload, "average_difficulty": average_difficulty, "is_admin": is_admin}
 
 
-def check_if_can_delete(review, user_email):
+def check_if_is_admin(user_email):
+    """
+    Checks if the currently logged in user is an admin (based on the AdminUser table).
+    :param user_email: str, Email of the logged in user.
+    :return: bool, Whether the user is an admin.
+    """
+    return AdminUser.objects.filter(user_email=user_email).exists()
+
+
+def check_if_can_delete(review, user_email, is_admin):
     """
     Checks if the user can delete a given review.
 
     :param review: dict, Dictionary representation of a Review instance.
     :param user_email: str, The currently logged in user's email.
+    :param is_admin: bool, If the user is an admin
     :return: bool, Whether the user can delete a review or not.
     """
-    return review["user_email"] == user_email
+    return is_admin or review["user_email"] == user_email
 
 
 def validate_review_post_request(request_data, reviewable_courses, email):
