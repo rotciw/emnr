@@ -8,12 +8,13 @@ import { ScoreRadioButtonsBar } from './RadioButtonBar';
 import { getLocalToken } from '../utils/api';
 import Dropdown from 'react-dropdown';
 import { RateCourseButton } from './RateCourseButton';
+import { ModalXButton } from 'styles/Buttons';
+import { GlobalStateContext } from 'context/GlobalStateContext';
 
 interface ReviewFormProps {
   closeModal: () => void;
   courseName: string;
   courseCode: string;
-  reviewSent: (value: boolean) => void;
 }
 
 const TextInput = styled.textarea`
@@ -34,12 +35,6 @@ const BoldInputDescription = styled.p`
   color: ${({ theme }) => theme.darkBlue};
 `;
 
-const ModalXButton = styled.span`
-  font-size: 1.5em;
-  margin-top: -5px;
-  cursor: pointer;
-`;
-
 const options = [
   { value: '-1', label: 'Ingen svar' },
   { value: '0', label: 'Lav' },
@@ -51,19 +46,16 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   closeModal,
   courseName,
   courseCode,
-  reviewSent,
 }) => {
   const [scoreValue, setScoreValue] = useState<number>(-1);
   const [difficultyValue, setDifficultyValue] = useState<number>(-1);
   const [workloadValue, setWorkloadValue] = useState<number>(-1);
   const [reviewText, setReviewText] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [postedReview, setPostedReview] = useState<boolean>(false);
+  const { refreshProvider } = useContext(GlobalStateContext)!;
 
   const postReview = async () => {
     setLoading(true);
-    setPostedReview(!postedReview);
-    reviewSent(!postedReview);
     const token = getLocalToken();
     axios.defaults.headers.common.Authorization = `${token}`;
     await axios
@@ -74,14 +66,15 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         difficulty: difficultyValue,
         reviewText,
       })
-      .then(function (response) {
-        return response.data;
+      .then(() => {
+        refreshProvider.setPostReviewHaveRefreshed(
+          !refreshProvider.postReviewHaveRefreshed,
+        );
+        setLoading(false);
+
+        closeModal();
       })
-      .catch(function (error) {
-        console.log(error);
-      });
-    setLoading(false);
-    closeModal();
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -93,7 +86,11 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       <BoldTitle>{courseName}</BoldTitle>
       <HrLine margin='15px 0 0 0' />
       <BoldInputDescription>Totalvurdering: *</BoldInputDescription>
-      <ScoreRadioButtonsBar radioID='reviewScore' valueSetter={setScoreValue} valueVariable={-1}/>
+      <ScoreRadioButtonsBar
+        radioID='reviewScore'
+        valueSetter={setScoreValue}
+        valueVariable={-1}
+      />
       <InputDescription>Arbeidsmengde:</InputDescription>
       <Dropdown
         options={options}

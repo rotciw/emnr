@@ -55,12 +55,6 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
     setModalIsOpen(!modalIsOpen);
   }
 
-  const [postedReview, setPostedReview] = useState<boolean>(false);
-
-  const handleSentReview = (value: boolean) => {
-    setPostedReview(value);
-  };
-
   Modal.setAppElement('#root');
 
   useEffect(() => {
@@ -138,7 +132,6 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
                 loading={false}
                 onClickFunction={toggleModalIsOpen}
                 courseCode={courseCode}
-                postedReview={postedReview}
               />
               <Modal
                 isOpen={modalIsOpen}
@@ -150,7 +143,6 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
                   courseName={courseInfo.course_name}
                   courseCode={courseInfo.course_code}
                   closeModal={toggleModalIsOpen}
-                  reviewSent={(value: boolean) => handleSentReview(value)}
                 />
               </Modal>
             </FlexItem>
@@ -183,7 +175,6 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
         limitReviews={limitReviews}
         scoreAvgSetter={setScoreAvg}
         numberOfReviewSetter={setNumberOfReviews}
-        postedReview={postedReview}
         difficultyAvgSetter={setDifficultyAvg}
         workloadAvgSetter={setWorkloadAvg}
       />

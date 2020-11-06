@@ -4,17 +4,11 @@ import { FlexContainer, HrLine } from 'styles/Containers';
 import { Title, BoldTitle, ExtraBold } from 'styles/Text';
 import { SortFactor } from './SortFactor';
 import { GlobalStateContext } from 'context/GlobalStateContext';
-import { ResetButton, SortButton } from 'styles/Buttons';
+import { ResetButton, SortButton, ModalXButton } from 'styles/Buttons';
 
 interface AdvancedSortFormProps {
   closeModal: () => void;
 }
-
-const ModalXButton = styled.span`
-  font-size: 1.5em;
-  margin-top: -5px;
-  cursor: pointer;
-`;
 
 const AdvancedSortForm: React.FC<AdvancedSortFormProps> = ({ closeModal }) => {
   const { advancedQueryProvider } = useContext(GlobalStateContext)!;

@@ -1,40 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { getLocalToken } from 'utils/api';
 import API_URL from 'config';
 import { PulseLoader } from 'react-spinners';
+import {
+  RedButton,
+  DisabledRedButton,
+  TooltipButtonContainer,
+} from 'styles/Buttons';
+import { GlobalStateContext } from 'context/GlobalStateContext';
 
 interface RateCourseButtonProps {
   onClickFunction: () => void;
   courseCode: string;
   loading: boolean;
-  postedReview?: boolean;
 }
-
-export const TooltipButtonContainer = styled.div`
-  position: relative;
-  display: flex;
-`;
-
-export const RateButton = styled.div`
-  background-color: ${({ theme }) => theme.red};
-  padding: 10px 20px;
-  color: ${({ theme }) => theme.white};
-  border: 1px solid black;
-  width: fit-content;
-  font-family: gilroyxbold;
-  cursor: pointer;
-  @media (max-width: 576px) {
-    font-size: 14px;
-  }
-`;
-
-export const DisabledRateButton = styled(RateButton)`
-  background-color: #aaa;
-  border: 1px solid #aaa;
-  z-index: -1;
-`;
 
 export const TooltipText = styled.div`
   font-size: 0.7em;
@@ -59,10 +40,13 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
   onClickFunction,
   courseCode,
   loading,
-  postedReview,
 }) => {
   const [reviewEligibility, setReviewEligibility] = useState<number>(1);
-  const [courseButtonLoading, setCourseButtonLoading] = useState<boolean>(loading);
+  const [courseButtonLoading, setCourseButtonLoading] = useState<boolean>(
+    loading,
+  );
+
+  const { refreshProvider } = useContext(GlobalStateContext)!;
 
   // TODO: move axios config (ref Casper code review comment @ !PR19)
   axios.defaults.headers.common.Authorization = `${getLocalToken()}`;
@@ -85,22 +69,22 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
     return () => {
       isCancelled = true;
     };
-  }, [loading, postedReview]);
+  }, [loading, refreshProvider.postReviewHaveRefreshed]);
 
   let content;
 
   switch (reviewEligibility) {
     case 0:
       content = (
-        <RateButton onClick={() => onClickFunction()}>
+        <RedButton onClick={() => onClickFunction()}>
           Vurder {courseCode}
-        </RateButton>
+        </RedButton>
       );
       break;
     case 1:
       content = (
         <TooltipButtonContainer>
-          <DisabledRateButton>Vurder {courseCode}</DisabledRateButton>
+          <DisabledRedButton>Vurder {courseCode}</DisabledRedButton>
           <TooltipText>Du har ikke fullført dette emnet</TooltipText>
         </TooltipButtonContainer>
       );
@@ -108,7 +92,7 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
     case 2:
       content = (
         <TooltipButtonContainer>
-          <DisabledRateButton>Vurder {courseCode}</DisabledRateButton>
+          <DisabledRedButton>Vurder {courseCode}</DisabledRedButton>
           <TooltipText>Du har allerede vurdert dette emnet</TooltipText>
         </TooltipButtonContainer>
       );
@@ -116,7 +100,7 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
     case 3:
       content = (
         <TooltipButtonContainer>
-          <DisabledRateButton>Vurder {courseCode}</DisabledRateButton>
+          <DisabledRedButton>Vurder {courseCode}</DisabledRedButton>
           <TooltipText>Noe gikk galt med brukerautentiseringen</TooltipText>
         </TooltipButtonContainer>
       );
@@ -124,7 +108,7 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
     case 4:
       content = (
         <TooltipButtonContainer>
-          <DisabledRateButton>Vurder {courseCode}</DisabledRateButton>
+          <DisabledRedButton>Vurder {courseCode}</DisabledRedButton>
           <TooltipText>Du har blitt utestengt fra å vurdere emner</TooltipText>
         </TooltipButtonContainer>
       );
@@ -138,9 +122,9 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
   return (
     <>
       {courseButtonLoading ? (
-        <DisabledRateButton>
+        <DisabledRedButton>
           <PulseLoader color='#FFF' size='10px' />
-        </DisabledRateButton>
+        </DisabledRedButton>
       ) : (
         <div>{content}</div>
       )}

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { FlexContainer, FlexItem, HrLine } from 'styles/Containers';
 import { ExtraBold } from 'styles/Text';
+import DeleteReview from 'components/DeleteReview';
 
 interface ReviewProps {
   name: string;
@@ -11,6 +12,9 @@ interface ReviewProps {
   difficulty: number | string | void;
   text: string;
   date: string;
+  canDelete: boolean;
+  userEmail: string;
+  courseCode: string;
 }
 
 const ReviewContainer = styled.div`
@@ -26,6 +30,13 @@ const ScoreDateContainer = styled.div`
   justify-content: space-between;
   display: flex;
   padding: 0 0 10px 0;
+`;
+
+const OptionContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin: 0 10px 0 0;
 `;
 
 const MainMetric = styled.div`
@@ -59,6 +70,9 @@ const Review: React.FC<ReviewProps> = ({
   difficulty = -1,
   text,
   date,
+  canDelete,
+  userEmail,
+  courseCode,
 }) => {
   const dateObject = new Date(date);
   let europeanDate = `${dateObject.getDate()}/${
@@ -124,6 +138,16 @@ const Review: React.FC<ReviewProps> = ({
         <FlexContainer width='100%'>
           <CommentText>{text}</CommentText>
         </FlexContainer>
+        <OptionContainer>
+          {canDelete ? (
+            <DeleteReview
+              courseCode={courseCode}
+              userEmail={userEmail}
+            />
+          ) : (
+            <></>
+          )}
+        </OptionContainer>
       </FlexItem>
     </ReviewContainer>
   );

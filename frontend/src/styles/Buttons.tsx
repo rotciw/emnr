@@ -51,7 +51,7 @@ export const NavbarButton = styled.button`
   outline: none;
   flex: 1;
   :hover {
-    background-color: ${({ theme }) => theme.lightBlue};
+    background-color: ${({ theme }) => theme.lightlightBlue};
     color: ${({ theme }) => theme.darkBlue};
   }
   @media (max-width: 768px) {
@@ -77,6 +77,7 @@ export const SortHighLowButton = styled.button`
   :hover {
     background-color: ${({ theme }) => theme.lightlightBlue};
     color: ${({ theme }) => theme.darkBlue};
+    border: solid 2px ${({ theme }) => theme.lightlightBlue};
   }
 `;
 
@@ -133,3 +134,37 @@ export const CourseButton: React.FC<ButtonProps> = ({
 }) => {
   return <StyledCourseBtn onClick={clickHandler}>{children}</StyledCourseBtn>;
 };
+
+export const ModalXButton = styled.span`
+  font-size: 1.5em;
+  margin-top: -5px;
+  cursor: pointer;
+  :hover {
+    color: ${({theme}) => theme.red};
+  }
+`;
+
+export const RedButton = styled.div`
+  background-color: ${({ theme }) => theme.red};
+  padding: 10px 20px;
+  color: ${({ theme }) => theme.white};
+  border: 1px solid black;
+  width: fit-content;
+  font-family: gilroyxbold;
+  cursor: pointer;
+  @media (max-width: 576px) {
+    font-size: 14px;
+  }
+`;
+
+export const TooltipButtonContainer = styled.div`
+  position: relative;
+  display: flex;
+`;
+
+
+export const DisabledRedButton = styled(RedButton)`
+  background-color: #aaa;
+  border: 1px solid #aaa;
+  z-index: -1;
+`;
