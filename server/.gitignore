@@ -89,6 +89,9 @@ celerybeat-schedule
 # Admins file
 .admins
 
+# User blacklist file
+.bannedusers
+
 # virtualenv
 .venv
 venv/
