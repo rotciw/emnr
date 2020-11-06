@@ -12,7 +12,7 @@ interface CourseProps {
   averageGrade: number;
   passRate: number;
   credit: number;
-  advancedSortingMatch: number,
+  advancedSortingMatch: number;
   sortingParam: string;
 }
 
@@ -29,16 +29,17 @@ const Course: React.FC<CourseProps> = ({
 }) => {
   let paramMetric: String = '';
 
+  let listOfSubReviewText = [
+    'course_code',
+    'course_name',
+    'average_review_score',
+    'review_count',
+  ];
+
   switch (sortingParam) {
     case 'course_code':
-      paramMetric = '';
-      break;
     case 'course_name':
-      paramMetric = '';
-      break;
     case 'average_review_score':
-      paramMetric = String(averageReviewScore.toFixed(1)) + ' / 5';
-      break;
     case 'review_count':
       paramMetric = String(averageReviewScore.toFixed(1)) + ' / 5';
       break;
@@ -52,7 +53,7 @@ const Course: React.FC<CourseProps> = ({
       paramMetric = String((100 - passRate).toFixed(2));
       break;
     case 'advanced_sorting_score':
-      paramMetric = String((advancedSortingMatch).toFixed(1)) + '%';
+      paramMetric = String(advancedSortingMatch.toFixed(1)) + '%';
       break;
     default:
       paramMetric = 'X';
@@ -70,8 +71,7 @@ const Course: React.FC<CourseProps> = ({
             </CourseItemText>
             <FlexColumn width='25%'>
               <CourseItemText>{paramMetric}</CourseItemText>
-              {(sortingParam === 'average_review_score' ||
-                sortingParam === 'review_count') && (
+              {listOfSubReviewText.indexOf(sortingParam) > -1 && (
                 <CourseItemSubtext>
                   {reviewCount}{' '}
                   {reviewCount === 1 ? 'vurdering' : 'vurderinger'}
