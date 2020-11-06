@@ -8,6 +8,7 @@ from review.views import check_if_is_admin, get_user_full_name_and_email
 from review.models import Review
 from course.models import Course
 from auth.models import UserAuth
+from .models import BannedUser
 
 
 @api_view(["DELETE"])
@@ -41,16 +42,12 @@ def delete_user(request):
     if passed_email is None:
         return Response("No user email provided", status=400)
 
-    # Check if blacklist file exists. If it does, check if the user to be banned is already banned.
-    if Path(".bannedusers").exists():
-        with open(".bannedusers", "r") as blacklist_file:
-            banned_users = list(map(lambda raw_line: raw_line.strip(), blacklist_file.readlines()))
-        if passed_email in banned_users:
-            return Response("User is already banned.", status=200)
+    # Check if the user to be banned is already banned.
+    if BannedUser.objects.filter(user_email=passed_email).exists():
+        return Response("User is already banned.", status=200)
 
-    # Add passed email to blacklist file
-    with open(".bannedusers", "a") as blacklist_file:
-        blacklist_file.write(passed_email + "\n")
+    # Add passed email to blacklist
+    BannedUser(user_email=passed_email).save()
 
     # Delete all reviews belonging to the deleted user, and update the statistics of the related courses
     user_reviews = Review.objects.filter(user_email=passed_email)
