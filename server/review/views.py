@@ -8,6 +8,7 @@ from course.views import retrieve_courses_from_token, get_current_semester, perf
 from auth.models import UserAuth
 from .models import Review
 from course.models import Course
+from user.models import AdminUser
 from django.db.models import Avg
 
 
@@ -211,16 +212,11 @@ def get_course_code_parameter(request):
 
 def check_if_is_admin(user_email):
     """
-    Checks if the currently logged in user is an admin (based on the .admins file).
+    Checks if the currently logged in user is an admin (based on the AdminUser table).
     :param user_email: str, Email of the logged in user.
     :return: bool, Whether the user is an admin.
     """
-    try:
-        with open(".admins", "r") as admin_file:
-            admins = json.load(admin_file)
-    except FileNotFoundError:
-        return False
-    return user_email in admins
+    return AdminUser.objects.filter(user_email=user_email).exists()
 
 
 def check_if_can_delete(review, user_email, is_admin):
