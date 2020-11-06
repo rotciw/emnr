@@ -50,13 +50,26 @@ def delete_user(request):
     BannedUser(user_email=passed_email).save()
 
     # Delete all reviews belonging to the deleted user, and update the statistics of the related courses
+    delete_all_reviews_for_user(passed_email)
+
+    # Return a 200 indicating that the user is successfully banned
+    return Response("User successfully banned, with all reviews deleted.", status=200)
+
+
+def delete_all_reviews_for_user(passed_email):
+    """
+    Helper method for deleting all reviews with user_email = passed_email. Also updates the review statistics for
+    the affected courses.
+    """
+    # Delete all reviews
     user_reviews = Review.objects.filter(user_email=passed_email)
     affected_courses = []
     for review in user_reviews:
         affected_courses.append(review.course_code)
         review.delete()
-
     affected_courses = list(set(affected_courses))  # Remove duplicates from affected courses
+
+    # Update affected courses
     for course_code in affected_courses:
         course_qs = Course.objects.filter(course_code=course_code)
         review_qs = Review.objects.filter(course_code=course_code)
@@ -72,9 +85,6 @@ def delete_user(request):
 
         # Update average workload
         course_qs.update(average_workload=get_avg_or_default(review_qs.filter(workload__gt=-1), "workload", -1))
-
-    # Return a 200 indicating that the user is successfully banned
-    return Response("User successfully banned, with all reviews deleted.", status=200)
 
 
 def get_avg_or_default(queryset, field, default=0):
