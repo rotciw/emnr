@@ -45,10 +45,11 @@ export const CourseList: React.FC = () => {
   let useAdvancedSorting = advancedQueryProvider.advancedSorting;
   // Sorting dropdown
   let orderByQuery: string;
-  useAdvancedSorting ? (orderByQuery = 'advanced_sorting_score') 
+  useAdvancedSorting
+    ? (orderByQuery = 'advanced_sorting_score')
     : queryProvider.orderByQuery
-      ? (orderByQuery = queryProvider.orderByQuery)
-      : (orderByQuery = 'review_count');
+    ? (orderByQuery = queryProvider.orderByQuery)
+    : (orderByQuery = 'review_count');
 
   let orderToggle: number;
 
@@ -58,11 +59,7 @@ export const CourseList: React.FC = () => {
       orderByText = 'Antall vurderinger';
       break;
     case 'course_code':
-      orderByText = 'Emnekode';
-      break;
     case 'course_name':
-      orderByText = 'Emnenavn';
-      break;
     case 'average_review_score':
       orderByText = 'Gjennomsnittlig vurdering';
       break;
@@ -158,7 +155,9 @@ export const CourseList: React.FC = () => {
                       averageGrade={currentCourse.average_grade}
                       passRate={currentCourse.pass_rate}
                       credit={currentCourse.credit}
-                      advancedSortingMatch={currentCourse.advanced_sorting_score}
+                      advancedSortingMatch={
+                        currentCourse.advanced_sorting_score
+                      }
                       sortingParam={orderByQuery}
                     />
                   );

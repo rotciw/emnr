@@ -10,7 +10,10 @@ import 'react-dropdown/style.css';
 import '../utils/dropdown.css';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { Menu } from './Menu';
-import { NavbarButton, NavbarRemoveButton } from 'styles/Buttons';
+import {
+  NavbarButton,
+  SortHighLowButton,
+} from 'styles/Buttons';
 import AdvancedSortForm from './AdvancedSortForm';
 
 const NavBarContainer = styled.nav`
@@ -95,8 +98,10 @@ const Navbar: React.FC = () => {
 
   const onSelect = (e: Option) => {
     queryProvider.setOrderByQuery(e.value);
+  };
+
+  const onOrderToggle = () => {
     queryProvider.setOrderToggle(!queryProvider.orderToggle);
-    queryProvider.orderToggle ? (e.label += ` \u25BC`) : (e.label += ` \u25B2`);
   };
 
   return (
@@ -121,23 +126,17 @@ const Navbar: React.FC = () => {
               <Dropdown
                 options={options}
                 onChange={(e) => onSelect(e)}
-                placeholder='Sorter etter..'
+                placeholder='Sorter..'
                 disabled={advancedQueryProvider.advancedSorting}
               />
             </DropdownContainer>
+            <SortHighLowButton onClick={onOrderToggle}>
+              {(queryProvider.orderToggle ? 'Stigende' : 'Synkende') + ` \u21C5`}
+            </SortHighLowButton>
             <NavBarButtonContainer>
               <NavbarButton onClick={toggleModalIsOpen}>
                 EMNR-sortering
               </NavbarButton>
-              {advancedQueryProvider.advancedSorting && (
-                <NavbarRemoveButton
-                  onClick={(e) => {
-                    advancedQueryProvider.setAdvancedSorting(false);
-                  }}
-                >
-                  Avslutt EMNR-sortering
-                </NavbarRemoveButton>
-              )}
             </NavBarButtonContainer>
           </SortingContainer>
         </>
