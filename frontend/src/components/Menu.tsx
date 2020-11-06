@@ -114,6 +114,7 @@ export const Menu: React.FC = () => {
   const history = useHistory();
   const handleOnClick = useCallback(() => history.push('/'), [history]);
   const handleClickMe = useCallback(() => history.push('/me'), [history]);
+  const handleClickAbout = useCallback(() => history.push('/about'), [history]);
   const handleClickLogOut = useCallback(() => {
     history.push('/login');
     localStorage.clear();
@@ -123,18 +124,18 @@ export const Menu: React.FC = () => {
     <div ref={node}>
       <StyledMenu open={open}>
         <FlexContainer>
-          <Icon src={homeIcon} />
+          <Icon src={homeIcon} alt='Home icon' />
           <StyledLink onClick={handleOnClick}>Gå til forsiden</StyledLink>
         </FlexContainer>
 
         <FlexContainer>
-          <Icon src={meIcon} />
+          <Icon src={meIcon} alt='Me icon' />
           <StyledLink onClick={handleClickMe}>Gå til min side</StyledLink>
         </FlexContainer>
 
         <FlexContainer>
-          <Icon src={infoIcon} />
-          <StyledLink onClick={() => close()}>Om EMNR</StyledLink>
+          <Icon src={infoIcon} alt='Info icon' />
+          <StyledLink onClick={handleClickAbout}>Om EMNR</StyledLink>
         </FlexContainer>
 
         <HrLineLightScaled />

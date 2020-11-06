@@ -102,7 +102,7 @@ const Navbar: React.FC = () => {
   return (
     <NavBarContainer>
       <TopRow>
-        <Logo src={emnrLogo} onClick={handleOnClick} />
+        <Logo src={emnrLogo} onClick={handleOnClick} alt='Logo' />
         <Menu />
       </TopRow>
       {isOnLandingPage && (
