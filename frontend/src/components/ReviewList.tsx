@@ -6,6 +6,7 @@ import API_URL from 'config';
 import Review from './Review';
 import { EmptyResult } from './CourseList';
 import Loading from './Loading';
+import { Pagination } from 'components/pagination/Pagination';
 
 const Wrapper = styled.div`
   padding: 5px;
@@ -18,7 +19,6 @@ const Wrapper = styled.div`
 
 interface ReviewListProps {
   courseCode: string;
-  pageNumber: number;
   limitReviews: boolean;
   scoreAvgSetter: (value: number) => void;
   numberOfReviewSetter: (value: number) => void;
@@ -41,7 +41,6 @@ interface ReviewProps {
 
 const ReviewList: React.FC<ReviewListProps> = ({
   courseCode,
-  pageNumber,
   limitReviews,
   scoreAvgSetter,
   numberOfReviewSetter,
@@ -49,12 +48,11 @@ const ReviewList: React.FC<ReviewListProps> = ({
   workloadAvgSetter,
 }) => {
   const [reviews, updateReviews] = useState<ReviewProps[]>([]);
-  const { pageReviewProvider, refreshProvider } = useContext(
-    GlobalStateContext,
-  )!;
+  const { pageProvider, refreshProvider } = useContext(GlobalStateContext)!;
   const [loading, setLoading] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
+  let pageNumber = pageProvider.page;
   const resultLimit = 5;
   let start = (pageNumber - 1) * resultLimit;
 
@@ -76,17 +74,19 @@ const ReviewList: React.FC<ReviewListProps> = ({
           if (!isCancelled) {
             updateReviews(res.data.data);
             setIsAdmin(res.data.is_admin);
-            pageReviewProvider.setTotalPageReview(
-              Math.ceil(reviews.length / resultLimit),
-            );
+            pageProvider.setTotalPage(Math.ceil(res.data.count / resultLimit));
             scoreAvgSetter(
               res.data.average_score != null ? res.data.average_score : 0,
             );
             difficultyAvgSetter(
-              res.data.average_difficulty != null ? res.data.average_difficulty : -1
+              res.data.average_difficulty != null
+                ? res.data.average_difficulty
+                : -1,
             );
             workloadAvgSetter(
-              res.data.average_workload != null ? res.data.average_workload : -1
+              res.data.average_workload != null
+                ? res.data.average_workload
+                : -1,
             );
             setLoading(false);
           }
@@ -139,6 +139,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
                   />
                 );
               })}
+              <Pagination />
             </div>
           ) : (
             <EmptyResult>Ingen vurderinger av {courseCode}. </EmptyResult>

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import Modal from 'react-modal';
 import Layout from 'styles/Layout';
@@ -17,7 +17,6 @@ import { defaultTheme } from 'styles/theme';
 import axios from 'axios';
 import ReviewList from 'components/ReviewList';
 import ReviewForm from 'components/ReviewForm';
-import { GlobalStateContext } from 'context/GlobalStateContext';
 import modalStyles from 'styles/Modals';
 import API_URL from 'config';
 import CourseInfoBox from 'components/CourseInfoBox';
@@ -32,7 +31,6 @@ interface CourseViewProps {
 }
 
 const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
-  const { pageReviewProvider } = useContext(GlobalStateContext)!;
 
   const courseCode: string = useLocation().pathname.substr(8);
   const [courseInfo, setCourseInfo] = useState<any>({});
@@ -49,7 +47,9 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [limitReviews, setLimitReviews] = useState<boolean>(localStorage.getItem('seeOnlyOwnProgrammeReviews') === 'true');
+  const [limitReviews, setLimitReviews] = useState<boolean>(
+    localStorage.getItem('seeOnlyOwnProgrammeReviews') === 'true',
+  );
 
   function toggleModalIsOpen() {
     setModalIsOpen(!modalIsOpen);
@@ -161,17 +161,23 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
       )}
       <HrLine />
       {(numberOfReviews > 0 || limitReviews) && (
-        <FlexContainer margin='0 0 0 5px'>
+        <FlexContainer margin='0 0 5px 5px'>
           <SubTitle fontSize='0.9em'>Mitt studieprogram:</SubTitle>
-          <Checkbox type='checkbox' checked={limitReviews} onChange={() => {
-            setLimitReviews(!limitReviews);
-            localStorage.setItem('seeOnlyOwnProgrammeReviews',String(!limitReviews));
-          }} />
+          <Checkbox
+            type='checkbox'
+            checked={limitReviews}
+            onChange={() => {
+              setLimitReviews(!limitReviews);
+              localStorage.setItem(
+                'seeOnlyOwnProgrammeReviews',
+                String(!limitReviews),
+              );
+            }}
+          />
         </FlexContainer>
       )}
       <ReviewList
         courseCode={courseCode}
-        pageNumber={pageReviewProvider.pageReview}
         limitReviews={limitReviews}
         scoreAvgSetter={setScoreAvg}
         numberOfReviewSetter={setNumberOfReviews}
