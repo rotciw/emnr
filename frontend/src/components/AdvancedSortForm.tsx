@@ -84,7 +84,7 @@ const AdvancedSortForm: React.FC<AdvancedSortFormProps> = ({ closeModal }) => {
         <ModalXButton onClick={closeModal}>&#10006;</ModalXButton>
       </FlexContainer>
       <HrLine margin='5px 0 15px 0' />
-      <p>Hvor viktig det er at?</p>
+      <p>Hvor viktig er det at..?</p>
 
       <SortFactor
         setDirectionFunction={setScoreHighState}
