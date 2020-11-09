@@ -43,7 +43,7 @@ export const PaginationComponent: React.FC = () => {
           <PaginationButton pageNumber={page + 2}>{page + 2}</PaginationButton>
         )}
         {page < totalPages - 2 && <Separator>...</Separator>}
-        {page !== 1 && (
+        {totalPages !== 1 && (
           <PaginationButton pageNumber={totalPages}>
             {totalPages}
           </PaginationButton>
