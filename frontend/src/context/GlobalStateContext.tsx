@@ -4,7 +4,6 @@ interface GlobalStateContextProps {
   authProvider: AuthProviderValue;
   userProvider: UserProviderValue;
   pageProvider: PageProviderValue;
-  pageReviewProvider: PageReviewProviderValue;
   queryProvider: QueryProviderValue;
   advancedQueryProvider: AdvancedQueryProviderValue;
   refreshProvider: RefreshProviderValue;
@@ -34,13 +33,6 @@ interface QueryProviderValue {
   setOrderByQuery: (val: string) => void;
   orderToggle: boolean;
   setOrderToggle: (val: boolean) => void;
-}
-
-interface PageReviewProviderValue {
-  pageReview: number;
-  setPageReview: (val: number) => void;
-  totalPageReview: number;
-  setTotalPageReview: (val: number) => void;
 }
 
 interface AdvancedQueryProviderValue {
@@ -92,8 +84,6 @@ const GlobalStateProvider: React.FC = ({ children }) => {
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
-  const [pageReview, setPageReview] = useState<number>(1);
-  const [totalPageReview, setTotalPageReview] = useState<number>(1);
   const [orderByQuery, setOrderByQuery] = useState<string | null>(null);
   const [orderToggle, setOrderToggle] = useState(false);
 
@@ -124,10 +114,6 @@ const GlobalStateProvider: React.FC = ({ children }) => {
   const pageProvider = useMemo(
     () => ({ page, setPage, totalPage, setTotalPage }),
     [page, setPage, totalPage, setTotalPage],
-  );
-  const pageReviewProvider = useMemo(
-    () => ({ pageReview, setPageReview, totalPageReview, setTotalPageReview }),
-    [pageReview, setPageReview, totalPageReview, setTotalPageReview],
   );
   const queryProvider = useMemo(
     () => ({
@@ -223,7 +209,6 @@ const GlobalStateProvider: React.FC = ({ children }) => {
         authProvider,
         userProvider,
         pageProvider,
-        pageReviewProvider,
         queryProvider,
         advancedQueryProvider,
         refreshProvider,
