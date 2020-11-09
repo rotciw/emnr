@@ -17,7 +17,6 @@ import { defaultTheme } from 'styles/theme';
 import axios from 'axios';
 import ReviewList from 'components/ReviewList';
 import ReviewForm from 'components/ReviewForm';
-import { GlobalStateContext } from 'context/GlobalStateContext';
 import modalStyles from 'styles/Modals';
 import API_URL from 'config';
 import CourseInfoBox from 'components/CourseInfoBox';
