@@ -51,14 +51,15 @@ const ReviewList: React.FC<ReviewListProps> = ({
   const { pageProvider, refreshProvider } = useContext(GlobalStateContext)!;
   const [loading, setLoading] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [numberOfReviews, setNumberOfReviews] = useState<number>(0);
 
   let pageNumber = pageProvider.page;
   const resultLimit = 5;
   let start = (pageNumber - 1) * resultLimit;
 
   useEffect(() => {
-    numberOfReviewSetter(reviews.length);
-  }, [reviews]);
+    numberOfReviewSetter(numberOfReviews);
+  }, [numberOfReviews]);
 
   useEffect(() => {
     let isCancelled = false;
@@ -75,6 +76,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
             updateReviews(res.data.data);
             setIsAdmin(res.data.is_admin);
             pageProvider.setTotalPage(Math.ceil(res.data.count / resultLimit));
+            setNumberOfReviews(res.data.count);
             scoreAvgSetter(
               res.data.average_score != null ? res.data.average_score : 0,
             );
