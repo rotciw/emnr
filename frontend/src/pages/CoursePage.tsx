@@ -161,7 +161,7 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
       )}
       <HrLine />
       {(numberOfReviews > 0 || limitReviews) && (
-        <FlexContainer margin='0 0 5px 5px'>
+        <FlexContainer margin='0 0 0 5px'>
           <SubTitle fontSize='0.9em'>Mitt studieprogram:</SubTitle>
           <Checkbox
             type='checkbox'

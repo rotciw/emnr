@@ -23,7 +23,7 @@ const ReviewContainer = styled.div`
   background-color: ${({ theme }) => theme.white};
   border: 1px solid ${({ theme }) => theme.black};
   display: flex;
-  margin: 0 0 4vh 0;
+  margin: 2vh 0 2vh 0;
   padding: 12px 3% 12px 3%;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
