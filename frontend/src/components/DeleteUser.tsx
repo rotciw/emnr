@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import TrashIcon from 'assets/icons/trash.svg';
+import DeleteUserIcon from 'assets/icons/deleteUser.svg';
 import Modal from 'react-modal';
 import modalStyles from 'styles/Modals';
 import { FlexContainer, HrLine } from 'styles/Containers';
@@ -12,8 +12,8 @@ import { PulseLoader } from 'react-spinners';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 
 const TrashBtn = styled.img`
-  width: 20px;
-  margin-left: 15px;
+  width: 25px;
+  margin-left: auto;
   cursor: pointer;
   :hover {
     filter: invert(48%) sepia(96%) saturate(3381%) hue-rotate(328deg)
@@ -22,11 +22,10 @@ const TrashBtn = styled.img`
 `;
 
 interface ReviewProps {
-  courseCode: string;
   userEmail: string;
 }
 
-const DeleteReview: React.FC<ReviewProps> = ({ courseCode, userEmail }) => {
+const DeleteUser: React.FC<ReviewProps> = ({ userEmail }) => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -40,9 +39,7 @@ const DeleteReview: React.FC<ReviewProps> = ({ courseCode, userEmail }) => {
     let isCancelled = false;
     setLoading(true);
     await axios
-      .delete(
-        `${API_URL}/review/delete/?courseCode=${courseCode}&userEmail=${userEmail}`,
-      )
+      .delete(`${API_URL}/user/delete/?userEmail=${userEmail}`)
       .then(() => {
         if (!isCancelled) {
           refreshProvider.setDeleteReviewHaveRefreshed(
@@ -66,14 +63,17 @@ const DeleteReview: React.FC<ReviewProps> = ({ courseCode, userEmail }) => {
         isOpen={modalIsOpen}
         onRequestClose={toggleModalIsOpen}
         style={modalStyles}
-        contentLabel='Delete Review Modal'
+        contentLabel='Delete User Modal'
       >
         <FlexContainer style={{ justifyContent: 'space-between' }}>
-          <BoldTitle margin='0 0 5px 0'>Slett anmeldelsen</BoldTitle>
+          <BoldTitle margin='0 0 5px 0'>Slett brukeren</BoldTitle>
           <ModalXButton onClick={toggleModalIsOpen}>&#10006;</ModalXButton>
         </FlexContainer>
         <HrLine margin='5px 0 15px 0' />
-        <p>Denne anmeldelsen vil bli slettet.</p>
+        <p>
+          Alle anmeldelsene til bruker <b>{userEmail}</b> vil bli slettet, og
+          vil ikke få mulighet til å legge til flere anmeldelser.
+        </p>
         <p>Er du sikker? Denne handlingen kan ikke bli reversert.</p>
 
         {loading ? (
@@ -84,9 +84,9 @@ const DeleteReview: React.FC<ReviewProps> = ({ courseCode, userEmail }) => {
           <RedButton onClick={deleteReview}>Ja, jeg er sikker</RedButton>
         )}
       </Modal>
-      <TrashBtn src={TrashIcon} onClick={toggleModalIsOpen} />
+      <TrashBtn src={DeleteUserIcon} onClick={toggleModalIsOpen} />
     </>
   );
 };
 
-export default DeleteReview;
+export default DeleteUser;

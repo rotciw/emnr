@@ -8,7 +8,7 @@ import { ScoreRadioButtonsBar } from './RadioButtonBar';
 import { getLocalToken } from '../utils/api';
 import Dropdown from 'react-dropdown';
 import { RateCourseButton } from './RateCourseButton';
-import { ModalXButton } from 'styles/Buttons';
+import { ModalXButton, DisabledRedButton } from 'styles/Buttons';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 
 interface ReviewFormProps {
@@ -110,13 +110,17 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         maxLength={750}
         onChange={(e) => setReviewText(e.target.value)}
       />
-      <RateCourseButton
-        loading={loading}
-        onClickFunction={postReview}
-        courseCode={courseCode}
-      >
-        Send inn
-      </RateCourseButton>
+      {scoreValue === -1 ? (
+        <DisabledRedButton>Mangler totalvurdering</DisabledRedButton>
+      ) : (
+        <RateCourseButton
+          loading={loading}
+          onClickFunction={postReview}
+          courseCode={courseCode}
+        >
+          Send inn
+        </RateCourseButton>
+      )}
     </div>
   );
 };
