@@ -53,7 +53,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
     GlobalStateContext,
   )!;
   const [loading, setLoading] = useState<boolean>(false);
-  const [isReviewDeleted, setReviewDeleted] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const resultLimit = 5;
   let start = (pageNumber - 1) * resultLimit;
@@ -75,6 +75,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
         .then((res) => {
           if (!isCancelled) {
             updateReviews(res.data.data);
+            setIsAdmin(res.data.is_admin);
             pageReviewProvider.setTotalPageReview(
               Math.ceil(reviews.length / resultLimit),
             );
@@ -131,6 +132,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
                     difficulty={currentReview.difficulty}
                     text={currentReview.review_text}
                     date={currentReview.date}
+                    isAdmin={isAdmin}
                     canDelete={currentReview.can_delete}
                     userEmail={currentReview.user_email}
                     courseCode={currentReview.course_code}
