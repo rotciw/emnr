@@ -67,9 +67,10 @@ export const NavbarRemoveButton = styled(NavbarButton)`
 export const SortHighLowButton = styled.button`
   color: ${({ theme }) => theme.black};
   background-color: ${({ theme }) => theme.lightBlue};
-  border: solid 2px ${({ theme }) => theme.lightBlue};
+  border: none;
   border-radius: 3px;
   font-family: gilroylight;
+  margin: 0;
   padding: 4px 4px;
   cursor: pointer;
   user-select: none;
@@ -77,7 +78,6 @@ export const SortHighLowButton = styled.button`
   :hover {
     background-color: ${({ theme }) => theme.lightlightBlue};
     color: ${({ theme }) => theme.darkBlue};
-    border: solid 2px ${({ theme }) => theme.lightlightBlue};
   }
 `;
 
