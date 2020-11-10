@@ -20,12 +20,14 @@ const SearchInput = styled.input`
   border: none;
   outline: none;
   border-radius: 3px;
+  -webkit-appearance: none; // For removing ios border radius
 
   &::placeholder {
     color: #333;
   }
 
   &:focus {
+    border-radius: 3px;
     box-shadow: 0px 0px 10px 0px rgba(168, 218, 220, 0.7);
   }
 `;

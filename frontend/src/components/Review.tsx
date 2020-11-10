@@ -35,8 +35,6 @@ const ScoreDateContainer = styled.div`
 `;
 
 const OptionContainer = styled.div`
-  display: flex;
-  flex-direction: row;
   margin: 0 10px 0 0;
 `;
 
@@ -141,16 +139,12 @@ const Review: React.FC<ReviewProps> = ({
           <CommentText>{text}</CommentText>
         </FlexContainer>
         <OptionContainer>
-          {isAdmin ? (
-            <DeleteUser userEmail={userEmail} />
-          ) : (
-            <></>
-          )}
           {canDelete ? (
             <DeleteReview courseCode={courseCode} userEmail={userEmail} />
           ) : (
             <></>
           )}
+          {isAdmin ? <DeleteUser userEmail={userEmail} /> : <></>}
         </OptionContainer>
       </FlexItem>
     </ReviewContainer>

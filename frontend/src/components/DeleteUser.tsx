@@ -12,8 +12,8 @@ import { PulseLoader } from 'react-spinners';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 
 const TrashBtn = styled.img`
-  width: 25px;
-  margin-left: auto;
+  width: 28px;
+  float: right;
   cursor: pointer;
   :hover {
     filter: invert(48%) sepia(96%) saturate(3381%) hue-rotate(328deg)
