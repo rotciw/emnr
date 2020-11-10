@@ -10,10 +10,7 @@ import 'react-dropdown/style.css';
 import '../utils/dropdown.css';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { Menu } from './Menu';
-import {
-  NavbarButton,
-  SortHighLowButton,
-} from 'styles/Buttons';
+import { NavbarButton, SortHighLowButton } from 'styles/Buttons';
 import AdvancedSortForm from './AdvancedSortForm';
 
 const NavBarContainer = styled.nav`
@@ -130,10 +127,11 @@ const Navbar: React.FC = () => {
                 disabled={advancedQueryProvider.advancedSorting}
               />
             </DropdownContainer>
-            <NavBarButtonContainer>
             <SortHighLowButton onClick={onOrderToggle}>
-              {(queryProvider.orderToggle ? 'Stigende' : 'Synkende') + ` \u21C5`}
+              {(queryProvider.orderToggle ? 'Stigende' : 'Synkende') +
+                ` \u21C5`}
             </SortHighLowButton>
+            <NavBarButtonContainer>
               <NavbarButton onClick={toggleModalIsOpen}>
                 EMNR-sortering
               </NavbarButton>
