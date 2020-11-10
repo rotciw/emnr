@@ -130,10 +130,10 @@ const Navbar: React.FC = () => {
                 disabled={advancedQueryProvider.advancedSorting}
               />
             </DropdownContainer>
+            <NavBarButtonContainer>
             <SortHighLowButton onClick={onOrderToggle}>
               {(queryProvider.orderToggle ? 'Stigende' : 'Synkende') + ` \u21C5`}
             </SortHighLowButton>
-            <NavBarButtonContainer>
               <NavbarButton onClick={toggleModalIsOpen}>
                 EMNR-sortering
               </NavbarButton>
