@@ -14,6 +14,7 @@ import { GlobalStateContext } from 'context/GlobalStateContext';
 const TrashBtn = styled.img`
   width: 20px;
   margin-left: 15px;
+  float: right;
   cursor: pointer;
   :hover {
     filter: invert(48%) sepia(96%) saturate(3381%) hue-rotate(328deg)
