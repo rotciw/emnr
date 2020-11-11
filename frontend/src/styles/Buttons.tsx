@@ -75,7 +75,12 @@ export const SortHighLowButton = styled.button`
   cursor: pointer;
   user-select: none;
   outline: none;
-  :hover {
+  :disabled {
+    background-color: #BBBBBB;
+    cursor: auto;
+    color: #333333;
+  };
+  :hover !disabled {
     background-color: ${({ theme }) => theme.lightlightBlue};
     color: ${({ theme }) => theme.darkBlue};
   }
