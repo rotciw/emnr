@@ -54,14 +54,15 @@ const ReviewList: React.FC<ReviewListProps> = ({
   const [numberOfReviews, setNumberOfReviews] = useState<number>(0);
 
   let pageNumber = pageProvider.page;
-  const resultLimit = 5;
-  let start = (pageNumber - 1) * resultLimit;
 
   useEffect(() => {
     numberOfReviewSetter(numberOfReviews);
-  }, [numberOfReviews]);
+  }, [numberOfReviews, numberOfReviewSetter]);
 
   useEffect(() => {
+    const resultLimit = 5;
+    let start = (pageNumber - 1) * resultLimit;
+
     let isCancelled = false;
     const getReviews = async () => {
       setLoading(true);
@@ -105,6 +106,11 @@ const ReviewList: React.FC<ReviewListProps> = ({
     refreshProvider.postReviewHaveRefreshed,
     limitReviews,
     refreshProvider.deleteReviewHaveRefreshed,
+    courseCode, 
+    difficultyAvgSetter,
+    pageProvider,
+    scoreAvgSetter,
+    workloadAvgSetter,
   ]);
 
   return (
