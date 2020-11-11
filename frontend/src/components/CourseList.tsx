@@ -63,6 +63,9 @@ export const CourseList: React.FC = () => {
     case 'average_review_score':
       orderByText = 'Gjennomsnittlig vurdering';
       break;
+    case 'review_count':
+      orderByText = 'Antall vurderinger';
+      break;
     case 'credit':
       orderByText = 'Studiepoeng';
       break;
@@ -83,15 +86,15 @@ export const CourseList: React.FC = () => {
   // The backend sorts ascending on 1 and descending on 0
   queryProvider.orderToggle ? (orderToggle = 1) : (orderToggle = 0);
 
+  const resultLimit = 25;
+  let start: number = (pageNumber - 1) * resultLimit;
+
   // this useEffect is used for resetting page number to 1 when searching
   useEffect(() => {
     pageProvider.setPage(1);
-  }, [searchQuery, pageProvider]);
+  }, [searchQuery]);
 
   useEffect(() => {
-    const resultLimit = 25;
-    let start: number = (pageNumber - 1) * resultLimit;
-    
     const getCourses = async () => {
       setLoading(true);
       let fetchURL: string;
@@ -121,8 +124,6 @@ export const CourseList: React.FC = () => {
     orderToggle,
     advancedSortChangedFlag,
     useAdvancedSorting,
-    pageProvider,
-    advancedQueryProvider,
   ]);
 
   return (

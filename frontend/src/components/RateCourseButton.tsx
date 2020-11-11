@@ -69,7 +69,7 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
     return () => {
       isCancelled = true;
     };
-  }, [loading, refreshProvider.postReviewHaveRefreshed, courseCode]);
+  }, [loading, refreshProvider.postReviewHaveRefreshed]);
 
   let content;
 

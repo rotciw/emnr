@@ -29,6 +29,11 @@ const RadioButton = styled.input`
   margin-right: 10px;
 `;
 
+const RadioButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 // Used in review form, does not use variable to temporarily store value, just the radio button element itself
 export const ScoreRadioButtonsBar: React.FC<RadioButtonProps> = ({
   radioID,

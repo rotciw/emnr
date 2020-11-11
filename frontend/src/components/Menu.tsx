@@ -107,6 +107,7 @@ const useOnClickOutside = (
 export const Menu: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const node = useRef<HTMLDivElement>(null);
+  const close = () => setOpen(false);
 
   useOnClickOutside(node, () => setOpen(false));
 

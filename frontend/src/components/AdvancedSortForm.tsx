@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
+import styled from 'styled-components';
 import { FlexContainer, HrLine } from 'styles/Containers';
-import { Title } from 'styles/Text';
+import { Title, BoldTitle, ExtraBold } from 'styles/Text';
 import { SortFactor } from './SortFactor';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { ResetButton, SortButton, ModalXButton } from 'styles/Buttons';

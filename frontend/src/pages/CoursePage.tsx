@@ -75,7 +75,7 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
     return () => {
       isCancelled = true;
     };
-  }, [numberOfReviews, courseCode]);
+  }, [numberOfReviews]);
 
   return (
     <Layout padding='0 20%'>
