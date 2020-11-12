@@ -29,4 +29,5 @@ services:
       - "127.0.0.1:3000:3000"
     volumes:
       - ./frontend:/app
+      - /app/node_modules
     stdin_open: true
