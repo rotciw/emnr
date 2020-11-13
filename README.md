@@ -22,7 +22,7 @@ Pull request:
 
 ## Technologies
 ### Frontend
-- TypeScript with React.js
+- TypeScript with React.js (Dockerized for local development)
 - Context for state management
 - Styled Components for styling
 
@@ -81,7 +81,7 @@ You can run `docker-compose -f "dev.docker-compose.yml" down` to quit.
   - After installing all dependencies, run `npm start`.
   - The frontend project should then open a new tab in your we browser with the running React project ar localhost:3000.
 
-## Using the project after installation
+## Running the project after installation
 After initially setting up the project, it can be started again by doing the following: 
 - With Docker:
   - Start Docker
