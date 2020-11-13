@@ -1,11 +1,14 @@
-# TDT4290-gr13
+# EMNR - TDT4290 Group 13
 
-## UNINETT - Feide expo
-Group 13 are going to develop to be used as an "example-app" for a EdHackathon early 2021. The solution will be based on FEIDE as an authentication provider. 
+## About EMNR
+EMNR is a personalized course reviewing service intended for NTNU students, to help them decide on what courses to enlist in. The project team have developed EMNR as part of the course TDT4290 at NTNU, during Fall 2020. The project was commissioned by [Uninett](https://www.uninett.no/), with the intention of it being used as a showcase of using data made available through Feide. The product is intended to be shown at the EdInnovation Hackathon early 2021.
+
+## End user manual
+End users can access the product by going to https://emnr.no in a web browser of their choice. They will be presented with the login page (https://emnr.no/login) with the logo and an explanatory text about EMNR and a login button, which, when clicked on, takes them to the Feide login site. After completing the Feide login, they will be taken to the landing page (https://emnr.no). There, they can access all functionality of the web application.
 
 ## Git-conventions
 
-branches:
+Branches:
 
 - master: update only for deployment (merge from dev)
 - dev: development branches, update continously
@@ -15,8 +18,7 @@ branches:
 
 Pull request:
 
-- At least two collaborators have to approve a pull request before it is merged in to dev-branch
-- Always use "Squash and merge" as merge-options
+- At least one collaborator has to approve a pull request before it is merged in to dev-branch
 
 ## Technologies
 ### Frontend
@@ -28,34 +30,18 @@ Pull request:
 - Python with Django
 - PostgreSQL (Dockerized for local development)
 
-## Folder structure
-
-### Server
-- **server/** django project folder containing the project modules
-  - **app (ex. user)** - overview over user projects
-    - **admins.py** - file contaning definitions to connect models to the django admin panel
-    - **urls.py** - contains mapping between urls and views
-    - **models.py** - contains data models
-    - **tests/** - contains tests for the module. [View Testing in Django](https://docs.djangoproject.com/en/2.1/topics/testing/) for more.
-
-
 ## Installation guide
-
-### End user manual
-End users can access the product by going to https://emnr.no in a web browser of their choice. They will be presented by the login page (https://emnr.no/login) with the logo and an explanatory text about EMNR and a login button, which, when clicked on, takes them to the Feide login site. After completing the Feide login, they will be taken to the landing page (https://emnr.no). There, they can access all functionality of the web application.
-
-### Development setup guide
 This section details how to setup the project for development. The easiest way to set it up is through the use of Docker, but it is also possible to do it manually.
 
-#### Prerequisites
-- Python 3 / pip
+### Prerequisites
+- [Python 3 / pip](https://www.python.org/downloads/)
 - If using Docker:
-  - Docker Engine for Linux or Docker Desktop for Mac/Windows
-  - Docker Compose (if using Linux)
+  - [Docker Engine for Linux or Docker Desktop for Mac/Windows](https://docs.docker.com/engine/install/)
+  - [Docker Compose (if using Linux)](https://docs.docker.com/compose/install/)
 - If setting up manually:
-  - Node/npm
+  - [Node/npm](https://nodejs.org/en/download/)
 
-#### Setup procedure
+### Setup procedure
 - Make sure the project is cloned locally onto your computer. You can do this by typing
 `git clone https://github.com/rotciw/emnr.git`
 in a terminal from your desired directory.
@@ -75,14 +61,14 @@ course information:
   - To migrate the database, run `python manage.py migrate`.
   - To fill your local database with courses from the grades.no-API, start a Django shell, using `python manage.py shell`, and then running the command `exec(open("course/fill_db.py")).read())`. (Warning: this may take a while)
 
-#### Setup using Docker
+### Setup using Docker
 - Remember to start up Docker in your respective OS..
 - `cd` into the root (emnr) directory you cloned.
 - run `docker-compose -f "dev.docker-compose.yml" up`.
 You can run `docker-compose -f "dev.docker-compose.yml" down` to quit.
 - The application is now available at localhost:3000, and the backend at localhost:8000.
 
-#### Setting up manually
+### Setting up manually
 - Start the backend server:
   - Start the server by running the command `python manage.py runserver`
   - The local server will now run on localhost:8000.
@@ -95,7 +81,7 @@ You can run `docker-compose -f "dev.docker-compose.yml" down` to quit.
   - After installing all dependencies, run `npm start`.
   - The frontend project should then open a new tab in your we browser with the running React project ar localhost:3000.
 
-### Development usage guide
+## Using the project after installation
 After initially setting up the project, it can be started again by doing the following: 
 - With Docker:
   - Start Docker
@@ -110,4 +96,54 @@ After initially setting up the project, it can be started again by doing the fol
   - The application is now available at localhost:3000 and the backend at localhost:8000.
   - Closing the terminal windows or quitting inside them will quit.
 
+## Directory structure
+This section of the README covers the general directory layout for both the frontend and backend parts of the project.
 
+### React frontend
+As React does not have any official guide for structuring files, the team have opted to follow a common approach. The team chose to group files by file types. For instance, components, styles, pages and assets, are all grouped inside their respective folders.
+```
+frontend/src/
+├── App/                        <- Files for the default App component.
+│   └── ...    
+├── assets/                     <- Contains assets used.
+│   ├── icons/                  <- Contains icons used.
+│   └── images/                 <- Contains images used.
+├── components/                 <- Reusable React components.
+│   └── ...    
+├── context/                    <- Contains the global state management context. 
+│   └── GlobalStateContext.tsx
+├── fonts/                      <- Contains fonts used.
+│   └── ...    
+├── navigation/                 <- Routing files to navigate between pages.
+│   └── ...    
+├── pages/                      <- Different pages that are routed to/from.
+│   └── ...    
+├── styles/                     <- Styles and reusable styled components.
+│   └── ...    
+├── utils/   <- Utility files.
+│   └── ...    
+└── ...
+```
+
+### Django backend
+The structure of the backend part of the project follows [the typical way of structuring a Django project with applications](https://www.askpython.com/django/django-app-structure-project-structure). The diagram below shows the directory layout of the Django project. The different apps are detailed further in the API documentation, provided in the project report.
+```
+server/
+├── .env               <- File containing environment variables.
+├── .gitignore         <- Django/Python-specific .gitignore
+├── db.sqlite3         <- SQLite3 database used when developing
+├── server/            <- Main app for the project
+│   ├── settings.py    <- Django settings file
+│   ├── urls.py        <- Server URL configuration (app-level)
+│   └── ...
+├── <app>/             <- Directory for all files pertaining to a certain app
+│   ├── migrations/    <- Migration files for app models
+│   │   └── ...
+│   ├── admin.py       <- File for registering models in the admin panel
+│   ├── models.py      <- Database model definitions
+│   ├── tests.py       <- Unit tests for the views.
+│   ├── urls.py        <- URL routing within each app.
+│   ├── views.py       <- All views for the app, i.e. endpoints and helper methods.
+│   └── ...
+└── ...
+```
