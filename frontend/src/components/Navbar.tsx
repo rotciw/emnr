@@ -127,7 +127,7 @@ const Navbar: React.FC = () => {
                 disabled={advancedQueryProvider.advancedSorting}
               />
             </DropdownContainer>
-            <SortHighLowButton onClick={onOrderToggle}>
+            <SortHighLowButton onClick={onOrderToggle} disabled={advancedQueryProvider.advancedSorting}>
               {(queryProvider.orderToggle ? 'Stigende' : 'Synkende') +
                 ` \u21C5`}
             </SortHighLowButton>
