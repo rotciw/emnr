@@ -48,7 +48,7 @@ in a terminal from your desired directory.
 - Setup an env environment:
   - Navigate into the server folder from root.
   - Create an .env file in the server directory with the same fields as the env.example file.
-  - The fields `DATAPORTEN_CLIENT_ID` and `DATAPORTEN_SECRET` are the only ones that needs to be filled in development. These values can be obtained by registering a new application at the [Dataporten Dashboard](https://dashboard.dataporten.no/#!/_), with OAuth 2.0 Redirect URL set to http://localhost:3000/verifylogin. After creating the app, you have to add all scopes except social network ID on the "Rettigheter" tab on the app page. When this is done, the CLIENT_ID and CLIENT_SECRET can be found under the "OAuth detaljer" tab on the app page.
+  - The fields `DATAPORTEN_CLIENT_ID` and `DATAPORTEN_SECRET` are the only ones that needs to be filled for development. These values can be obtained by registering a new application at the [Dataporten Dashboard](https://dashboard.dataporten.no/#!/_), with OAuth 2.0 Redirect URL set to http://localhost:3000/verifylogin. After creating the app, you have to add all scopes except social network ID on the "Rettigheter" tab on the app page. When this is done, the CLIENT_ID and CLIENT_SECRET can be found under the "OAuth detaljer" tab on the app page.
 - Setup server by creating a virtual environment, running database migrations, and filling the database with
 course information:
   - Make sure python is added to system variables. This can be checked by typing `python` in a command prompt or terminal. If the python interpreter does not open, you have to add python to your system variables. Follow [these instructions](https://projects.raspberrypi.org/en/projects/using-pip-on-windows/4).
