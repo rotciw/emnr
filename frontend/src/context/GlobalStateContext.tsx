@@ -24,6 +24,10 @@ interface PageProviderValue {
   setPage: (val: number) => void;
   totalPage: number;
   setTotalPage: (val: number) => void;
+  reviewPage: number;
+  setReviewPage: (val: number) => void;
+  totalReviewPage: number;
+  setTotalReviewPage: (val: number) => void;
 }
 
 interface QueryProviderValue {
@@ -83,6 +87,8 @@ const GlobalStateProvider: React.FC = ({ children }) => {
   const [email, setEmail] = useState<string | null>(null);
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
+  const [totalReviewPage, setTotalReviewPage] = useState<number>(1);
+  const [reviewPage, setReviewPage] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
   const [orderByQuery, setOrderByQuery] = useState<string | null>(null);
   const [orderToggle, setOrderToggle] = useState(false);
@@ -112,8 +118,26 @@ const GlobalStateProvider: React.FC = ({ children }) => {
   const authProvider = useMemo(() => ({ token, setToken }), [token, setToken]);
   const userProvider = useMemo(() => ({ email, setEmail }), [email, setEmail]);
   const pageProvider = useMemo(
-    () => ({ page, setPage, totalPage, setTotalPage }),
-    [page, setPage, totalPage, setTotalPage],
+    () => ({
+      page,
+      setPage,
+      totalPage,
+      setTotalPage,
+      totalReviewPage,
+      setTotalReviewPage,
+      reviewPage,
+      setReviewPage,
+    }),
+    [
+      page,
+      setPage,
+      totalPage,
+      setTotalPage,
+      totalReviewPage,
+      setTotalReviewPage,
+      reviewPage,
+      setReviewPage,
+    ],
   );
   const queryProvider = useMemo(
     () => ({
