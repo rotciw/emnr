@@ -1,15 +1,14 @@
-import React, { useContext, useEffect } from 'react';
-import qs from 'qs';
-import { Redirect } from 'react-router-dom';
-import { verifyFeideLogin } from '../utils/api';
-import { GlobalStateContext } from '../context/GlobalStateContext';
 import Loading from 'components/Loading';
+import qs from 'qs';
+import React, { useContext, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
+import { GlobalStateContext } from '../context/GlobalStateContext';
+import { verifyFeideLogin } from '../utils/api';
 
 interface VerifyLoginProps {
-  callback: (val?: any) => void;
 }
 
-const VerifyLogin: React.FC<VerifyLoginProps> = (props) => {
+const VerifyLogin: React.FC<VerifyLoginProps> = () => {
   const { authProvider, userProvider } = useContext(GlobalStateContext)!;
   useEffect(() => {
     const verifyLogin = async () => {
@@ -22,8 +21,6 @@ const VerifyLogin: React.FC<VerifyLoginProps> = (props) => {
           if (token) {
             authProvider.setToken(token);
             userProvider.setEmail(email);
-
-            props.callback();
           }
         }
       } catch (e) {

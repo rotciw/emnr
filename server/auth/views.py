@@ -65,10 +65,16 @@ def verify_token(request):
 
 @api_view(["GET"])
 def validate_token(request):
-    if request.user.is_anonymous:
-        raise PermissionDenied
-    token = ExpiringToken.objects.get(user=request.user)
-    return HttpResponse(token.valid())
+    validated = False
+    user_mail = request.GET.get("email")
+    exp_token = request.META['HTTP_AUTHORIZATION']
+    user = User.objects.filter(email=user_mail).first()
+    if user:
+        user_auth = UserAuth.objects.filter(expiring_token=exp_token)
+        token = ExpiringToken.objects.get(user=user)
+        if user_auth and token:
+            validated = True
+    return HttpResponse(validated)
 
 
 def get_token(expiring_token):

@@ -29,10 +29,40 @@ export const verifyFeideLogin = (code: string) => {
 
 // fetch local token
 export const getLocalToken = () => {
-  if (localStorage.getItem('token')) {
-    return localStorage.getItem('token');
+  let validated = false;
+  if (localStorage.getItem('token') && getLocalEmail()) {
+    const token = localStorage.getItem('token');
+    const email = getLocalEmail();
+    if (email)
+    axios.defaults.headers.common.Authorization = `${token}`;
+    validateToken(email!).then((res: boolean) => {
+      validated = res
+      if (!validated){
+        localStorage.clear();
+        window.history.pushState({}, '', '/login');
+        window.location.reload();
+      }
+    });
+    return token;
   }
 };
+
+export const validateToken = (email: string) => {
+  return axios
+    .get(`${API_URL}/auth/validate_token/`, {
+      params: {
+        email,
+      },
+    })
+    .then(function (response) {
+      console.log("response: " + response.data);
+      if (response.data === 'True'){
+        return true;
+      } else {
+        return false;
+      }
+    });
+}
 
 export const getLocalEmail = () => {
   if (localStorage.getItem('email')) {
