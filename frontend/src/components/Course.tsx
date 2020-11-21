@@ -47,7 +47,7 @@ const Course: React.FC<CourseProps> = ({
       paramMetric = String(credit);
       break;
     case 'average_grade':
-      paramMetric = String(averageGrade);
+      paramMetric = String(averageGrade.toFixed(1));
       break;
     case 'pass_rate':
       paramMetric = String((100 - passRate).toFixed(2));

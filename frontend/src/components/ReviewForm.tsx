@@ -29,10 +29,19 @@ const InputDescription = styled.p`
   margin: 20px 0 5px 0;
 `;
 
+const ItalicText = styled.p`
+  font-style: italic;
+  font-size: 14px;
+`;
+
 const BoldInputDescription = styled.p`
   margin: 20px 0 10px 0;
   font-family: 'gilroyxbold';
   color: ${({ theme }) => theme.darkBlue};
+`;
+
+const RedAnchor = styled.a`
+  color: red;
 `;
 
 const options = [
@@ -70,9 +79,8 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         refreshProvider.setPostReviewHaveRefreshed(
           !refreshProvider.postReviewHaveRefreshed,
         );
-        setLoading(false);
-
         closeModal();
+        setLoading(false);
       })
       .catch((error) => console.log(error));
   };
@@ -85,7 +93,9 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       </FlexContainer>
       <BoldTitle>{courseName}</BoldTitle>
       <HrLine margin='15px 0 0 0' />
-      <BoldInputDescription>Totalvurdering: *</BoldInputDescription>
+      <BoldInputDescription>
+        Totalvurdering: <RedAnchor>*</RedAnchor>
+      </BoldInputDescription>
       <ScoreRadioButtonsBar
         radioID='reviewScore'
         valueSetter={setScoreValue}
@@ -121,6 +131,11 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
           Send inn
         </RateCourseButton>
       )}
+      <ItalicText>
+        Merk at ditt fulle navn kommer til å vises i vurderingen av emnet.
+        Tjenesten støtter ikke personangrep mot fagstaben og slike vurderinger
+        vil bli slettet.
+      </ItalicText>
     </div>
   );
 };

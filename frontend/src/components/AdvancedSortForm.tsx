@@ -91,7 +91,7 @@ const AdvancedSortForm: React.FC<AdvancedSortFormProps> = ({ closeModal }) => {
         directionVariable={scoreHighState}
         setWeightFunction={setScoreWeight}
         weightVariable={scoreWeight}
-        displayName={'Score'}
+        displayName={'Totalvurdering'}
         idName={'score'}
       />
       <SortFactor
