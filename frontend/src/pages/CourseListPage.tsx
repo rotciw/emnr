@@ -7,7 +7,7 @@ const CourseListPage: React.FC = () => {
   return (
     <Layout>
       <CourseList />
-      <Pagination />
+      <Pagination currentPage='courses' />
     </Layout>
   );
 };

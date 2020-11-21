@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { ExtraBold } from 'styles/Text';
 import { SortHighLowButton } from 'styles/Buttons';

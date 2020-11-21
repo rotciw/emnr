@@ -1,5 +1,5 @@
 import React from 'react';
-import { CenteredFlexContainer, FlexContainer } from 'styles/Containers';
+import { CenteredFlexContainer } from 'styles/Containers';
 import Layout from 'styles/Layout';
 import { BoldTitle, Title } from 'styles/Text';
 import { ShapeContainer } from 'styles/Containers';

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import axios from 'axios';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { FlexContainer, StyledTable, StyledTH } from 'styles/Containers';
@@ -31,6 +31,7 @@ export const CourseList: React.FC = () => {
     GlobalStateContext,
   )!;
   const [loading, setLoading] = useState<boolean>(false);
+  const isInitialMount = useRef(true);
 
   const pageNumber = pageProvider.page;
   // Search input
@@ -63,9 +64,6 @@ export const CourseList: React.FC = () => {
     case 'average_review_score':
       orderByText = 'Gjennomsnittlig vurdering';
       break;
-    case 'review_count':
-      orderByText = 'Antall vurderinger';
-      break;
     case 'credit':
       orderByText = 'Studiepoeng';
       break;
@@ -91,7 +89,13 @@ export const CourseList: React.FC = () => {
 
   // this useEffect is used for resetting page number to 1 when searching
   useEffect(() => {
-    pageProvider.setPage(1);
+    // Checking initialmount to only reset page number when searching, and not when going back from another page
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      pageProvider.setPage(1);
+    }
+    // eslint-disable-next-line
   }, [searchQuery]);
 
   useEffect(() => {
@@ -116,6 +120,7 @@ export const CourseList: React.FC = () => {
         });
     };
     getCourses();
+    // eslint-disable-next-line
     start += resultLimit;
   }, [
     pageNumber,

@@ -8,6 +8,7 @@ interface PaginationProps {
 
 interface PaginationInterface {
   pageNumber: number;
+  currentPage: string;
 }
 
 const PaginationBtn = styled.div`
@@ -38,20 +39,36 @@ const PaginationBtn = styled.div`
 const PaginationButton: React.FC<PaginationInterface> = ({
   children,
   pageNumber,
+  currentPage,
 }) => {
   const { pageProvider } = useContext(GlobalStateContext)!;
   const [isActive, setIsActive] = useState(false);
 
   const handleActive = () => {
-    pageProvider.setPage(pageNumber);
+    if (currentPage === 'courses') {
+      pageProvider.setPage(pageNumber);
+    }
+    if (currentPage === 'reviews') {
+      pageProvider.setReviewPage(pageNumber);
+    }
   };
 
   useEffect(() => {
     const checkStatus = () => {
-      pageProvider.page === pageNumber ? setIsActive(true) : setIsActive(false);
+      if (currentPage === 'courses') {
+        pageProvider.page === pageNumber
+          ? setIsActive(true)
+          : setIsActive(false);
+      }
+      if (currentPage === 'reviews') {
+        pageProvider.reviewPage === pageNumber
+          ? setIsActive(true)
+          : setIsActive(false);
+      }
     };
     checkStatus();
-  }, [pageProvider.page, pageNumber]);
+    // eslint-disable-next-line
+  }, [pageProvider.page, pageNumber, pageProvider.reviewPage]);
 
   return (
     <PaginationBtn

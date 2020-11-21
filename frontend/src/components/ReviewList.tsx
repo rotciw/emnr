@@ -53,12 +53,13 @@ const ReviewList: React.FC<ReviewListProps> = ({
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [numberOfReviews, setNumberOfReviews] = useState<number>(0);
 
-  let pageNumber = pageProvider.page;
+  let pageNumber = pageProvider.reviewPage;
   const resultLimit = 5;
   let start = (pageNumber - 1) * resultLimit;
 
   useEffect(() => {
     numberOfReviewSetter(numberOfReviews);
+    // eslint-disable-next-line
   }, [numberOfReviews]);
 
   useEffect(() => {
@@ -75,7 +76,9 @@ const ReviewList: React.FC<ReviewListProps> = ({
           if (!isCancelled) {
             updateReviews(res.data.data);
             setIsAdmin(res.data.is_admin);
-            pageProvider.setTotalPage(Math.ceil(res.data.count / resultLimit));
+            pageProvider.setTotalReviewPage(
+              Math.ceil(res.data.count / resultLimit),
+            );
             setNumberOfReviews(res.data.count);
             scoreAvgSetter(
               res.data.average_score != null ? res.data.average_score : 0,
@@ -96,10 +99,12 @@ const ReviewList: React.FC<ReviewListProps> = ({
         .catch((err) => console.log(err));
     };
     getReviews();
+    // eslint-disable-next-line
     start += resultLimit;
     return () => {
       isCancelled = true;
     };
+    // eslint-disable-next-line
   }, [
     pageNumber,
     refreshProvider.postReviewHaveRefreshed,
@@ -141,7 +146,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
                   />
                 );
               })}
-              <Pagination />
+              <Pagination currentPage='reviews' />
             </div>
           ) : (
             <EmptyResult>Ingen vurderinger av {courseCode}. </EmptyResult>
