@@ -57,7 +57,7 @@ const DateText = styled.p`
 `;
 
 const CommentText = styled.p`
-  word-break: break-all;
+  word-break: break-word;
   text-align: left;
 `;
 
