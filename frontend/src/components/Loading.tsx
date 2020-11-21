@@ -6,6 +6,7 @@ const LoadingContainer = styled.div`
   margin-top: 50px;
   display: flex;
   justify-content: center;
+  height: 40vh;
 `;
 
 const Loading: React.FC = () => {
