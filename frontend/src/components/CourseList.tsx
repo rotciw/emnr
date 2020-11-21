@@ -64,9 +64,6 @@ export const CourseList: React.FC = () => {
     case 'average_review_score':
       orderByText = 'Gjennomsnittlig vurdering';
       break;
-    case 'review_count':
-      orderByText = 'Antall vurderinger';
-      break;
     case 'credit':
       orderByText = 'Studiepoeng';
       break;
@@ -98,6 +95,7 @@ export const CourseList: React.FC = () => {
     } else {
       pageProvider.setPage(1);
     }
+    // eslint-disable-next-line
   }, [searchQuery]);
 
   useEffect(() => {
@@ -122,6 +120,7 @@ export const CourseList: React.FC = () => {
         });
     };
     getCourses();
+    // eslint-disable-next-line
     start += resultLimit;
   }, [
     pageNumber,

@@ -59,6 +59,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
 
   useEffect(() => {
     numberOfReviewSetter(numberOfReviews);
+    // eslint-disable-next-line
   }, [numberOfReviews]);
 
   useEffect(() => {
@@ -98,10 +99,12 @@ const ReviewList: React.FC<ReviewListProps> = ({
         .catch((err) => console.log(err));
     };
     getReviews();
+    // eslint-disable-next-line
     start += resultLimit;
     return () => {
       isCancelled = true;
     };
+    // eslint-disable-next-line
   }, [
     pageNumber,
     refreshProvider.postReviewHaveRefreshed,

@@ -34,6 +34,7 @@ export const PaginationComponent: React.FC<PaginationProps> = ({
       setTotalPages(pageProvider.totalReviewPage);
       setPage(pageProvider.reviewPage);
     }
+    // eslint-disable-next-line
   }, [currentPage, pageProvider.totalPage, pageProvider.totalReviewPage]);
 
   return (

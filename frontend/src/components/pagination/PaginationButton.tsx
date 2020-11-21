@@ -56,13 +56,18 @@ const PaginationButton: React.FC<PaginationInterface> = ({
   useEffect(() => {
     const checkStatus = () => {
       if (currentPage === 'courses') {
-        pageProvider.page === pageNumber ? setIsActive(true) : setIsActive(false);
+        pageProvider.page === pageNumber
+          ? setIsActive(true)
+          : setIsActive(false);
       }
       if (currentPage === 'reviews') {
-        pageProvider.reviewPage === pageNumber ? setIsActive(true) : setIsActive(false);
+        pageProvider.reviewPage === pageNumber
+          ? setIsActive(true)
+          : setIsActive(false);
       }
     };
     checkStatus();
+    // eslint-disable-next-line
   }, [pageProvider.page, pageNumber, pageProvider.reviewPage]);
 
   return (
