@@ -14,7 +14,7 @@ class Course(models.Model):
     advanced_sorting_score = models.FloatField(default=-1)
 
     @classmethod
-    def create(cls, code, name, credit, average_grade, pass_rate):
+    def create(cls, code, name, credit, average_grade, pass_rate, review_count=0):
         course = cls(course_code=code, course_name=name, credit=credit, average_grade=average_grade,
                      pass_rate=pass_rate)
         return course

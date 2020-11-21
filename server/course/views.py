@@ -96,8 +96,18 @@ def get_courses_from_db(request):
             raise ValueError("Invalid value for ascending: {}".format(ascending))
         if ascending == "0":
             order_by = "-" + order_by
+        if order_by == 'average_review_score' or order_by == '-average_review_score':
+            order_by = [order_by, '-review_count']
+        elif order_by == 'review_count' or order_by == '-review_count':
+            order_by = [order_by, '-average_review_score']
         # Fetch data from database
-        data = list(Course.objects.filter(combined_search_filter).order_by(order_by)[offset:offset + n].values())
+        if isinstance(order_by, str):
+            # order_by has only one value
+            data = list(Course.objects.filter(combined_search_filter).order_by(order_by)[offset:offset + n].values())
+        else:
+            # order_by is a list, meaning it has a secondary value to order on.
+            data = list(Course.objects.filter(combined_search_filter).order_by(*order_by)[offset:offset + n].values())
+
     return {"count": number_of_courses, "data": data}
 
 
