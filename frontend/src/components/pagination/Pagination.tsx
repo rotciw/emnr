@@ -35,16 +35,19 @@ export const PaginationComponent: React.FC<PaginationProps> = ({
       setPage(pageProvider.reviewPage);
     }
     // eslint-disable-next-line
-  }, [currentPage, pageProvider.totalPage, pageProvider.totalReviewPage]);
+  }, [
+    currentPage,
+    pageProvider.totalPage,
+    pageProvider.totalReviewPage,
+    pageProvider.page,
+    pageProvider.reviewPage,
+  ]);
 
   return (
     <div>
       <PaginationWrapper>
         {page !== 1 && (
-          <PaginationButton
-            currentPage={currentPage}
-            pageNumber={page - 1}
-          >
+          <PaginationButton currentPage={currentPage} pageNumber={page - 1}>
             &lt;
           </PaginationButton>
         )}
