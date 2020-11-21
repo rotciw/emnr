@@ -53,14 +53,15 @@ def verify_token(request):
     access_token = response_json['access_token']
     has_token = False
     try:
-        has_token = UserAuth.objects.get(user_email=user_mail).exists()
+        user_auth = UserAuth.objects.filter(user_email=user_mail).first()
+        if user_auth:
+            has_token = True
     except:
         print("User has no token")
     if has_token:
-        UserAuth.objects.get(user_email=user_mail).delete()
+        UserAuth.objects.filter(user_email=user_mail).first().delete()
     UserAuth.objects.create(user_email=user_mail, expiring_token="Token " + str(token), access_token=access_token)
     return Response(({'token': token.key, 'email': user_mail}))
-
 
 @api_view(["GET"])
 def validate_token(request):
