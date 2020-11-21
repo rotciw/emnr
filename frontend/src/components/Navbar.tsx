@@ -12,14 +12,21 @@ import { GlobalStateContext } from 'context/GlobalStateContext';
 import { Menu } from './Menu';
 import { NavbarButton, SortHighLowButton } from 'styles/Buttons';
 import AdvancedSortForm from './AdvancedSortForm';
+import Headroom from 'react-headroom';
 
-const NavBarContainer = styled.nav`
+const NavbarContainer = styled.nav`
   width: 100%;
   flex: 1;
   background-color: ${({ theme }) => theme.darkBlue};
   position: sticky;
   position: -webkit-sticky;
   top: 0;
+  z-index: 2;
+  height: 60px;
+`;
+
+const NavbarUnderContainer = styled.div`
+  background-color: ${({ theme }) => theme.darkBlue};
 `;
 
 const SortingContainer = styled.div`
@@ -87,6 +94,7 @@ const Navbar: React.FC = () => {
   const isOnLandingPage: boolean = useLocation().pathname === '/';
 
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [marginTop, setMarginTop] = useState<string>('0px');
 
   function toggleModalIsOpen() {
     setModalIsOpen(!modalIsOpen);
@@ -102,44 +110,60 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <NavBarContainer>
-      <TopRow>
-        <Logo src={emnrLogo} onClick={handleOnClick} alt='Logo' />
-        <Menu />
-      </TopRow>
+    <>
+      <NavbarContainer>
+        <TopRow>
+          <Logo src={emnrLogo} onClick={handleOnClick} alt='Logo' />
+          <Menu />
+        </TopRow>
+      </NavbarContainer>
       {isOnLandingPage && (
         <>
-          <Modal
-            isOpen={modalIsOpen}
-            onRequestClose={toggleModalIsOpen}
-            style={modalStyles}
-            contentLabel='Example Modal'
+          <Headroom
+            style={{
+              marginTop: marginTop,
+            }}
+            onUnfix={() => setMarginTop('0px')}
+            onPin={() => setMarginTop('60px')}
+            upTolerance={20}
           >
-            <AdvancedSortForm closeModal={toggleModalIsOpen} />
-          </Modal>
-          <Searchbar />
-          <SortingContainer>
-            <DropdownContainer>
-              <Dropdown
-                options={options}
-                onChange={(e) => onSelect(e)}
-                placeholder='Sorter..'
-                disabled={advancedQueryProvider.advancedSorting}
-              />
-            </DropdownContainer>
-            <SortHighLowButton onClick={onOrderToggle} disabled={advancedQueryProvider.advancedSorting}>
-              {(queryProvider.orderToggle ? 'Stigende' : 'Synkende') +
-                ` \u21C5`}
-            </SortHighLowButton>
-            <NavBarButtonContainer>
-              <NavbarButton onClick={toggleModalIsOpen}>
-                EMNR-sortering
-              </NavbarButton>
-            </NavBarButtonContainer>
-          </SortingContainer>
+            <NavbarUnderContainer>
+              <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={toggleModalIsOpen}
+                style={modalStyles}
+                contentLabel='Example Modal'
+              >
+                <AdvancedSortForm closeModal={toggleModalIsOpen} />
+              </Modal>
+              <Searchbar />
+              <SortingContainer>
+                <DropdownContainer>
+                  <Dropdown
+                    options={options}
+                    onChange={(e) => onSelect(e)}
+                    placeholder='Sorter..'
+                    disabled={advancedQueryProvider.advancedSorting}
+                  />
+                </DropdownContainer>
+                <SortHighLowButton
+                  onClick={onOrderToggle}
+                  disabled={advancedQueryProvider.advancedSorting}
+                >
+                  {(queryProvider.orderToggle ? 'Stigende' : 'Synkende') +
+                    ` \u21C5`}
+                </SortHighLowButton>
+                <NavBarButtonContainer>
+                  <NavbarButton onClick={toggleModalIsOpen}>
+                    EMNR-sortering
+                  </NavbarButton>
+                </NavBarButtonContainer>
+              </SortingContainer>
+            </NavbarUnderContainer>
+          </Headroom>
         </>
       )}
-    </NavBarContainer>
+    </>
   );
 };
 
