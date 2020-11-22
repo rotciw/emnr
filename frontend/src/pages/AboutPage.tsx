@@ -85,7 +85,11 @@ const AboutPage: React.FC = () => {
             imgSrc={jakob}
             linkedIn='https://www.linkedin.com/in/jakob-kielland-93556613a//'
           />{' '}
-          <Person name='Sylvi P. Huynh' imgSrc={sylvi} linkedIn='' />{' '}
+          <Person
+            name='Sylvi P. Huynh'
+            imgSrc={sylvi}
+            linkedIn='https://www.linkedin.com/in/sylvi-huynh-207401200/'
+          />{' '}
           <Person
             name='Harald G. Brevik'
             imgSrc={harald}
