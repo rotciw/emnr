@@ -3,6 +3,7 @@ import { defaultTheme } from './theme';
 const modalStyles = {
   overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: 99
   },
   content: {
     top: '50%',

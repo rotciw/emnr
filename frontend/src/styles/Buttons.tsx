@@ -79,10 +79,12 @@ export const SortHighLowButton = styled.button`
     background-color: #BBBBBB;
     cursor: auto;
     color: #333333;
-  };
-  :hover !disabled {
+  }
+  :enabled {
+    :hover {
     background-color: ${({ theme }) => theme.lightlightBlue};
     color: ${({ theme }) => theme.darkBlue};
+  }
   }
 `;
 
