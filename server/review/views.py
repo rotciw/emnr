@@ -193,6 +193,10 @@ def get_reviews_from_db(request):
     for review in data:
         review["can_delete"] = check_if_can_delete(review, user_email, is_admin)
 
+    # Remove user email field from reviews
+    for review in data:
+        review.pop("user_email", None)
+
     # Return the data
     return {"count": number_of_reviews, "data": data, "average_score": average_score,
             "average_workload": average_workload, "average_difficulty": average_difficulty, "is_admin": is_admin}
@@ -307,7 +311,7 @@ def get_user_study_programme(expiring_token):
 @api_view(["DELETE"])
 def delete_review(request):
     """
-    Deletes a given review, based on course code and user email passed as a parameter
+    Deletes a given review, based on review id passed as parameter.
     """
     # Get and authenticate expiring token
     try:
@@ -317,16 +321,18 @@ def delete_review(request):
     if not UserAuth.objects.filter(expiring_token=exp_token).exists():
         return Response("Invalid expiring token provided", 401)
 
-    # Get and validate course code parameter
-    try:
-        course_code = get_course_code_parameter(request)
-    except ValueError as e:
-        return Response(str(e), status=400)
+    # Get and validate review id parameter
+    review_id = request.GET.get("reviewId", None)
+    if review_id is None or review_id == "undefined":
+        return Response("No review id provided", status=400)
+    if not Review.objects.filter(id=review_id).exists():
+        return Response("Review does not exist", status=400)
 
-    # Get and validate user email parameter
-    passed_email = request.GET.get("userEmail", None)
-    if passed_email is None:
-        return Response("No user email provided", status=400)
+    # Get review from database and extract relevant fields
+    review = Review.objects.get(id=review_id)
+    passed_email = review.user_email
+    course_code = review.course_code
+
 
     # Check if user can delete review
     try:
@@ -339,7 +345,7 @@ def delete_review(request):
         return Response("User cannot delete this review", status=401)
 
     # Delete review
-    Review.objects.get(course_code=course_code, user_email=passed_email).delete()
+    review.delete()
 
     # Update course review data
     course_qs = Course.objects.filter(course_code=course_code)

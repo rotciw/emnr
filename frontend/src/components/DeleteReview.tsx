@@ -23,11 +23,10 @@ const TrashBtn = styled.img`
 `;
 
 interface ReviewProps {
-  courseCode: string;
-  userEmail: string;
+  reviewId: number;
 }
 
-const DeleteReview: React.FC<ReviewProps> = ({ courseCode, userEmail }) => {
+const DeleteReview: React.FC<ReviewProps> = ({ reviewId }) => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -42,7 +41,7 @@ const DeleteReview: React.FC<ReviewProps> = ({ courseCode, userEmail }) => {
     setLoading(true);
     await axios
       .delete(
-        `${API_URL}/review/delete/?courseCode=${courseCode}&userEmail=${userEmail}`,
+        `${API_URL}/review/delete/?reviewId=${reviewId}`,
       )
       .then(() => {
         if (!isCancelled) {

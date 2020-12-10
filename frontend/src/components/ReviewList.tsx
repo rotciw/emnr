@@ -35,8 +35,8 @@ interface ReviewProps {
   review_text: string;
   date: string;
   can_delete: boolean;
-  user_email: string;
   course_code: string;
+  id: number;
 }
 
 const ReviewList: React.FC<ReviewListProps> = ({
@@ -141,7 +141,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
                     date={currentReview.date}
                     isAdmin={isAdmin}
                     canDelete={currentReview.can_delete}
-                    userEmail={currentReview.user_email}
+                    id={currentReview.id}
                     courseCode={currentReview.course_code}
                   />
                 );

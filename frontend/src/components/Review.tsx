@@ -15,7 +15,7 @@ interface ReviewProps {
   date: string;
   isAdmin: boolean;
   canDelete: boolean;
-  userEmail: string;
+  id: number;
   courseCode: string;
 }
 
@@ -71,8 +71,7 @@ const Review: React.FC<ReviewProps> = ({
   date,
   isAdmin,
   canDelete,
-  userEmail,
-  courseCode,
+  id,
 }) => {
   const dateObject = new Date(date);
   let europeanDate = `${dateObject.getDate()}/${
@@ -140,11 +139,11 @@ const Review: React.FC<ReviewProps> = ({
         </FlexContainer>
         <OptionContainer>
           {canDelete ? (
-            <DeleteReview courseCode={courseCode} userEmail={userEmail} />
+            <DeleteReview reviewId={id} />
           ) : (
             <></>
           )}
-          {isAdmin ? <DeleteUser userEmail={userEmail} /> : <></>}
+          {isAdmin ? <DeleteUser reviewId={id} userName={name} /> : <></>}
         </OptionContainer>
       </FlexItem>
     </ReviewContainer>
