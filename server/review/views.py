@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.db.models import Case, When
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import json
@@ -181,10 +182,19 @@ def get_reviews_from_db(request):
     average_difficulty = base_qs.filter(difficulty__gt=-1).aggregate(Avg("difficulty"))["difficulty__avg"]
 
     # Fetch reviews from database
-    data = list(base_qs.order_by("-date")[offset:offset + n].values())
+
+    # data = list(base_qs.order_by("-date")[offset:offset + n].values())
 
     # Append if user can delete review to the list of reviews
     _, user_email = get_user_full_name_and_email(exp_token)
+
+    # Fetch reviews from database
+    # Put user's own review first in the query set and order on date submitted
+    ordered_qs = base_qs.order_by(Case(When(user_email=user_email, then=0), default=1), "-date")
+    data = list(ordered_qs[offset:offset + n].values())
+
+    # Put user's own review first in the query set
+
 
     # Check if user is admin
     is_admin = check_if_is_admin(user_email)
