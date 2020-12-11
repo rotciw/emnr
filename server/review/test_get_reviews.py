@@ -32,6 +32,8 @@ class GetReviewsTest(TestCase):
                    review_text="Lattice", full_name="Heman 2015", study_programme="MTDT"),
             Review(course_code="TMA4100", user_email="hallo@hei.com", score=2, workload=1, difficulty=2,
                    review_text="Helt ok fag", full_name="Hanna Montana", study_programme="MTTEST"),
+            Review(course_code="TMA4100", user_email="test@testesen.com", score=4, workload=0, difficulty=1,
+                   review_text="Jeg er den innloggede brukeren", full_name="Test Testesen", study_programme="MTDT"),
             Review(course_code="TMA4100", user_email="pu@pu.com", score=5, workload=1, difficulty=1,
                    review_text="Sykt lett", full_name="PU PUsen", study_programme="MTDT"),
             Review(course_code="TMA4100", user_email="morn@morna.com", score=4, workload=1, difficulty=2,
@@ -95,13 +97,19 @@ class GetReviewsTest(TestCase):
         # Check correct count and number of reviews returned
         req = self.rf.get("/review/get/?courseCode=TMA4100&n=2", HTTP_AUTHORIZATION="valid_token")
         res = get_reviews_from_db(req)
-        self.assertEqual(res["count"], 6)
+        self.assertEqual(res["count"], 7)
         self.assertEqual(len(res["data"]), 2)
 
         req = self.rf.get("/review/get/?courseCode=TMA4100", HTTP_AUTHORIZATION="valid_token")
         res = get_reviews_from_db(req)
-        self.assertEqual(res["count"], 6)
-        self.assertEqual(len(res["data"]), 6)
+        self.assertEqual(res["count"], 7)
+        self.assertEqual(len(res["data"]), 7)
+
+    def test_get_reviews_from_db_valid_request_sorting(self):
+        # The user's own review is the first review
+        req = self.rf.get("/review/get/?courseCode=TMA4100&n=2", HTTP_AUTHORIZATION="valid_token")
+        res = get_reviews_from_db(req)
+        self.assertEqual(res["data"][0]["full_name"], "Test Testesen")
 
     def test_get_reviews_endpoint_invalid_course(self):
         # invalid and no course code
@@ -140,12 +148,18 @@ class GetReviewsTest(TestCase):
         c = APIClient()
         c.credentials(HTTP_AUTHORIZATION='valid_token')
         res = c.get("/review/get/?courseCode=TMA4100&n=2")
-        self.assertEqual(res.data["count"], 6)
+        self.assertEqual(res.data["count"], 7)
         self.assertEqual(len(res.data["data"]), 2)
 
         res = c.get("/review/get/?courseCode=TMA4100")
-        self.assertEqual(res.data["count"], 6)
-        self.assertEqual(len(res.data["data"]), 6)
+        self.assertEqual(res.data["count"], 7)
+        self.assertEqual(len(res.data["data"]), 7)
+
+    def test_get_reviews_endpoint_valid_request_sorting(self):
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
+        res = c.get("/review/get/?courseCode=TMA4100")
+        self.assertEqual(res.data["data"][0]["full_name"], "Test Testesen")
 
     def test_get_reviews_endpoint_invalid_token(self):
         c = APIClient()
@@ -158,8 +172,8 @@ class GetReviewsTest(TestCase):
         c.credentials(HTTP_AUTHORIZATION='valid_token')
         res = c.get("/review/get/?courseCode=TMA4100&showMyProgramme=true")
         self.assertEqual(res.status_code, 200)
-        self.assertEqual(len(res.data["data"]), 3)
-        self.assertEqual(res.data["count"], 3)
+        self.assertEqual(len(res.data["data"]), 4)
+        self.assertEqual(res.data["count"], 4)
 
     def test_get_reviews_endpoint_filter_on_programme_invalid_param(self):
         c = APIClient()
