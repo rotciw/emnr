@@ -22,10 +22,11 @@ const TrashBtn = styled.img`
 `;
 
 interface ReviewProps {
-  userEmail: string;
+  reviewId: number;
+  userName: String;
 }
 
-const DeleteUser: React.FC<ReviewProps> = ({ userEmail }) => {
+const DeleteUser: React.FC<ReviewProps> = ({ reviewId, userName }) => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -39,7 +40,7 @@ const DeleteUser: React.FC<ReviewProps> = ({ userEmail }) => {
     let isCancelled = false;
     setLoading(true);
     await axios
-      .delete(`${API_URL}/user/delete/?userEmail=${userEmail}`)
+      .delete(`${API_URL}/user/delete/?reviewId=${reviewId}`)
       .then(() => {
         if (!isCancelled) {
           refreshProvider.setDeleteReviewHaveRefreshed(
@@ -71,7 +72,7 @@ const DeleteUser: React.FC<ReviewProps> = ({ userEmail }) => {
         </FlexContainer>
         <HrLine margin='5px 0 15px 0' />
         <p>
-          Alle anmeldelsene til bruker <b>{userEmail}</b> vil bli slettet, og
+          Alle anmeldelsene til bruker <b>{userName}</b> vil bli slettet, og
           vil ikke få mulighet til å legge til flere anmeldelser.
         </p>
         <p>Er du sikker? Denne handlingen kan ikke bli reversert.</p>

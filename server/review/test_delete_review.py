@@ -21,19 +21,19 @@ class DeleteReviewTest(TestCase):
         ]
         for c in courses: c.save()
         reviews = [
-            Review(course_code="TMA4100", user_email="test@testesen.com", score=5, workload=1, difficulty=2,
+            Review(id=1, course_code="TMA4100", user_email="test@testesen.com", score=5, workload=1, difficulty=2,
                    review_text="Bra fag", full_name="Test test", study_programme="MTDT"),
-            Review(course_code="TMA4100", user_email="kpro@kpro.com", score=3, workload=1, difficulty=2,
+            Review(id=2, course_code="TMA4100", user_email="kpro@kpro.com", score=3, workload=1, difficulty=2,
                    review_text="Givende", full_name="KPro Kproson", study_programme="MTKPRO"),
-            Review(course_code="TMA4100", user_email="hei@hallo.com", score=4, workload=1, difficulty=2,
+            Review(id=3, course_code="TMA4100", user_email="hei@hallo.com", score=4, workload=1, difficulty=2,
                    review_text="Lattice", full_name="Heman 2015", study_programme="MTDT"),
-            Review(course_code="TMA4100", user_email="hallo@hei.com", score=2, workload=1, difficulty=2,
+            Review(id=4, course_code="TMA4100", user_email="hallo@hei.com", score=2, workload=1, difficulty=2,
                    review_text="Helt ok fag", full_name="Hanna Montana", study_programme="MTTEST"),
-            Review(course_code="TMA4100", user_email="pu@pu.com", score=5, workload=1, difficulty=1,
+            Review(id=5, course_code="TMA4100", user_email="pu@pu.com", score=5, workload=1, difficulty=1,
                    review_text="Sykt lett", full_name="PU PUsen", study_programme="MTDT"),
-            Review(course_code="TMA4100", user_email="morn@morna.com", score=4, workload=1, difficulty=2,
+            Review(id=6, course_code="TMA4100", user_email="morn@morna.com", score=4, workload=1, difficulty=2,
                    review_text="Morn du", full_name="Mons Bertilsen", study_programme="MTHEI"),
-            Review(course_code="EXPH0004", user_email="erasmus@montanus.com", score=1, workload=5, difficulty=2,
+            Review(id=7, course_code="EXPH0004", user_email="erasmus@montanus.com", score=1, workload=5, difficulty=2,
                    review_text="Meget filosofisk", full_name="Erasmus Montanus", study_programme="MTDT"),
         ]
         for r in reviews: r.save()
@@ -72,7 +72,7 @@ class DeleteReviewTest(TestCase):
         c.credentials(HTTP_AUTHORIZATION='valid_token')
         with patch("review.views.check_if_is_admin") as mock_admin_check:
             mock_admin_check.return_value = False
-            res = c.delete("/review/delete/?courseCode=TMA4100&userEmail=kpro@kpro.com")
+            res = c.delete("/review/delete/?reviewId=2")
         self.assertEqual(res.status_code, 401)
 
     def test_delete_review_valid_request_non_admin(self):
@@ -80,7 +80,7 @@ class DeleteReviewTest(TestCase):
         c.credentials(HTTP_AUTHORIZATION='valid_token')
         with patch("review.views.check_if_is_admin") as mock_admin_check:
             mock_admin_check.return_value = False
-            res = c.delete("/review/delete/?courseCode=TMA4100&userEmail=test@testesen.com")
+            res = c.delete("/review/delete/?reviewId=1")
         self.assertEqual(res.status_code, 200)
 
     def test_delete_review_valid_request_admin_and_correct_email(self):
@@ -88,7 +88,7 @@ class DeleteReviewTest(TestCase):
         c.credentials(HTTP_AUTHORIZATION='valid_token')
         with patch("review.views.check_if_is_admin") as mock_admin_check:
             mock_admin_check.return_value = True
-            res = c.delete("/review/delete/?courseCode=TMA4100&userEmail=test@testesen.com")
+            res = c.delete("/review/delete/?reviewId=1")
         self.assertEqual(res.status_code, 200)
 
     def test_delete_review_valid_request_admin_and_different_email(self):
@@ -96,5 +96,5 @@ class DeleteReviewTest(TestCase):
         c.credentials(HTTP_AUTHORIZATION='valid_token')
         with patch("review.views.check_if_is_admin") as mock_admin_check:
             mock_admin_check.return_value = True
-            res = c.delete("/review/delete/?courseCode=TMA4100&userEmail=kpro@kpro.com")
+            res = c.delete("/review/delete/?reviewId=2")
         self.assertEqual(res.status_code, 200)

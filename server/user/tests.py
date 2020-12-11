@@ -24,17 +24,17 @@ class DeleteUserTest(TestCase):
         ]
         for c in courses: c.save()
         reviews = [
-            Review(course_code="TMA4100", user_email="test@testesen.com", score=5, workload=1, difficulty=2,
+            Review(id=1, course_code="TMA4100", user_email="test@testesen.com", score=5, workload=1, difficulty=2,
                    review_text="Bra fag", full_name="Test test", study_programme="MTDT"),
-            Review(course_code="TMA4100", user_email="kpro@kpro.com", score=3, workload=0, difficulty=0,
+            Review(id=2, course_code="TMA4100", user_email="kpro@kpro.com", score=3, workload=0, difficulty=0,
                    review_text="Givende", full_name="KPro Kproson", study_programme="MTKPRO"),
-            Review(course_code="TMA4100", user_email="hei@hallo.com", score=4, workload=1, difficulty=2,
+            Review(id=3, course_code="TMA4100", user_email="hei@hallo.com", score=4, workload=1, difficulty=2,
                    review_text="Lattice", full_name="Heman 2015", study_programme="MTDT"),
-            Review(course_code="TDT4120", user_email="kpro@kpro.com", score=5, workload=2, difficulty=2,
+            Review(id=4, course_code="TDT4120", user_email="kpro@kpro.com", score=5, workload=2, difficulty=2,
                    review_text="Kult", full_name="KPro Kproson", study_programme="MTKPRO"),
-            Review(course_code="TDT4120", user_email="test@testesen.com", score=1, workload=0, difficulty=0,
+            Review(id=5, course_code="TDT4120", user_email="test@testesen.com", score=1, workload=0, difficulty=0,
                    review_text="Kjipt", full_name="Test test", study_programme="MTDT"),
-            Review(course_code="EXPH0004", user_email="kpro@kpro.com", score=3, workload=1, difficulty=0,
+            Review(id=6, course_code="EXPH0004", user_email="kpro@kpro.com", score=3, workload=1, difficulty=0,
                    review_text="<3", full_name="KPro Kproson", study_programme="MTDT")
         ]
         for r in reviews: r.save()
@@ -66,14 +66,14 @@ class DeleteUserTest(TestCase):
         c.credentials(HTTP_AUTHORIZATION='valid_token')
         res = c.delete("/user/delete/")
         self.assertEqual(res.status_code, 400)
-        self.assertEqual(res.data, "No user email provided")
+        self.assertEqual(res.data, "No review id provided")
 
     def test_delete_user_already_banned(self):
         AdminUser(user_email="test@testesen.com").save()
         BannedUser(user_email="hei@hallo.com").save()
         c = APIClient()
         c.credentials(HTTP_AUTHORIZATION='valid_token')
-        res = c.delete("/user/delete/?userEmail=hei@hallo.com")
+        res = c.delete("/user/delete/?reviewId=3")
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.data, "User is already banned.")
 
@@ -82,7 +82,7 @@ class DeleteUserTest(TestCase):
         AdminUser(user_email="test@testesen.com").save()
         c = APIClient()
         c.credentials(HTTP_AUTHORIZATION='valid_token')
-        res = c.delete("/user/delete/?userEmail=kpro@kpro.com")
+        res = c.delete("/user/delete/?reviewId=2")
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.data, "User successfully banned, with all reviews deleted.")
 

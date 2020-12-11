@@ -16,7 +16,7 @@ def delete_user(request):
     """
     Endpoint for handling deletion/banning of a single user.
     Request should contain the expiring token of the current session,
-    and the parameter userEmail, indicating the email of the user to be deleted.
+    and the parameter reviewId, indicating a review of the user to be deleted.
 
     When deleting a user, all their reviews should also be deleted.
     """
@@ -37,10 +37,16 @@ def delete_user(request):
     if not check_if_is_admin(user_email):
         return Response("Current user is not an admin.", status=401)
 
-    # Get and validate user email parameter
-    passed_email = request.GET.get("userEmail", None)
-    if passed_email is None:
-        return Response("No user email provided", status=400)
+    # Get and validate review id parameter
+    review_id = request.GET.get("reviewId", None)
+    if review_id is None or review_id == "undefined":
+        return Response("No review id provided", status=400)
+    if not Review.objects.filter(id=review_id).exists():
+        return Response("Review does not exist", status=400)
+
+    # Get review from database, and extract its email
+    review = Review.objects.get(id=review_id)
+    passed_email = review.user_email
 
     # Check if the user to be banned is already banned.
     if BannedUser.objects.filter(user_email=passed_email).exists():
