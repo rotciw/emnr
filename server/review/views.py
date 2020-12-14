@@ -190,8 +190,10 @@ def get_reviews_from_db(request):
     is_admin = check_if_is_admin(user_email)
 
     # Append if user can delete review to the list of reviews
+    print(Review.objects.get(id=24).upvote_set.count())
     for review in data:
         review["can_delete"] = check_if_can_delete(review, user_email, is_admin)
+        review["upvote_count"] = Review.objects.get(id=review["id"]).upvote_set.count()
 
     # Remove user email field from reviews
     for review in data:
