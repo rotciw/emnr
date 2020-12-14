@@ -35,7 +35,9 @@ RUN apk update \
   && apk add --virtual build-deps gcc python3-dev musl-dev \
   && apk add postgresql-dev \
   && pip install psycopg2 \
-  && apk del build-deps
+  && apk del build-deps \
+  # need to downgrade pip because of the new way pip resolves dependencies
+  && pip install pip==20.2.4
 COPY requirements.txt /src/backend/
 RUN pip install -r requirements.txt
 COPY . /src/backend/
