@@ -5,14 +5,6 @@ import { BoldTitle, Title } from 'styles/Text';
 import { ShapeContainer } from 'styles/Containers';
 import { Circle, RotatedSquare } from 'styles/Shapes';
 import { defaultTheme } from 'styles/theme';
-import wictor from 'assets/images/wic.jpg';
-import casp from 'assets/images/casp.png';
-import eivind from 'assets/images/eivind.jpg';
-import haakon from 'assets/images/haakon.png';
-import harald from 'assets/images/harald.png';
-import jakob from 'assets/images/jakob.png';
-import sylvi from 'assets/images/sylvi.png';
-import Person from 'components/Person';
 
 const GuideLinesPage: React.FC = () => {
   return (
@@ -46,28 +38,46 @@ const GuideLinesPage: React.FC = () => {
         />
       </ShapeContainer>
       <CenteredFlexContainer flexDirection='column' margin='5% 10%'>
-        <BoldTitle mobileFontSize='28px'>Om EMNR</BoldTitle>
-        <br />
-        <Title fontSize='22px'>
-          Hjelp til å velge NTNU-emner, for og av studenter
-        </Title>
+        <BoldTitle mobileFontSize='28px'>Regler for emnevurderinger</BoldTitle>
         <br />
         <Title fontSize='18px'>
-          EMNR skal hjelpe studenter med å velge emner på NTNU. Tjenesten er
-          laget for <a href='http://uninett.no/'>Uninett</a> av gruppe 13 i
-          emnet TDT4290 Kundestyrt Prosjekt. Brukere har tilgang til relevant
-          objektiv informasjon som snittkarakter og ståprosent, men i tillegg
-          også subjektive anmeldelser av emner laget av andre studenter.
-          <br />
-          <br />
-          EMNR gir kun studenter som har hatt emnet tidligere mulighet til å
-          anmelde faget, og autentiserer brukere gjennom FEIDE. På denne måten
-          kan brukere være sikre på at anmeldelsene er ekte.
+          <ol>
+              <li><b>Emnevurderinger skal være saklige.</b> Vurderingene på siden skal omhandle emnet vurderingen er skrevet på. Vurderinger som tydelig er usaklige blir slettet.</li>
+              <br/>
+              <li><b>Personangrep eller trolling er ikke tillatt.</b> Fokuser på emnet, ikke enkeltpersoner i fagstaben. Det gjelder også skjellsord og særlig ukonstruktive eller nedsettende kommentarer. Trolling vil si å unødig provosere folk.</li>
+              <br/>
+              <li><b>Ikke spam.</b> Det vil blant annet si off-topic fra emnet, eller unødvendige usakligheter.</li>
+              <br/>
+              <li><b>Sletting fra moderatorer skal følges.</b> Det er for øyeblikket utviklingsteamet som gjør modereringen. Blir en vurdering du har skrevet slettet, skal du ikke skrive den samme på nytt. Lurer du på hvorfor vurderingen din ble slettet, kan du ta kontakt med oss på emnr.moderering@gmail.com</li>
+              <br/>
+              <li><b>Uenighet med moderering skal tas opp på mail.</b> Er man uenig med en moderering, skal man ta det opp med oss på EMNR sin epost: emnr.moderering@gmail.com Det samme gjelder klager på andres regelbrudd.</li>
+              <br/>
+              <li><b>Selvpromotering og spørreundersøkelser.</b> Reklamering for andre grupper/sider, nettsider, events, blogger, spørreundersøkelser og selvpromotering er i utgangspunktet ikke lov. Unntak kan søkes om ved å sende en epost til emnr.moderering@gmail.com</li>
+          </ol>
         </Title>
         <br />
-        <BoldTitle mobileFontSize='28px'>Om teamet</BoldTitle>
+        <BoldTitle mobileFontSize='28px'>Konsekvenser av brudd på regler:</BoldTitle>
         <Title fontSize='18px'>
-          Teamet består av 7 studenter som studerer Datateknologi ved NTNU.
+        Bryter en vurdering med disse retningslinjene vil vurderingen bli slettet. Ved grove eller gjentagende brudd vil brukeren bli utestengt fra å bidra til EMNR sitt innhold.
+        </Title>
+        <br/>
+        <br/>
+        <BoldTitle mobileFontSize='28px'>Hvordan skrive en god emnevurdering:</BoldTitle>
+        <Title fontSize='18px'>
+          <ul>
+              <li>
+                  En god vurdering er
+                  <ul>
+                      <li>saklig</li>
+                      <li>konstruktiv</li>
+                      <li>konkret</li>
+                      <li>spesifikk</li>
+                  </ul>
+              </li>
+              <li>Gi din ærlige mening om et emne sin arbeidsmengde, vanskelighetsgrad og ditt totalinntrykk.</li>
+              <li>Skriv gjerne også hva du synes var bra, og hva emnet kan gjøre for å forbedre seg.</li>
+              <li>Din erfaring med hvordan emnet i praksis var for deg som student. Hva man lærer, hvordan øvingsopplegget er, hvor viktige forelesningene er, er eksempler på nyttig informasjon som gjerne kan være med i en emnevurdering.</li>
+          </ul>
         </Title>
       </CenteredFlexContainer>
     </Layout>
