@@ -12,6 +12,7 @@ import { Hamburger } from './Hamburger';
 import homeIcon from '../assets/icons/home.svg';
 import meIcon from '../assets/icons/me.svg';
 import infoIcon from '../assets/icons/info.svg';
+import guideLinesIcon from '../assets/icons/rules.svg';
 
 const StyledMenu = styled.nav<{ open: boolean }>`
   top: 0;
@@ -134,7 +135,7 @@ export const Menu: React.FC = () => {
         </FlexContainer>
 
         <FlexContainer>
-          <Icon src={infoIcon} alt='Info icon' />
+          <Icon src={guideLinesIcon} alt='Guidelines icon' />
           <StyledLink onClick={handleClickGuideLines}>Regler for bruk av siden</StyledLink>
         </FlexContainer>
 
