@@ -113,6 +113,7 @@ export const Menu: React.FC = () => {
   const history = useHistory();
   const handleOnClick = useCallback(() => history.push('/'), [history]);
   const handleClickMe = useCallback(() => history.push('/me'), [history]);
+  const handleClickGuideLines = useCallback(() => history.push('/guidelines'),[history]);
   const handleClickAbout = useCallback(() => history.push('/about'), [history]);
   const handleClickLogOut = useCallback(() => {
     history.push('/login');
@@ -131,6 +132,12 @@ export const Menu: React.FC = () => {
           <Icon src={meIcon} alt='Me icon' />
           <StyledLink onClick={handleClickMe}>Gå til min side</StyledLink>
         </FlexContainer>
+
+        <FlexContainer>
+          <Icon src={infoIcon} alt='Info icon' />
+          <StyledLink onClick={handleClickGuideLines}>Regler for bruk av siden</StyledLink>
+        </FlexContainer>
+
 
         <FlexContainer>
           <Icon src={infoIcon} alt='Info icon' />
