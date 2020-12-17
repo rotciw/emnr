@@ -55,7 +55,6 @@ export const validateToken = (email: string) => {
       },
     })
     .then(function (response) {
-      console.log("response: " + response.data);
       if (response.data === 'True'){
         return true;
       } else {

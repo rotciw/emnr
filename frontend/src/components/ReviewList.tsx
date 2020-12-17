@@ -53,6 +53,13 @@ const ReviewList: React.FC<ReviewListProps> = ({
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [numberOfReviews, setNumberOfReviews] = useState<number>(0);
 
+  // this useEffect is used for resetting page number to 1 on clean up
+  useEffect(() => {
+    return () => {
+      pageProvider.setReviewPage(1);
+    }
+  }, []);
+
   let pageNumber = pageProvider.reviewPage;
   const resultLimit = 5;
   let start = (pageNumber - 1) * resultLimit;
@@ -117,42 +124,42 @@ const ReviewList: React.FC<ReviewListProps> = ({
       {loading ? (
         <Loading />
       ) : (
-        <Wrapper>
-          {reviews.length ? (
-            <div>
-              {reviews.map((currentReview) => {
-                //If the difficulty or workload value is not set in the review, they are replaced with an explaining string.
-                if (currentReview.difficulty === -1) {
-                  currentReview.difficulty = 'Not given';
-                }
-                if (currentReview.workload === -1) {
-                  currentReview.workload = 'Not given';
-                }
+          <Wrapper>
+            {reviews.length ? (
+              <div>
+                {reviews.map((currentReview) => {
+                  //If the difficulty or workload value is not set in the review, they are replaced with an explaining string.
+                  if (currentReview.difficulty === -1) {
+                    currentReview.difficulty = 'Not given';
+                  }
+                  if (currentReview.workload === -1) {
+                    currentReview.workload = 'Not given';
+                  }
 
-                return (
-                  <Review
-                    key={currentReview.full_name + currentReview.date}
-                    name={currentReview.full_name}
-                    studyProgramme={currentReview.study_programme}
-                    score={currentReview.score}
-                    workLoad={currentReview.workload}
-                    difficulty={currentReview.difficulty}
-                    text={currentReview.review_text}
-                    date={currentReview.date}
-                    isAdmin={isAdmin}
-                    canDelete={currentReview.can_delete}
-                    id={currentReview.id}
-                    courseCode={currentReview.course_code}
-                  />
-                );
-              })}
-              <Pagination currentPage='reviews' />
-            </div>
-          ) : (
-            <EmptyResult>Ingen vurderinger av {courseCode}. </EmptyResult>
-          )}
-        </Wrapper>
-      )}
+                  return (
+                    <Review
+                      key={currentReview.full_name + currentReview.date}
+                      name={currentReview.full_name}
+                      studyProgramme={currentReview.study_programme}
+                      score={currentReview.score}
+                      workLoad={currentReview.workload}
+                      difficulty={currentReview.difficulty}
+                      text={currentReview.review_text}
+                      date={currentReview.date}
+                      isAdmin={isAdmin}
+                      canDelete={currentReview.can_delete}
+                      id={currentReview.id}
+                      courseCode={currentReview.course_code}
+                    />
+                  );
+                })}
+                <Pagination currentPage='reviews' />
+              </div>
+            ) : (
+                <EmptyResult>Ingen vurderinger av {courseCode}. </EmptyResult>
+              )}
+          </Wrapper>
+        )}
     </>
   );
 };
