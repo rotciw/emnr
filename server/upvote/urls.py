@@ -6,5 +6,5 @@ from . import views
 urlpatterns = [
     path("", views.upvote),
     path("check/", views.upvote_status),
-    path("remove/", views.remove_upvote),
+    path("delete/", views.delete_upvote),
 ]

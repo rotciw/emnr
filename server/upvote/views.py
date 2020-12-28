@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from .models import Upvote
 from user.models import BannedUser
 from review.models import Review
-from course.views import retrieve_courses_from_token, get_current_semester, perform_feide_api_call
+from course.views import perform_feide_api_call
 
 
 @api_view(['POST'])
@@ -58,7 +58,7 @@ def upvote_status(request):
 
 
 @api_view(['DELETE'])
-def remove_upvote(request):
+def delete_upvote(request):
     """
     Removes the user's upvote from the given review (reviewId), if it has one.
     """
@@ -78,7 +78,7 @@ def remove_upvote(request):
         upvote.delete()
         return Response("Upvote successfully removed.", status=200)
     except Upvote.DoesNotExist:
-        return Response("User has not previously upvoted this review. Thus there is no upvote to remove.", status=400)
+        return Response("User has not previously upvoted this review. There is no upvote to remove.", status=400)
     except Exception as e:
         print("Unknown error: ", e)
 
