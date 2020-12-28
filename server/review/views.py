@@ -145,7 +145,6 @@ def get_reviews_from_db(request):
         exp_token = request.META["HTTP_AUTHORIZATION"]
     except KeyError:
         raise KeyError("No expiring token provided")
-
     # Get and validate course_code parameter
     course_code = get_course_code_parameter(request)
 
@@ -154,7 +153,6 @@ def get_reviews_from_db(request):
     if show_my_programme not in ["true", "false"]:
         raise ValueError("Illegal boolean value")
     show_my_programme = show_my_programme == "true"
-
     # Define a base queryset, which is used for all queries later in the method
     base_qs = Review.objects.filter(course_code=course_code)
     if show_my_programme:
@@ -190,10 +188,9 @@ def get_reviews_from_db(request):
     is_admin = check_if_is_admin(user_email)
 
     # Append if user can delete review to the list of reviews
-    print(Review.objects.get(id=24).upvote_set.count())
     for review in data:
         review["can_delete"] = check_if_can_delete(review, user_email, is_admin)
-        review["upvote_count"] = Review.objects.get(id=review["id"]).upvote_set.count()
+        # review["upvote_count"] = Review.objects.get(id=review["id"]).upvote_set.count()
 
     # Remove user email field from reviews
     for review in data:

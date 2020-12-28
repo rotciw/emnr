@@ -7,5 +7,4 @@ urlpatterns = [
     path("", views.upvote),
     path("check/", views.can_upvote),
     path("remove/", views.remove_upvote),
-    path("user/", views.get_user),
 ]
