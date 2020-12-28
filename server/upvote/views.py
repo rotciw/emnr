@@ -31,12 +31,37 @@ def upvote(request):
 
 
 @api_view(['GET'])
-def can_upvote(request):
-    pass
+def upvote_status(request):
+    """
+    See the user's upvote status for a given review(reviewId).
+    0: User can upvote this review
+    1. User has already upvoted this review.
+    2. User is banned from making upvotes
+    """
+    exp_token = request.META['HTTP_AUTHORIZATION']
+    user = get_user(exp_token)
+    review_id = request.GET.get('reviewId', None)
+
+    if review_id is None or review_id == "undefined":
+        return Response("No review id provided", status=400)
+    if not Review.objects.filter(id=review_id).exists():
+        return Response("Review does not exist", status=400)
+
+    review = Review.objects.get(id=review_id)
+
+    if BannedUser.objects.filter(user_email=user.email).exists():
+        return Response(2, status=200)
+    elif Upvote.objects.filter(user=user).filter(review=review).exists():
+        return Response(1, status=200)
+    else:
+        return Response(0, status=200)
 
 
 @api_view(['DELETE'])
 def remove_upvote(request):
+    """
+    Removes the user's upvote from the given review (reviewId), if it has one.
+    """
     exp_token = request.META['HTTP_AUTHORIZATION']
     # TODO: Confirm that the expiring token is okay? It is done when deleting reviews, but not when posting..
     user = get_user(exp_token)
@@ -48,12 +73,14 @@ def remove_upvote(request):
         return Response("Review does not exist", status=400)
 
     review = Review.objects.get(id=review_id)
-    if Upvote.objects.filter(user=user).filter(review=review).exists():
+    try:
         upvote = Upvote.objects.get(user=user, review=review)
         upvote.delete()
         return Response("Upvote successfully removed.", status=200)
-    else:
+    except Upvote.DoesNotExist:
         return Response("User has not previously upvoted this review. Thus there is no upvote to remove.", status=400)
+    except Exception as e:
+        print("Unknown error: ", e)
 
 
 def get_user(exp_token):

@@ -5,6 +5,6 @@ from . import views
 
 urlpatterns = [
     path("", views.upvote),
-    path("check/", views.can_upvote),
+    path("check/", views.upvote_status),
     path("remove/", views.remove_upvote),
 ]
