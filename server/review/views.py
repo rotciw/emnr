@@ -9,7 +9,7 @@ from auth.models import UserAuth
 from .models import Review
 from course.models import Course
 from user.models import AdminUser, BannedUser
-from django.db.models import Avg
+from django.db.models import Avg, Count
 
 
 @api_view(['POST'])
@@ -179,7 +179,8 @@ def get_reviews_from_db(request):
     average_difficulty = base_qs.filter(difficulty__gt=-1).aggregate(Avg("difficulty"))["difficulty__avg"]
 
     # Fetch reviews from database
-    data = list(base_qs.order_by("-date")[offset:offset + n].values())
+    qs = base_qs.annotate(num_upvotes=Count('upvote'))
+    data = list(qs.order_by("-date")[offset:offset + n].values())
 
     # Append if user can delete review to the list of reviews
     _, user_email = get_user_full_name_and_email(exp_token)
@@ -190,7 +191,6 @@ def get_reviews_from_db(request):
     # Append if user can delete review to the list of reviews
     for review in data:
         review["can_delete"] = check_if_can_delete(review, user_email, is_admin)
-        # review["upvote_count"] = Review.objects.get(id=review["id"]).upvote_set.count()
 
     # Remove user email field from reviews
     for review in data:

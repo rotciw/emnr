@@ -37,7 +37,23 @@ def can_upvote(request):
 
 @api_view(['DELETE'])
 def remove_upvote(request):
-    pass
+    exp_token = request.META['HTTP_AUTHORIZATION']
+    # TODO: Confirm that the expiring token is okay? It is done when deleting reviews, but not when posting..
+    user = get_user(exp_token)
+    review_id = request.GET.get('reviewId', None)
+
+    if review_id is None or review_id == "undefined":
+        return Response("No review id provided", status=400)
+    if not Review.objects.filter(id=review_id).exists():
+        return Response("Review does not exist", status=400)
+
+    review = Review.objects.get(id=review_id)
+    if Upvote.objects.filter(user=user).filter(review=review).exists():
+        upvote = Upvote.objects.get(user=user, review=review)
+        upvote.delete()
+        return Response("Upvote successfully removed.", status=200)
+    else:
+        return Response("User has not previously upvoted this review. Thus there is no upvote to remove.", status=400)
 
 
 def get_user(exp_token):
