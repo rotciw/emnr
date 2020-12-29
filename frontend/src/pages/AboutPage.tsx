@@ -73,17 +73,17 @@ const AboutPage: React.FC = () => {
           <Person
             name='Haakon Gunleiksrud'
             imgSrc={haakon}
-            linkedIn='https://www.linkedin.com/in/haakon-gunleiksrud-a45309a9/'
+            linkedIn='https://www.linkedin.com/in/haakogun/'
           />
           <Person
             name='Eivind H. Furdal'
             imgSrc={eivind}
-            linkedIn='https://www.linkedin.com/in/eivind-hovdeg%C3%A5rd-furdal-3687041b9/'
+            linkedIn='https://www.linkedin.com/in/eivindhf/'
           />{' '}
           <Person
             name='Jakob E. Kielland'
             imgSrc={jakob}
-            linkedIn='https://www.linkedin.com/in/jakob-kielland-93556613a//'
+            linkedIn='https://www.linkedin.com/in/jakobkielland/'
           />{' '}
           <Person
             name='Sylvi P. Huynh'
@@ -93,7 +93,7 @@ const AboutPage: React.FC = () => {
           <Person
             name='Harald G. Brevik'
             imgSrc={harald}
-            linkedIn='https://www.linkedin.com/in/harald-guntvedt-brevik-6386a3169'
+            linkedIn='https://www.linkedin.com/in/harald-guntvedt-brevik-6386a3169/'
           />{' '}
           <Person
             name='Casper Feng'
