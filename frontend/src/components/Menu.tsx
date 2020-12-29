@@ -12,6 +12,7 @@ import { Hamburger } from './Hamburger';
 import homeIcon from '../assets/icons/home.svg';
 import meIcon from '../assets/icons/me.svg';
 import infoIcon from '../assets/icons/info.svg';
+import guidelinesIcon from '../assets/icons/rules.svg';
 
 const StyledMenu = styled.nav<{ open: boolean }>`
   top: 0;
@@ -113,6 +114,7 @@ export const Menu: React.FC = () => {
   const history = useHistory();
   const handleOnClick = useCallback(() => history.push('/'), [history]);
   const handleClickMe = useCallback(() => history.push('/me'), [history]);
+  const handleClickGuidelines = useCallback(() => history.push('/guidelines'),[history]);
   const handleClickAbout = useCallback(() => history.push('/about'), [history]);
   const handleClickLogOut = useCallback(() => {
     history.push('/login');
@@ -131,6 +133,12 @@ export const Menu: React.FC = () => {
           <Icon src={meIcon} alt='Me icon' />
           <StyledLink onClick={handleClickMe}>Gå til min side</StyledLink>
         </FlexContainer>
+
+        <FlexContainer>
+          <Icon src={guidelinesIcon} alt='Guidelines icon' />
+          <StyledLink onClick={handleClickGuidelines}>Regler for bruk av siden</StyledLink>
+        </FlexContainer>
+
 
         <FlexContainer>
           <Icon src={infoIcon} alt='Info icon' />

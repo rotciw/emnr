@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
 import { FlexContainer, HrLine } from 'styles/Containers';
 import { Title, BoldTitle } from 'styles/Text';
@@ -10,6 +10,7 @@ import Dropdown from 'react-dropdown';
 import { RateCourseButton } from './RateCourseButton';
 import { ModalXButton, DisabledRedButton } from 'styles/Buttons';
 import { GlobalStateContext } from 'context/GlobalStateContext';
+import { useHistory } from 'react-router-dom';
 
 interface ReviewFormProps {
   closeModal: () => void;
@@ -42,6 +43,17 @@ const BoldInputDescription = styled.p`
 
 const RedAnchor = styled.a`
   color: red;
+`;
+
+const GuidelineLink = styled.a`
+  font-family: gilroyxbold;
+  text-decoration: underline;
+  font-size: 14px;
+  cursor: pointer;
+  :hover {
+    text-decoration: none;
+  }
+  color: ${({ theme }) => theme.darkBlue};
 `;
 
 const options = [
@@ -84,6 +96,9 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       })
       .catch((error) => console.log(error));
   };
+
+  const history = useHistory();
+  const handleGuidelinesClick = useCallback(() => history.push('/guidelines'),[history]);
 
   return (
     <div>
@@ -136,6 +151,9 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         Tjenesten støtter ikke personangrep mot fagstaben og slike vurderinger
         vil bli slettet.
       </ItalicText>
+      <GuidelineLink onClick={handleGuidelinesClick}>
+        Regler og tips for gode emnevurderinger
+      </GuidelineLink>
     </div>
   );
 };
