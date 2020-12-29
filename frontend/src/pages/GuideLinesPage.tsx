@@ -6,7 +6,7 @@ import { ShapeContainer } from 'styles/Containers';
 import { Circle, RotatedSquare } from 'styles/Shapes';
 import { defaultTheme } from 'styles/theme';
 
-const GuideLinesPage: React.FC = () => {
+const GuidelinesPage: React.FC = () => {
   return (
     <Layout padding='0 20%'>
       <ShapeContainer>
@@ -42,9 +42,9 @@ const GuideLinesPage: React.FC = () => {
         <br />
         <Title fontSize='18px'>
           <ol>
-              <li><b>Emnevurderinger skal være saklige.</b> Vurderingene på siden skal omhandle emnet vurderingen er skrevet på. Vurderinger som tydelig er usaklige blir slettet.</li>
+              <li><b>Emnevurderinger skal være saklige.</b> Vurderingene på siden skal omhandle emnet vurderingen er skrevet for. Vurderinger som tydelig er usaklige blir slettet.</li>
               <br/>
-              <li><b>Personangrep eller trolling er ikke tillatt.</b> Fokuser på emnet, ikke enkeltpersoner i fagstaben. Det gjelder også skjellsord og særlig ukonstruktive eller nedsettende kommentarer. Trolling vil si å unødig provosere folk.</li>
+              <li><b>Personangrep eller "trolling" er ikke tillatt.</b> Fokuser på emnet, ikke enkeltpersoner i fagstaben. Det gjelder også skjellsord og særlig ukonstruktive eller nedsettende kommentarer. "Trolling" vil si å unødig provosere folk.</li>
               <br/>
               <li><b>Ikke spam.</b> Det vil blant annet si off-topic fra emnet, eller unødvendige usakligheter.</li>
               <br/>
@@ -84,4 +84,4 @@ const GuideLinesPage: React.FC = () => {
   );
 };
 
-export default GuideLinesPage;
+export default GuidelinesPage;
