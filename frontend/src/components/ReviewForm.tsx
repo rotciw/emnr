@@ -45,7 +45,7 @@ const RedAnchor = styled.a`
   color: red;
 `;
 
-const GuidelineLink = styled.p`
+const GuidelineLink = styled.a`
   font-family: gilroyxbold;
   text-decoration: underline;
   font-size: 14px;
