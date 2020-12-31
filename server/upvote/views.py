@@ -13,12 +13,15 @@ def upvote(request):
     exp_token = request.META['HTTP_AUTHORIZATION']
     user = get_user(exp_token)
     review_id = request.GET.get("reviewId", None)
-
     if BannedUser.objects.filter(user_email=user.email).exists():
         return Response("User is banned from upvoting reviews", status=400)
 
     if review_id is None or review_id == "undefined":
         return Response("No review id provided", status=400)
+    try:
+        int(review_id)
+    except ValueError:
+        return Response("reviewId is not an integer.", status=400)
     if not Review.objects.filter(id=review_id).exists():
         return Response("Review does not exist", status=400)
 
@@ -38,8 +41,10 @@ def upvote_status(request):
     1. User has already upvoted this review.
     2. User is banned from making upvotes
     """
+    # TODO: What happens when the exp_token is not valid? should return correct.
     exp_token = request.META['HTTP_AUTHORIZATION']
     user = get_user(exp_token)
+
     review_id = request.GET.get('reviewId', None)
 
     if review_id is None or review_id == "undefined":
