@@ -35,7 +35,7 @@ class DeleteUpvoteTest(TestCase):
         Upvote(user=self.other_user, review=self.review1).save()
 
     def test_delete_upvote_missing_review_id(self):
-        response = self.api_client.delete("/upvote/delete/", HTTP_AUTHORIZATION="valid_token")
+        response = self.api_client.delete("/upvote/delete/")
         self.assertEqual(response.status_code, 400, "Delete upvote without reviewId should not be processed.")
 
     def test_delete_upvote_invalid_review_id_values(self):
