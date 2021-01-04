@@ -3,8 +3,10 @@ from unittest.mock import patch
 from review.views import get_reviews, get_reviews_from_db
 from course.models import Course
 from review.models import Review
+from upvote.models import Upvote
 from django.test import RequestFactory, Client
 from auth.models import UserAuth
+from django.contrib.auth.models import User
 from rest_framework.test import APIClient
 from review.tests import mock_feide_apis
 
@@ -173,4 +175,16 @@ class GetReviewsTest(TestCase):
         res = c.get("/review/get/?courseCode=TMA4100&showMyProgramme=true")
         self.assertEqual(res.status_code, 400)
 
-
+    def test_get_reviews_upvote(self):
+        # Sees if num_upvotes behaves correctly when upvotes for the review exists.
+        self.c = APIClient()
+        self.c.credentials(HTTP_AUTHORIZATION="valid_token")
+        User.objects.create(username="test1@testesen.com", email="test1@testesen.com").save()
+        user1 = User.objects.get(username="test1@testesen.com")
+        User.objects.create(username="test2@testesen.com", email="test2@testesen.com").save()
+        user2 = User.objects.get(username="test2@testesen.com")
+        review = Review.objects.get(id=1)
+        Upvote(user=user1, review=review).save()
+        Upvote(user=user2, review=review).save()
+        response = self.c.get("/review/get/?courseCode=TMA4100")
+        self.assertEqual(response.data["data"][5]["num_upvotes"], 2, "Upvoting should lead to increased num_upvotes")
