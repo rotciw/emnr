@@ -4,7 +4,7 @@ from . import views
 
 
 urlpatterns = [
-    path("", views.upvote),
+    path("", views.post_upvote),
     path("check/", views.upvote_status),
     path("delete/", views.delete_upvote),
 ]
