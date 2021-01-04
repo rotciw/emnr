@@ -175,10 +175,10 @@ class GetReviewsTest(TestCase):
         res = c.get("/review/get/?courseCode=TMA4100&showMyProgramme=true")
         self.assertEqual(res.status_code, 400)
 
-    def test_get_reviews_upvote(self):
+    def test_get_reviews_num_upvotes(self):
         # Sees if num_upvotes behaves correctly when upvotes for the review exists.
-        self.c = APIClient()
-        self.c.credentials(HTTP_AUTHORIZATION="valid_token")
+        api_client = APIClient()
+        api_client.credentials(HTTP_AUTHORIZATION="valid_token")
         User.objects.create(username="test1@testesen.com", email="test1@testesen.com").save()
         user1 = User.objects.get(username="test1@testesen.com")
         User.objects.create(username="test2@testesen.com", email="test2@testesen.com").save()
@@ -186,5 +186,5 @@ class GetReviewsTest(TestCase):
         review = Review.objects.get(id=1)
         Upvote(user=user1, review=review).save()
         Upvote(user=user2, review=review).save()
-        response = self.c.get("/review/get/?courseCode=TMA4100")
+        response = api_client.get("/review/get/?courseCode=TMA4100")
         self.assertEqual(response.data["data"][5]["num_upvotes"], 2, "Upvoting should lead to increased num_upvotes")

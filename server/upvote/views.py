@@ -62,6 +62,10 @@ def upvote_status(request):
     review_id = request.GET.get('reviewId', None)
     if review_id is None or review_id == "undefined":
         return Response("No review id provided", status=400)
+    try:
+        int(review_id)
+    except ValueError:
+        return Response("reviewId is not an integer.", status=400)
     if not Review.objects.filter(id=review_id).exists():
         return Response("Review does not exist", status=400)
     review = Review.objects.get(id=review_id)
@@ -87,6 +91,10 @@ def delete_upvote(request):
     review_id = request.GET.get('reviewId', None)
     if review_id is None or review_id == "undefined":
         return Response("No review id provided", status=400)
+    try:
+        int(review_id)
+    except ValueError:
+        return Response("reviewId is not an integer.", status=400)
     if not Review.objects.filter(id=review_id).exists():
         return Response("Review does not exist", status=400)
     review = Review.objects.get(id=review_id)
