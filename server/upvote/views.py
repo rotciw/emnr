@@ -43,12 +43,9 @@ def delete_upvote(request):
         user = get_user(exp_token)
         review_id = request.GET.get("reviewId")
         review = Review.objects.get(id=review_id)
-        try:
-            upvote = Upvote.objects.get(user=user, review=review)
-            upvote.delete()
-            return Response("Upvote successfully removed.", status=200)
-        except Exception as e:
-            print("Unknown error: ", e)
+        upvote = Upvote.objects.get(user=user, review=review)
+        upvote.delete()
+        return Response("Upvote successfully removed.", status=200)
 
 
 @api_view(['GET'])
@@ -67,12 +64,12 @@ def get_upvote_status_from_db(request):
     try:
         exp_token = request.META['HTTP_AUTHORIZATION']
     except KeyError:
-        raise KeyError("No expiring token provided.")
+        return Response("Field HTTP_AUTHORIZATION missing in request, i.e. missing user's expiring token.", status=401)
     if not UserAuth.objects.filter(expiring_token=exp_token).exists():
         return Response(2, status=200)
     user = get_user(exp_token)
     if user is None:
-        return Response("User not found in our database", status=404)
+        return Response("User not found in our database", status=401)
 
     review_id = request.GET.get('reviewId', None)
     if review_id is None or review_id == "undefined":
@@ -100,8 +97,8 @@ def get_user(exp_token):
     json_object = perform_feide_api_call(exp_token, "https://auth.dataporten.no/openid/userinfo")
     user_mail = json_object["email"]
     try:
-        user = User.objects.filter(email=user_mail).first()
+        user = User.objects.get(email=user_mail)
     except ObjectDoesNotExist as e:
-        print("User object not found in our database.")
+        print(e, "User object not found in our database.")
         return None
     return user

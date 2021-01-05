@@ -78,9 +78,9 @@ class DeleteUpvoteTest(TestCase):
 
     def test_delete_upvote_missing_user(self):
         User.objects.get(username="test@testesen.com").delete()
-        self.assertEqual(self.api_client.delete("/upvote/delete/?reviewId=1").status_code, 404)
+        self.assertEqual(self.api_client.delete("/upvote/delete/?reviewId=1").status_code, 401)
         UserAuth(expiring_token="valid_token_missing_user", access_token="valid_token_missing_user",
                  user_email="test_missing_user@testesen.com").save()
         api_client_missing_user = APIClient()
         api_client_missing_user.credentials(HTTP_AUTHORIZATION="valid_token_missing_user")
-        self.assertEqual(api_client_missing_user.delete("/upvote/delete/?reviewId=1").status_code, 404)
+        self.assertEqual(api_client_missing_user.delete("/upvote/delete/?reviewId=1").status_code, 401)

@@ -51,15 +51,6 @@ class PostUpvoteTest(TestCase):
         ]
         for r in reviews: r.save()
 
-    def test_get_user(self):
-        self.assertEqual(get_user('valid_token').email, "test@testesen.com")
-        User.objects.get(username="test@testesen.com").delete()
-        self.assertIsNone(get_user('valid_token'))
-        # Making user auth without corresponding user
-        UserAuth(expiring_token="valid_token_missing_user", access_token="valid_token_missing_user",
-                 user_email="test_missing_user@testesen.com").save()
-        self.assertIsNone(get_user('valid_token_missing_user'))
-
     def test_upvote_missing_review_id(self):
         response = self.api_client.post("/upvote/", HTTP_AUTHORIZATION="valid_token")
         self.assertEqual(response.status_code, 400, "Upvote without reviewId should not be processed.")
@@ -92,13 +83,23 @@ class PostUpvoteTest(TestCase):
                                                                      "same when a user that has already upvoted tries "
                                                                      "to upvote again.")
 
-    def test_missing_user(self):
+    def test_post_upvote_missing_user(self):
         # The website mainly uses authentication and user data from Feide.
         # Upvotes however, use the User that is created in our database during authentication.
         User.objects.get(username="test@testesen.com").delete()
-        self.assertEqual(self.api_client.post("/upvote/?reviewId=1").status_code, 404)
+        self.assertEqual(self.api_client.post("/upvote/?reviewId=1").status_code, 401)
         UserAuth(expiring_token="valid_token_missing_user", access_token="valid_token_missing_user",
                  user_email="test_missing_user@testesen.com").save()
         api_client_missing_user = APIClient()
         api_client_missing_user.credentials(HTTP_AUTHORIZATION="valid_token_missing_user")
-        self.assertEqual(api_client_missing_user.post("/upvote/?reviewId=1").status_code, 404)
+        self.assertEqual(api_client_missing_user.post("/upvote/?reviewId=1").status_code, 401)
+
+    def test_get_user(self):
+        self.assertEqual(get_user('valid_token').email, "test@testesen.com")
+        User.objects.get(username="test@testesen.com").delete()
+        self.assertIsNone(get_user('valid_token'))
+        # Making user auth without corresponding user
+        UserAuth(expiring_token="valid_token_missing_user", access_token="valid_token_missing_user",
+                 user_email="test_missing_user@testesen.com").save()
+        self.assertIsNone(get_user('valid_token_missing_user'))
+

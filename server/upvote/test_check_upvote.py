@@ -52,10 +52,16 @@ class CheckUpvoteTest(TestCase):
         response = self.api_client.get("/upvote/check/?reviewId=1")
         self.assertEqual(response.data, 1)
 
-    def test_check_upvote_missing_expiring_token(self):
+    def test_check_upvote_no_matching_expiring_token(self):
         UserAuth.objects.get(expiring_token="valid_token").delete()
         response = self.api_client.get("/upvote/check/?reviewId=1")
         self.assertEqual(response.data, 2)
+
+    def test_check_upvote_no_expiring_token(self):
+        api_client_missing_http_authorization = APIClient()
+        # with self.assertRaises(KeyError)
+        response = api_client_missing_http_authorization.get("/upvote/check/?reviewId=1")
+        self.assertEqual(response.status_code, 401)
 
     def test_check_upvote_banned_user(self):
         BannedUser(user_email="test@testesen.com").save()
