@@ -47,11 +47,11 @@ const MyCoursesList: React.FC<MyCoursesListProps> = () => {
                 if (course.has_reviewed) {
                   reviewedCounter++;
                 }
-                setAmountOfReviewed(parseInt(((reviewedCounter / allMyCourses.length) * 100).toFixed(0)));
                 return semesters;
               },
               {},
             );
+            setAmountOfReviewed(parseInt(((reviewedCounter / allMyCourses.length) * 100).toFixed(0)));
             updateMySemesters(sortedCourses);
           }
         })
