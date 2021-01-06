@@ -10,6 +10,7 @@ from .models import Review
 from course.models import Course
 from user.models import AdminUser, BannedUser
 from django.db.models import Avg, Count
+from upvote.views import _get_upvote_status_from_db
 
 
 @api_view(['POST'])
@@ -191,6 +192,7 @@ def get_reviews_from_db(request):
     # Append if user can delete review to the list of reviews
     for review in data:
         review["can_delete"] = check_if_can_delete(review, user_email, is_admin)
+        review["upvote_status"] = _get_upvote_status_from_db(exp_token=exp_token, review_id=review["id"]).data
 
     # Remove user email field from reviews
     for review in data:

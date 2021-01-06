@@ -12,7 +12,7 @@ from course.views import perform_feide_api_call
 
 @api_view(['POST'])
 def post_upvote(request):
-    status_response = get_upvote_status_from_db(request)
+    status_response = get_upvote_status_from_db(request=request)
     if status_response.status_code != 200:
         return status_response
 
@@ -32,7 +32,7 @@ def delete_upvote(request):
     """
     Removes the user's upvote from the given review (reviewId), if it has one.
     """
-    status_response = get_upvote_status_from_db(request)
+    status_response = get_upvote_status_from_db(request=request)
     if status_response.status_code != 200:
         return status_response
 
@@ -50,7 +50,7 @@ def delete_upvote(request):
 
 @api_view(['GET'])
 def upvote_status(request):
-    return get_upvote_status_from_db(request)
+    return get_upvote_status_from_db(request=request)
 
 
 def get_upvote_status_from_db(request):
@@ -65,13 +65,15 @@ def get_upvote_status_from_db(request):
         exp_token = request.META['HTTP_AUTHORIZATION']
     except KeyError:
         return Response("Field HTTP_AUTHORIZATION missing in request, i.e. missing user's expiring token.", status=401)
-    if not UserAuth.objects.filter(expiring_token=exp_token).exists():
-        return Response(2, status=200)
-    user = get_user(exp_token)
-    if user is None:
-        return Response("User not found in our database", status=401)
 
     review_id = request.GET.get('reviewId', None)
+    return _get_upvote_status_from_db(exp_token=exp_token, review_id=review_id)
+
+
+def _get_upvote_status_from_db(exp_token, review_id):
+    """
+    Helper method for get_upvote_status_from_db
+    """
     if review_id is None or review_id == "undefined":
         return Response("No review id provided", status=400)
     try:
@@ -82,6 +84,12 @@ def get_upvote_status_from_db(request):
         return Response("Review does not exist", status=400)
     review = Review.objects.get(id=review_id)
 
+    if not UserAuth.objects.filter(expiring_token=exp_token).exists():
+        return Response(2, status=200)
+
+    user = get_user(exp_token)
+    if user is None:
+        return Response("User not found in our database", status=401)
     if BannedUser.objects.filter(user_email=user.email).exists():
         return Response(3, status=200)
     elif Upvote.objects.filter(user=user).filter(review=review).exists():

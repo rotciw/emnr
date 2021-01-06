@@ -4,6 +4,7 @@ from review.views import get_reviews, get_reviews_from_db
 from course.models import Course
 from review.models import Review
 from upvote.models import Upvote
+from user.models import BannedUser
 from django.test import RequestFactory, Client
 from auth.models import UserAuth
 from django.contrib.auth.models import User
@@ -43,6 +44,7 @@ class GetReviewsTest(TestCase):
         ]
         for r in reviews: r.save()
         UserAuth(expiring_token="valid_token", access_token="valid_token", user_email="test@testesen.com").save()
+        User.objects.create(username="test@testesen.com", email="test@testesen.com").save()
 
     def test_get_reviews_from_db_invalid_course_code(self):
         # Course code not in Course db
@@ -179,8 +181,7 @@ class GetReviewsTest(TestCase):
         # Sees if num_upvotes behaves correctly when upvotes for the review exists.
         api_client = APIClient()
         api_client.credentials(HTTP_AUTHORIZATION="valid_token")
-        User.objects.create(username="test1@testesen.com", email="test1@testesen.com").save()
-        user1 = User.objects.get(username="test1@testesen.com")
+        user1 = User.objects.get(username="test@testesen.com")
         User.objects.create(username="test2@testesen.com", email="test2@testesen.com").save()
         user2 = User.objects.get(username="test2@testesen.com")
         review = Review.objects.get(id=1)
@@ -188,3 +189,24 @@ class GetReviewsTest(TestCase):
         Upvote(user=user2, review=review).save()
         response = api_client.get("/review/get/?courseCode=TMA4100")
         self.assertEqual(response.data["data"][5]["num_upvotes"], 2, "Upvoting should lead to increased num_upvotes")
+
+    def test_get_reviews_upvote_status(self):
+        api_client = APIClient()
+        api_client.credentials(HTTP_AUTHORIZATION="valid_token")
+        user1 = User.objects.get(username="test@testesen.com")
+        User.objects.create(username="test2@testesen.com", email="test2@testesen.com").save()
+        user2 = User.objects.get(username="test2@testesen.com")
+        review1 = Review.objects.get(id=1)
+        review2 = Review.objects.get(id=2)
+        Upvote(user=user1, review=review1).save()
+        Upvote(user=user2, review=review2).save()
+        response = api_client.get("/review/get/?courseCode=TMA4100")
+        # Current user has not yet upvoted review2. Status=1
+        self.assertEqual(response.data["data"][5]["upvote_status"], 1)
+        response = api_client.get("/review/get/?courseCode=TMA4100")
+        # Current user has not yet upvoted review2. Status=0
+        self.assertEqual(response.data["data"][4]["upvote_status"], 0)
+        BannedUser(user_email="test@testesen.com").save()
+        response = api_client.get("/review/get/?courseCode=TMA4100")
+        # Current user has not yet upvoted review2, but is banned. Status=3
+        self.assertEqual(response.data["data"][4]["upvote_status"], 3)
