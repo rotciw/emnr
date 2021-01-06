@@ -9,6 +9,7 @@ import CoursePage from 'pages/CoursePage';
 import VerifyLogin from '../pages/VerifyLogin';
 import MePage from '../pages/MePage';
 import AboutPage from 'pages/AboutPage';
+import GuideLinesPage from '../pages/GuideLinesPage';
 
 const Routes: React.FC = () => {
   return (
@@ -18,6 +19,7 @@ const Routes: React.FC = () => {
       <PrivateRoute path='/course/:id' component={CoursePage} />
       <PrivateRoute path='/me' component={MePage} />
       <PrivateRoute path='/about' component={AboutPage} />
+      <PrivateRoute path='/guidelines' component={GuideLinesPage} />
       <Route exact path='/login' component={LoginPage} />
     </Switch>
   );

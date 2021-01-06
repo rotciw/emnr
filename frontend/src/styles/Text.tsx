@@ -59,3 +59,8 @@ export const ExtraBold = styled.span`
   font-family: gilroyxbold;
   font-weight: 900; /* In case the gilroy fonts aren't available, does not affect gilroyxbold */
 `;
+
+export const RedHighlight = styled.span`
+  color: ${({ theme }) => theme.red};
+  font-family: gilroyxbold;
+`;
