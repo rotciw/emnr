@@ -35,11 +35,6 @@
     "react/require-default-props": "off",
     "react/prop-types": "off",
     "@typescript-eslint/explicit-module-boundary-types": ["off"],
-    "@typescript-eslint/explicit-function-return-type": [
-      "error",
-      {
-        "allowTypedFunctionExpressions": true,
-        "allowExpressions": true
-      }]
+    "@typescript-eslint/explicit-function-return-type": ["off"]
   }
 }
