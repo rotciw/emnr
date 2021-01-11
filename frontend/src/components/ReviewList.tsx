@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import API_URL from 'config';
-import Review from './Review';
+import Review from './review/Review';
 import { EmptyResult } from './CourseList';
 import Loading from './Loading';
 import { Pagination } from 'components/pagination/Pagination';
@@ -37,6 +37,8 @@ interface ReviewProps {
   can_delete: boolean;
   course_code: string;
   id: number;
+  upvote_status: number;
+  num_upvotes: number;
 }
 
 const ReviewList: React.FC<ReviewListProps> = ({
@@ -150,6 +152,8 @@ const ReviewList: React.FC<ReviewListProps> = ({
                       canDelete={currentReview.can_delete}
                       id={currentReview.id}
                       courseCode={currentReview.course_code}
+                      upvoteStatus={currentReview.upvote_status}
+                      numUpvotes={currentReview.num_upvotes}
                     />
                   );
                 })}
