@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import ThumbsUpIcon from 'assets/icons/thumbsUp.svg';
+import ThumbsUpIconOutlined from 'assets/icons/thumbsUpOutlined.svg';
 import axios from 'axios';
 import API_URL from 'config';
 import { getLocalToken } from 'utils/api';
@@ -9,10 +10,6 @@ const ThumbsUpBtn = styled.img`
   height: 28px;
   float: left;
   cursor: pointer;
-  :hover {
-    filter: invert(48%) sepia(96%) saturate(3381%) hue-rotate(328deg)
-      brightness(86%) contrast(112%);
-  }
 `;
 
 const RedThumbsUp = styled(ThumbsUpBtn)`
@@ -29,8 +26,6 @@ const RedThumbsUp = styled(ThumbsUpBtn)`
       transform: scale(1);
     }
   }
-  filter: invert(48%) sepia(96%) saturate(3381%) hue-rotate(328deg)
-    brightness(86%) contrast(112%);
   :hover {
     filter: none;
   }
@@ -39,6 +34,8 @@ const RedThumbsUp = styled(ThumbsUpBtn)`
 const ThumbsUpText = styled.p`
   margin: 5px 0 0 5px;
   font-family: gilroymedium;
+  user-select: none;
+  cursor: default;
 `;
 
 interface ReviewProps {
@@ -96,7 +93,7 @@ const Upvote: React.FC<ReviewProps> = ({
   return (
     <>
       {status === 0 ? (
-        <ThumbsUpBtn src={ThumbsUpIcon} onClick={toggleUpvote} />
+        <ThumbsUpBtn src={ThumbsUpIconOutlined} onClick={toggleUpvote} />
       ) : (
         <RedThumbsUp src={ThumbsUpIcon} onClick={toggleUpvote} />
       )}
