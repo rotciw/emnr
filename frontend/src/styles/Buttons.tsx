@@ -76,15 +76,15 @@ export const SortHighLowButton = styled.button`
   user-select: none;
   outline: none;
   :disabled {
-    background-color: #BBBBBB;
+    background-color: #bbbbbb;
     cursor: auto;
     color: #333333;
   }
   :enabled {
     :hover {
-    background-color: ${({ theme }) => theme.lightlightBlue};
-    color: ${({ theme }) => theme.darkBlue};
-  }
+      background-color: ${({ theme }) => theme.lightlightBlue};
+      color: ${({ theme }) => theme.darkBlue};
+    }
   }
 `;
 
@@ -147,7 +147,7 @@ export const ModalXButton = styled.span`
   margin-top: -5px;
   cursor: pointer;
   :hover {
-    color: ${({theme}) => theme.red};
+    color: ${({ theme }) => theme.red};
   }
 `;
 
@@ -168,7 +168,6 @@ export const TooltipButtonContainer = styled.div`
   position: relative;
   display: flex;
 `;
-
 
 export const DisabledRedButton = styled(RedButton)`
   background-color: #aaa;

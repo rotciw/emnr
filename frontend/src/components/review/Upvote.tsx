@@ -5,6 +5,8 @@ import ThumbsUpIconOutlined from 'assets/icons/thumbsUpOutlined.svg';
 import axios from 'axios';
 import API_URL from 'config';
 import { getLocalToken } from 'utils/api';
+import { TooltipButtonContainer } from 'styles/Buttons';
+import { TooltipText } from 'components/RateCourseButton';
 
 const ThumbsUpBtn = styled.img`
   height: 28px;
@@ -12,7 +14,7 @@ const ThumbsUpBtn = styled.img`
   cursor: pointer;
 `;
 
-const RedThumbsUp = styled(ThumbsUpBtn)`
+const ClickedThumbsUp = styled(ThumbsUpBtn)`
   animation: like 300ms ease-out;
   @keyframes like {
     0% {
@@ -25,9 +27,6 @@ const RedThumbsUp = styled(ThumbsUpBtn)`
     100% {
       transform: scale(1);
     }
-  }
-  :hover {
-    filter: none;
   }
 `;
 
@@ -65,37 +64,64 @@ const Upvote: React.FC<ReviewProps> = ({
   };
 
   const removeUpvote = async () => {
-    let isCancelled = false;
     updateUpvotes(upvotes - 1);
     setStatus(0);
     await axios
       .delete(`${API_URL}/upvote/delete/?reviewId=${reviewId}`)
-      .then(() => {
-        if (!isCancelled) {
-          // setLoading(false);
-        }
-      })
       .catch((err) => console.log(err));
-    return () => {
-      isCancelled = true;
-    };
   };
 
   const toggleUpvote = (): void => {
-    setDisabledButton(true);
-    // eslint-disable-next-line no-unused-expressions
-    status === 0 ? upvoteReview() : removeUpvote();
-    // Timeout for disallowing spam clicking during click animation
-    setTimeout(() => setDisabledButton(false), 300);
+    // Status 2: User cannot review because its expiring token does not exist.
+    // Status 3: User is banned from making upvotes
+    if (status !== 2 && status !== 3) {
+      // disabledButton button variable setting is to mitigate spam clicking during animation
+      setDisabledButton(true);
+      if (!disabledButton) {
+        // eslint-disable-next-line no-unused-expressions
+        status === 0 ? upvoteReview() : removeUpvote();
+        // Timeout for disallowing spam clicking during click animation
+        setTimeout(() => setDisabledButton(false), 300);
+      }
+    }
   };
+
+  let content;
+
+  switch (status) {
+    // Status 0: Can upvote
+    // Status 1: Upvoted
+    // Status 2: User cannot review because its expiring token does not exist.
+    // Status 3: User is banned from making upvotes
+    default:
+      content = (
+        <ThumbsUpBtn src={ThumbsUpIconOutlined} onClick={toggleUpvote} />
+      );
+      break;
+    case 1:
+      content = <ClickedThumbsUp src={ThumbsUpIcon} onClick={toggleUpvote} />;
+      break;
+    case 2:
+      content = (
+        <TooltipButtonContainer>
+          <ClickedThumbsUp src={ThumbsUpIcon} onClick={toggleUpvote} />
+          <TooltipText>Din token har utløpt.</TooltipText>
+        </TooltipButtonContainer>
+      );
+      break;
+    case 3:
+      content = (
+        <TooltipButtonContainer>
+          <ClickedThumbsUp src={ThumbsUpIcon} onClick={toggleUpvote} />
+          <TooltipText>Du har blitt utestengt.</TooltipText>
+        </TooltipButtonContainer>
+      );
+      break;
+  }
 
   return (
     <>
-      {status === 0 ? (
-        <ThumbsUpBtn src={ThumbsUpIconOutlined} onClick={toggleUpvote} />
-      ) : (
-        <RedThumbsUp src={ThumbsUpIcon} onClick={toggleUpvote} />
-      )}
+      {content}
       <ThumbsUpText>{upvotes}</ThumbsUpText>
     </>
   );

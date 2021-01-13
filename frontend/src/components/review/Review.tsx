@@ -99,16 +99,12 @@ const Review: React.FC<ReviewProps> = ({
     case 4:
       scoreLabelColor = '#A0C85A';
       break;
-    // case 5:
-    //   scoreLabelColor = '#47C964';
     default:
       scoreLabelColor = '#47C964';
   }
 
   const mapSecondaryMetric = (secondaryMetric: string | number) => {
     switch (secondaryMetric) {
-      // case 0:
-      //   return 'lav';
       case 1:
         return 'middels';
       case 2:
