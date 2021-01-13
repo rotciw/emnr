@@ -83,11 +83,10 @@ const Upvote: React.FC<ReviewProps> = ({
 
   const toggleUpvote = (): void => {
     setDisabledButton(true);
-    if (!disabledButton) {
-      // eslint-disable-next-line no-unused-expressions
-      status === 0 ? upvoteReview() : removeUpvote();
-      setTimeout(() => setDisabledButton(false), 300);
-    }
+    // eslint-disable-next-line no-unused-expressions
+    status === 0 ? upvoteReview() : removeUpvote();
+    // Timeout for disallowing spam clicking during click animation
+    setTimeout(() => setDisabledButton(false), 300);
   };
 
   return (
