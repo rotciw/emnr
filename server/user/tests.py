@@ -4,6 +4,8 @@ from course.models import Course
 from rest_framework.test import APIClient
 from review.models import Review
 from auth.models import UserAuth
+from upvote.models import Upvote
+from django.contrib.auth.models import User
 from .models import AdminUser, BannedUser
 from review.tests import mock_feide_apis
 from unittest.mock import patch
@@ -39,6 +41,7 @@ class DeleteUserTest(TestCase):
         ]
         for r in reviews: r.save()
         UserAuth(expiring_token="valid_token", access_token="valid_token", user_email="test@testesen.com").save()
+        User.objects.create(username="kpro@kpro.com", email="kpro@kpro.com").save()
 
     def test_delete_user_no_token(self):
         c = APIClient()
@@ -106,3 +109,16 @@ class DeleteUserTest(TestCase):
         self.assertEqual(course.average_review_score, 1)
         self.assertEqual(course.average_difficulty, 0)
         self.assertEqual(course.average_workload, 0)
+
+    def test_upvotes_after_deleting_user(self):
+        # A user's upvotes should be deleted upon removal / banning of the user.
+        AdminUser(user_email="test@testesen.com").save()
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
+        user = User.objects.get(username="kpro@kpro.com")
+        for i in range(1, 7):
+            review = Review.objects.get(id=i)
+            Upvote(user=user, review=review).save()
+        self.assertEqual(Upvote.objects.count(), 6)
+        res = c.delete("/user/delete/?reviewId=2")
+        self.assertEqual(Upvote.objects.count(), 0)

@@ -3,6 +3,7 @@ from django.shortcuts import render
 import json
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.contrib.auth.models import User
 from pathlib import Path
 from review.views import check_if_is_admin, get_user_full_name_and_email
 from review.models import Review
@@ -57,6 +58,9 @@ def delete_user(request):
 
     # Delete all reviews belonging to the deleted user, and update the statistics of the related courses
     delete_all_reviews_for_user(passed_email)
+
+    # Delete the user in our database - needed to make sure upvotes are removed. Also to remove data we have stored.
+    User.objects.get(email=passed_email).delete()
 
     # Return a 200 indicating that the user is successfully banned
     return Response("User successfully banned, with all reviews deleted.", status=200)
