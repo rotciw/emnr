@@ -53,9 +53,7 @@ const AboutPage: React.FC = () => {
         </Title>
         <br />
         <Title fontSize='18px'>
-          EMNR skal hjelpe studenter med å velge emner på NTNU. Tjenesten er
-          laget for <a href='http://uninett.no/'>Uninett</a> av gruppe 13 i
-          emnet TDT4290 Kundestyrt Prosjekt. Brukere har tilgang til relevant
+          EMNR skal hjelpe studenter med å velge emner på NTNU. Brukere har tilgang til relevant
           objektiv informasjon som snittkarakter og ståprosent, men i tillegg
           også subjektive anmeldelser av emner laget av andre studenter.
           <br />
