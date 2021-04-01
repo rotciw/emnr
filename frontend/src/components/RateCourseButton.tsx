@@ -69,6 +69,7 @@ export const RateCourseButton: React.FC<RateCourseButtonProps> = ({
     return () => {
       isCancelled = true;
     };
+    // eslint-disable-next-line
   }, [loading, refreshProvider.postReviewHaveRefreshed]);
 
   let content;

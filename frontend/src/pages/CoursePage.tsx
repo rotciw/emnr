@@ -31,7 +31,6 @@ interface CourseViewProps {
 }
 
 const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
-
   const courseCode: string = useLocation().pathname.substr(8);
   const [courseInfo, setCourseInfo] = useState<any>({});
 
@@ -75,6 +74,7 @@ const CoursePage: React.FC<CourseViewProps> = (props: CourseViewProps) => {
     return () => {
       isCancelled = true;
     };
+    // eslint-disable-next-line
   }, [numberOfReviews]);
 
   return (

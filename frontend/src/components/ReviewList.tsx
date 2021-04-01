@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import API_URL from 'config';
-import Review from './Review';
+import Review from './review/Review';
 import { EmptyResult } from './CourseList';
 import Loading from './Loading';
 import { Pagination } from 'components/pagination/Pagination';
@@ -35,8 +35,10 @@ interface ReviewProps {
   review_text: string;
   date: string;
   can_delete: boolean;
-  user_email: string;
   course_code: string;
+  id: number;
+  upvote_status: number;
+  num_upvotes: number;
 }
 
 const ReviewList: React.FC<ReviewListProps> = ({
@@ -53,12 +55,20 @@ const ReviewList: React.FC<ReviewListProps> = ({
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [numberOfReviews, setNumberOfReviews] = useState<number>(0);
 
-  let pageNumber = pageProvider.page;
+  // this useEffect is used for resetting page number to 1 on clean up
+  useEffect(() => {
+    return () => {
+      pageProvider.setReviewPage(1);
+    }
+  }, []);
+
+  let pageNumber = pageProvider.reviewPage;
   const resultLimit = 5;
   let start = (pageNumber - 1) * resultLimit;
 
   useEffect(() => {
     numberOfReviewSetter(numberOfReviews);
+    // eslint-disable-next-line
   }, [numberOfReviews]);
 
   useEffect(() => {
@@ -75,7 +85,9 @@ const ReviewList: React.FC<ReviewListProps> = ({
           if (!isCancelled) {
             updateReviews(res.data.data);
             setIsAdmin(res.data.is_admin);
-            pageProvider.setTotalPage(Math.ceil(res.data.count / resultLimit));
+            pageProvider.setTotalReviewPage(
+              Math.ceil(res.data.count / resultLimit),
+            );
             setNumberOfReviews(res.data.count);
             scoreAvgSetter(
               res.data.average_score != null ? res.data.average_score : 0,
@@ -96,10 +108,12 @@ const ReviewList: React.FC<ReviewListProps> = ({
         .catch((err) => console.log(err));
     };
     getReviews();
+    // eslint-disable-next-line
     start += resultLimit;
     return () => {
       isCancelled = true;
     };
+    // eslint-disable-next-line
   }, [
     pageNumber,
     refreshProvider.postReviewHaveRefreshed,
@@ -112,42 +126,44 @@ const ReviewList: React.FC<ReviewListProps> = ({
       {loading ? (
         <Loading />
       ) : (
-        <Wrapper>
-          {reviews.length ? (
-            <div>
-              {reviews.map((currentReview) => {
-                //If the difficulty or workload value is not set in the review, they are replaced with an explaining string.
-                if (currentReview.difficulty === -1) {
-                  currentReview.difficulty = 'Not given';
-                }
-                if (currentReview.workload === -1) {
-                  currentReview.workload = 'Not given';
-                }
+          <Wrapper>
+            {reviews.length ? (
+              <div>
+                {reviews.map((currentReview) => {
+                  //If the difficulty or workload value is not set in the review, they are replaced with an explaining string.
+                  if (currentReview.difficulty === -1) {
+                    currentReview.difficulty = 'Not given';
+                  }
+                  if (currentReview.workload === -1) {
+                    currentReview.workload = 'Not given';
+                  }
 
-                return (
-                  <Review
-                    key={currentReview.full_name + currentReview.date}
-                    name={currentReview.full_name}
-                    studyProgramme={currentReview.study_programme}
-                    score={currentReview.score}
-                    workLoad={currentReview.workload}
-                    difficulty={currentReview.difficulty}
-                    text={currentReview.review_text}
-                    date={currentReview.date}
-                    isAdmin={isAdmin}
-                    canDelete={currentReview.can_delete}
-                    userEmail={currentReview.user_email}
-                    courseCode={currentReview.course_code}
-                  />
-                );
-              })}
-              <Pagination />
-            </div>
-          ) : (
-            <EmptyResult>Ingen vurderinger av {courseCode}. </EmptyResult>
-          )}
-        </Wrapper>
-      )}
+                  return (
+                    <Review
+                      key={currentReview.full_name + currentReview.date}
+                      name={currentReview.full_name}
+                      studyProgramme={currentReview.study_programme}
+                      score={currentReview.score}
+                      workLoad={currentReview.workload}
+                      difficulty={currentReview.difficulty}
+                      text={currentReview.review_text}
+                      date={currentReview.date}
+                      isAdmin={isAdmin}
+                      canDelete={currentReview.can_delete}
+                      id={currentReview.id}
+                      courseCode={currentReview.course_code}
+                      upvoteStatus={currentReview.upvote_status}
+                      numUpvotes={currentReview.num_upvotes}
+                    />
+                  );
+                })}
+                <Pagination currentPage='reviews' />
+              </div>
+            ) : (
+                <EmptyResult>Ingen vurderinger av {courseCode}. </EmptyResult>
+              )}
+          </Wrapper>
+        )}
     </>
   );
 };

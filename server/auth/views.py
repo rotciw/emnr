@@ -53,21 +53,28 @@ def verify_token(request):
     access_token = response_json['access_token']
     has_token = False
     try:
-        has_token = UserAuth.objects.get(user_email=user_mail).exists()
+        user_auth = UserAuth.objects.filter(user_email=user_mail).first()
+        if user_auth:
+            has_token = True
     except:
         print("User has no token")
     if has_token:
-        UserAuth.objects.get(user_email=user_mail).delete()
+        UserAuth.objects.filter(user_email=user_mail).first().delete()
     UserAuth.objects.create(user_email=user_mail, expiring_token="Token " + str(token), access_token=access_token)
     return Response(({'token': token.key, 'email': user_mail}))
 
-
 @api_view(["GET"])
 def validate_token(request):
-    if request.user.is_anonymous:
-        raise PermissionDenied
-    token = ExpiringToken.objects.get(user=request.user)
-    return HttpResponse(token.valid())
+    validated = False
+    user_mail = request.GET.get("email")
+    exp_token = request.META['HTTP_AUTHORIZATION']
+    user = User.objects.filter(email=user_mail).first()
+    if user:
+        user_auth = UserAuth.objects.filter(expiring_token=exp_token)
+        token = ExpiringToken.objects.get(user=user)
+        if user_auth and token:
+            validated = True
+    return HttpResponse(validated)
 
 
 def get_token(expiring_token):

@@ -158,7 +158,7 @@ class GetAllCoursesTest(TestCase):
         self.assertEqual(res.data["data"], [])
 
     def test_get_courses_from_db_valid_order_by(self):
-        order_by_values = ["course_code", "course_name", "credit", "average_grade", "pass_rate"]
+        order_by_values = ["course_code", "course_name", "credit", "average_grade", "pass_rate", "review_count"]
 
         def get_data(order_by, ascending):
             if ascending is None:
@@ -227,6 +227,19 @@ class GetAllCoursesTest(TestCase):
             res = c.get("/course/all/?order_by={}".format(order_value))
             self.assertEqual(res.status_code, 400)
 
+    # TODO: Put more values for review_count and average_review_score in test_course.json to allow more thorough tests.
+    def test_get_courses_from_db_secondary_sorting(self):
+        mock_response1 = get_courses_from_db(self.rf.get("/courses/all/?order_by=average_review_score&ascending=0"))
+        mock_response2 = get_courses_from_db(self.rf.get("/courses/all/?order_by=review_count&ascending=0"))
+        self.assertEqual(mock_response1["data"][0]["course_code"], "TN202406")
+        # TODO: add checks for correct sorting between courses with the same average score
+        self.assertEqual(mock_response2["data"][0]["course_code"], "TPG4190")
+        # the next two has the same review count, should sort the one with the highest average score first
+        self.assertEqual(mock_response2["data"][1]["course_code"], "TN202406")
+        self.assertEqual(mock_response2["data"][2]["course_code"], "TMR4555")
+        # TODO: add other checks for correct sorting between courses with the same review count, current
+        #  pass may be random
+
     def test_get_courses_from_db_valid_advanced_sorting(self):
         valid_advanced_sortings = ["true", "false"]
         valid_highs = ["true", "false"]
@@ -237,11 +250,14 @@ class GetAllCoursesTest(TestCase):
             mock_request = get_courses_from_db(self.rf.get("/courses/all/?advanced_sorting={}".format(value)))
         for param in params:
             for value in valid_highs:
-                mock_request = get_courses_from_db(self.rf.get(
-                        "/courses/all/?advanced_sorting=true&{}_high={}".format(param, value)))
+                mock_request = self.rf.get(
+                        "/courses/all/?advanced_sorting=true&{}_high={}".format(param, value))
+                mock_response = get_courses_from_db(mock_request)
             for value in valid_weights:
-                mock_request = get_courses_from_db(self.rf.get(
-                    "/courses/all/?advanced_sorting=true&{}_weight={}".format(param, value)))
+
+                mock_request = self.rf.get(
+                    "/courses/all/?advanced_sorting=true&{}_weight={}".format(param, value))
+                mock_response = get_courses_from_db(mock_request)
 
         # Query number: [query, first hit course_code, sorting_score]
         base_query = "/course/all/?advanced_sorting=true"

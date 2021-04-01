@@ -30,10 +30,11 @@
   "plugins": ["prettier", "@typescript-eslint"],
   "rules": {
     "prettier/prettier": ["error"],
-    "@typescript-eslint/no-explicit-any": ["error"],
-    "@typescript-eslint/explicit-function-return-type": [
-      "error",
-      { "allowExpressions": true }
-    ]
+    "no-underscore-dangle": ["error", { "allow": ["_retry"] }],
+    "function-call-argument-newline": ["error", "consistent"],
+    "react/require-default-props": "off",
+    "react/prop-types": "off",
+    "@typescript-eslint/explicit-module-boundary-types": ["off"],
+    "@typescript-eslint/explicit-function-return-type": ["off"]
   }
 }

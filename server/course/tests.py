@@ -21,7 +21,8 @@ def _create_models_without_saving():
 							  pass_rate=course_dict["pass_rate"],
 							  average_review_score=course_dict["average_review_score"],
 							  average_difficulty=course_dict["average_difficulty"],
-							  average_workload=course_dict["average_workload"]))
+							  average_workload=course_dict["average_workload"],
+							  review_count=course_dict["review_count"]))
 	return courses
 
 

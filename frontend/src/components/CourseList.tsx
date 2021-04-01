@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import axios from 'axios';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { FlexContainer, StyledTable, StyledTH } from 'styles/Containers';
@@ -31,14 +31,9 @@ export const CourseList: React.FC = () => {
     GlobalStateContext,
   )!;
   const [loading, setLoading] = useState<boolean>(false);
+  const isInitialMount = useRef(true);
 
   const pageNumber = pageProvider.page;
-  // Search input
-  // Reset page number when searching
-  let searchQuery = '';
-  if (queryProvider.searchQuery) {
-    searchQuery = queryProvider.searchQuery;
-  }
 
   // Flag that triggers useEffect, value doesn't matter
   let advancedSortChangedFlag = advancedQueryProvider.advancedSortChangedFlag;
@@ -48,8 +43,8 @@ export const CourseList: React.FC = () => {
   useAdvancedSorting
     ? (orderByQuery = 'advanced_sorting_score')
     : queryProvider.orderByQuery
-    ? (orderByQuery = queryProvider.orderByQuery)
-    : (orderByQuery = 'review_count');
+      ? (orderByQuery = queryProvider.orderByQuery)
+      : (orderByQuery = 'review_count');
 
   let orderToggle: number;
 
@@ -62,9 +57,6 @@ export const CourseList: React.FC = () => {
     case 'course_name':
     case 'average_review_score':
       orderByText = 'Gjennomsnittlig vurdering';
-      break;
-    case 'review_count':
-      orderByText = 'Antall vurderinger';
       break;
     case 'credit':
       orderByText = 'Studiepoeng';
@@ -89,10 +81,22 @@ export const CourseList: React.FC = () => {
   const resultLimit = 25;
   let start: number = (pageNumber - 1) * resultLimit;
 
+  // Search input
+  // Reset page number when searching
+  let searchQuery = '';
+  if (queryProvider.searchQuery) {
+    searchQuery = queryProvider.searchQuery;
+  }
   // this useEffect is used for resetting page number to 1 when searching
   useEffect(() => {
-    pageProvider.setPage(1);
-  }, [searchQuery]);
+    // Checking initialmount to only reset page number when searching, and not when going back from another page
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      pageProvider.setPage(1);
+    }
+    // eslint-disable-next-line
+  }, [searchQuery, queryProvider.orderToggle, orderByQuery, advancedQueryProvider.advancedSorting]);
 
   useEffect(() => {
     const getCourses = async () => {
@@ -116,6 +120,7 @@ export const CourseList: React.FC = () => {
         });
     };
     getCourses();
+    // eslint-disable-next-line
     start += resultLimit;
   }, [
     pageNumber,
@@ -131,44 +136,44 @@ export const CourseList: React.FC = () => {
       {loading ? (
         <Loading />
       ) : (
-        <FlexContainer margin='15px 0 0 0'>
-          {courses.length ? (
-            <StyledTable>
-              <thead>
-                <tr>
-                  <StyledTH width='25%'>Emnekode</StyledTH>
-                  <StyledTH width='50%' textAlign='left'>
-                    Emnenavn
+          <FlexContainer margin='15px 0 0 0'>
+            {courses.length ? (
+              <StyledTable>
+                <thead>
+                  <tr>
+                    <StyledTH width='25%'>Emnekode</StyledTH>
+                    <StyledTH width='50%' textAlign='left'>
+                      Emnenavn
                   </StyledTH>
-                  <StyledTH width='25%'>{orderByText}</StyledTH>
-                </tr>
-              </thead>
-              <tbody>
-                {courses.map((currentCourse) => {
-                  return (
-                    <Course
-                      key={currentCourse.course_code}
-                      courseCode={currentCourse.course_code}
-                      courseName={currentCourse.course_name}
-                      averageReviewScore={currentCourse.average_review_score}
-                      reviewCount={currentCourse.review_count}
-                      averageGrade={currentCourse.average_grade}
-                      passRate={currentCourse.pass_rate}
-                      credit={currentCourse.credit}
-                      advancedSortingMatch={
-                        currentCourse.advanced_sorting_score
-                      }
-                      sortingParam={orderByQuery}
-                    />
-                  );
-                })}
-              </tbody>
-            </StyledTable>
-          ) : (
-            <EmptyResult>Beklager! Vi fant ingen data. </EmptyResult>
-          )}
-        </FlexContainer>
-      )}
+                    <StyledTH width='25%'>{orderByText}</StyledTH>
+                  </tr>
+                </thead>
+                <tbody>
+                  {courses.map((currentCourse) => {
+                    return (
+                      <Course
+                        key={currentCourse.course_code}
+                        courseCode={currentCourse.course_code}
+                        courseName={currentCourse.course_name}
+                        averageReviewScore={currentCourse.average_review_score}
+                        reviewCount={currentCourse.review_count}
+                        averageGrade={currentCourse.average_grade}
+                        passRate={currentCourse.pass_rate}
+                        credit={currentCourse.credit}
+                        advancedSortingMatch={
+                          currentCourse.advanced_sorting_score
+                        }
+                        sortingParam={orderByQuery}
+                      />
+                    );
+                  })}
+                </tbody>
+              </StyledTable>
+            ) : (
+                <EmptyResult>Beklager! Vi fant ingen data. </EmptyResult>
+              )}
+          </FlexContainer>
+        )}
     </>
   );
 };

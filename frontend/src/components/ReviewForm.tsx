@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
 import { FlexContainer, HrLine } from 'styles/Containers';
 import { Title, BoldTitle } from 'styles/Text';
@@ -10,6 +10,7 @@ import Dropdown from 'react-dropdown';
 import { RateCourseButton } from './RateCourseButton';
 import { ModalXButton, DisabledRedButton } from 'styles/Buttons';
 import { GlobalStateContext } from 'context/GlobalStateContext';
+import { useHistory } from 'react-router-dom';
 
 interface ReviewFormProps {
   closeModal: () => void;
@@ -29,9 +30,29 @@ const InputDescription = styled.p`
   margin: 20px 0 5px 0;
 `;
 
+const ItalicText = styled.p`
+  font-style: italic;
+  font-size: 14px;
+`;
+
 const BoldInputDescription = styled.p`
   margin: 20px 0 10px 0;
   font-family: 'gilroyxbold';
+  color: ${({ theme }) => theme.darkBlue};
+`;
+
+const RedAnchor = styled.a`
+  color: red;
+`;
+
+const GuidelineLink = styled.a`
+  font-family: gilroyxbold;
+  text-decoration: underline;
+  font-size: 14px;
+  cursor: pointer;
+  :hover {
+    text-decoration: none;
+  }
   color: ${({ theme }) => theme.darkBlue};
 `;
 
@@ -70,12 +91,14 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         refreshProvider.setPostReviewHaveRefreshed(
           !refreshProvider.postReviewHaveRefreshed,
         );
-        setLoading(false);
-
         closeModal();
+        setLoading(false);
       })
       .catch((error) => console.log(error));
   };
+
+  const history = useHistory();
+  const handleGuidelinesClick = useCallback(() => history.push('/guidelines'),[history]);
 
   return (
     <div>
@@ -85,7 +108,9 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       </FlexContainer>
       <BoldTitle>{courseName}</BoldTitle>
       <HrLine margin='15px 0 0 0' />
-      <BoldInputDescription>Totalvurdering: *</BoldInputDescription>
+      <BoldInputDescription>
+        Totalvurdering: <RedAnchor>*</RedAnchor>
+      </BoldInputDescription>
       <ScoreRadioButtonsBar
         radioID='reviewScore'
         valueSetter={setScoreValue}
@@ -121,6 +146,14 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
           Send inn
         </RateCourseButton>
       )}
+      <ItalicText>
+        Merk at ditt fulle navn kommer til å vises i vurderingen av emnet.
+        Tjenesten støtter ikke personangrep mot fagstaben og slike vurderinger
+        vil bli slettet.
+      </ItalicText>
+      <GuidelineLink onClick={handleGuidelinesClick}>
+        Regler og tips for gode emnevurderinger
+      </GuidelineLink>
     </div>
   );
 };

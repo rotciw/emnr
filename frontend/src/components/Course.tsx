@@ -27,9 +27,9 @@ const Course: React.FC<CourseProps> = ({
   advancedSortingMatch,
   sortingParam,
 }) => {
-  let paramMetric: String = '';
+  let paramMetric = '';
 
-  let listOfSubReviewText = [
+  const listOfSubReviewText = [
     'course_code',
     'course_name',
     'average_review_score',
@@ -41,19 +41,19 @@ const Course: React.FC<CourseProps> = ({
     case 'course_name':
     case 'average_review_score':
     case 'review_count':
-      paramMetric = String(averageReviewScore.toFixed(1)) + ' / 5';
+      paramMetric = `${String(averageReviewScore.toFixed(1))} / 5`;
       break;
     case 'credit':
       paramMetric = String(credit);
       break;
     case 'average_grade':
-      paramMetric = String(averageGrade);
+      paramMetric = String(averageGrade.toFixed(1));
       break;
     case 'pass_rate':
       paramMetric = String((100 - passRate).toFixed(2));
       break;
     case 'advanced_sorting_score':
-      paramMetric = String(advancedSortingMatch.toFixed(1)) + '%';
+      paramMetric = `${String(advancedSortingMatch.toFixed(1))}%`;
       break;
     default:
       paramMetric = 'X';

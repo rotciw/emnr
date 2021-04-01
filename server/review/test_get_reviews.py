@@ -3,8 +3,11 @@ from unittest.mock import patch
 from review.views import get_reviews, get_reviews_from_db
 from course.models import Course
 from review.models import Review
+from upvote.models import Upvote
+from user.models import BannedUser
 from django.test import RequestFactory, Client
 from auth.models import UserAuth
+from django.contrib.auth.models import User
 from rest_framework.test import APIClient
 from review.tests import mock_feide_apis
 
@@ -32,6 +35,8 @@ class GetReviewsTest(TestCase):
                    review_text="Lattice", full_name="Heman 2015", study_programme="MTDT"),
             Review(course_code="TMA4100", user_email="hallo@hei.com", score=2, workload=1, difficulty=2,
                    review_text="Helt ok fag", full_name="Hanna Montana", study_programme="MTTEST"),
+            Review(course_code="TMA4100", user_email="test@testesen.com", score=4, workload=0, difficulty=1,
+                   review_text="Jeg er den innloggede brukeren", full_name="Test Testesen", study_programme="MTDT"),
             Review(course_code="TMA4100", user_email="pu@pu.com", score=5, workload=1, difficulty=1,
                    review_text="Sykt lett", full_name="PU PUsen", study_programme="MTDT"),
             Review(course_code="TMA4100", user_email="morn@morna.com", score=4, workload=1, difficulty=2,
@@ -41,6 +46,7 @@ class GetReviewsTest(TestCase):
         ]
         for r in reviews: r.save()
         UserAuth(expiring_token="valid_token", access_token="valid_token", user_email="test@testesen.com").save()
+        User.objects.create(username="test@testesen.com", email="test@testesen.com").save()
 
     def test_get_reviews_from_db_invalid_course_code(self):
         # Course code not in Course db
@@ -95,13 +101,19 @@ class GetReviewsTest(TestCase):
         # Check correct count and number of reviews returned
         req = self.rf.get("/review/get/?courseCode=TMA4100&n=2", HTTP_AUTHORIZATION="valid_token")
         res = get_reviews_from_db(req)
-        self.assertEqual(res["count"], 6)
+        self.assertEqual(res["count"], 7)
         self.assertEqual(len(res["data"]), 2)
 
         req = self.rf.get("/review/get/?courseCode=TMA4100", HTTP_AUTHORIZATION="valid_token")
         res = get_reviews_from_db(req)
-        self.assertEqual(res["count"], 6)
-        self.assertEqual(len(res["data"]), 6)
+        self.assertEqual(res["count"], 7)
+        self.assertEqual(len(res["data"]), 7)
+
+    def test_get_reviews_from_db_valid_request_sorting(self):
+        # The user's own review is the first review
+        req = self.rf.get("/review/get/?courseCode=TMA4100&n=2", HTTP_AUTHORIZATION="valid_token")
+        res = get_reviews_from_db(req)
+        self.assertEqual(res["data"][0]["full_name"], "Test Testesen")
 
     def test_get_reviews_endpoint_invalid_course(self):
         # invalid and no course code
@@ -140,12 +152,18 @@ class GetReviewsTest(TestCase):
         c = APIClient()
         c.credentials(HTTP_AUTHORIZATION='valid_token')
         res = c.get("/review/get/?courseCode=TMA4100&n=2")
-        self.assertEqual(res.data["count"], 6)
+        self.assertEqual(res.data["count"], 7)
         self.assertEqual(len(res.data["data"]), 2)
 
         res = c.get("/review/get/?courseCode=TMA4100")
-        self.assertEqual(res.data["count"], 6)
-        self.assertEqual(len(res.data["data"]), 6)
+        self.assertEqual(res.data["count"], 7)
+        self.assertEqual(len(res.data["data"]), 7)
+
+    def test_get_reviews_endpoint_valid_request_sorting(self):
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
+        res = c.get("/review/get/?courseCode=TMA4100")
+        self.assertEqual(res.data["data"][0]["full_name"], "Test Testesen")
 
     def test_get_reviews_endpoint_invalid_token(self):
         c = APIClient()
@@ -158,8 +176,8 @@ class GetReviewsTest(TestCase):
         c.credentials(HTTP_AUTHORIZATION='valid_token')
         res = c.get("/review/get/?courseCode=TMA4100&showMyProgramme=true")
         self.assertEqual(res.status_code, 200)
-        self.assertEqual(len(res.data["data"]), 3)
-        self.assertEqual(res.data["count"], 3)
+        self.assertEqual(len(res.data["data"]), 4)
+        self.assertEqual(res.data["count"], 4)
 
     def test_get_reviews_endpoint_filter_on_programme_invalid_param(self):
         c = APIClient()
@@ -173,4 +191,36 @@ class GetReviewsTest(TestCase):
         res = c.get("/review/get/?courseCode=TMA4100&showMyProgramme=true")
         self.assertEqual(res.status_code, 400)
 
+    def test_get_reviews_num_upvotes(self):
+        # Sees if num_upvotes behaves correctly when upvotes for the review exists.
+        api_client = APIClient()
+        api_client.credentials(HTTP_AUTHORIZATION="valid_token")
+        user1 = User.objects.get(username="test@testesen.com")
+        User.objects.create(username="test2@testesen.com", email="test2@testesen.com").save()
+        user2 = User.objects.get(username="test2@testesen.com")
+        review = Review.objects.get(id=1)
+        Upvote(user=user1, review=review).save()
+        Upvote(user=user2, review=review).save()
+        response = api_client.get("/review/get/?courseCode=TMA4100")
+        self.assertEqual(response.data["data"][6]["num_upvotes"], 2, "Upvoting should lead to increased num_upvotes")
 
+    def test_get_reviews_upvote_status(self):
+        api_client = APIClient()
+        api_client.credentials(HTTP_AUTHORIZATION="valid_token")
+        user1 = User.objects.get(username="test@testesen.com")
+        User.objects.create(username="test2@testesen.com", email="test2@testesen.com").save()
+        user2 = User.objects.get(username="test2@testesen.com")
+        review1 = Review.objects.get(id=1)
+        review2 = Review.objects.get(id=2)
+        Upvote(user=user1, review=review1).save()
+        Upvote(user=user2, review=review2).save()
+        response = api_client.get("/review/get/?courseCode=TMA4100")
+        # Current user has not yet upvoted review2. Status=1
+        self.assertEqual(response.data["data"][6]["upvote_status"], 1)
+        response = api_client.get("/review/get/?courseCode=TMA4100")
+        # Current user has not yet upvoted review2. Status=0
+        self.assertEqual(response.data["data"][5]["upvote_status"], 0)
+        BannedUser(user_email="test@testesen.com").save()
+        response = api_client.get("/review/get/?courseCode=TMA4100")
+        # Current user has not yet upvoted review2, but is banned. Status=3
+        self.assertEqual(response.data["data"][5]["upvote_status"], 3)

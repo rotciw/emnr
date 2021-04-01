@@ -75,7 +75,8 @@ INSTALLED_APPS = [
     'auth.apps.AuthConfig',
     'course.apps.CourseConfig',
     'review.apps.ReviewConfig',
-    'user.apps.UserConfig'
+    'user.apps.UserConfig',
+    'upvote.apps.UpvoteConfig',
 ]
 
 MIDDLEWARE = [

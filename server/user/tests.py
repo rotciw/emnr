@@ -4,6 +4,8 @@ from course.models import Course
 from rest_framework.test import APIClient
 from review.models import Review
 from auth.models import UserAuth
+from upvote.models import Upvote
+from django.contrib.auth.models import User
 from .models import AdminUser, BannedUser
 from review.tests import mock_feide_apis
 from unittest.mock import patch
@@ -24,21 +26,22 @@ class DeleteUserTest(TestCase):
         ]
         for c in courses: c.save()
         reviews = [
-            Review(course_code="TMA4100", user_email="test@testesen.com", score=5, workload=1, difficulty=2,
+            Review(id=1, course_code="TMA4100", user_email="test@testesen.com", score=5, workload=1, difficulty=2,
                    review_text="Bra fag", full_name="Test test", study_programme="MTDT"),
-            Review(course_code="TMA4100", user_email="kpro@kpro.com", score=3, workload=0, difficulty=0,
+            Review(id=2, course_code="TMA4100", user_email="kpro@kpro.com", score=3, workload=0, difficulty=0,
                    review_text="Givende", full_name="KPro Kproson", study_programme="MTKPRO"),
-            Review(course_code="TMA4100", user_email="hei@hallo.com", score=4, workload=1, difficulty=2,
+            Review(id=3, course_code="TMA4100", user_email="hei@hallo.com", score=4, workload=1, difficulty=2,
                    review_text="Lattice", full_name="Heman 2015", study_programme="MTDT"),
-            Review(course_code="TDT4120", user_email="kpro@kpro.com", score=5, workload=2, difficulty=2,
+            Review(id=4, course_code="TDT4120", user_email="kpro@kpro.com", score=5, workload=2, difficulty=2,
                    review_text="Kult", full_name="KPro Kproson", study_programme="MTKPRO"),
-            Review(course_code="TDT4120", user_email="test@testesen.com", score=1, workload=0, difficulty=0,
+            Review(id=5, course_code="TDT4120", user_email="test@testesen.com", score=1, workload=0, difficulty=0,
                    review_text="Kjipt", full_name="Test test", study_programme="MTDT"),
-            Review(course_code="EXPH0004", user_email="kpro@kpro.com", score=3, workload=1, difficulty=0,
+            Review(id=6, course_code="EXPH0004", user_email="kpro@kpro.com", score=3, workload=1, difficulty=0,
                    review_text="<3", full_name="KPro Kproson", study_programme="MTDT")
         ]
         for r in reviews: r.save()
         UserAuth(expiring_token="valid_token", access_token="valid_token", user_email="test@testesen.com").save()
+        User.objects.create(username="kpro@kpro.com", email="kpro@kpro.com").save()
 
     def test_delete_user_no_token(self):
         c = APIClient()
@@ -66,14 +69,14 @@ class DeleteUserTest(TestCase):
         c.credentials(HTTP_AUTHORIZATION='valid_token')
         res = c.delete("/user/delete/")
         self.assertEqual(res.status_code, 400)
-        self.assertEqual(res.data, "No user email provided")
+        self.assertEqual(res.data, "No review id provided")
 
     def test_delete_user_already_banned(self):
         AdminUser(user_email="test@testesen.com").save()
         BannedUser(user_email="hei@hallo.com").save()
         c = APIClient()
         c.credentials(HTTP_AUTHORIZATION='valid_token')
-        res = c.delete("/user/delete/?userEmail=hei@hallo.com")
+        res = c.delete("/user/delete/?reviewId=3")
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.data, "User is already banned.")
 
@@ -82,7 +85,7 @@ class DeleteUserTest(TestCase):
         AdminUser(user_email="test@testesen.com").save()
         c = APIClient()
         c.credentials(HTTP_AUTHORIZATION='valid_token')
-        res = c.delete("/user/delete/?userEmail=kpro@kpro.com")
+        res = c.delete("/user/delete/?reviewId=2")
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.data, "User successfully banned, with all reviews deleted.")
 
@@ -106,3 +109,16 @@ class DeleteUserTest(TestCase):
         self.assertEqual(course.average_review_score, 1)
         self.assertEqual(course.average_difficulty, 0)
         self.assertEqual(course.average_workload, 0)
+
+    def test_upvotes_after_deleting_user(self):
+        # A user's upvotes should be deleted upon removal / banning of the user.
+        AdminUser(user_email="test@testesen.com").save()
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION='valid_token')
+        user = User.objects.get(username="kpro@kpro.com")
+        for i in range(1, 7):
+            review = Review.objects.get(id=i)
+            Upvote(user=user, review=review).save()
+        self.assertEqual(Upvote.objects.count(), 6)
+        res = c.delete("/user/delete/?reviewId=2")
+        self.assertEqual(Upvote.objects.count(), 0)

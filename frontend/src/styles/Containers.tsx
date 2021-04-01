@@ -52,6 +52,7 @@ export const MobileFlexContainer = styled.div`
 export const CenteredFlexContainer = styled.div`
   display: flex;
   flex-direction: ${(props: LayoutProps) => props.flexDirection || 'row'};
+  flex-wrap: ${(props: LayoutProps) => props.flexWrap || 'nowrap'};
   justify-content: center;
   margin: ${(props: LayoutProps) => props.margin || 'auto'};
 `;

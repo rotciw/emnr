@@ -9,7 +9,7 @@ interface CourseInfoProps {
   averageGrade: number;
   passRate: number;
   hasReview: boolean;
-  gradeDistribution: [number, number, number, number, number, number]; //There is probably a better way to do this (specify array of 6 numbers)
+  gradeDistribution: [number, number, number, number, number, number]; // There is probably a better way to do this (specify array of 6 numbers)
 }
 
 const InfoContainer = styled.div`
@@ -18,7 +18,7 @@ const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 15px;
-  box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
 const InfoText = styled.p`
@@ -38,9 +38,9 @@ const CourseInfoBox: React.FC<CourseInfoProps> = ({
   return (
     <InfoContainer>
       <ExtraBold>Vanskelighetsgrad:</ExtraBold>
-      <InfoSlider sliderProgress={difficulty / 2} hasReview={hasReview}/>
+      <InfoSlider sliderProgress={difficulty / 2} hasReview={hasReview} />
       <ExtraBold>Arbeidsmengde:</ExtraBold>
-      <InfoSlider sliderProgress={workload / 2} hasReview={hasReview}/>
+      <InfoSlider sliderProgress={workload / 2} hasReview={hasReview} />
       <ExtraBold>Karakterer for faget:</ExtraBold>
       <InfoText>
         Karaktersnitt: <ExtraBold>{averageGrade}</ExtraBold>
@@ -48,7 +48,7 @@ const CourseInfoBox: React.FC<CourseInfoProps> = ({
       <InfoText>
         Ståprosent: <ExtraBold>{passRate}%</ExtraBold>
       </InfoText>
-      {/* <InfoText>Karakterfordeling:</InfoText> //TODO: Implement frontend for grade distribution*/}
+      {/* <InfoText>Karakterfordeling:</InfoText> //TODO: Implement frontend for grade distribution */}
     </InfoContainer>
   );
 };

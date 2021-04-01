@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { FlexContainer, FlexItem, HrLine } from 'styles/Containers';
 import { ExtraBold } from 'styles/Text';
-import DeleteReview from 'components/DeleteReview';
+import DeleteReview from 'components/review/DeleteReview';
 import DeleteUser from './DeleteUser';
+import Upvote from './Upvote';
 
 interface ReviewProps {
   name: string;
@@ -15,8 +16,10 @@ interface ReviewProps {
   date: string;
   isAdmin: boolean;
   canDelete: boolean;
-  userEmail: string;
+  id: number;
   courseCode: string;
+  upvoteStatus: number;
+  numUpvotes: number;
 }
 
 const ReviewContainer = styled.div`
@@ -36,6 +39,8 @@ const ScoreDateContainer = styled.div`
 
 const OptionContainer = styled.div`
   margin: 0 10px 0 0;
+  display: flex;
+  align-items: center;
 `;
 
 const MainMetric = styled.div`
@@ -57,7 +62,7 @@ const DateText = styled.p`
 `;
 
 const CommentText = styled.p`
-  word-break: break-all;
+  word-break: break-word;
   text-align: left;
 `;
 
@@ -71,16 +76,16 @@ const Review: React.FC<ReviewProps> = ({
   date,
   isAdmin,
   canDelete,
-  userEmail,
-  courseCode,
+  id,
+  upvoteStatus,
+  numUpvotes,
 }) => {
   const dateObject = new Date(date);
-  let europeanDate = `${dateObject.getDate()}/${
+  const europeanDate = `${dateObject.getDate()}/${
     dateObject.getMonth() + 1
   }/${dateObject.getFullYear().toString().substr(-2)}`;
-
   let scoreLabelColor = 'transparent';
-  //TODO: Make this more elegant? Possibly use themes instead for example?
+  // TODO: Make this more elegant? Possibly use themes instead for example?
   switch (score) {
     case 1:
       scoreLabelColor = '#F94144';
@@ -94,38 +99,38 @@ const Review: React.FC<ReviewProps> = ({
     case 4:
       scoreLabelColor = '#A0C85A';
       break;
-    case 5:
+    default:
       scoreLabelColor = '#47C964';
   }
 
   const mapSecondaryMetric = (secondaryMetric: string | number) => {
     switch (secondaryMetric) {
-      case 0:
-        return 'lav';
       case 1:
         return 'middels';
       case 2:
         return 'høy';
+      default:
+        return 'lav';
     }
   };
 
   return (
     <ReviewContainer>
-      <FlexItem flex={'1'} style={{ marginRight: '3%' }}>
+      <FlexItem flex='1' style={{ marginRight: '3%' }}>
         <div>
           <ExtraBold>{name}</ExtraBold>
           <div>{studyProgramme}</div>
           {/* Using div instead of p to avoid having to reduce line spacing */}
         </div>
       </FlexItem>
-      <FlexItem flex={'3'}>
+      <FlexItem flex='3'>
         <ScoreDateContainer>
           <MainMetric style={{ backgroundColor: scoreLabelColor }}>
             <ExtraBold>{score}/5</ExtraBold>
           </MainMetric>
           <DateText>{europeanDate}</DateText>
         </ScoreDateContainer>
-        <FlexContainer flexWrap={'wrap'}>
+        <FlexContainer flexWrap='wrap'>
           <SecondaryMetric>
             Arbeidsmengde: <ExtraBold>{mapSecondaryMetric(workLoad)}</ExtraBold>
           </SecondaryMetric>
@@ -134,17 +139,18 @@ const Review: React.FC<ReviewProps> = ({
             <ExtraBold>{mapSecondaryMetric(difficulty)}</ExtraBold>
           </SecondaryMetric>
         </FlexContainer>
-        <HrLine margin={'20px 0 0 0'} />
+        <HrLine margin='20px 0 0 0' />
         <FlexContainer width='100%'>
           <CommentText>{text}</CommentText>
         </FlexContainer>
         <OptionContainer>
-          {canDelete ? (
-            <DeleteReview courseCode={courseCode} userEmail={userEmail} />
-          ) : (
-            <></>
-          )}
-          {isAdmin ? <DeleteUser userEmail={userEmail} /> : <></>}
+          <Upvote
+            reviewId={id}
+            upvoteStatus={upvoteStatus}
+            numUpvotes={numUpvotes}
+          />
+          {canDelete ? <DeleteReview reviewId={id} /> : <></>}
+          {isAdmin ? <DeleteUser reviewId={id} userName={name} /> : <></>}
         </OptionContainer>
       </FlexItem>
     </ReviewContainer>

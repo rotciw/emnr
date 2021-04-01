@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.db.models import Case, When
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import json
@@ -9,7 +10,8 @@ from auth.models import UserAuth
 from .models import Review
 from course.models import Course
 from user.models import AdminUser, BannedUser
-from django.db.models import Avg
+from django.db.models import Avg, Count
+from upvote.views import _get_upvote_status_from_db
 
 
 @api_view(['POST'])
@@ -145,7 +147,6 @@ def get_reviews_from_db(request):
         exp_token = request.META["HTTP_AUTHORIZATION"]
     except KeyError:
         raise KeyError("No expiring token provided")
-
     # Get and validate course_code parameter
     course_code = get_course_code_parameter(request)
 
@@ -154,7 +155,6 @@ def get_reviews_from_db(request):
     if show_my_programme not in ["true", "false"]:
         raise ValueError("Illegal boolean value")
     show_my_programme = show_my_programme == "true"
-
     # Define a base queryset, which is used for all queries later in the method
     base_qs = Review.objects.filter(course_code=course_code)
     if show_my_programme:
@@ -180,11 +180,12 @@ def get_reviews_from_db(request):
     average_workload = base_qs.filter(workload__gt=-1).aggregate(Avg("workload"))["workload__avg"]
     average_difficulty = base_qs.filter(difficulty__gt=-1).aggregate(Avg("difficulty"))["difficulty__avg"]
 
-    # Fetch reviews from database
-    data = list(base_qs.order_by("-date")[offset:offset + n].values())
-
-    # Append if user can delete review to the list of reviews
     _, user_email = get_user_full_name_and_email(exp_token)
+
+    qs = base_qs.annotate(num_upvotes=Count('upvote'))
+    # Put user's own review first in the query set and order on date submitted
+    ordered_qs = qs.order_by(Case(When(user_email=user_email, then=0), default=1), "-date")
+    data = list(ordered_qs[offset:offset + n].values())
 
     # Check if user is admin
     is_admin = check_if_is_admin(user_email)
@@ -192,6 +193,11 @@ def get_reviews_from_db(request):
     # Append if user can delete review to the list of reviews
     for review in data:
         review["can_delete"] = check_if_can_delete(review, user_email, is_admin)
+        review["upvote_status"] = _get_upvote_status_from_db(exp_token=exp_token, review_id=review["id"]).data
+
+    # Remove user email field from reviews
+    for review in data:
+        review.pop("user_email", None)
 
     # Return the data
     return {"count": number_of_reviews, "data": data, "average_score": average_score,
@@ -307,7 +313,7 @@ def get_user_study_programme(expiring_token):
 @api_view(["DELETE"])
 def delete_review(request):
     """
-    Deletes a given review, based on course code and user email passed as a parameter
+    Deletes a given review, based on review id passed as parameter.
     """
     # Get and authenticate expiring token
     try:
@@ -317,16 +323,18 @@ def delete_review(request):
     if not UserAuth.objects.filter(expiring_token=exp_token).exists():
         return Response("Invalid expiring token provided", 401)
 
-    # Get and validate course code parameter
-    try:
-        course_code = get_course_code_parameter(request)
-    except ValueError as e:
-        return Response(str(e), status=400)
+    # Get and validate review id parameter
+    review_id = request.GET.get("reviewId", None)
+    if review_id is None or review_id == "undefined":
+        return Response("No review id provided", status=400)
+    if not Review.objects.filter(id=review_id).exists():
+        return Response("Review does not exist", status=400)
 
-    # Get and validate user email parameter
-    passed_email = request.GET.get("userEmail", None)
-    if passed_email is None:
-        return Response("No user email provided", status=400)
+    # Get review from database and extract relevant fields
+    review = Review.objects.get(id=review_id)
+    passed_email = review.user_email
+    course_code = review.course_code
+
 
     # Check if user can delete review
     try:
@@ -339,7 +347,7 @@ def delete_review(request):
         return Response("User cannot delete this review", status=401)
 
     # Delete review
-    Review.objects.get(course_code=course_code, user_email=passed_email).delete()
+    review.delete()
 
     # Update course review data
     course_qs = Course.objects.filter(course_code=course_code)

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { CourseItemText } from 'styles/Text';
-import { CourseButton } from '../styles/Buttons';
+import { CourseButton } from 'styles/Buttons';
 
 interface MyCourseProps {
   courseName: string;
