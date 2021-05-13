@@ -25,7 +25,8 @@ def post_review(request):
         score: (number between 1 and 5),
         workload: (number between 1 and 5),
         difficulty: (number between 1 and 5),
-        reviewText: Free text field. Can be empty, but should be provided nonetheless.
+        reviewText: Free text field. Can be empty, but should be provided nonetheless.,
+        anonymous: (boolean) cannot be true if the review does contain reviewText.
     }
     """
     request_data = json.loads(request.body)
@@ -44,6 +45,14 @@ def post_review(request):
     if BannedUser.objects.filter(user_email=email).exists():
         return Response("User is banned from posting reviews", status=401)
 
+    if "anonymous" in request_data:
+        if request_data["anonymous"] == "true" and not request_data["reviewText"] == '':
+            return Response("Anonymous reviews can only be posted without review text.")
+        else:
+            anonymous = True
+    else:
+        anonymous = False
+
     # Validate request
     try:
         validate_review_post_request(request_data, reviewable_courses, email)
@@ -55,7 +64,8 @@ def post_review(request):
     # Save the review to the database.
     Review(user_email=email, course_code=request_data["courseCode"], score=request_data["score"],
            workload=request_data["workload"], difficulty=request_data["difficulty"],
-           review_text=request_data["reviewText"], full_name=full_name, study_programme=study_prg).save()
+           review_text=request_data["reviewText"],  study_programme=study_prg,
+           full_name=full_name if not anonymous else "Anonym bruker").save()
 
     # Update the review counter in Course
     course_qs = Course.objects.filter(course_code=request_data["courseCode"])
