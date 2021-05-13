@@ -81,9 +81,8 @@ const Review: React.FC<ReviewProps> = ({
   numUpvotes,
 }) => {
   const dateObject = new Date(date);
-  const europeanDate = `${dateObject.getDate()}/${
-    dateObject.getMonth() + 1
-  }/${dateObject.getFullYear().toString().substr(-2)}`;
+  const europeanDate = `${dateObject.getDate()}/${dateObject.getMonth() + 1
+    }/${dateObject.getFullYear().toString().substr(-2)}`;
   let scoreLabelColor = 'transparent';
   // TODO: Make this more elegant? Possibly use themes instead for example?
   switch (score) {

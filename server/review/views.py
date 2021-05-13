@@ -46,10 +46,12 @@ def post_review(request):
         return Response("User is banned from posting reviews", status=401)
 
     if "anonymous" in request_data:
-        if request_data["anonymous"] == "true" and not request_data["reviewText"] == '':
+        if request_data["anonymous"] == True and not request_data["reviewText"] == '':
             return Response("Anonymous reviews can only be posted without review text.")
-        else:
+        if request_data["anonymous"]:
             anonymous = True
+        else:
+            anonymous = False
     else:
         anonymous = False
 
