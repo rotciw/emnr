@@ -281,7 +281,10 @@ def parse_course_object(obj):
         semester = get_current_semester()
 
     # Get course name from Course table
-    course_name = Course.objects.filter(course_code=course_code)[0].course_name
+    if Course.objects.filter(course_code=course_code).exists():
+        course_name = Course.objects.filter(course_code=course_code)[0].course_name
+    else:
+        return None
 
     return {"course_code": course_code, "course_name": course_name, "semester": semester}
 
