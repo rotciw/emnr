@@ -188,6 +188,7 @@ def map_course_to_sorting_score(course, params, max_values):
     else:
         sorting_score = 0
     course["advanced_sorting_score"] = sorting_score
+    # Set advanced sorting score to 0 if there are no reviews for the given course
     if course["review_count"] == 0:
         course["advanced_sorting_score"] = 0
     return course
