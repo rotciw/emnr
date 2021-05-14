@@ -115,6 +115,7 @@ export const Checkbox = styled.input`
   height: 20px;
   text-align: center;
   display: inline-block;
+  overflow: hidden;
 
   &:focus {
     outline: none;
