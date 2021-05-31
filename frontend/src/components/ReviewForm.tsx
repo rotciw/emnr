@@ -4,13 +4,13 @@ import { FlexContainer, HrLine } from 'styles/Containers';
 import { Title, BoldTitle } from 'styles/Text';
 import axios from 'axios';
 import API_URL from 'config';
-import { ScoreRadioButtonsBar } from './RadioButtonBar';
-import { getLocalToken } from '../utils/api';
 import Dropdown from 'react-dropdown';
-import { RateCourseButton } from './RateCourseButton';
-import { ModalXButton, DisabledRedButton } from 'styles/Buttons';
+import { ModalXButton, DisabledRedButton, Checkbox } from 'styles/Buttons';
 import { GlobalStateContext } from 'context/GlobalStateContext';
 import { useHistory } from 'react-router-dom';
+import { RateCourseButton } from './RateCourseButton';
+import { getLocalToken } from '../utils/api';
+import { ScoreRadioButtonsBar } from './RadioButtonBar';
 
 interface ReviewFormProps {
   closeModal: () => void;
@@ -73,9 +73,14 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   const [workloadValue, setWorkloadValue] = useState<number>(-1);
   const [reviewText, setReviewText] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [anonymous, setAnonymous] = useState<boolean>(false);
   const { refreshProvider } = useContext(GlobalStateContext)!;
 
   const postReview = async () => {
+    let anonymousText = reviewText;
+    if (anonymous) {
+      anonymousText = '';
+    }
     setLoading(true);
     const token = getLocalToken();
     axios.defaults.headers.common.Authorization = `${token}`;
@@ -85,7 +90,8 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         score: scoreValue,
         workload: workloadValue,
         difficulty: difficultyValue,
-        reviewText,
+        reviewText: anonymousText,
+        anonymous,
       })
       .then(() => {
         refreshProvider.setPostReviewHaveRefreshed(
@@ -98,7 +104,9 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   };
 
   const history = useHistory();
-  const handleGuidelinesClick = useCallback(() => history.push('/guidelines'),[history]);
+  const handleGuidelinesClick = useCallback(() => history.push('/guidelines'), [
+    history,
+  ]);
 
   return (
     <div>
@@ -128,13 +136,31 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         onChange={(e) => setDifficultyValue(parseInt(e.value))}
         placeholder='Velg...'
       />
-      <InputDescription style={{ margin: '30px 0 0 0' }}>
+      <InputDescription>Post som anonym:</InputDescription>
+      <Checkbox
+        type='checkbox'
+        onChange={() => {
+          setAnonymous(!anonymous);
+        }}
+      />
+      <InputDescription style={{ margin: '10px 0 0 0' }}>
         Kommentar (maks 750 tegn):
       </InputDescription>
-      <TextInput
-        maxLength={750}
-        onChange={(e) => setReviewText(e.target.value)}
-      />
+      {anonymous ? (
+        <TextInput
+          value='Anonyme vurderinger kan ikke ha kommentarer'
+          maxLength={750}
+          disabled={anonymous}
+        />
+      ) : (
+        <>
+          <TextInput
+            value={reviewText}
+            maxLength={750}
+            onChange={(e) => setReviewText(e.target.value)}
+          />
+        </>
+      )}
       {scoreValue === -1 ? (
         <DisabledRedButton>Mangler totalvurdering</DisabledRedButton>
       ) : (

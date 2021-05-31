@@ -188,6 +188,9 @@ def map_course_to_sorting_score(course, params, max_values):
     else:
         sorting_score = 0
     course["advanced_sorting_score"] = sorting_score
+    # Set advanced sorting score to 0 if there are no reviews for the given course
+    if course["review_count"] == 0:
+        course["advanced_sorting_score"] = 0
     return course
 
 
@@ -278,7 +281,10 @@ def parse_course_object(obj):
         semester = get_current_semester()
 
     # Get course name from Course table
-    course_name = Course.objects.filter(course_code=course_code)[0].course_name
+    if Course.objects.filter(course_code=course_code).exists():
+        course_name = Course.objects.filter(course_code=course_code)[0].course_name
+    else:
+        return None
 
     return {"course_code": course_code, "course_name": course_name, "semester": semester}
 
